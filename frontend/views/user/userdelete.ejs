@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>chinaz</title>
+    <!-- Bootstrap Styles使用Bootstrap框架样式-->
+    <!--Bootstrap Styes是流行的前端框架-->
+
+    <link href="/assets/css/bootstrap.css" rel="stylesheet" />
+    <!--href 属性指定了要引入的 CSS 文件的路径-->
+    <!-- FontAwesome Styles图标样式-->
+    <!--FontAwesome是一个流行的图标库-->
+
+    <link href="/assets/css/font-awesome.css" rel="stylesheet" />
+    <!--rel 的值通常是 "stylesheet"，表示这是一个样式表。-->
+    <!-- Morris Chart Styles图表样式-->
+    <link href="/assets/js/morris/morris-0.4.3.min.css" rel="stylesheet" />
+    <!-- Custom Styles普通样式-->
+    <link href="/assets/css/custom-styles.css" rel="stylesheet" />
+    <!-- Google Fonts字体-->
+    <link
+      href="http://fonts.useso.com/css?family=Open+Sans"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <!-- 轻量级图表样式-->
+    <link rel="stylesheet" href="/assets/js/Lightweight-Chart/cssCharts.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+  </head>
+
+  <body>
+    <div id="wrapper">
+      <!--<div> 是 division 的缩写，表示文档中的一个区块或一个容器。-->
+      <!--页面内容的包裹容器-->
+      <!-- 1导航栏 -->
+      <!--<nav> 标签专用于定义页面或应用程序中的导航部分，比如菜单、链接列表等。-->
+      <nav class="navbar navbar-default top-navbar" role="navigation">
+        <!-- 1.1导航栏头部,包含了导航栏切换按钮、品牌标识和侧边栏切换按钮 -->
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle"
+            data-toggle="collapse"
+            data-target=".sidebar-collapse"
+          >
+            <!-- 响应式导航栏切换按钮 -->
+            <span class="sr-only">Toggle navigation</span>
+            <!-- 屏幕阅读器专用文本，仅供无障碍访问使用 -->
+            <span class="icon-bar"></span>
+            <!--看不懂-->
+            <!-- 导航栏图标条（汉堡菜单） -->
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <!-- 1.1.1导航栏商标 -->
+          <a class="navbar-brand" href="index.html"
+            ><strong>Nurse Home</strong></a
+          >
+          <!-- 导航栏品牌链接 -->
+
+          <div id="sideNav" href=""><i class="fa fa-caret-right"></i></div>
+          <!-- 侧边栏切换按钮 -->
+        </div>
+        <!-- 1.1.2导航条右上角的导航链接 -->
+        <ul class="nav navbar-top-links navbar-right">
+          <!-- 用户下拉菜单/.dropdown -->
+          <li class="dropdown">
+            <a
+              class="dropdown-toggle"
+              data-toggle="dropdown"
+              href="#"
+              aria-expanded="false"
+            >
+              <span>
+                <%= userName %>
+                <i class="fa fa-user fa-fw"></i>
+                <i class="fa fa-caret-down"></i>
+              </span>
+              <!-- <i ><%= userName %></i>
+              <i class="fa fa-user fa-fw"></i>
+              <i class="fa fa-caret-down"></i> -->
+            </a>
+            <ul class="dropdown-menu dropdown-user">
+              <li>
+                <a href="#">
+                  <i class="fa fa-user fa-fw"></i>
+                  User Profile
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <i class="fa fa-gear fa-fw"></i>
+                  Settings
+                </a>
+              </li>
+              <li class="divider"></li>
+              <li>
+                <a href="#">
+                  <i class="fa fa-sign-out fa-fw"></i>
+                  Logout
+                </a>
+              </li>
+            </ul>
+            <!-- /.dropdown-user -->
+          </li>
+          <!-- /.dropdown -->
+        </ul>
+      </nav>
+      <!--/. NAV TOP  -->
+      <!--navbar-default:类设置默认导航栏样式-->
+      <!--类设置侧边栏样式 -->
+      <!--role="navigation":ARIA 属性，指定这是一个导航区域，有助于无障碍访问。 -->
+      <nav class="navbar-default navbar-side" role="navigation">
+        <div class="sidebar-collapse">
+          <!--定义一个包含侧边栏内容的容器,class="sidebar-collapse"：应用自定义类，用于控制侧边栏的折叠状态-->
+          <!--collapse:折叠收缩-->
+          <ul class="nav" id="main-menu">
+            <li>
+              <a class="active-menu" href="index.html">
+                <i class="fa fa-dashboard"></i>
+                Dashboard
+              </a>
+            </li>
+            <!--用户管理菜单-->
+            <li>
+              <a href="#">
+                <i class="fa fa-user fa-fw"></i>
+                User Management
+              </a>
+            </li>
+            <!--老人管理菜单-->
+            <li>
+              <a href="#">
+                <i class="fa fa-blind fa-fw"></i>
+                Elderly Management
+                <span class="fa arrow"></span>
+              </a>
+              <ul class="nav nav-second-level">
+                <!--老人档案-->
+                <li>
+                  <a href="#">Elderly Records</a>
+                </li>
+                <!--入住退住-->
+                <li>
+                  <a href="#">Admission & Discharge</a>
+                </li>
+                <!--请假管理-->
+                <li>
+                  <a href="#">Leave Management</a>
+                </li>
+              </ul>
+            </li>
+            <!--访客管理-->
+            <li>
+              <a href="#">
+                <i class="fa fa-user-friends fa-fw"></i>
+                Visitor Management
+                <span class="fa arrow"></span>
+              </a>
+              <ul class="nav nav-second-level">
+                <!--预约登记-->
+                <li>
+                  <a href="#">Appointment Registration</a>
+                </li>
+                <!--访客登记-->
+                <li>
+                  <a href="#">Visitor Registration</a>
+                </li>
+              </ul>
+            </li>
+
+            <!--员工管理-->
+            <li>
+              <a href="#">
+                <i class="fa fa-users-cog fa-fw"></i>
+                Employee Management
+                <span class="fa arrow"></span>
+              </a>
+              <ul class="nav nav-second-level">
+                <!--预约登记-->
+                <li>
+                  <a href="#">Employee Records</a>
+                </li>
+                <!--访客登记-->
+                <li>
+                  <a href="#">Shift Scheduling</a>
+                </li>
+              </ul>
+            </li>
+
+            <!--床位管理-->
+            <li>
+              <a href="#">
+                <i class="fa fa-bed fa-fw"></i>
+                Bed Management
+                <span class="fa arrow"></span>
+              </a>
+              <ul class="nav nav-second-level">
+                <!--床位状态-->
+                <li>
+                  <a href="#">Bed Status </a>
+                </li>
+                <!--入住办理-->
+                <li>
+                  <a href="#">Bed Assignment</a>
+                </li>
+              </ul>
+            </li>
+
+            <!--餐饮管理-->
+            <li>
+              <a href="#">
+                <i class="fa fa-utensils fa-fw"></i>
+                Catering Management
+                <span class="fa arrow"></span>
+              </a>
+              <ul class="nav nav-second-level">
+                <!--餐次安排-->
+                <li>
+                  <a href="#">Meal Scheduling </a>
+                </li>
+                <!--餐饮计划-->
+                <li>
+                  <a href="#">Meal Planning</a>
+                </li>
+                <!--个性定制-->
+                <li>
+                  <a href="#">Personalized Diets</a>
+                </li>
+              </ul>
+            </li>
+
+            <!--健康管理-->
+            <li>
+              <a href="#">
+                <i class="fa fa-user-md fa-fw"></i>
+                Health Management
+                <span class="fa arrow"></span>
+              </a>
+              <ul class="nav nav-second-level">
+                <!--健康档案-->
+                <li>
+                  <a href="#">Health Records</a>
+                </li>
+                <!--护理管理-->
+                <li>
+                  <a href="#">Care Management</a>
+                </li>
+                <!--体检记录-->
+                <li>
+                  <a href="#">Medical Checkup</a>
+                </li>
+              </ul>
+            </li>
+
+            <!--财务管理-->
+            <li>
+              <a href="#">
+                <i class="fa fa-dollar-sign"></i>
+                Financial Management
+                <span class="fa arrow"></span>
+              </a>
+              <ul class="nav nav-second-level">
+                <!--缴费记录-->
+                <li>
+                  <a href="#">Payment Records</a>
+                </li>
+                <!--退费记录-->
+                <li>
+                  <a href="#">Refund Records</a>
+                </li>
+                <!--工资查询-->
+                <li>
+                  <a href="#">Salary Inquiry</a>
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="#">
+                <i class="fa fa-bullhorn"></i>
+                Notifications
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <!-- /. NAV SIDE  -->
+
+      <div id="page-wrapper">
+        <div class="header">
+          <h1 class="page-header">
+            Tables Page <small>Responsive tables</small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Tables</a></li>
+            <li class="active">Data</li>
+          </ol>
+        </div>
+
+        <div id="page-inner">
+          <div class="row">
+            <div class="col-md-12">
+              <!-- Advanced Tables -->
+              <div class="panel panel-default">
+                <div class="panel-heading">Advanced Tables</div>
+                <div class="panel-body">
+                  <div class="table-responsive">
+                    <table
+                      class="table table-striped table-bordered table-hover"
+                      id="dataTables-example"
+                    >
+                      <thead>
+                        <tr>
+                          <th>Rendering engine</th>
+                          <th>Browser</th>
+                          <th>Platform(s)</th>
+                          <th>Engine version</th>
+                          <th>CSS grade</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr class="odd gradeX">
+                          <td>Trident</td>
+                          <td>Internet Explorer 4.0</td>
+                          <td>Win 95+</td>
+                          <td class="center">4</td>
+                          <td class="center">X</td>
+                        </tr>
+                        
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <!--End Advanced Tables -->
+            </div>
+          </div>
+        </div>
+        <footer>
+          <p>
+            Copyright &copy; 2016.Company name All rights reserved.<a
+              target="_blank"
+              href="http://sc.chinaz.com/moban/"
+              >&#x7F51;&#x9875;&#x6A21;&#x677F;</a
+            >
+          </p>
+        </footer>
+      </div>
+      <!-- /. PAGE INNER  -->
+    </div>
+    <!-- /. PAGE WRAPPER  -->
+    <!-- /. WRAPPER  -->
+    <!-- JS Scripts-->
+    <!-- jQuery Js -->
+    <script src="assets/js/jquery-1.10.2.js"></script>
+    <!-- Bootstrap Js -->
+    <script src="assets/js/bootstrap.min.js"></script>
+    <!-- Metis Menu Js -->
+    <script src="assets/js/jquery.metisMenu.js"></script>
+    <!-- DATA TABLE SCRIPTS -->
+    <script src="assets/js/dataTables/jquery.dataTables.js"></script>
+    <script src="assets/js/dataTables/dataTables.bootstrap.js"></script>
+    <script>
+      $(document).ready(function () {
+        $('#dataTables-example').dataTable();
+      });
+    </script>
+    <!-- Custom Js -->
+    <script src="assets/js/custom-scripts.js"></script>
+  </body>
+</html>

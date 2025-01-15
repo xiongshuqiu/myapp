@@ -1,0 +1,42 @@
+<script>
+  $(document).ready(function () {
+    var table = $('#dataTables-example').DataTable();
+
+    $('#dataTables-example_filter').append(
+      '<button id="addUser" class="btn btn-primary add-user-btn">Add User</button>',
+    );
+
+    $('#addUser').on('click', function () {
+      window.location.href = '/user/create';
+    });
+
+    // 绑定删除按钮点击事件
+    $(document).on('click', '.deleteLink', function (event) {
+      event.preventDefault(); // 阻止默认行为
+      var _id = $(this).data('id'); // 从 data-id 获取用户ID
+      $('#confirmDeleteButton').data('id', _id); // 将用户ID存储到模态框按钮中
+      $('#confirmDeleteModal').modal('show'); // 显示模态框
+    });
+
+    async function deleteUser(_id) {
+      try {
+        const response = await fetch(`/user/delete/${_id}`, {
+          method: 'POST',
+        });
+        if (response.ok) {
+          window.location.href = '/user/'; // 删除成功后重定向到用户页面
+        } else {
+          alert('Delete Failed!');
+        }
+      } catch (error) {
+        alert('An error occurred while deleting the user.');
+        console.error('Error:', error);
+      }
+    }
+
+    $('#confirmDeleteButton').click(function () {
+      var _id = $(this).data('id'); // 获取存储在按钮上的用户ID
+      deleteUser(_id);
+    });
+  });
+</script>

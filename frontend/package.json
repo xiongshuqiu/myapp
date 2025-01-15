@@ -1,0 +1,26 @@
+{
+    "name": "frontend",
+    "version": "1.0.0",
+    "description": "User for the project with login functionality",
+    "main": "app.js",
+    "scripts": {
+        "start": "node app.js",
+        "dev": "nodemon app.js "
+    },
+    "dependencies": {
+        "axios": "^0.21.4",
+        "cookie-parser": "^1.4.7",
+        "cors": "^2.8.5",
+        "dotenv": "^8.6.0",
+        "ejs": "^3.1.6",
+        "express": "^4.21.2",
+        "express-session": "^1.18.1",
+        "jsonwebtoken": "^9.0.2",
+        "jwt-decode": "^4.0.0",
+        "method-override": "^3.0.0",
+        "path": "^0.12.7"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.9"
+    }
+}

@@ -1,0 +1,13 @@
+# Ignore app/node_modules folder
+node_modules/
+# Ignore app/api-gateway/node_modules folder
+api-gateway/node_modules/
+
+# Ignore app/frontend/node_modules folder
+frontend/node_modules/
+
+# Ignore app/user-service/node_modules folder
+user-service/node_modules/
+
+# Ignore app/auth-service/node_modules folder
+auth-service/node_modules/

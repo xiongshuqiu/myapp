@@ -1,0 +1,69 @@
+<nav class="navbar navbar-default top-navbar" role="navigation">
+  <!-- 1.1导航栏头部,包含了导航栏切换按钮、品牌标识和侧边栏切换按钮 -->
+  <div class="navbar-header">
+    <button
+      type="button"
+      class="navbar-toggle"
+      data-toggle="collapse"
+      data-target=".sidebar-collapse"
+    >
+      <!-- 响应式导航栏切换按钮 -->
+      <span class="sr-only">Toggle navigation</span>
+      <!-- 屏幕阅读器专用文本，仅供无障碍访问使用 -->
+      <span class="icon-bar"></span>
+      <!--看不懂-->
+      <!-- 导航栏图标条（汉堡菜单） -->
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <!-- 1.1.1导航栏商标 -->
+    <a class="navbar-brand" href="index.html"><strong>Nurse Home</strong></a>
+    <!-- 导航栏品牌链接 -->
+
+    <div id="sideNav" href=""><i class="fa fa-caret-right"></i></div>
+    <!-- 侧边栏切换按钮 -->
+  </div>
+  <!-- 1.1.2导航条右上角的导航链接 -->
+  <ul class="nav navbar-top-links navbar-right">
+    <!-- 用户下拉菜单/.dropdown -->
+    <li class="dropdown">
+      <a
+        class="dropdown-toggle"
+        data-toggle="dropdown"
+        href="#"
+        aria-expanded="false"
+      >
+        <span>
+        
+          <i class="fa fa-user fa-fw"></i>
+          <i class="fa fa-caret-down"></i>
+        </span>
+      </a>
+      <ul class="dropdown-menu dropdown-user">
+        <li>
+          <a href="#">
+            <i class="fa fa-user fa-fw"></i>
+            User Profile
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <i class="fa fa-gear fa-fw"></i>
+            Settings
+          </a>
+        </li>
+        <li class="divider"></li>
+        <li>
+          <a href="#">
+            <i class="fa fa-sign-out fa-fw"></i>
+            Logout
+          </a>
+        </li>
+      </ul>
+      <!-- /.dropdown-user -->
+    </li>
+    <!-- /.dropdown -->
+  </ul>
+</nav>
+<!--/. NAV TOP  -->
+<!--navbar-default:类设置默认导航栏样式-->

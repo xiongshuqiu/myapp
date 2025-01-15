@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  # Auth Service
+  auth-service:
+    image: node:14
+    working_dir: /usr/src/app
+    volumes:
+      - ./auth-service:/usr/src/app
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/auth_db?authSource=admin
+    ports:
+      - "5004:5004"
+    command: sh -c "npm install && npm run dev"
+
+  
+
+  # MongoDB Service
+  mongo:
+    image: mongo:4.2
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=example
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
+    driver: local
