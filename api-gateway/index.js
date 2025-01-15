@@ -5,6 +5,8 @@ const cors = require('cors'); // 引入 CORS 中间件
 const cookieParser = require('cookie-parser'); // 引入cookie-parser模块，用于解析Cookie
 const authRoutes = require('./routes/authRoutes'); // 引入自定义的authRoutes模块，定义认证相关的路由
 const userRoutes = require('./routes/userRoutes'); 
+const accountRoutes = require('./routes/accountRoutes');
+
 // 2.加载环境变量
 dotenv.config(); // 加载根目录中的.env文件中的环境变量
 // 3.创建Express应用实例
@@ -24,6 +26,7 @@ app.use(cors());
 // 5.使用路由
 app.use('/api/auth', authRoutes); // 当请求路径以/api/auth开头时，使用authRoutes路由
 app.use('/api/user', userRoutes); // 当请求路径以/api/auth开头时，使用authRoutes路由
+app.use('/api/account', accountRoutes);
 // 6.调试环境变量
 console.log('Loaded PORT:', process.env.PORT); // 输出环境变量值以调试
 

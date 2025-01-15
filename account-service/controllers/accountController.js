@@ -1,4 +1,4 @@
-const User = require('../models/userModel');
+const User = require('../models/accountModel');
 
 // 1.查找所有用户信息
 const getUsers = async (req, res) => {
