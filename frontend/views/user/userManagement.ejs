@@ -8,13 +8,23 @@
     <link href="/assets/css/bootstrap.css" rel="stylesheet" />
     <!-- 2.图标样式：FontAwesome Styles-->
     <link href="/assets/css/font-awesome.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
     <!--3.普通样式：Custom Styles-->
     <link href="/assets/css/custom-styles.css" rel="stylesheet" />
     <!-- 4.字体样式：Google Fonts-->
-    <link href="http://fonts.useso.com/css?family=Open+Sans" rel="stylesheet" type="text/css" />
+    <link
+      href="http://fonts.useso.com/css?family=Open+Sans"
+      rel="stylesheet"
+      type="text/css"
+    />
     <!-- 5.表格样式：TABLE STYLES-->
-    <link href="/assets/js/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
+    <link
+      href="/assets/js/dataTables/dataTables.bootstrap.css"
+      rel="stylesheet"
+    />
   </head>
 
   <body>
@@ -49,7 +59,10 @@
                 <div class="panel-heading">User Tables</div>
                 <div class="panel-body">
                   <div class="table-responsive">
-                    <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                    <table
+                      class="table table-striped table-bordered table-hover"
+                      id="dataTables-example"
+                    >
                       <thead>
                         <tr>
                           <th>userID</th>
@@ -73,10 +86,33 @@
                           <td><%= user.email %></td>
                           <td><%= user.role %></td>
                           <td>
-                            <a href="/user/<%= user._id %>" class="editLink" style="color: blue; display: inline">Edit</a>
-                            <a href="/user/delete<%= user._id %>" class="deleteLink" style="color: red; padding: 5px; display: inline" onclick="confirmDeletion('<%= user._id %>')">Delete</a>
-                            <form id="delete-form-<%= user._id %>" action="/user/delete/<%= user._id %>" method="post" style="display: none">
-                              <input type="hidden" name="_method" value="DELETE" />
+                            <a
+                              href="/user/<%= user._id %>"
+                              class="editLink"
+                              style="color: blue; display: inline"
+                              >Edit</a
+                            >
+                            <!-- 链接的href属性: 使用href="javascript:void(0)"避免页面跳转，确保点击链接时不会重定向。
+                            onclick事件: 直接调用JavaScript函数confirmDeletion('<%= user._id %>')来处理删除逻辑。
+                            #代替javascript:void(0)可能会跳转到顶部 -->
+                            <a
+                              href="javascript:void(0)"
+                              class="deleteLink"
+                              style="color: red; padding: 5px; display: inline"
+                              onclick="confirmDeletion('<%= user._id %>')"
+                              >Delete</a
+                            >
+                            <form
+                              id="delete-form-<%= user._id %>"
+                              action="/user/delete/<%= user._id %>"
+                              method="post"
+                              style="display: none"
+                            >
+                              <input
+                                type="hidden"
+                                name="_method"
+                                value="DELETE"
+                              />
                             </form>
                           </td>
                         </tr>
@@ -93,7 +129,11 @@
 
         <footer>
           <p>
-            Copyright &copy; 2016.Company name All rights reserved.<a target="_blank" href="http://sc.chinaz.com/moban/">模板网站</a>
+            Copyright &copy; 2016.Company name All rights reserved.<a
+              target="_blank"
+              href="http://sc.chinaz.com/moban/"
+              >模板网站</a
+            >
           </p>
         </footer>
       </div>
@@ -115,29 +155,31 @@
       // 当文档加载完成并且 DOM 准备就绪时，执行内部的函数
       $(document).ready(function () {
         // 初始化 DataTable 插件，并将其绑定到 ID 为 dataTables-example 的表格元素
-        var table = $('#dataTables-example').DataTable();
+        var table = $("#dataTables-example").DataTable();
 
         // 在过滤器区域添加 "Add User" 按钮
-        $('#dataTables-example_filter').append(
-          '<button id="addUser" class="btn btn-primary add-user-btn">Add User</button>',
+        $("#dataTables-example_filter").append(
+          '<button id="addUser" class="btn btn-primary add-user-btn">Add User</button>'
         );
         // 处理 "Add User" 按钮点击事件
-        $('#addUser').on('click', function () {
-          window.location.href = '/user/create';
+        $("#addUser").on("click", function () {
+          window.location.href = "/user/create";
         });
       });
 
-      // 函数：确认删除对话框
-      async function confirmDeletion(userId) {
-        if (confirm('Are you sure you want to delete this user?')) {
+      async function confirmDeletion(_id) {
+        if (confirm("Are you sure you want to delete this user?")) {
           try {
-            const response = await fetch(`/user/delete/${userId}`, { method: 'POST' });
-            const result = await response.json();
-            alert(result.message); // 显示反馈给用户
+            const response = await fetch(`/user/delete/${_id}`, {
+              method: "POST",
+            });
+            window.location.href = "/user/";
+            // const result = await response.json();
+            // alert(result.message); // 显示反馈给用户
             location.reload(); // 刷新页面以更新用户表
           } catch (error) {
-            alert('An error occurred while deleting the user.');
-            console.error('Error:', error);
+            alert("An error occurred while deleting the user.");
+            console.error("Error:", error);
           }
         }
       }
