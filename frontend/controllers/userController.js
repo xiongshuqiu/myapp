@@ -42,12 +42,14 @@ exports.createUser = async (req, res) => {
       },
     );
     if (response.status === 201) {
+       res.redirect('/user/'); //有return后面的代码不会执行，没有会执行
       // 渲染用户创建页面，并传递数据给EJS模板
       return res.render('user/userCreate', {
         activePage: 'userManagement',
         message: response.data.message,
         user: response.data.user, // 确保传递新创建的用户信息
       });
+     
     } else {
       // 渲染错误页面或其他页面
       return res.render('user/userCreate', {
@@ -106,7 +108,7 @@ exports.renderUpdateUserPage = (req, res) => {
 //(3) 提交更新用户信息
 exports.updateUser = async (req, res) => {
   const {userId, account, userName, passWord, phoneNumber, email, role } = req.body;
-
+  res.redirect('/user/'); //有return后面的代码不会执行，没有会执行
   try {
     const { _id } = req.params; // 从请求参数中获取 _id
     const response = await axios.post(
@@ -115,6 +117,8 @@ exports.updateUser = async (req, res) => {
     );
 
     if (response.status === 200) {
+      
+      
       // 渲染用户更新页面，并传递成功信息
       return res.render('user/userUpdate', {
         activePage: 'userManagement',
