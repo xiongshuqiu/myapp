@@ -46,7 +46,8 @@ const authorizeRole = (roles) => {
 // 3.设置用户名的中间件函数
 const setUsername = (req, res, next) => {
   if (req.user && req.user.userName) {
-    // 设置用户名变量在response本地对象
+    // 设置用户名变量在response本地对象,userName可以直接应用到页面上.
+    //存储在 res.locals 中的 userName 现在可以直接在同一请求响应周期内渲染的任何 EJS 模板中访问。
     res.locals.userName = req.user.userName;
     next();
   } else {

@@ -5,9 +5,8 @@ const session = require('express-session');
 const dotenv = require('dotenv'); // 引入dotenv模块，用于加载环境变量
 const path = require('path'); // 引入path模块，用于处理和转换文件路径
 const cookieParser = require('cookie-parser'); // 引入cookie-parser模块，用于解析Cookie
-//const { authenticate, setUsername } = require('../middleware/authMiddleware'); // 导入中间件
 
-
+const { authenticate, setUsername } = require('../middleware/authMiddleware'); // 导入中间件
 const authRoutes = require('./routes/authRoutes'); // 引入自定义的路由模块
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const userRoutes = require('./routes/userRoutes'); 
@@ -48,8 +47,8 @@ app.use(cors());
 //app.use(verifyToken);
 app.use('/auth', authRoutes);
 
-//app.use(authenticate);
-//app.use(setUsername);
+app.use(authenticate);
+app.use(setUsername);
 app.use('/', dashboardRoutes);
 app.use('/user', userRoutes);
 
