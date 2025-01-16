@@ -3,11 +3,11 @@ const axios = require('axios'); // 导入 axios 模块，用于发送 HTTP 请�
 axios.defaults.withCredentials = true; // 配置 axios 允许跨域请求时携带 cookies
 
 // 通用错误处理函数
-const handleError = (err, res) => {
-  console.error('Error:', err.response ? err.response.data : err.message);
+const handleError = (err, res, msg = 'Server error') => {
+  console.error('Error:', err.response ? err.response.data : err.message); // 输出详细调试信息
   res.status(err.response?.status || 500).json({
     success: false,
-    message: err.response?.data?.message || 'Server error',
+    message: err.response?.data?.message || msg,
   });
 };
 
@@ -29,9 +29,10 @@ exports.getAccount = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取 _id
     console.log(`Fetching account with ID: ${_id}`); // 调试信息
-    const apiUrl = `${ process.env.API_URL}/api/users/${_id}`;
+    const apiUrl = `${ process.env.API_URL}/api/accounts/${_id}`;
     const response = await getRequest(apiUrl); // 使用通用请求函数
-    req.session.account = response; // 将用户信息存储到 session 中
+    req.session.user = response; // 将用户信息存储到 session 中
+    res.json({ success: true, user: response }); // 优化：返回 JSON 格式数据，增加响应
   } catch (err) {
     handleError(err, res); // 使用通用错误处理函数
   }
@@ -39,9 +40,9 @@ exports.getAccount = async (req, res) => {
 
 // (2)跳转到账户信息查看页面
 exports.accountView = async (req, res) => {
-  const response = req.session.account; // 从 session 中获取用户信息
+  const user = req.session.user; // 从 session 中获取用户信息
   if (response) {
-    res.render('account/userProfile.ejs', { response });
+    res.render('account/userProfile.ejs',  user);
   } else {
     res.status(400).json({ success: false, message: 'Account not found in session' });
   }
@@ -52,7 +53,7 @@ exports.updatePassword = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取 _id
     console.log(`Fetching account with ID: ${_id}`); // 调试信息
-    const apiUrl = `${process.env.API_URL}/api//users/${_id}/password`;
+    const apiUrl = `${process.env.API_URL}/api/accounts/${_id}/password`; // 修正 URL 中多余的 /
     const data = { password: req.body.password }; // 新密码数据
     const response = await postRequest(apiUrl, data); // 调用通用提交函数
     const message = response.message;
@@ -72,7 +73,7 @@ exports.deleteAccount = async (req, res) => {
         console.error('Error destroying session:', err);
         return res.status(500).json({ success: false, message: 'Failed to destroy session' });
       }
-      res.redirect('/login'); // 跳转到登录页面
+      res.redirect('/auth/login'); // 重新定向到登录页面
     });
   } catch (err) {
     handleError(err, res); // 使用通用错误处理函数

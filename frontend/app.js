@@ -52,7 +52,7 @@ app.use(authenticate);
 app.use(setUsername);
 app.use('/', dashboardRoutes);
 app.use('/user', userRoutes);
-app.use('/account', accountRoutes);
+app.use('/accounts', accountRoutes);
 
 // 8.启动服务器并监听指定端口
 const PORT = process.env.PORT  // 设置服务器端口

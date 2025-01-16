@@ -3,7 +3,7 @@ const express = require('express'); // 引入Express框架
 const cors = require('cors');
 const mongoose = require('mongoose'); // 引入Mongoose，用于连接MongoDB
 const dotenv = require('dotenv'); // 引入dotenv模块，用于加载环境变量
-//const cookieParser = require('cookie-parser'); // 引入cookie-parser模块，用于解析Cookie
+
 
 const userRoutes = require('./routes/userRoutes'); // 引入自定义的路由模块
 
@@ -19,7 +19,6 @@ app.use(cors({
 }));
 
 // 5.使用中间件解析 JSON 和 URL 编码的数据
-//app.use(cookieParser()); // 使用cookie-parser中间件
 app.use(express.json()); // 解析 JSON 请求体
 app.use(express.urlencoded({ extended: true })); // 解析 URL 编码的请求体
 
@@ -37,7 +36,7 @@ mongoose
     console.log('Database connected successfully');
   })
   .catch((err) => console.error('Database connection error:', err));
-const PORT = process.env.PORT;
+
 
 module.exports = app;
    
