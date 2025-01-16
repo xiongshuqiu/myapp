@@ -5,9 +5,9 @@ const accountController = require('../controllers/accountController');
 
 //1.User Profile
 // (1)查找账户信息
-router.get('/:id', accountController.getAccount);
+router.get('/:_id', accountController.getAccount);
 
 // (2)修改密码提交
-router.post('/:id/password', accountController.updatePassword);
+router.post('/:_id/password', accountController.updatePassword);
 
 module.exports = router;

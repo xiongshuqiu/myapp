@@ -5,14 +5,14 @@ const { authorizeRole} = require('../../middleware/authMiddleware');
 
 //1.User Profile
 // (1)查找账户信息
-router.get('/:id', accountController.getAccount);
+router.get('/:_id', accountController.getAccount);
 // (2)跳转到账户信息查看页面
-router.get('/:id/view', accountController.accountView);
+router.get('/:_id/view', accountController.accountView);
 // (3)修改密码提交
-router.post('/:id/password', accountController.updatePassword);
+router.post('/:_id/password', accountController.updatePassword);
 //2.Login Out
 // 退出账户并跳转到登录页面
-router.get('/:id/delete', accountController.deleteAccout);
+router.get('/:_id/delete', accountController.logOut);
 
 module.exports = router;
 

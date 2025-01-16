@@ -32,7 +32,7 @@ exports.getAccount = async (req, res) => {
     const apiUrl = `${ process.env.API_URL}/api/accounts/${_id}`;
     const response = await getRequest(apiUrl); // 使用通用请求函数
     req.session.user = response; // 将用户信息存储到 session 中
-    res.json({ success: true, user: response }); // 优化：返回 JSON 格式数据，增加响应
+    res.redirect(`/accounts/${_id}/view`) //这一步很重要
   } catch (err) {
     handleError(err, res); // 使用通用错误处理函数
   }
@@ -41,8 +41,8 @@ exports.getAccount = async (req, res) => {
 // (2)跳转到账户信息查看页面
 exports.accountView = async (req, res) => {
   const user = req.session.user; // 从 session 中获取用户信息
-  if (response) {
-    res.render('account/userProfile.ejs',  user);
+  if (user) {
+    res.render('account/userProfile.ejs', { user }); // 传递 user 对象给 EJS 模板
   } else {
     res.status(400).json({ success: false, message: 'Account not found in session' });
   }
@@ -65,7 +65,7 @@ exports.updatePassword = async (req, res) => {
 
 //2.Login Out
 // 退出账户并跳转到登录页面
-exports.deleteAccount = async (req, res) => {
+exports.logOut = async (req, res) => {
   try {
     console.log('Logging out account'); // 调试信息
     req.session.destroy((err) => {

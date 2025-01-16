@@ -22,9 +22,9 @@ exports.postLogin = async (req, res) => {
 
         // 3. 生成 JWT 并存入 cookie
         const token = jwt.sign(
-          { userName: user.userName, role: user.role },
+          { userName: user.userName, role: user.role, _id: user._id },
           'your_secret_key', // 这里是签名密钥（应保存在安全的地方）
-          { expiresIn: '24h' } // 设置 token 的有效期
+          { expiresIn: '24h' }, // 设置 token 的有效期
         );
         console.log('Generated token:', token);
 
@@ -32,7 +32,7 @@ exports.postLogin = async (req, res) => {
         res.cookie('jwt', token, {
           httpOnly: true, // 防止客户端脚本访问 cookie
           sameSite: 'None', // 设置 sameSite 属性
-          secure: true // 在 HTTPS 环境下传输 cookie
+          secure: true, // 在 HTTPS 环境下传输 cookie
         });
         console.log('Cookie set successfully with token:', token);
 
@@ -42,7 +42,7 @@ exports.postLogin = async (req, res) => {
           userName: user.userName,
           role: user.role,
           message: 'Login successful',
-          token: token
+          token: token,
         });
       } else {
         console.log('Role is missing');
@@ -61,6 +61,8 @@ exports.postLogin = async (req, res) => {
   } catch (error) {
     console.error('Error processing login request:', error);
     // 处理服务器错误
-    return res.status(500).json({ message: 'An error occurred while processing your request' });
+    return res
+      .status(500)
+      .json({ message: 'An error occurred while processing your request' });
   }
 };
