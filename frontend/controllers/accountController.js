@@ -2,162 +2,99 @@ const axios = require('axios'); // 导入 axios 模块，用于发送 HTTP 请�
 
 axios.defaults.withCredentials = true; // 配置 axios 允许跨域请求时携带 cookies
 
-// 1.查找所用用户信息
-exports.getUsers = async (req, res) => {
+//1.User Profile
+// (1)查找登录账户用户信息
+exports.getAccount = async (req, res) => {
   try {
-    const response = await axios.get(`${process.env.API_URL}/api/user/`);
-    const users = response.data;
-    res.render('user/userManagement', { users, activePage: 'userManagement' }); // 将用户数据传递给EJS模板
+    const { _id } = req.params; // 从参数中获取 _id
+    console.log(`Fetching account with ID: ${_id}`); // 调试信息/*  */
+    // API调用的URL放入变量
+    const apiUrl = `${process.env.API_URL}/api/users/${_id}`;
+    const response = await axios.get(apiUrl); // 使用组装的URL进行API调用
+    //处理响应数据
+    const account = response.data;
+    req.session.account = account; // 将用户信息存储到 session 中
   } catch (err) {
     console.error(
       'Error retrieving user:',
       err.response ? err.response.data : err.message,
     );
-    res.status(500).json({ success: false, message: 'Server error' });
-  }
-};
-// 2.新增用户
-// 2-1点击AddUser按钮跳转到添加新用户的页面
-exports.renderCreateUserForm = async (req, res) => {
-  res.render('user/userCreate.ejs', {
-    activePage: 'userManagement',
-  });
-};
-// 2-2提交新用户信息
-exports.createUser = async (req, res) => {
-  const { userId, account, userName, passWord, phoneNumber, email, role } =
-    req.body;
-  console.log(userId, account, userName, passWord, phoneNumber, email, role);
-  try {
-    const response = await axios.post(
-      `${process.env.API_URL}/api/user/create`,
-      {
-        userId,
-        account,
-        userName,
-        passWord,
-        phoneNumber,
-        email,
-        role,
-      },
-    );
-    if (response.status === 201) {
-       res.redirect('/user/'); //有return后面的代码不会执行，没有会执行
-      // 渲染用户创建页面，并传递数据给EJS模板
-      return res.render('user/userCreate', {
-        activePage: 'userManagement',
-        message: response.data.message,
-        user: response.data.user, // 确保传递新创建的用户信息
-      });
-     
-    } else {
-      // 渲染错误页面或其他页面
-      return res.render('user/userCreate', {
-        activePage: 'userManagement',
-        message: response.data.message,
-        // user: response.data.user, // 确保传递响应中的用户信息（如果有）
-      });
-    }
-  } catch (err) {
-    console.error(
-      'Error creating user:',
-      err.response ? err.response.data : err.message,
-    );
-    return res.render('user/userCreate', {
-      activePage: 'userManagement',
-      message: err.response ? err.response.data.message : 'Server error',
-      user: {}, // 在错误情况下传递一个空对象
+    // 使用明确的HTTP状态码和错误信息返回
+    res.status(err.response?.status || 500).json({
+      success: false,
+      message: err.response?.data?.message || 'Server error',
     });
   }
 };
-
-// 3.更新用户信息
-// (1)查找特定用户信息并跳转到更新页面
-exports.getUserById = async (req, res) => {
-  try {
-    const { _id } = req.params; // 从参数中获取 _id
-    console.log(`Fetching user with ID: ${_id}`); // 调试信息
-    const response = await axios.get(`${process.env.API_URL}/api/user/${_id}`); // 使用组装的URL进行API调用
-    const user = response.data;
-    req.session.user = user; // 将用户信息存储到 session 中
-    res.redirect(`/user/update/${_id}`); // 跳转到更新用户页面
-  } catch (err) {
-    console.error(
-      'Error retrieving user:',
-      err.response ? err.response.data : err.message,
-    );
-    res.status(500).json({ success: false, message: 'Server error' });
-  }
-};
-
-// (2)跳转到用户编辑界面
-exports.renderUpdateUserPage = (req, res) => {
-  const user = req.session.user; // 从 session 中获取用户信息
-  if (user) {
-    res.render('user/userUpdate.ejs', {
-      activePage: 'userManagement',
-      user,
+// (2)跳转到账户信息查看页面
+exports.accountView = async (req, res) => {
+  const account = req.session.account; // 从 session 中获取用户信息
+  if (account) {
+    res.render('account/userProfile.ejs', {
+      // activePage: 'userManagement',
+      message: response.data.message,
+      account, // 确保传递响应中的用户信息（如果有）
     });
   } else {
     res
       .status(400)
-      .json({ success: false, message: 'User not found in session' });
+      .json({ success: false, message: 'Account not found in session' });
   }
 };
+//(3)修改密码提交
+exports.updatePassword = async (req, res) => {
+  exports.updatePassword = async (req, res) => {
+    try {
+      const { _id } = req.params; // 从参数中获取 _id
+      console.log(`Fetching account with ID: ${_id}`); // 调试信息
 
-//(3) 提交更新用户信息
-exports.updateUser = async (req, res) => {
-  const {userId, account, userName, passWord, phoneNumber, email, role } = req.body;
-  res.redirect('/user/'); //有return后面的代码不会执行，没有会执行
-  try {
-    const { _id } = req.params; // 从请求参数中获取 _id
-    const response = await axios.post(
-      `${process.env.API_URL}/api/user/update/${_id}`,
-      { userId, account, userName, passWord, phoneNumber, email, role },
-    );
+      // API调用的URL放入变量
+      const apiUrl = `${process.env.API_URL}/api/users/${_id}`;
+      const response = await axios.post(apiUrl); // 使用组装的URL进行API调用
 
-    if (response.status === 200) {
-      
-      
-      // 渲染用户更新页面，并传递成功信息
-      return res.render('user/userUpdate', {
-        activePage: 'userManagement',
-        message: response.data.message,
-        user: response.data.user, // 更新后的用户信息
+      // 提取响应信息
+      const message = response.data.message;
+
+      // 渲染用户页面，并传递响应消息
+      res.render('account/userProfile.ejs', {
+        // activePage: 'userManagement',
+        message,
+        // user: response.data.user, // 确保传递响应中的用户信息（如果有）
       });
-    } else {
-      // 渲染错误页面或其他页面
-      return res.render('user/userUpdate', {
-        activePage: 'userManagement',
-        message: response.data.message,
-        user: {},
+    } catch (err) {
+      console.error(
+        'Error retrieving user:',
+        err.response ? err.response.data : err.message,
+      );
+
+      res.status(err.response?.status || 500).json({
+        success: false,
+        message: err.response?.data?.message || 'Server error',
       });
     }
-  } catch (err) {
-    console.error(
-      'Error updating user:',
-      err.response ? err.response.data : err.message,
-    );
-    res.status(500).json({ success: false, message: 'server is wrong' });
-  }
+  };
 };
-
-// 7. 删除用户 (D)
-exports.deleteUser = async (req, res) => {
+//2.Login Out
+// 退出账户并跳转到登录页面
+exports.deleteAccount = async (req, res) => {
   try {
-    const { _id } = req.params; // 从参数中获取_id
-    console.log(_id);
-    const response = await axios.post(
-      `${process.env.API_URL}/api/user/delete/${_id}`,
-    );
-    res.json(response.data);
+    console.log('Logging out account'); // 调试信息
+    // 销毁用户 session
+    req.session.destroy((err) => {
+      if (err) {
+        console.error('Error destroying session:', err);
+        return res
+          .status(500)
+          .json({ success: false, message: 'Failed to destroy session' });
+      }
+      // 跳转到登录页面
+      res.redirect('/login');
+    });
   } catch (err) {
-    console.error(
-      'Error deleting user:',
-      err.response ? err.response.data : err.message,
-    );
-    res.status(500).json({ success: false, message: 'Server error' });
+    console.error('Error logging out:', err.message);
+    res.status(500).json({
+      success: false,
+      message: 'Server error',
+    });
   }
 };
- 
-     

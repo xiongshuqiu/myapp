@@ -45,14 +45,14 @@ app.use(session({
 
 app.use(cors());
 // 7.使用认证路由和dashboard页面路由
-//app.use(verifyToken);
+
 app.use('/auth', authRoutes);
 
 app.use(authenticate);
 app.use(setUsername);
 app.use('/', dashboardRoutes);
 app.use('/user', userRoutes);
-app.use('/user', accountRoutes);
+app.use('/account', accountRoutes);
 
 // 8.启动服务器并监听指定端口
 const PORT = process.env.PORT  // 设置服务器端口
