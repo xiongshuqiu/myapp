@@ -25,7 +25,7 @@
   <body>
     <div id="wrapper">
       <!-- 顶部导航条 -->
-      <%- include('../block/top-navbar_other.ejs') %>
+      <%- include('../block/top-navbar.ejs') %>
       <!-- 左侧导航条 -->
       <%- include('../block/navbar-side.ejs') %>
 
@@ -154,6 +154,23 @@
 
       <!-- /. PAGE WRAPPER  -->
     </div>
+    <script>
+      document.getElementById('userProfileLink').addEventListener('click', function(e) {
+        var sideNav = document.getElementById('sideNav');
+        if (sideNav) {
+          sideNav.style.display = 'none'; // 隐藏图标
+        }
+  
+        // 取消默认的链接跳转行为，防止图标消失太快导致看不到效果
+        e.preventDefault();
+  
+        // 延迟跳转到用户信息页面
+        setTimeout(function() {
+          window.location.href = e.target.href;
+        }, 100); // 延迟100毫秒
+      });
+    </script>
+
     <!-- /. WRAPPER  -->
     <!-- JS Scripts-->
     <!-- jQuery Js -->

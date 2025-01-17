@@ -33,7 +33,7 @@ exports.getAccount = async (req, res) => {
     const response = await getRequest(apiUrl); // 使用通用请求函数
     const user =response.user
       res.render('account/userProfile.ejs', {
-        activePage: 'dashboard',
+        activePage: 'userProfile',
         message: user.message,
         user,  // 传递 user 对象给 EJS 模板
       })
@@ -52,7 +52,7 @@ exports.updatePassword = async (req, res) => {
     const response = await postRequest(apiUrl, data); // 调用通用提交函数
     const message = response.message;
     res.render('account/userProfile.ejs', {
-      activePage: 'dashboard',
+      activePage: 'userProfile',
       message
     });
   } catch (err) {

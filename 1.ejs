@@ -1,28 +1,37 @@
-exports.updatePassword = async (req, res) => {
-  try {
-    const { _id } = req.params; // 从参数中获取 _id
-    console.log(`Fetching account with ID: ${_id}`); // 调试信息
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="path/to/font-awesome.css">
+  <title>Dashboard</title>
+</head>
+<body>
+  <div id="wrapper">
+    <% if (activePage === 'dashboard') { %>
+      <div id="sideNav" href=""><i class="fa fa-caret-right"></i></div>
+    <% } %>
 
-    // API调用的URL放入变量
-    const apiUrl = `${process.env.API_URL}/api/users/${_id}`;
-    const response = await axios.post(apiUrl); // 使用组装的URL进行API调用
+    <a href="/accounts/<%= _id %>/view" id="userProfileLink">
+      <i class="fa fa-user fa-fw"></i>
+      User Profile
+    </a>
+  </div>
 
-    // 使用提取变量避免代码重复
-    const message = response.data.message;
+  <script>
+    document.getElementById('userProfileLink').addEventListener('click', function(e) {
+      var sideNav = document.getElementById('sideNav');
+      if (sideNav) {
+        sideNav.style.display = 'none'; // 隐藏图标
+      }
 
-    // 根据响应状态决定页面的渲染逻辑
-    const renderPage = response.status === 201 ? 'user/userCreate' : 'account/userProfile.ejs';
+      // 取消默认的链接跳转行为，防止图标消失太快导致看不到效果
+      e.preventDefault();
 
-    res.render(renderPage, {
-      // activePage: 'userManagement',
-      message,
+      // 延迟跳转到用户信息页面
+      setTimeout(function() {
+        window.location.href = e.target.href;
+      }, 100); // 延迟100毫秒
     });
-  } catch (err) {
-    console.error('Error retrieving user:', err.response ? err.response.data : err.message);
-
-    res.status(err.response?.status || 500).json({
-      success: false,
-      message: err.response?.data?.message || 'Server error',
-    });
-  }
-};
+  </script>
+</body>
+</html>

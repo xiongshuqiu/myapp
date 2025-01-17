@@ -20,7 +20,10 @@
     <a class="navbar-brand" href="index.html"><strong>Nurse Home</strong></a>
     <!-- 导航栏品牌链接 -->
 
-    <div id="sideNav" href=""><i class="fa fa-caret-right"></i></div>
+    <% if (activePage === 'dashboard') { %>
+      <div id="sideNav" href=""><i class="fa fa-caret-right"></i></div>
+  <% } %>
+  
     <!-- 侧边栏切换按钮 -->
   </div>
   <!-- 1.1.2导航条右上角的导航链接 -->
@@ -41,8 +44,7 @@
       </a>
       <ul class="dropdown-menu dropdown-user">
         <li>
-         
-          <a href="/accounts/<%=_id%>/vie">
+          <a href="/accounts/<%=_id%>/view">
             <i class="fa fa-user fa-fw"></i>
             User Profile
           </a>
