@@ -52,10 +52,7 @@ exports.updatePassword = async (req, res) => {
     const data = { password: req.body.password }; // 新密码数据
     const response = await postRequest(apiUrl, data); // 调用通用提交函数
     const message = response.message;
-    res.render('account/userProfile.ejs', {
-      activePage: 'userProfile',
-      message
-    });
+    res.redirect(`/accounts/${_id}/view`);
   } catch (err) {
     handleError(err, res); // 使用通用错误处理函数
   }
@@ -77,3 +74,4 @@ exports.logOut = async (req, res) => {
     handleError(err, res); // 使用通用错误处理函数
   }
 };
+

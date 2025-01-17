@@ -34,7 +34,7 @@ const updatePassword = async (req, res) => {
     const user = await User.findOne({ _id });
     if (user) {
       console.log('User found:', user); // 调试信息
-      user.password = password; // 优化：直接更新用户的密码属性
+      user.passWord = password; // 优化：直接更新用户的密码属性
       const updatedUser = await user.save(); // 优化：保存更新后的用户对象
       console.log('Password updated successfully:', updatedUser); // 调试信息
       res.status(200).json({ success: true, message: 'Update successful', user: updatedUser });
