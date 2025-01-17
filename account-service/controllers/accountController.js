@@ -15,7 +15,8 @@ const getAccount = async (req, res) => {
     const user = await User.findOne({ _id });
     if (user) {
       console.log('User retrieved successfully:', user); // 调试信息
-      res.status(200).json({ success: true, user });
+      // res.status(200).json({ success: true,  user });
+      res.status(200).json({ sucess: true, message:'get user',user });
     } else {
       console.warn(`User not found with ID: ${_id}`); // 调试信息
       res.status(404).json({ success: false, message: 'User not found' });

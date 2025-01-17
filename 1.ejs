@@ -1,37 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="path/to/font-awesome.css">
-  <title>Dashboard</title>
-</head>
-<body>
-  <div id="wrapper">
-    <% if (activePage === 'dashboard') { %>
-      <div id="sideNav" href=""><i class="fa fa-caret-right"></i></div>
-    <% } %>
+<!-- Update Password 按钮 -->
+<button class="btn btn-primary" data-toggle="modal" data-target="#updatePasswordModal">
+  Update Password
+</button>
 
-    <a href="/accounts/<%= _id %>/view" id="userProfileLink">
-      <i class="fa fa-user fa-fw"></i>
-      User Profile
-    </a>
+<!-- 模态框： -->
+<div class="modal fade" id="updatePasswordModal" tabindex="-1" role="dialog" aria-labelledby="updatePasswordModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="updatePasswordModalLabel">Update Password</h4>
+      </div>
+      <div class="modal-body">
+        <form id="updatePasswordForm">
+          <div class="form-group">
+            <label for="newPassword">New Password</label>
+            <input type="password" class="form-control" id="newPassword" required>
+          </div>
+          <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" class="form-control" id="confirmPassword" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="savePasswordButton">Save changes</button>
+      </div>
+    </div>
   </div>
-
-  <script>
-    document.getElementById('userProfileLink').addEventListener('click', function(e) {
-      var sideNav = document.getElementById('sideNav');
-      if (sideNav) {
-        sideNav.style.display = 'none'; // 隐藏图标
-      }
-
-      // 取消默认的链接跳转行为，防止图标消失太快导致看不到效果
-      e.preventDefault();
-
-      // 延迟跳转到用户信息页面
-      setTimeout(function() {
-        window.location.href = e.target.href;
-      }, 100); // 延迟100毫秒
-    });
-  </script>
-</body>
-</html>
+</div>
+<!-- 模态框： -->

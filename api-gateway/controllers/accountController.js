@@ -31,7 +31,7 @@ exports.getAccount = async (req, res) => {
     console.log(`Fetching account with ID: ${_id}`); // 输出调试信息
     const apiUrl = `${process.env.ACCOUNT_SERVICE_URL}/accounts/${_id}/view`;
     const response = await getRequest(apiUrl); // 使用通用请求函数
-    res.json({ success: true, user: response });
+    res.json(response);
   } catch (err) {
     handleError(err, res); // 使用通用错误处理函数
   }

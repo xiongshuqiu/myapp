@@ -23,6 +23,7 @@ const postRequest = async (url, data) => {
   return response.data;
 };
 
+
 //1.User Profile
 //(1)查找账户信息,跳转到账户信息查看页面
 exports.getAccount = async (req, res) => {
@@ -31,11 +32,11 @@ exports.getAccount = async (req, res) => {
     console.log(`Fetching account with ID: ${_id}`); // 调试信息
     const apiUrl = `${ process.env.API_URL}/api/accounts/${_id}/view`;
     const response = await getRequest(apiUrl); // 使用通用请求函数
-    const user =response.user
+    const user = response.user // user内容为： res.status(200).json({ sucess: true, message:'get user',user });
+    console.log(user);
       res.render('account/userProfile.ejs', {
         activePage: 'userProfile',
-        message: user.message,
-        user,  // 传递 user 对象给 EJS 模板
+        user // 传递 user 对象给 EJS 模板
       })
   } catch (err) {
     handleError(err, res); // 使用通用错误处理函数
