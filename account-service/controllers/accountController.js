@@ -7,7 +7,7 @@ const handleError = (err, res, msg = 'Server error') => {
 };
 
 
-// 获取特定用户信息
+// (1)查找账户信息,跳转到账户信息查看页面
 const getAccount = async (req, res) => {
   const { _id } = req.params;
   console.log(`Received request to get user by ID: ${_id}`); // 调试信息
@@ -25,7 +25,7 @@ const getAccount = async (req, res) => {
   }
 };
 
-// 更新用户信息
+// 修改密码提交
 const updatePassword = async (req, res) => {
   const { password } = req.body; // 优化：修正参数名为 password
   try {

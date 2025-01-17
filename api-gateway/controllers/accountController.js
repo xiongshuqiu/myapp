@@ -24,12 +24,12 @@ const postRequest = async (url, data) => {
 };
 
 //1.User Profile
-// (1)查找登录账户用户信息
+// (1)查找账户信息,跳转到账户信息查看页面
 exports.getAccount = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取 _id
     console.log(`Fetching account with ID: ${_id}`); // 输出调试信息
-    const apiUrl = `${process.env.ACCOUNT_SERVICE_URL}/accounts/${_id}`;
+    const apiUrl = `${process.env.ACCOUNT_SERVICE_URL}/accounts/${_id}/view`;
     const response = await getRequest(apiUrl); // 使用通用请求函数
     res.json({ success: true, user: response });
   } catch (err) {

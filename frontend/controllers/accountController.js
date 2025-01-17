@@ -24,29 +24,23 @@ const postRequest = async (url, data) => {
 };
 
 //1.User Profile
-// (1)查找登录账户用户信息
+//(1)查找账户信息,跳转到账户信息查看页面
 exports.getAccount = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取 _id
     console.log(`Fetching account with ID: ${_id}`); // 调试信息
-    const apiUrl = `${ process.env.API_URL}/api/accounts/${_id}`;
+    const apiUrl = `${ process.env.API_URL}/api/accounts/${_id}/view`;
     const response = await getRequest(apiUrl); // 使用通用请求函数
-    req.session.user = response; // 将用户信息存储到 session 中
-    res.redirect(`/accounts/${_id}/view`) //这一步很重要
+    const user =response.user
+      res.render('account/userProfile.ejs', {
+        activePage: 'dashboard',
+        message: user.message,
+        user,  // 传递 user 对象给 EJS 模板
+      })
   } catch (err) {
     handleError(err, res); // 使用通用错误处理函数
   }
 };                    
-
-// (2)跳转到账户信息查看页面
-exports.accountView = async (req, res) => {
-  const user = req.session.user; // 从 session 中获取用户信息
-  if (user) {
-    res.render('account/userProfile.ejs', { user }); // 传递 user 对象给 EJS 模板
-  } else {
-    res.status(400).json({ success: false, message: 'Account not found in session' });
-  }
-};
 
 // (3)修改密码提交
 exports.updatePassword = async (req, res) => {
@@ -57,7 +51,10 @@ exports.updatePassword = async (req, res) => {
     const data = { password: req.body.password }; // 新密码数据
     const response = await postRequest(apiUrl, data); // 调用通用提交函数
     const message = response.message;
-    res.render('account/userProfile.ejs', { message });
+    res.render('account/userProfile.ejs', {
+      activePage: 'dashboard',
+      message
+    });
   } catch (err) {
     handleError(err, res); // 使用通用错误处理函数
   }
