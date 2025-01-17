@@ -45,7 +45,7 @@ exports.updatePassword = async (req, res) => {
     const apiUrl = `${process.env.ACCOUNT_SERVICE_URL}/accounts/${_id}/password`;
     const data = { password: req.body.password }; // 新密码数据
     const response = await postRequest(apiUrl, data); // 调用通用提交函数
-    res.json({ success: true, message: response.message });
+    res.json(response);
   } catch (err) {
     handleError(err, res); // 使用通用错误处理函数
   }
