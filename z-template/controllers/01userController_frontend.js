@@ -62,7 +62,7 @@ const createUser = async (req, res) => {
       res.redirect('/users/');
     } else {
       // 渲染错误页面或其他页面
-      return res.render('users/userCreate', {
+      return res.render('user/userCreate', {
         activePage: 'userManagement', //:与=相同
         message,
       });
@@ -77,8 +77,8 @@ const createUser = async (req, res) => {
   }
 
 
-// 3.更新用户信息
-// (1)查找特定用户信息并跳转到更新用户信息页面
+// 3.编辑用户信息
+// (1)查找特定用户信息并跳转到编辑用户信息页面
 const getUserById = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取 _id
@@ -95,7 +95,7 @@ const getUserById = async (req, res) => {
   }
 };
 
-//(2) 提交更新用户信息
+//(2) 提交已编辑的用户信息
 const updateUser = async (req, res) => {
   try {
     const { _id } = req.params;
@@ -110,7 +110,7 @@ const updateUser = async (req, res) => {
     };
     console.log(data);
     // 从请求参数中获取 _id
-    const apiUrl = `${process.env.API_URL}/api/users/update/${_id}`;
+    const apiUrl = `${process.env.API_URL}/api/users/${_id}/update`;
     const response = await postRequest(apiUrl, data);
     const message = response.message;
     if (response.status === 200) {

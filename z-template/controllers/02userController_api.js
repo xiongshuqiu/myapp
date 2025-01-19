@@ -24,7 +24,7 @@ const postRequest = async (url, data) => {
 // 1.查找所有用户信息
 const getUsers = async (req, res) => {
   try {
-    const url = `${process.env.USER_SERVICE_URL}/user/`;
+    const url = `${process.env.USER_SERVICE_URL}/users/`;
     const response = await getRequest(url); // 发送 GET 请求以获取用户信息
     res.json(response); // 将响应数据返回给前端:包括数据和message
   } catch (err) {
@@ -37,7 +37,7 @@ const createUser = async (req, res) => {
     req.body; // 从请求体中获取所有用户信息
 
   try {
-    const url = `${process.env.USER_SERVICE_URL}/user/create`;
+    const url = `${process.env.USER_SERVICE_URL}/users/create`;
     const data = {
       userId: req.body.userId,
       account: req.body.account,
@@ -58,7 +58,7 @@ const createUser = async (req, res) => {
 const getUserById = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取 _id
-    const url = `${process.env.USER_SERVICE_URL}/user/${_id}/update`;
+    const url = `${process.env.USER_SERVICE_URL}/users/${_id}/update`;
     const response = await getRequest(url); // 发送 GET 请求以获取用户信息
     const user = response.data;
     console.log(user);
@@ -74,7 +74,7 @@ const updateUser = async (req, res) => {
 
   try {
     const { _id } = req.params; // 从参数中获取 _Id
-    const url = `${process.env.USER_SERVICE_URL}/user/${_id}/update`;
+    const url = `${process.env.USER_SERVICE_URL}/users/${_id}/update`;
     const data = {
       userId: req.body.userId,
       account: req.body.account,
@@ -95,7 +95,7 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取 userId
-    const url = `${process.env.USER_SERVICE_URL}/user/${_id}/delete`;
+    const url = `${process.env.USER_SERVICE_URL}/users/${_id}/delete`;
     const response = await postRequest(url); // 发送 DELETE 请求以删除用户
     res.json(response); // 将响应数据返回给前端
   } catch (err) {

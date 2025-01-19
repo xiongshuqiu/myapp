@@ -15,7 +15,7 @@ router.get('/', getUsers);
 // 2.新增用户
 router.post('/create', createUser);
 
-// 3.更新用户信息
+// 3.编辑用户信息
 router.get('/:_id/update', getUserById); //查找特定用户信息
 router.post('/:_id/update', updateUser);//查找特定用户信息
 

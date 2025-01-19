@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: true })); // 使用URL编码解析中间�
 app.use(cors());
 // 5.使用路由
 app.use('/api/auth', authRoutes); // 当请求路径以/api/auth开头时，使用authRoutes路由
-app.use('/api/user', userRoutes); // 当请求路径以/api/auth开头时，使用authRoutes路由
+app.use('/api/users', userRoutes); // 当请求路径以/api/auth开头时，使用authRoutes路由
 app.use('/api/accounts', accountRoutes);
 // 6.调试环境变量
 console.log('Loaded PORT:', process.env.PORT); // 输出环境变量值以调试

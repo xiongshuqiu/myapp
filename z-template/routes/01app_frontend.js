@@ -51,7 +51,7 @@ app.use('/auth', authRoutes);
 app.use(authenticate);
 app.use(setUsername);
 app.use('/', dashboardRoutes);
-app.use('/user', userRoutes);
+app.use('/users', userRoutes);
 app.use('/accounts', accountRoutes);
 
 // 8.启动服务器并监听指定端口
