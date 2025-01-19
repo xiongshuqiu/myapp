@@ -32,7 +32,7 @@ exports.getAccount = async (req, res) => {
     console.log(`Fetching account with ID: ${_id}`); // 调试信息
     const apiUrl = `${ process.env.API_URL}/api/accounts/${_id}/view`;
     const response = await getRequest(apiUrl); // 使用通用请求函数
-    const user = response.user // user内容为： res.status(200).json({ sucess: true, message:'get user',user });
+    const user = response.data // user内容为： res.status(200).json({ sucess: true, message:'get user',user });
     console.log(user);
       res.render('account/userProfile.ejs', {
         activePage: 'userProfile',

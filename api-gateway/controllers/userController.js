@@ -35,7 +35,7 @@ exports.createUser = async (req, res) => {
         role,
       },
     ); // 发送 POST 请求以创建新用户
-    res.json(response.data); // 将响应数据返回给前端
+    res.status(201).json(response.data); // 将响应数据返回给前端
   } catch (err) {
     console.error(
       'Error creating user:',

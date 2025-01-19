@@ -16,6 +16,7 @@ const getUsers = async (req, res) => {
 const createUser = async (req, res) => {
   const { userId, account, userName, passWord, phoneNumber, email, role } = req.body;
   console.log('Received request to create user with data:', req.body); // 调试信息
+  
   try {
     let existingUser = await User.findOne({ userId });
     if (existingUser) {

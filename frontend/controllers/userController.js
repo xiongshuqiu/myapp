@@ -41,17 +41,11 @@ exports.createUser = async (req, res) => {
         role,
       },
     );
-    if (response.status === 201) {
-       res.redirect('/user/'); //有return后面的代码不会执行，没有会执行
-      // 渲染用户创建页面，并传递数据给EJS模板
-      return res.render('user/userCreate', {
-        activePage: 'userManagement',
-        message: response.data.message,
-        user: response.data.user, // 确保传递新创建的用户信息
-      });
-     
+    if (response.success) {
+      res.redirect('/user/'); //重新刷新一下
     } else {
       // 渲染错误页面或其他页面
+      console.log(response.status); // 添加调试信息
       return res.render('user/userCreate', {
         activePage: 'userManagement',
         message: response.data.message,
