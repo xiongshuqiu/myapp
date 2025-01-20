@@ -1,8 +1,4 @@
 const axios = require('axios'); // 导入 axios 模块，用于发送 HTTP 请求
-const {
-  getNavItems,
-} = require('../visibilityMiddleware/userManagementVisibility.js');
-
 axios.defaults.withCredentials = true; // 配置 axios 允许跨域请求时携带 cookies
 
 // 通用错误处理函数
@@ -50,12 +46,10 @@ const getUsers = async (req, res) => {
     const response = await getRequest(apiUrl);
     const users = response.data;
     if (response.success) {
-      const userRole = req.user.role; // 假设用户角色已存储在 req.user 中 
-      const navItems = getNavItems(userRole);
       res.render('user/userManagement', {
         activePage: 'user-management',
         users,
-        navItems
+        navItems: req.navItems // 将导航项传递到视图
       });
     }
   } catch (err) {

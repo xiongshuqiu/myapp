@@ -17,26 +17,17 @@
         return iconClasses[id] || 'fa-user';
       }; %>
 
-      <% const navItems = [
-        { id: 'dashboard', name: 'Dashboard', href: '/dashboard', visible: true },
-        { id: 'user-management', name: 'User Management', href: '/users', visible: true },
-        { id: 'elderly-management', name: 'Elderly Management', href: '#', visible: true },
-        { id: 'visitor-management', name: 'Visitor Management', href: '#', visible: true },
-        { id: 'employee-management', name: 'Employee Management', href: '#', visible: true },
-        { id: 'bed-management', name: 'Bed Management', href: '#', visible: true },
-        { id: 'catering-management', name: 'Catering Management', href: '#', visible: true },
-        { id: 'health-management', name: 'Health Management', href: '#', visible: true },
-        { id: 'financial-management', name: 'Financial Management', href: '#', visible: true },
-        { id: 'notifications', name: 'Notifications', href: '#', visible: true }
-      ]; %>
+  
 
       <% navItems.forEach(item => { %>
-        <li class="<%= (activePage === item.id) ? 'active-menu' : '' %> <%= item.visible ? '' : 'hidden' %>">
-          <a href="<%= item.href %>" id="<%= item.id %>">
-            <i class="fa <%= getIconClass(item.id) %> fa-fw"></i>
-            <%= item.name %>
-          </a>
-        </li>
+        <% if (item.visible) { %> <!-- 检查可见性 -->
+          <li class="<%= (activePage === item.id) ? 'active-menu' : '' %>">
+            <a href="<%= item.href %>" id="<%= item.id %>">
+              <i class="fa <%= getIconClass(item.id) %> fa-fw"></i>
+              <%= item.name %>
+            </a>
+          </li>
+        <% } %>
       <% }) %>
 
       <!--老人管理菜单-->

@@ -1,23 +1,53 @@
-function getNavItems(role) {
-  const navItems = [
-      { id: 'dashboard-link', visible: true },
-      { id: 'userManagement-link', visible: true },
-  ];
-
-  switch (role) {
-      case 'family':
-          navItems[1].visible = false; // 隐藏 dashboard
-          break;
-      case 'medical':
-          navItems[1].visible = false; // 隐藏 User Management
-          break;
-      case 'admin':
-          navItems[1].visible = true; // 显示 User Management
-          break;
-      default:
-          // 默认行为（如果有）
-          break;
-  }
-
-  return navItems;
-}
+<nav class="navbar-default navbar-side" role="navigation">
+    <div class="sidebar-collapse">
+      <ul class="nav" id="main-menu">
+        <% const getIconClass = (id) => {
+          const iconClasses = {
+            'dashboard': 'fa-dashboard',
+            'user-management': 'fa-user',
+            'elderly-management': 'fa-blind',
+            'visitor-management': 'fa-user-friends',
+            'employee-management': 'fa-users-cog',
+            'bed-management': 'fa-bed',
+            'catering-management': 'fa-utensils',
+            'health-management': 'fa-user-md',
+            'financial-management': 'fa-dollar-sign',
+            'notifications': 'fa-bullhorn'
+          };
+          return iconClasses[id] || 'fa-user';
+        }; %>
+  
+        <% navItems.forEach(item => { %>
+          <% if (item.visible) { %> <!-- 检查可见性 -->
+            <li class="<%= (activePage === item.id) ? 'active-menu' : '' %>">
+              <a href="<%= item.href %>" id="<%= item.id %>">
+                <i class="fa <%= getIconClass(item.id) %> fa-fw"></i>
+                <%= item.name %>
+              </a>
+            </li>
+          <% } %>
+        <% }) %>
+  
+        <!--老人管理菜单-->
+        <li class="<%= (activePage === 'elderly-management') ? 'active-menu' : '' %>">
+          <a href="#" id="elderly-management-link">
+            <i class="fa fa-blind fa-fw"></i>
+            Elderly Management
+            <span class="fa arrow"></span>
+          </a>
+          <ul class="nav nav-second-level">
+            <li>
+              <a href="/elderly-records" id="elderly-records-link">Elderly Records</a>
+            </li>
+            <li>
+              <a href="/admission-discharge" id="admission-discharge-link">Admission & Discharge</a>
+            </li>
+            <li>
+              <a href="/leave-management" id="leave-management-link">Leave Management</a>
+            </li>
+          </ul>
+        </li>
+  
+        <li class="<%= (activePage === 'visitor-management') ? 'active-menu' : '' %>">
+          <a href="#" id="visitor-management-link">
+  

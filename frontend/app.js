@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser'); // 引入cookie-parser模块，�
 const methodOverride = require('method-override');
 
 const { authenticate, setUsername } = require('../middleware/authMiddleware'); // 导入中间件
+const { visibilityMiddleware } = require('./visibilityMiddleware/userManagementVisibility');
 const authRoutes = require('./routes/authRoutes'); // 引入自定义的路由模块
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const userRoutes = require('./routes/userRoutes');
@@ -55,6 +56,7 @@ app.use('/auth', authRoutes);
 
 app.use(authenticate);
 app.use(setUsername);
+app.use(visibilityMiddleware);
 app.use('/', dashboardRoutes);
 app.use('/users', userRoutes);
 app.use('/accounts', accountRoutes);

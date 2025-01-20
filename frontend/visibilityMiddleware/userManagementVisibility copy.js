@@ -11,71 +11,76 @@ function getNavItems(role) {
       id: 'dashboard',
       name: 'Dashboard',
       href: '/dashboard',
+      visible: true,
       roles: ['admin', 'user', 'family', 'medical'],
     },
     {
       id: 'user-management',
       name: 'User Management',
       href: '/users',
+      visible: true,
       roles: ['admin'],
     },
     {
       id: 'elderly-management',
       name: 'Elderly Management',
-      href: '/users/',
+      href: '#',
+      visible: true,
       roles: ['admin', 'user', 'family', 'medical'],
     },
     {
       id: 'visitor-management',
       name: 'Visitor Management',
-      href: '/visitor-management',
+      href: '#',
+      visible: true,
       roles: ['admin', 'user', 'family'],
     },
     {
       id: 'employee-management',
       name: 'Employee Management',
-      href: '/employee-management',
+      href: '#',
+      visible: true,
       roles: ['admin'],
     },
     {
       id: 'bed-management',
       name: 'Bed Management',
-      href: '/bed-management',
+      href: '#',
+      visible: true,
       roles: ['admin', 'user', 'medical'],
     },
     {
       id: 'catering-management',
       name: 'Catering Management',
-      href: '/catering-management',
+      href: '#',
+      visible: true,
       roles: ['admin', 'user'],
     },
     {
       id: 'health-management',
       name: 'Health Management',
-      href: '/health-management',
+      href: '#',
+      visible: true,
       roles: ['admin', 'user', 'medical'],
     },
     {
       id: 'financial-management',
       name: 'Financial Management',
-      href: '/financial-management',
+      href: '#',
+      visible: true,
       roles: ['admin'],
     },
     {
       id: 'notifications',
       name: 'Notifications',
-      href: '/notifications',
+      href: '#',
+      visible: true,
       roles: ['admin', 'user'],
     },
   ];
 
-  return navItems.map(item => ({
-    ...item,
-    visible: item.roles.includes(role) // 根据角色设置可见性
-  }));
+  // 过滤掉用户角色不包含的项目
+  return navItems.filter((item) => item.roles.includes(role));
 }
-
-
-
 
 module.exports = { visibilityMiddleware, getNavItems };
