@@ -1,0 +1,170 @@
+<nav class="navbar-default navbar-side" role="navigation">
+  <div class="sidebar-collapse">
+    <!--定义一个包含侧边栏内容的容器，class="sidebar-collapse"：应用自定义类，用于控制侧边栏的折叠状态-->
+    <!--collapse:折叠收缩-->
+    <ul class="nav" id="main-menu">
+      <li class="<%= (activePage === 'dashboard') ? 'active-menu' : '' %>">
+        <a href="/dashboard">
+          <i class="fa fa-dashboard"></i>
+          Dashboard
+        </a>
+      </li>
+      <!--用户管理菜单-->
+      <li class="<%= (activePage === 'userManagement') ? 'active-menu' : '' %>">
+        <a href="/users/">
+          <i class="fa fa-user fa-fw"></i>
+          User Management
+        </a>
+      </li>
+      <!--老人管理菜单-->
+      <li class="<%= (activePage === 'elderly-management') ? 'active-menu' : '' %>">
+        <a href="#">
+          <i class="fa fa-blind fa-fw"></i>
+          Elderly Management
+          <span class="fa arrow"></span>
+        </a>
+        <ul class="nav nav-second-level">
+          <!--老人档案-->
+          <li>
+            <a href="#">Elderly Records</a>
+          </li>
+          <!--入住退住-->
+          <li>
+            <a href="#">Admission & Discharge</a>
+          </li>
+          <!--请假管理-->
+          <li>
+            <a href="#">Leave Management</a>
+          </li>
+        </ul>
+      </li>
+      <!--访客管理-->
+      <li class="<%= (activePage === 'visitor-management') ? 'active-menu' : '' %>">
+        <a href="#">
+          <i class="fa fa-user-friends fa-fw"></i>
+          Visitor Management
+          <span class="fa arrow"></span>
+        </a>
+        <ul class="nav nav-second-level">
+          <!--预约登记-->
+          <li>
+            <a href="#">Appointment Registration</a>
+          </li>
+          <!--访客登记-->
+          <li>
+            <a href="#">Visitor Registration</a>
+          </li>
+        </ul>
+      </li>
+      <!--员工管理-->
+      <li class="<%= (activePage === 'employee-management') ? 'active-menu' : '' %>">
+        <a href="#">
+          <i class="fa fa-users-cog fa-fw"></i>
+          Employee Management
+          <span class="fa arrow"></span>
+        </a>
+        <ul class="nav nav-second-level">
+          <!--员工档案-->
+          <li>
+            <a href="#">Employee Records</a>
+          </li>
+          <!--班次安排-->
+          <li>
+            <a href="#">Shift Scheduling</a>
+          </li>
+        </ul>
+      </li>
+      <!--床位管理-->
+      <li class="<%= (activePage === 'bed-management') ? 'active-menu' : '' %>">
+        <a href="#">
+          <i class="fa fa-bed fa-fw"></i>
+          Bed Management
+          <span class="fa arrow"></span>
+        </a>
+        <ul class="nav nav-second-level">
+          <!--床位状态-->
+          <li>
+            <a href="#">Bed Status</a>
+          </li>
+          <!--入住办理-->
+          <li>
+            <a href="#">Bed Assignment</a>
+          </li>
+        </ul>
+      </li>
+      <!--餐饮管理-->
+      <li class="<%= (activePage === 'catering-management') ? 'active-menu' : '' %>">
+        <a href="#">
+          <i class="fa fa-utensils fa-fw"></i>
+          Catering Management
+          <span class="fa arrow"></span>
+        </a>
+        <ul class="nav nav-second-level">
+          <!--餐次安排-->
+          <li>
+            <a href="#">Meal Scheduling</a>
+          </li>
+          <!--餐饮计划-->
+          <li>
+            <a href="#">Meal Planning</a>
+          </li>
+          <!--个性定制-->
+          <li>
+            <a href="#">Personalized Diets</a>
+          </li>
+        </ul>
+      </li>
+      <!--健康管理-->
+      <li class="<%= (activePage === 'health-management') ? 'active-menu' : '' %>">
+        <a href="#">
+          <i class="fa fa-user-md fa-fw"></i>
+          Health Management
+          <span class="fa arrow"></span>
+        </a>
+        <ul class="nav nav-second-level">
+          <!--健康档案-->
+          <li>
+            <a href="#">Health Records</a>
+          </li>
+          <!--护理管理-->
+          <li>
+            <a href="#">Care Management</a>
+          </li>
+          <!--体检记录-->
+          <li>
+            <a href="#">Medical Checkup</a>
+          </li>
+        </ul>
+      </li>
+      <!--财务管理-->
+      <li class="<%= (activePage === 'financial-management') ? 'active-menu' : '' %>">
+        <a href="#">
+          <i class="fa fa-dollar-sign"></i>
+          Financial Management
+          <span class="fa arrow"></span>
+        </a>
+        <ul class="nav nav-second-level">
+          <!--缴费记录-->
+          <li>
+            <a href="#">Payment Records</a>
+          </li>
+          <!--退费记录-->
+          <li>
+            <a href="#">Refund Records</a>
+          </li>
+          <!--工资查询-->
+          <li>
+            <a href="#">Salary Inquiry</a>
+          </li>
+        </ul>
+      </li>
+      <!--通知管理-->
+      <li class="<%= (activePage === 'notifications') ? 'active-menu' : '' %>">
+        <a href="#">
+          <i class="fa fa-bullhorn"></i>
+          Notifications
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>

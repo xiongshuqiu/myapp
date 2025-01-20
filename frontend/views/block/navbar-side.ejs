@@ -1,167 +1,172 @@
 <nav class="navbar-default navbar-side" role="navigation">
   <div class="sidebar-collapse">
-    <!--定义一个包含侧边栏内容的容器，class="sidebar-collapse"：应用自定义类，用于控制侧边栏的折叠状态-->
-    <!--collapse:折叠收缩-->
     <ul class="nav" id="main-menu">
-      <li class="<%= (activePage === 'dashboard') ? 'active-menu' : '' %>">
-        <a href="/dashboard">
-          <i class="fa fa-dashboard"></i>
-          Dashboard
-        </a>
-      </li>
-      <!--用户管理菜单-->
-      <li class="<%= (activePage === 'userManagement') ? 'active-menu' : '' %>">
-        <a href="/users/">
-          <i class="fa fa-user fa-fw"></i>
-          User Management
-        </a>
-      </li>
+      <% const getIconClass = (id) => {
+        const iconClasses = {
+          'dashboard': 'fa-dashboard',
+          'user-management': 'fa-user',
+          'elderly-management': 'fa-blind',
+          'visitor-management': 'fa-user-friends',
+          'employee-management': 'fa-users-cog',
+          'bed-management': 'fa-bed',
+          'catering-management': 'fa-utensils',
+          'health-management': 'fa-user-md',
+          'financial-management': 'fa-dollar-sign',
+          'notifications': 'fa-bullhorn'
+        };
+        return iconClasses[id] || 'fa-user';
+      }; %>
+
+      <% const navItems = [
+        { id: 'dashboard', name: 'Dashboard', href: '/dashboard', visible: true },
+        { id: 'user-management', name: 'User Management', href: '/users', visible: true },
+        { id: 'elderly-management', name: 'Elderly Management', href: '#', visible: true },
+        { id: 'visitor-management', name: 'Visitor Management', href: '#', visible: true },
+        { id: 'employee-management', name: 'Employee Management', href: '#', visible: true },
+        { id: 'bed-management', name: 'Bed Management', href: '#', visible: true },
+        { id: 'catering-management', name: 'Catering Management', href: '#', visible: true },
+        { id: 'health-management', name: 'Health Management', href: '#', visible: true },
+        { id: 'financial-management', name: 'Financial Management', href: '#', visible: true },
+        { id: 'notifications', name: 'Notifications', href: '#', visible: true }
+      ]; %>
+
+      <% navItems.forEach(item => { %>
+        <li class="<%= (activePage === item.id) ? 'active-menu' : '' %> <%= item.visible ? '' : 'hidden' %>">
+          <a href="<%= item.href %>" id="<%= item.id %>">
+            <i class="fa <%= getIconClass(item.id) %> fa-fw"></i>
+            <%= item.name %>
+          </a>
+        </li>
+      <% }) %>
+
       <!--老人管理菜单-->
       <li class="<%= (activePage === 'elderly-management') ? 'active-menu' : '' %>">
-        <a href="#">
+        <a href="#" id="elderly-management-link">
           <i class="fa fa-blind fa-fw"></i>
           Elderly Management
           <span class="fa arrow"></span>
         </a>
         <ul class="nav nav-second-level">
-          <!--老人档案-->
           <li>
-            <a href="#">Elderly Records</a>
+            <a href="/elderly-records" id="elderly-records-link">Elderly Records</a>
           </li>
-          <!--入住退住-->
           <li>
-            <a href="#">Admission & Discharge</a>
+            <a href="/admission-discharge" id="admission-discharge-link">Admission & Discharge</a>
           </li>
-          <!--请假管理-->
           <li>
-            <a href="#">Leave Management</a>
+            <a href="/leave-management" id="leave-management-link">Leave Management</a>
           </li>
         </ul>
       </li>
-      <!--访客管理-->
+
       <li class="<%= (activePage === 'visitor-management') ? 'active-menu' : '' %>">
-        <a href="#">
+        <a href="#" id="visitor-management-link">
           <i class="fa fa-user-friends fa-fw"></i>
           Visitor Management
           <span class="fa arrow"></span>
         </a>
         <ul class="nav nav-second-level">
-          <!--预约登记-->
           <li>
-            <a href="#">Appointment Registration</a>
+            <a href="/appointment-registration" id="appointment-registration-link">Appointment Registration</a>
           </li>
-          <!--访客登记-->
           <li>
-            <a href="#">Visitor Registration</a>
+            <a href="/visitor-registration" id="visitor-registration-link">Visitor Registration</a>
           </li>
         </ul>
       </li>
-      <!--员工管理-->
+
       <li class="<%= (activePage === 'employee-management') ? 'active-menu' : '' %>">
-        <a href="#">
+        <a href="#" id="employee-management-link">
           <i class="fa fa-users-cog fa-fw"></i>
           Employee Management
           <span class="fa arrow"></span>
         </a>
         <ul class="nav nav-second-level">
-          <!--员工档案-->
           <li>
-            <a href="#">Employee Records</a>
+            <a href="/employee-records" id="employee-records-link">Employee Records</a>
           </li>
-          <!--班次安排-->
           <li>
-            <a href="#">Shift Scheduling</a>
+            <a href="/shift-scheduling" id="shift-scheduling-link">Shift Scheduling</a>
           </li>
         </ul>
       </li>
-      <!--床位管理-->
+
       <li class="<%= (activePage === 'bed-management') ? 'active-menu' : '' %>">
-        <a href="#">
+        <a href="#" id="bed-management-link">
           <i class="fa fa-bed fa-fw"></i>
           Bed Management
           <span class="fa arrow"></span>
         </a>
         <ul class="nav nav-second-level">
-          <!--床位状态-->
           <li>
-            <a href="#">Bed Status</a>
+            <a href="/bed-status" id="bed-status-link">Bed Status</a>
           </li>
-          <!--入住办理-->
           <li>
-            <a href="#">Bed Assignment</a>
+            <a href="/bed-assignment" id="bed-assignment-link">Bed Assignment</a>
           </li>
         </ul>
       </li>
-      <!--餐饮管理-->
+
       <li class="<%= (activePage === 'catering-management') ? 'active-menu' : '' %>">
-        <a href="#">
+        <a href="#" id="catering-management-link">
           <i class="fa fa-utensils fa-fw"></i>
           Catering Management
           <span class="fa arrow"></span>
         </a>
         <ul class="nav nav-second-level">
-          <!--餐次安排-->
           <li>
-            <a href="#">Meal Scheduling</a>
+            <a href="/meal-scheduling" id="meal-scheduling-link">Meal Scheduling</a>
           </li>
-          <!--餐饮计划-->
           <li>
-            <a href="#">Meal Planning</a>
+            <a href="/meal-planning" id="meal-planning-link">Meal Planning</a>
           </li>
-          <!--个性定制-->
           <li>
-            <a href="#">Personalized Diets</a>
+            <a href="/personalized-diets" id="personalized-diets-link">Personalized Diets</a>
           </li>
         </ul>
       </li>
-      <!--健康管理-->
+
       <li class="<%= (activePage === 'health-management') ? 'active-menu' : '' %>">
-        <a href="#">
+        <a href="#" id="health-management-link">
           <i class="fa fa-user-md fa-fw"></i>
           Health Management
           <span class="fa arrow"></span>
         </a>
         <ul class="nav nav-second-level">
-          <!--健康档案-->
           <li>
-            <a href="#">Health Records</a>
+            <a href="/health-records" id="health-records-link">Health Records</a>
           </li>
-          <!--护理管理-->
           <li>
-            <a href="#">Care Management</a>
+            <a href="/care-management" id="care-management-link">Care Management</a>
           </li>
-          <!--体检记录-->
           <li>
-            <a href="#">Medical Checkup</a>
+            <a href="/medical-checkup" id="medical-checkup-link">Medical Checkup</a>
           </li>
         </ul>
       </li>
-      <!--财务管理-->
+
       <li class="<%= (activePage === 'financial-management') ? 'active-menu' : '' %>">
-        <a href="#">
-          <i class="fa fa-dollar-sign"></i>
+        <a href="#" id="financial-management-link">
+          <i class="fa fa-dollar-sign fa-fw"></i>
           Financial Management
           <span class="fa arrow"></span>
         </a>
         <ul class="nav nav-second-level">
-          <!--缴费记录-->
           <li>
-            <a href="#">Payment Records</a>
+            <a href="/payment-records" id="payment-records-link">Payment Records</a>
           </li>
-          <!--退费记录-->
           <li>
-            <a href="#">Refund Records</a>
+            <a href="/refund-records" id="refund-records-link">Refund Records</a>
           </li>
-          <!--工资查询-->
           <li>
-            <a href="#">Salary Inquiry</a>
+            <a href="/salary-inquiry" id="salary-inquiry-link">Salary Inquiry</a>
           </li>
         </ul>
       </li>
-      <!--通知管理-->
+
       <li class="<%= (activePage === 'notifications') ? 'active-menu' : '' %>">
-        <a href="#">
-          <i class="fa fa-bullhorn"></i>
+        <a href="#" id="notifications-link">
+          <i class="fa fa-bullhorn fa-fw"></i>
           Notifications
         </a>
       </li>

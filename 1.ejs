@@ -1,49 +1,23 @@
-const createUser = async (req, res) => {
-  try {
-    // 解构赋值提取请求体中的数据
-    const {
-      userId,
-      account,
-      userName,
-      passWord,
-      phoneNumber,
-      email,
-      role,
-    } = req.body;
+function getNavItems(role) {
+  const navItems = [
+      { id: 'dashboard-link', visible: true },
+      { id: 'userManagement-link', visible: true },
+  ];
 
-    // 组装数据对象
-    const data = {
-      userId,
-      account,
-      userName,
-      passWord,
-      phoneNumber,
-      email,
-      role,
-    };
-
-    console.log('User data:', data);
-
-    // 构建 API 请求 URL
-    const apiUrl = `${process.env.API_URL}/api/users/create`;
-
-    // 发送 POST 请求
-    const response = await postRequest(apiUrl, data);
-
-    // 获取响应数据
-    const user = response.data;
-    console.log('Created user:', user);
-
-    // 检查响应是否成功
-    if (response.success) {
-      res.redirect('/users/');
-    } else {
-      throw new Error('User creation failed');
-    }
-  } catch (err) {
-    console.error('Error creating user:', err);
-    // 处理错误并返回用户创建页面以重新输入
-    const targetPage = 'user/userCreate';
-    handleError(err, res, targetPage);
+  switch (role) {
+      case 'family':
+          navItems[1].visible = false; // 隐藏 dashboard
+          break;
+      case 'medical':
+          navItems[1].visible = false; // 隐藏 User Management
+          break;
+      case 'admin':
+          navItems[1].visible = true; // 显示 User Management
+          break;
+      default:
+          // 默认行为（如果有）
+          break;
   }
-};
+
+  return navItems;
+}
