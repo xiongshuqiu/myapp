@@ -1,24 +1,34 @@
+// #frontend routes
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/userController.js');
 const { authorizeRole} = require('../../middleware/authMiddleware');
+const {
+  getUsers,
+  renderCreateUserForm,
+  createUser,
+  getUserById,
+  updateUser,
+  deleteUser,
+} = require('../controllers/userController');
 
-// 查找所有用户信息
-router.get('/',userController.getUsers);
+// 1.查找所有用户信息
+router.get('/', getUsers);
 
-// 新增用户
-router.get('/create', userController.renderCreateUserForm); // 跳转到新增用户界面
-router.post('/create', userController.createUser);
+// 2.新增用户
+router.get('/new', renderCreateUserForm); // 显示新增用户表单
+router.post('/create', createUser);       // 提交新增用户信息
 
-// 更新用户信息
-router.get('/:_id', userController.getUserById); // 查找特定用户信息并跳转到更新页面
-router.get('/update/:_id', userController.renderUpdateUserPage); // 渲染更新用户页面
-router.post('/update/:_id', userController.updateUser); // 提交更新的用户信息
+// 3.更新用户信息
+router.get('/:_id/update', getUserById);  // 查找特定用户信息并跳转到更新用户信息表单
+router.put('/:_id', updateUser);  // 提交更新的用户信息
 
-// 删除用户信息
-router.post('/delete/:_id', userController.deleteUser);
+// 4.删除用户信息
+router.delete('/:_id/delete', deleteUser);  // 删除用户信息
 
 module.exports = router;
 
 
+module.exports = router;
 
+
+// #api-gateway routes

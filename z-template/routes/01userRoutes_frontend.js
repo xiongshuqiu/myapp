@@ -9,7 +9,7 @@ const {
   getUserById,
   updateUser,
   deleteUser,
-} = require('../controllers/userControlle');
+} = require('../controllers/userController');
 
 // 1.查找所有用户信息
 router.get('/', getUsers);

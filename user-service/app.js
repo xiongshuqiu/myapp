@@ -24,7 +24,7 @@ app.use(express.urlencoded({ extended: true })); // 解析 URL 编码的请求�
 
 app.use(cors());
 // 5.设置路由
-app.use('/user', userRoutes);
+app.use('/users', userRoutes);
 
 // 6.连接数据库
 mongoose

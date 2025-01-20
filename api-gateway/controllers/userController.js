@@ -1,113 +1,120 @@
-//导入模块
 const axios = require('axios'); // 导入 axios 模块，用于发送 HTTP 请求
 
-// 配置 axios 以允许跨域请求时携带 cookies
 axios.defaults.withCredentials = true; // 配置 axios 允许跨域请求时携带 cookies
 
+// 通用错误处理函数
+const handleError = (err, res, msg = 'Server error') => {
+  console.error('Error:', err.response ? err.response.data : err.message); // 输出详细调试信息
+  res.status(err.response?.status || 500).json({
+    success: false,
+    message: err.response?.data?.message || msg,
+  });
+};
+// 通用GET请求函数
+const getRequest = async (url) => {
+  const response = await axios.get(url);
+  return response.data;
+};
+
+// 通用POST请求函数
+const postRequest = async (url, data) => {
+  const response = await axios.post(url, data);
+  return response.data;
+};
+// 通用PUT请求函数
+const putRequest = async (url, data) => {
+  const response = await axios.put(url, data);
+  return response.data;
+};
+// 通用Delete请求函数
+const deleteRequest = async (url, data) => {
+  const response = await axios.delete(url, data);
+  return response.data;
+};
+
 // 1.查找所有用户信息
-exports.getUsers = async (req, res) => {
+const getUsers = async (req, res) => {
   try {
-    const response = await axios.get(`${process.env.USER_SERVICE_URL}/user/`); // 发送 GET 请求以获取用户信息
-    res.json(response.data); // 将响应数据返回给前端:包括数据和message
+    const url = `${process.env.USER_SERVICE_URL}/users/`;
+    const response = await getRequest(url); // 发送 GET 请求以获取用户信息
+    res.json(response); // 将响应数据返回给前端:包括数据和message
   } catch (err) {
-    console.error(
-      'Error retrieving user:',
-      err.response ? err.response.data : err.message,
-    ); // 处理获取用户信息时的错误并记录错误信息
-    res.status(500).json({ success: false, message: 'Server error' }); // 返回服务器错误状态码和信息
+    handleError(err, res)
   }
 };
 // 2. 创建用户 (C)
-exports.createUser = async (req, res) => {
+const createUser = async (req, res) => {
   const { userId, account, userName, passWord, phoneNumber, email, role } =
     req.body; // 从请求体中获取所有用户信息
 
   try {
-    const response = await axios.post(
-      `${process.env.USER_SERVICE_URL}/user/create`,
-      {
-        userId,
-        account,
-        userName,
-        passWord,
-        phoneNumber,
-        email,
-        role,
-      },
-    ); // 发送 POST 请求以创建新用户
-    res.status(201).json(response.data); // 将响应数据返回给前端
+    const url = `${process.env.USER_SERVICE_URL}/users/create`;
+    const data = {
+      userId: req.body.userId,
+      account: req.body.account,
+      userName: req.body.userName,
+      passWord: req.body.passWord,
+      phoneNumber: req.body.phoneNumber,
+      email: req.body.email,
+      role: req.body.role,
+    }
+    const response = await postRequest(url,data) // 发送 POST 请求以创建新用户
+    res.status(201).json(response); // 将响应数据返回给前端
   } catch (err) {
-    console.error(
-      'Error creating user:',
-      err.response ? err.response.data : err.message,
-    ); // 处理创建用户时的错误并记录错误信息
-    res.status(err.response ? err.response.status : 500).json({
-      success: false,
-      message: err.response ? err.response.data.message : 'Server error',
-    }); // 返回相应状态码和信息
+    handleError(err, res)
   }
 };
 // 3. 更新用户信息 (U)
 //(1)查找特定用户信息
-exports.getUserById = async (req, res) => {
+const getUserById = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取 _id
-    const response = await axios.get(
-      `${process.env.USER_SERVICE_URL}/user/${_id}`,
-    ); // 发送 GET 请求以获取用户信息
+    const url = `${process.env.USER_SERVICE_URL}/users/${_id}/update`;
+    const response = await getRequest(url); // 发送 GET 请求以获取用户信息
     const user = response.data;
     console.log(user);
-    res.json(response.data); // 将响应数据返回给前端:包括数据和message
+    res.json(response); // 将响应数据返回给前端:包括数据和message
   } catch (err) {
-    console.error(
-      'Error retrieving user:',
-      err.response ? err.response.data : err.message,
-    ); // 处理获取用户信息时的错误并记录错误信息
-    res.status(500).json({ success: false, message: 'Server error' }); // 返回服务器错误状态码和信息
+    handleError(err, res)
   }
 };
 //(2)更新用户信息
-exports.updateUser = async (req, res) => {
-  const { userId, account, userName, passWord, phoneNumber, email, role } =
-    req.body; // 从请求体中获取所有用户信息
-
+const updateUser = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取 _Id
-    const response = await axios.post(
-      `${process.env.USER_SERVICE_URL}/user/update/${_id}`,
-      {
-        userId,
-        account,
-        userName,
-        passWord,
-        phoneNumber,
-        email,
-        role,
-      },
-    ); // 发送 PUT 请求以更新用户信息
-    res.json(response.data); // 将响应数据返回给前端
+    const url = `${process.env.USER_SERVICE_URL}/users/${_id}`;
+    const data = {
+      userId: req.body.userId,
+      account: req.body.account,
+      userName: req.body.userName,
+      passWord: req.body.passWord,
+      phoneNumber: req.body.phoneNumber,
+      email: req.body.email,
+      role: req.body.role,
+    }
+    const response = await putRequest(url,data); // 发送 PUT 请求以更新用户信息
+    res.json(response); // 将响应数据返回给前端
   } catch (err) {
-    console.error(
-      'Error updating user:',
-      err.response ? err.response.data : err.message,
-    ); // 处理更新用户信息时的错误并记录错误信息
-    res.status(500).json({ success: false, message: 'Server error' }); // 返回服务器错误状态码和信息
+    handleError(err, res)
   }
 };
 
 // 5. 删除用户 (D)
-exports.deleteUser = async (req, res) => {
+const deleteUser = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取 userId
-    const response = await axios.post(
-      `${process.env.USER_SERVICE_URL}/user/delete/${_id}`,
-    ); // 发送 DELETE 请求以删除用户
-    res.json(response.data); // 将响应数据返回给前端
+    const url = `${process.env.USER_SERVICE_URL}/users/${_id}/delete`;
+    const response = await deleteRequest(url); // 发送 DELETE 请求以删除用户
+    res.json(response); // 将响应数据返回给前端
   } catch (err) {
-    console.error(
-      'Error deleting user:',
-      err.response ? err.response.data : err.message,
-    ); // 处理删除用户时的错误并记录错误信息
-    res.status(500).json({ success: false, message: 'Server error' }); // 返回服务器错误状态码和信息
+    handleError(err, res)
   }
 };
+
+  module.exports = {
+    getUsers,
+    createUser,
+    getUserById,
+    updateUser,
+    deleteUser,
+  }

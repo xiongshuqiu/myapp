@@ -1,33 +1,38 @@
 const User = require('../models/userModel');
 
-// 1.查找所有用户信息
+// 1. 查找所有用户信息
 const getUsers = async (req, res) => {
   console.log('Received request to get all users'); // 调试信息
   try {
     const users = await User.find();
-    res.json(users);
+    res.status(200).json({success: true, message: 'Users retrieved successfully', data: users });
   } catch (err) {
     console.error('Error retrieving users:', err.message); // 调试信息
-    res.status(500).json({ message: err.message });
+    res.status(500).json({success: false, message: err.message });
   }
 };
 
-// 2.新增用户
+// 2. 新增用户
 const createUser = async (req, res) => {
   const { userId, account, userName, passWord, phoneNumber, email, role } = req.body;
   console.log('Received request to create user with data:', req.body); // 调试信息
-  
+
+  // 验证用户输入
+  if (!userId || !account || !userName || !passWord || !phoneNumber || !email || !role) {
+    return res.status(400).json({success: false, message: 'Missing required fields' });
+  }
+
   try {
-    let existingUser = await User.findOne({ userId });
+    let existingUser = await User.findOne({ userId });//let可以重新赋值
     if (existingUser) {
       console.warn(`UserId already exists: ${userId}`); // 调试信息
-      return res.status(400).json({ message: 'UserId already exists' });
+      return res.status(400).json({ success: false, message: 'UserId already exists' });
     }
 
     existingUser = await User.findOne({ email });
     if (existingUser) {
       console.warn(`Email already exists: ${email}`); // 调试信息
-      return res.status(400).json({ message: 'Email already exists' });
+      return res.status(400).json({ success: false, message: 'Email already exists' });
     }
 
     const userData = { userId, account, userName, passWord, phoneNumber, email, role };
@@ -35,14 +40,14 @@ const createUser = async (req, res) => {
     const newUser = await user.save();
     console.log('User created successfully:', newUser); // 调试信息
 
-    res.status(201).json({ message: 'User created successfully', user: newUser });
+    return res.status(201).json({ success: true, message: 'User created successfully', data: newUser });
   } catch (error) {
     console.error('Error creating user:', error.message); // 调试信息
-    res.status(500).json({ message: 'An error occurred', error: error.message });
+    return res.status(500).json({success: false, message: 'An error occurred', error: error.message });
   }
 };
-// 3.更新用户
-//3-1 获取特定用户信息
+
+// 3. 获取特定用户信息
 const getUserById = async (req, res) => {
   const { _id } = req.params;
   console.log(`Received request to get user by ID: ${_id}`); // 调试信息
@@ -50,76 +55,63 @@ const getUserById = async (req, res) => {
     const user = await User.findOne({ _id });
     if (user) {
       console.log('User retrieved successfully:', user); // 调试信息
-      res.json(user);
+      return res.status(200).json({ success: true, message: 'User retrieved successfully', data: user });
     } else {
       console.warn(`User not found with ID: ${_id}`); // 调试信息
-      res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ success: false, message: 'User not found' });
     }
   } catch (err) {
     console.error('Error retrieving user:', err.message); // 调试信息
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({  success: false, message: err.message });
   }
 };
-//3-1 更新用户信息
+
+// 3. 更新用户信息
 const updateUser = async (req, res) => {
-  const {userId, account, userName, passWord, phoneNumber, email, role } = req.body;
+  const { userId, account, userName, passWord, phoneNumber, email, role } = req.body;
+  const { _id } = req.params;
+
   try {
-    const { _id } = req.params; 
-    const user = await User.findOne({_id});
-    if (user) {
-      // 打印找到的用户信息，调试用
-      console.log('User found:', user);
+    const user = await User.findOne({ _id });
+    if (!user) {
+      console.warn(`User not found with ID: ${_id}`); // 调试信息
+      return res.status(404).json({  success: false, message: 'User not found' });
+    }
 
-      // 使用 _id 进行更新，并打印更新结果，调试用
-      const updatedUser = await User.findByIdAndUpdate(
-        user._id,
-        { userId,
-          account, 
-          userName, 
-          passWord, 
-          phoneNumber, 
-          email, 
-          role 
-        }, 
-        { new: true, runValidators: true }
-      );
+    const updatedUser = await User.findByIdAndUpdate(
+      user._id,
+      { userId, account, userName, passWord, phoneNumber, email, role },
+      { new: true, runValidators: true }
+    );
 
-      if (updatedUser) {
-        console.log('User updated successfully:', updatedUser); // 调试信息
-        return res.status(200).json({ message: 'Update successful', user: updatedUser });
-      } else {
-        console.warn(`Failed to update user with ID: ${req.params._id}`); // 调试信息
-        return res.status(404).json({ message: 'User not found' });
-      }
+    if (updatedUser) {
+      console.log('User updated successfully:', updatedUser); // 调试信息
+      return res.status(200).json({  success: true, message: 'Update successful', data: updatedUser });
     } else {
-      console.warn(`User not found with ID: ${req.params.userId}`); // 调试信息
-      return res.status(404).json({ message: 'User not found' });
+      console.warn(`Failed to update user with ID: ${_id}`); // 调试信息
+      return res.status(404).json({ success: false, message: 'User not found' });
     }
   } catch (err) {
     console.error('Error updating user:', err.message); // 调试信息
-    res.status(400).json({ message: err.message });
+    return res.status(400).json({  success: false, message: err.message });
   }
 };
-
-
 
 // 5. 删除用户数据
 const deleteUser = async (req, res) => {
+  const { _id } = req.params;
+
   try {
-    const {_id } = req.params;  // 从请求参数中获取 id
-    await User.findByIdAndDelete(_id);  // 直接使用 id 进行删除操作
-    console.log('User deleted successfully:', _id);  // Debugging information
-    res.status(200).json({ message: 'User deleted successfully' });
+    await User.findByIdAndDelete(_id);
+    console.log('User deleted successfully:', _id); // 调试信息
+    return res.status(200).json({ success: true, message: 'User deleted successfully' });
   } catch (error) {
-    console.error('Error deleting user:', error.message);  // Debugging information
-    res.status(500).json({ message: 'An error occurred', error: error.message });
+    console.error('Error deleting user:', error.message); // 调试信息
+    return res.status(400).json({success: false, message: 'An error occurred', error: error.message });
   }
 };
 
-
-
-
-// 6.导出模块
+// 6. 导出模块
 module.exports = {
   getUsers, // 获取所有用户数据的方法
   getUserById, // 获取特定用户数据的方法

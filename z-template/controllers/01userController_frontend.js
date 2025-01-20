@@ -26,10 +26,10 @@ const postRequest = async (url, data) => {
 // 1.查找所用用户信息
 const getUsers = async (req, res) => {
   try {
-    const apiUrl = `${API_URL}/api/users/`;
+    const apiUrl = `${process.env.API_URL}/api/users/`;
     const response = await getRequest(apiUrl);
-    const users = response.users;
-    res.render('users/userManagement', { activePage: 'userManagement', users });
+    const users = response.data;
+    res.render('user/userManagement', { activePage: 'userManagement', users });
   } catch (err) {
     handleError(err, res);
   }
@@ -57,7 +57,7 @@ const createUser = async (req, res) => {
     const apiUrl = `${process.env.API_URL}/api/users/create`;
     const response = await postRequest(apiUrl, data);
     const message = response.message;
-    if (response.success) {
+    if (response.status ===201) {
       req.flash('success', response.message); // 使用flash消息显示成功信息
       res.redirect('/users/');
     } else {
@@ -69,7 +69,7 @@ const createUser = async (req, res) => {
     }
   } catch (err) {
       handleError(err, res);
-      return res.render('user/userUpdate', {
+      return res.render('user/userCreate', {
         activePage: 'userManagement',
         message: err.response?.data?.message || 'Server error',
       });

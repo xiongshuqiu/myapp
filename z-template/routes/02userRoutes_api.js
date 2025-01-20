@@ -7,7 +7,7 @@ const {
   getUserById,
   updateUser,
   deleteUser,
-} = require('../controllers/userController_frontedn');
+} = require('../controllers/userController');
 
 // 1.查找所有用户信息
 router.get('/', getUsers);
