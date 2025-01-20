@@ -48,16 +48,16 @@ const createUser = async (req, res) => {
     req.body; // 从请求体中获取所有用户信息
 
   try {
-    const url = `${process.env.USER_SERVICE_URL}/users/create`;
     const data = {
-      userId: req.body.userId,
-      account: req.body.account,
-      userName: req.body.userName,
-      passWord: req.body.passWord,
-      phoneNumber: req.body.phoneNumber,
-      email: req.body.email,
-      role: req.body.role,
-    }
+      userId,
+      account,
+      userName,
+      passWord,
+      phoneNumber,
+      email,
+      role,
+    };
+    const url = `${process.env.USER_SERVICE_URL}/users/create`;
     const response = await postRequest(url,data) // 发送 POST 请求以创建新用户
     res.status(201).json(response); // 将响应数据返回给前端
   } catch (err) {
@@ -80,18 +80,20 @@ const getUserById = async (req, res) => {
 };
 //(2)更新用户信息
 const updateUser = async (req, res) => {
+  const { userId, account, userName, passWord, phoneNumber, email, role } =
+  req.body; 
   try {
+    const data = {
+      userId,
+      account,
+      userName,
+      passWord,
+      phoneNumber,
+      email,
+      role,
+    };
     const { _id } = req.params; // 从参数中获取 _Id
     const url = `${process.env.USER_SERVICE_URL}/users/${_id}`;
-    const data = {
-      userId: req.body.userId,
-      account: req.body.account,
-      userName: req.body.userName,
-      passWord: req.body.passWord,
-      phoneNumber: req.body.phoneNumber,
-      email: req.body.email,
-      role: req.body.role,
-    }
     const response = await putRequest(url,data); // 发送 PUT 请求以更新用户信息
     res.json(response); // 将响应数据返回给前端
   } catch (err) {

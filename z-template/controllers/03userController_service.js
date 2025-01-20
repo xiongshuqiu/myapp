@@ -23,7 +23,7 @@ const createUser = async (req, res) => {
   }
 
   try {
-    const existingUser = await User.findOne({ userId });
+    let existingUser = await User.findOne({ userId });//let可以重新赋值
     if (existingUser) {
       console.warn(`UserId already exists: ${userId}`); // 调试信息
       return res.status(400).json({ success: false, message: 'UserId already exists' });

@@ -14,16 +14,19 @@ const {
 // 1.查找所有用户信息
 router.get('/', getUsers);
 
-// 2.新增用户/*  */
-router.get('/create', renderCreateUserForm);
-router.post('/create', createUser);
+// 2.新增用户
+router.get('/new', renderCreateUserForm); // 显示新增用户表单
+router.post('/create', createUser);       // 提交新增用户信息
 
-// 3.编辑用户信息
-router.get('/:_id/update', getUserById); //查找特定用户信息并跳转到新增用户界面
-router.post('/:_id/update', updateUser);//查找更新的用户信息
+// 3.更新用户信息
+router.get('/:_id/update', getUserById);  // 查找特定用户信息并跳转到更新用户信息表单
+router.put('/:_id', updateUser);  // 提交更新的用户信息
 
 // 4.删除用户信息
-router.post('/:_id/delete', deleteUser);
+router.delete('/:_id/delete', deleteUser);  // 删除用户信息
+
+module.exports = router;
+
 
 module.exports = router;
 

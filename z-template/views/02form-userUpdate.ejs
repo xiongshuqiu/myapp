@@ -4,28 +4,28 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Update User Information</title>
-   <!-- 1.框架样式：Bootstrap Styles-->
-   <link href="/assets/css/bootstrap.css" rel="stylesheet" />
-   <!-- 2.图标样式：FontAwesome Styles-->
-   <link href="/assets/css/font-awesome.css" rel="stylesheet" />
-   <link
-     rel="stylesheet"
-     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-   />
-   <!--3.普通样式：Custom Styles-->
-   <link href="/assets/css/custom-styles.css" rel="stylesheet" />
-   <!-- 4.字体样式：Google Fonts-->
-   <link
-     href="http://fonts.useso.com/css?family=Open+Sans"
-     rel="stylesheet"
-     type="text/css"
-   />
- </head>
+    <!-- 1.框架样式：Bootstrap Styles-->
+    <link href="/assets/css/bootstrap.css" rel="stylesheet" />
+    <!-- 2.图标样式：FontAwesome Styles-->
+    <link href="/assets/css/font-awesome.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <!--3.普通样式：Custom Styles-->
+    <link href="/assets/css/custom-styles.css" rel="stylesheet" />
+    <!-- 4.字体样式：Google Fonts-->
+    <link
+      href="http://fonts.useso.com/css?family=Open+Sans"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
 
   <body>
     <div id="wrapper">
       <!-- 顶部导航条 -->
-      <%- include('../block/top-navbar.ejs') %>  
+      <%- include('../block/top-navbar.ejs') %>
       <!-- 左侧导航条 -->
       <%- include('../block/navbar-side.ejs') %>
 
@@ -49,10 +49,16 @@
                 <div class="panel-body">
                   <div class="row">
                     <div class="col-lg-6">
-                      <form action="/users/<%= user._id%>/update" method="post" role="form">
-                      
+                      <form
+                        action="/users/<%= user._id %>?_method=PUT"
+                        method="post"
+                        role="form"
+                      >
+                        <input type="hidden" name="_method" value="PUT" />
                         <div class="form-group">
-                          <label for="userId">User ID <span style="color: red">*</span></label>
+                          <label for="userId"
+                            >User ID <span style="color: red">*</span></label
+                          >
                           <input
                             type="text"
                             class="form-control"
@@ -64,7 +70,9 @@
                         </div>
 
                         <div class="form-group">
-                          <label for="account">Account <span style="color: red">*</span></label>
+                          <label for="account"
+                            >Account <span style="color: red">*</span></label
+                          >
                           <input
                             type="text"
                             class="form-control"
@@ -76,7 +84,9 @@
                         </div>
 
                         <div class="form-group">
-                          <label for="userName">User Name <span style="color: red">*</span></label>
+                          <label for="userName"
+                            >User Name <span style="color: red">*</span></label
+                          >
                           <input
                             type="text"
                             class="form-control"
@@ -88,7 +98,9 @@
                         </div>
 
                         <div class="form-group">
-                          <label for="passWord">Password <span style="color: red">*</span></label>
+                          <label for="passWord"
+                            >Password <span style="color: red">*</span></label
+                          >
                           <input
                             type="password"
                             class="form-control"
@@ -100,7 +112,10 @@
                         </div>
 
                         <div class="form-group">
-                          <label for="phoneNumber">Phone Number <span style="color: red">*</span></label>
+                          <label for="phoneNumber"
+                            >Phone Number
+                            <span style="color: red">*</span></label
+                          >
                           <input
                             type="tel"
                             class="form-control"
@@ -112,7 +127,9 @@
                         </div>
 
                         <div class="form-group">
-                          <label for="email">Email <span style="color: red">*</span></label>
+                          <label for="email"
+                            >Email <span style="color: red">*</span></label
+                          >
                           <input
                             type="email"
                             class="form-control"
@@ -126,7 +143,9 @@
                         </div>
 
                         <div class="form-group">
-                          <label for="role">Role <span style="color: red">*</span></label>
+                          <label for="role"
+                            >Role <span style="color: red">*</span></label
+                          >
                           <input
                             type="text"
                             class="form-control"
@@ -143,14 +162,15 @@
                         <button
                           type="reset"
                           class="btn btn-secondary"
-                          onclick="window.location.href='/user/';"
+                          onclick="window.location.href='/users/';"
                         >
                           Return
                         </button>
                       </form>
                       <div id="message">
-                        <% if (typeof message !== 'undefined' && message !== null) { %>
-                          <div class="alert alert-success"><%= message %></div>
+                        <% if (typeof message !== 'undefined' && message !==
+                        null) { %>
+                        <div class="alert alert-success"><%= message %></div>
                         <% } %>
                       </div>
                     </div>

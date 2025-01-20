@@ -1,100 +1,49 @@
-<form action="/users/<%= user._id %>?_method=PUT" method="post" role="form">
-  <input type="hidden" name="_method" value="PUT" />
-  <!-- 表单字段 -->
-  <div class="form-group">
-    <label for="userId">User ID <span style="color: red">*</span></label>
-    <input
-      type="text"
-      class="form-control"
-      id="userId"
-      name="userId"
-      value="<%= user.userId %>"
-      required
-    />
-  </div>
+const createUser = async (req, res) => {
+  try {
+    // 解构赋值提取请求体中的数据
+    const {
+      userId,
+      account,
+      userName,
+      passWord,
+      phoneNumber,
+      email,
+      role,
+    } = req.body;
 
-  <div class="form-group">
-    <label for="account">Account <span style="color: red">*</span></label>
-    <input
-      type="text"
-      class="form-control"
-      id="account"
-      name="account"
-      value="<%= user.account %>"
-      required
-    />
-  </div>
+    // 组装数据对象
+    const data = {
+      userId,
+      account,
+      userName,
+      passWord,
+      phoneNumber,
+      email,
+      role,
+    };
 
-  <div class="form-group">
-    <label for="userName">User Name <span style="color: red">*</span></label>
-    <input
-      type="text"
-      class="form-control"
-      id="userName"
-      name="userName"
-      value="<%= user.userName %>"
-      required
-    />
-  </div>
+    console.log('User data:', data);
 
-  <div class="form-group">
-    <label for="passWord">Password <span style="color: red">*</span></label>
-    <input
-      type="password"
-      class="form-control"
-      id="passWord"
-      name="passWord"
-      value="<%= user.passWord %>"
-      required
-    />
-  </div>
+    // 构建 API 请求 URL
+    const apiUrl = `${process.env.API_URL}/api/users/create`;
 
-  <div class="form-group">
-    <label for="phoneNumber"
-      >Phone Number <span style="color: red">*</span></label
-    >
-    <input
-      type="tel"
-      class="form-control"
-      id="phoneNumber"
-      name="phoneNumber"
-      value="<%= user.phoneNumber %>"
-      required
-    />
-  </div>
+    // 发送 POST 请求
+    const response = await postRequest(apiUrl, data);
 
-  <div class="form-group">
-    <label for="email">Email <span style="color: red">*</span></label>
-    <input
-      type="email"
-      class="form-control"
-      id="email"
-      name="email"
-      value="<%= user.email %>"
-      required
-      pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-      title="Email format should be similar to xiongwang@126.com"
-    />
-  </div>
+    // 获取响应数据
+    const user = response.data;
+    console.log('Created user:', user);
 
-  <div class="form-group">
-    <label for="role">Role <span style="color: red">*</span></label>
-    <input
-      type="text"
-      class="form-control"
-      id="role"
-      name="role"
-      value="<%= user.role %>"
-      required
-    />
-  </div>
-
-  <button type="submit" class="btn btn-primary">Save Changes</button>
-  <button
-    type="reset"
-    class="btn btn-secondary"
-    onclick="window.location.href='/users/';"
-  >
-    Return
-  </button>
-</form>
+    // 检查响应是否成功
+    if (response.success) {
+      res.redirect('/users/');
+    } else {
+      throw new Error('User creation failed');
+    }
+  } catch (err) {
+    console.error('Error creating user:', err);
+    // 处理错误并返回用户创建页面以重新输入
+    const targetPage = 'user/userCreate';
+    handleError(err, res, targetPage);
+  }
+};

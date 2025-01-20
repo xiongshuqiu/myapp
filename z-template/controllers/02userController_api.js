@@ -21,6 +21,17 @@ const postRequest = async (url, data) => {
   const response = await axios.post(url, data);
   return response.data;
 };
+// 通用PUT请求函数
+const putRequest = async (url, data) => {
+  const response = await axios.put(url, data);
+  return response.data;
+};
+// 通用Delete请求函数
+const deleteRequest = async (url, data) => {
+  const response = await axios.delete(url, data);
+  return response.data;
+};
+
 // 1.查找所有用户信息
 const getUsers = async (req, res) => {
   try {
@@ -37,16 +48,16 @@ const createUser = async (req, res) => {
     req.body; // 从请求体中获取所有用户信息
 
   try {
-    const url = `${process.env.USER_SERVICE_URL}/users/create`;
     const data = {
-      userId: req.body.userId,
-      account: req.body.account,
-      userName: req.body.userName,
-      passWord: req.body.passWord,
-      phoneNumber: req.body.phoneNumber,
-      email: req.body.email,
-      role: req.body.role,
-    }
+      userId,
+      account,
+      userName,
+      passWord,
+      phoneNumber,
+      email,
+      role,
+    };
+    const url = `${process.env.USER_SERVICE_URL}/users/create`;
     const response = await postRequest(url,data) // 发送 POST 请求以创建新用户
     res.status(201).json(response); // 将响应数据返回给前端
   } catch (err) {
@@ -70,21 +81,20 @@ const getUserById = async (req, res) => {
 //(2)更新用户信息
 const updateUser = async (req, res) => {
   const { userId, account, userName, passWord, phoneNumber, email, role } =
-    req.body; // 从请求体中获取所有用户信息
-
+  req.body; 
   try {
-    const { _id } = req.params; // 从参数中获取 _Id
-    const url = `${process.env.USER_SERVICE_URL}/users/${_id}/update`;
     const data = {
-      userId: req.body.userId,
-      account: req.body.account,
-      userName: req.body.userName,
-      passWord: req.body.passWord,
-      phoneNumber: req.body.phoneNumber,
-      email: req.body.email,
-      role: req.body.role,
-    }
-    const response = await postRequest(url,data); // 发送 PUT 请求以更新用户信息
+      userId,
+      account,
+      userName,
+      passWord,
+      phoneNumber,
+      email,
+      role,
+    };
+    const { _id } = req.params; // 从参数中获取 _Id
+    const url = `${process.env.USER_SERVICE_URL}/users/${_id}`;
+    const response = await putRequest(url,data); // 发送 PUT 请求以更新用户信息
     res.json(response); // 将响应数据返回给前端
   } catch (err) {
     handleError(err, res)
@@ -96,7 +106,7 @@ const deleteUser = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取 userId
     const url = `${process.env.USER_SERVICE_URL}/users/${_id}/delete`;
-    const response = await postRequest(url); // 发送 DELETE 请求以删除用户
+    const response = await deleteRequest(url); // 发送 DELETE 请求以删除用户
     res.json(response); // 将响应数据返回给前端
   } catch (err) {
     handleError(err, res)

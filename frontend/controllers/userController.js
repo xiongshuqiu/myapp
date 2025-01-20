@@ -40,14 +40,18 @@ const deleteRequest = async (url, data) => {
   return response.data;
 };
 
-
 // 1.查找所用用户信息
 const getUsers = async (req, res) => {
   try {
     const apiUrl = `${process.env.API_URL}/api/users/`;
     const response = await getRequest(apiUrl);
     const users = response.data;
-    res.render('user/userManagement', { activePage: 'userManagement', users });
+    if (response.success) {
+      res.render('user/userManagement', {
+        activePage: 'userManagement',
+        users,
+      });
+    }
   } catch (err) {
     handleError(err, res);
   }
@@ -61,17 +65,18 @@ const renderCreateUserForm = async (req, res) => {
 };
 //(2)提交新用户信息
 const createUser = async (req, res) => {
+  const { userId, account, userName, passWord, phoneNumber, email, role } =
+    req.body;
   try {
     const data = {
-      userId: req.body.userId,
-      account: req.body.account,
-      userName: req.body.userName,
-      passWord: req.body.passWord,
-      phoneNumber: req.body.phoneNumber,
-      email: req.body.email,
-      role: req.body.role,
+      userId,
+      account,
+      userName,
+      passWord,
+      phoneNumber,
+      email,
+      role,
     };
-    console.log(data);
     const apiUrl = `${process.env.API_URL}/api/users/create`;
     const response = await postRequest(apiUrl, data);
     const user = response.data;
@@ -88,17 +93,19 @@ const createUser = async (req, res) => {
 // 3.更新用户信息
 // (1)查找特定用户信息并跳转到编辑用户信息页面
 const getUserById = async (req, res) => {
+  const { _id } = req.params; // 从参数中获取 _id
+  console.log(`Fetching user with ID: ${_id}`); // 调试信息
   try {
-    const { _id } = req.params; // 从参数中获取 _id
-    console.log(`Fetching user with ID: ${_id}`); // 调试信息
     const apiUrl = `${process.env.API_URL}/api/users/${_id}/update`;
     const response = await getRequest(apiUrl); // 使用组装的URL进行API调用
     const user = response.data;
     console.log(user);
-    res.render('user/userUpdate.ejs', {
-      activePage: 'userManagement',
-      user,
-    });
+    if (response.success) {
+      res.render('user/userUpdate.ejs', {
+        activePage: 'userManagement',
+        user,
+      });
+    }
   } catch (err) {
     handleError(err, res);
   }
@@ -106,26 +113,27 @@ const getUserById = async (req, res) => {
 
 //(2) 提交已编辑的用户信息
 const updateUser = async (req, res) => {
+  const { userId, account, userName, passWord, phoneNumber, email, role } =
+    req.body;
+  const { _id } = req.params;
   try {
-    const { _id } = req.params;
     const data = {
-      userId: req.body.userId,
-      account: req.body.account,
-      userName: req.body.userName,
-      passWord: req.body.passWord,
-      phoneNumber: req.body.phoneNumber,
-      email: req.body.email,
-      role: req.body.role,
+      userId,
+      account,
+      userName,
+      passWord,
+      phoneNumber,
+      email,
+      role,
     };
-    console.log(data);
     // 从请求参数中获取 _id
     const apiUrl = `${process.env.API_URL}/api/users/${_id}`;
     const response = await putRequest(apiUrl, data);
     const user = response.data;
     console.log(user);
-     if (response.success ) {
-        res.redirect('/users/');
-     }
+    if (response.success) {
+      res.redirect('/users/');
+    }
   } catch (err) {
     const targetPage = 'user/userUpdate'; //用户需要输入新值
     handleError(err, res, targetPage);
@@ -139,11 +147,8 @@ const deleteUser = async (req, res) => {
     console.log(_id);
     const apiUrl = `${process.env.API_URL}/api/users/${_id}/delete`;
     const response = await deleteRequest(apiUrl);
-    if (response.sucess) {
+    if (response.success) {
       res.redirect('/users/');
-    } else {
-      // 处理失败的情况，返回简单的响应
-      throw new Error(response.message); // 抛出错误
     }
   } catch (err) {
     handleError(err, res);
