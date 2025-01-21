@@ -470,49 +470,34 @@ padding-top: 4px;
 .nav-third-level li a {
     padding-left: 55px;
 }
-
-.sidebar-collapse, .sidebar-collapse .nav {
-    background: none;
+.sidebar-collapse , .sidebar-collapse .nav{
+	background:none;
 }
-
 .sidebar-collapse {
-    overflow-y: auto; /* 启用垂直滚动条 */
-    height: calc(100vh - 50px); /* 调整为适应整个视口高度，减去50px来考虑页面顶部导航或其他固定元素的高度 */
-}
-
+    overflow-y: auto;
+    max-height: 100vh;
+  }
 .sidebar-collapse .nav {
-    padding: 0;
-    max-height: none; /* 确保子元素没有高度限制 */
+	padding:0;
 }
-
 .sidebar-collapse .nav > li > a {
-    color: #FFFFFF;
-    background: transparent;
-    text-shadow: none;
-    height: auto; /* 确保链接高度自适应内容 */
+	color: #FFFFFF;
+	background:transparent;
+	text-shadow:none;
 }
-
 .sidebar-collapse > .nav > li > a {
-    padding: 12px 10px;
+	padding: 12px 10px;
 }
-
 .sidebar-collapse > .nav > li {
-    border-bottom: 1px solid rgba(107, 108, 109, 0.19);
+	border-bottom: 1px solid rgba(107, 108, 109, 0.19);
 }
-
-ul.nav.nav-second-level.collapse.in {
-    background: #131212;
-}
-
+ul.nav.nav-second-level.collapse.in {background: #131212;}
 .sidebar-collapse .nav > li > a:hover,
 .sidebar-collapse .nav > li > a:focus {
-    outline: 0;
+	 
+	outline:0;
 }
-
-
  
-
-
 .navbar-side {
 	border:none;
 	background: #323232;
@@ -571,7 +556,6 @@ background-color: #FFF;
 ul.dropdown-menu.dropdown-messages li a div {
   padding: 2px 0;
 }
-
 /*----------------------------------------------
     UI ELEMENTS STYLES     
 ------------------------------------------------*/

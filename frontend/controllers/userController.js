@@ -65,7 +65,7 @@ const getUsers = async (req, res) => {
 //(1)点击AddUser按钮跳转到新增用户的页面
 const renderCreateUserForm = async (req, res) => {
   res.render('user/userCreate.ejs', {
-    activePage: 'userManagement',
+    activePage: 'user-management',
     navItems: req.navItems, // 将导航项传递到视图
   });
 };

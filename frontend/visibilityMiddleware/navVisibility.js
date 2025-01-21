@@ -19,7 +19,7 @@ function getNavItems(role) {
       id: 'user-management',
       name: 'User Management',
       href: '/users',
-      roles: ['admin', 'family', 'medical'],
+      roles: ['admin'],
       icon: 'fa-user fa-fw',
       subMenu: []
     },
@@ -38,12 +38,12 @@ function getNavItems(role) {
         {
           name: 'Admission & Discharge',
           href: '#',
-          roles: ['admin', 'user', 'family',]
+          roles: ['admin','family',]
         },
         {
           name: 'Leave Management',
           href: '#',
-          roles: ['admin', 'user', 'family', 'medical']
+          roles: ['admin','family']
         }
       ]
     },
@@ -51,18 +51,18 @@ function getNavItems(role) {
       id: 'visitor-management',
       name: 'Visitor Management',
       href: '/visitor-management',
-      roles: ['admin', 'user', 'family'],
+      roles: ['admin','family'],
       icon: 'fa-user-friends fa-fw',
       subMenu: [
         {
           name: 'Appointment Registration',
           href: '#',
-          roles: ['admin', 'user', 'family']
+          roles: ['admin', 'family']
         },
         {
           name: 'Visitor Registration',
           href: '#',
-          roles: ['admin', 'user', 'family']
+          roles: ['admin', 'family']
         }
       ]
     },
@@ -70,7 +70,7 @@ function getNavItems(role) {
       id: 'employee-management',
       name: 'Employee Management',
       href: '/employee-management',
-      roles: ['admin'],
+      roles: ['admin','medical'],
       icon: 'fa-users-cog fa-fw',
       subMenu: [
         {
@@ -81,7 +81,7 @@ function getNavItems(role) {
         {
           name: 'Shift Scheduling',
           href: '#',
-          roles: ['admin']
+          roles: ['admin','medical']
         }
       ]
     },
@@ -89,18 +89,18 @@ function getNavItems(role) {
       id: 'bed-management',
       name: 'Bed Management',
       href: '/bed-management',
-      roles: ['admin', 'user', 'medical'],
+      roles: ['admin','medical'],
       icon: 'fa-bed fa-fw',
       subMenu: [
         {
           name: 'Bed Status',
           href: '#',
-          roles: ['admin', 'user', 'medical']
+          roles: ['admin','medical']
         },
         {
           name: 'Bed Assignment',
           href: '#',
-          roles: ['admin', 'user', 'medical']
+          roles: ['admin','medical']
         }
       ]
     },
@@ -114,17 +114,17 @@ function getNavItems(role) {
         {
           name: 'Meal Scheduling',
           href: '#',
-          roles: ['admin', 'user']
+          roles: ['admin', 'family']
         },
         {
           name: 'Meal Planning',
           href: '#',
-          roles: ['admin', 'user']
+          roles: ['admin', 'family']
         },
         {
           name: 'Personalized Diets',
           href: '#',
-          roles: ['admin', 'user']
+          roles: ['admin','family']
         }
       ]
     },
@@ -132,23 +132,23 @@ function getNavItems(role) {
       id: 'health-management',
       name: 'Health Management',
       href: '/health-management',
-      roles: ['admin', 'user', 'medical'],
+      roles: ['admin', 'family', 'medical'],
       icon: 'fa-user-md fa-fw',
       subMenu: [
         {
           name: 'Health Records',
           href: '#',
-          roles: ['admin', 'user', 'medical']
+          roles: ['admin', 'family', 'medical']
         },
         {
           name: 'Care Management',
           href: '#',
-          roles: ['admin', 'user', 'medical']
+          roles: ['admin', 'family', 'medical']
         },
         {
           name: 'Medical Checkup',
           href: '#',
-          roles: ['admin', 'user', 'medical']
+          roles: ['admin', 'family', 'medical']
         }
       ]
     },
@@ -156,23 +156,23 @@ function getNavItems(role) {
       id: 'financial-management',
       name: 'Financial Management',
       href: '/financial-management',
-      roles: ['admin'],
+      roles: ['admin', 'family', 'medical'],
       icon: 'fa-dollar-sign',
       subMenu: [
         {
           name: 'Payment Records',
           href: '#',
-          roles: ['admin']
+          roles: ['admin','medical']
         },
         {
           name: 'Refund Records',
           href: '#',
-          roles: ['admin']
+          roles: ['admin','family']
         },
         {
           name: 'Salary Inquiry',
           href: '#',
-          roles: ['admin']
+          roles: ['admin','medical']
         }
       ]
     },
@@ -180,7 +180,7 @@ function getNavItems(role) {
       id: 'notifications',
       name: 'Notifications',
       href: '/notifications',
-      roles: ['admin', 'user'],
+      roles: ['admin', 'family', 'medical'],
       icon: 'fa-bullhorn',
       subMenu: []
     }
