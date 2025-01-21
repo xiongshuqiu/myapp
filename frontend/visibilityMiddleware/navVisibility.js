@@ -108,7 +108,7 @@ function getNavItems(role) {
       id: 'catering-management',
       name: 'Catering Management',
       href: '/catering-management',
-      roles: ['admin', 'user'],
+      roles: ['admin', 'family'],
       icon: 'fa-utensils fa-fw',
       subMenu: [
         {
