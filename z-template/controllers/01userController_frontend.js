@@ -12,7 +12,7 @@ const handleError = (
   console.error('Error:', err.response ? err.response.data : err.message); // 输出详细调试信息
   if (!res.headersSent) {
     res.status(err.response?.status || 500).render(targetPage, {
-      activePage: 'userManagement',
+      activePage: 'user-management',
       message: err.response?.data?.message || msg,
     });
   }
@@ -47,9 +47,14 @@ const getUsers = async (req, res) => {
     const response = await getRequest(apiUrl);
     const users = response.data;
     if (response.success) {
+      // const buttonItems = req.buttonItems;
+      // const linkItems = req.linkItems
       res.render('user/userManagement', {
-        activePage: 'userManagement',
+        activePage: 'user-management',
         users,
+        navItems: req.navItems, // 将导航项传递到视图
+        buttonItems:req.buttonItems,
+        linkItems:req.linkItems
       });
     }
   } catch (err) {
@@ -61,6 +66,7 @@ const getUsers = async (req, res) => {
 const renderCreateUserForm = async (req, res) => {
   res.render('user/userCreate.ejs', {
     activePage: 'userManagement',
+    navItems: req.navItems, // 将导航项传递到视图
   });
 };
 //(2)提交新用户信息
@@ -102,8 +108,9 @@ const getUserById = async (req, res) => {
     console.log(user);
     if (response.success) {
       res.render('user/userUpdate.ejs', {
-        activePage: 'userManagement',
+        activePage: 'user-management',
         user,
+        navItems: req.navItems
       });
     }
   } catch (err) {

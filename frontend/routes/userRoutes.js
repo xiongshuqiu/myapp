@@ -1,7 +1,8 @@
 // #frontend routes
 const express = require('express');
 const router = express.Router();
-const { authorizeRole} = require('../../middleware/authMiddleware');
+const { authorizeRole } = require('../../middleware/authMiddleware');
+const {bntLinkVisibility} =require('../visibilityMiddleware/bntLinkVisibility')
 const {
   getUsers,
   renderCreateUserForm,
@@ -12,10 +13,10 @@ const {
 } = require('../controllers/userController');
 
 // 1.查找所有用户信息
-router.get('/', getUsers);
+router.get('/',bntLinkVisibility, getUsers);
 
 // 2.新增用户
-router.get('/new', renderCreateUserForm); // 显示新增用户表单
+router.get('/new', renderCreateUserForm,); // 显示新增用户表单
 router.post('/create', createUser);       // 提交新增用户信息
 
 // 3.更新用户信息

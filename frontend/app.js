@@ -8,7 +8,7 @@ const cookieParser = require('cookie-parser'); // 引入cookie-parser模块，�
 const methodOverride = require('method-override');
 
 const { authenticate, setUsername } = require('../middleware/authMiddleware'); // 导入中间件
-const { visibilityMiddleware } = require('./visibilityMiddleware/userManagementVisibility');
+const { navVisibility } = require('./visibilityMiddleware/navVisibility'); //导航可见性判断控制器
 const authRoutes = require('./routes/authRoutes'); // 引入自定义的路由模块
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const userRoutes = require('./routes/userRoutes');
@@ -32,8 +32,8 @@ app.use(
 app.use(express.json()); // 解析 JSON 请求体
 app.use(express.urlencoded({ extended: true })); // 解析 URL 编码的请求体
 
-// 6. 使用 method-override 中间件
-app.use(methodOverride('_method'));
+// 6. 使用 method-override 中间件，用于方法转化
+app.use(methodOverride('_method')); 
 
 // 7. 使用会话管理和 Cookie 解析中间件
 app.use(cookieParser()); // 使用cookie-parser中间件
@@ -56,7 +56,7 @@ app.use('/auth', authRoutes);
 
 app.use(authenticate);
 app.use(setUsername);
-app.use(visibilityMiddleware);
+app.use(navVisibility); 
 app.use('/', dashboardRoutes);
 app.use('/users', userRoutes);
 app.use('/accounts', accountRoutes);

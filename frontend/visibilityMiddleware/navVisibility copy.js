@@ -1,4 +1,4 @@
-function visibilityMiddleware(req, res, next) {
+function navVisibility(req, res, next) {
   const userRole = req.user.role; // 假设用户角色已存储在 req.user 中
   const navItems = getNavItems(userRole);
   req.navItems = navItems;
@@ -11,76 +11,68 @@ function getNavItems(role) {
       id: 'dashboard',
       name: 'Dashboard',
       href: '/dashboard',
-      visible: true,
-      roles: ['admin', 'user', 'family', 'medical'],
+      roles: ['admin', 'family', 'medical'],
     },
     {
       id: 'user-management',
       name: 'User Management',
       href: '/users',
-      visible: true,
-      roles: ['admin'],
+      roles: ['admin', 'family', 'medical'],
     },
     {
       id: 'elderly-management',
       name: 'Elderly Management',
-      href: '#',
-      visible: true,
+      href: '/users/',
       roles: ['admin', 'user', 'family', 'medical'],
     },
     {
       id: 'visitor-management',
       name: 'Visitor Management',
-      href: '#',
-      visible: true,
+      href: '/visitor-management',
       roles: ['admin', 'user', 'family'],
     },
     {
       id: 'employee-management',
       name: 'Employee Management',
-      href: '#',
-      visible: true,
+      href: '/employee-management',
       roles: ['admin'],
     },
     {
       id: 'bed-management',
       name: 'Bed Management',
-      href: '#',
-      visible: true,
+      href: '/bed-management',
       roles: ['admin', 'user', 'medical'],
     },
     {
       id: 'catering-management',
       name: 'Catering Management',
-      href: '#',
-      visible: true,
+      href: '/catering-management',
       roles: ['admin', 'user'],
     },
     {
       id: 'health-management',
       name: 'Health Management',
-      href: '#',
-      visible: true,
+      href: '/health-management',
       roles: ['admin', 'user', 'medical'],
     },
     {
       id: 'financial-management',
       name: 'Financial Management',
-      href: '#',
-      visible: true,
+      href: '/financial-management',
       roles: ['admin'],
     },
     {
       id: 'notifications',
       name: 'Notifications',
-      href: '#',
-      visible: true,
+      href: '/notifications',
       roles: ['admin', 'user'],
     },
   ];
 
-  // 过滤掉用户角色不包含的项目
-  return navItems.filter((item) => item.roles.includes(role));
+  return navItems.map((item) => ({
+    ...item,
+    visible: item.roles.includes(role), // 根据角色设置可见性
+  }));
 }
 
-module.exports = { visibilityMiddleware, getNavItems };
+module.exports = {navVisibility};

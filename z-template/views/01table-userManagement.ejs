@@ -86,12 +86,17 @@
                           <td><%= user.email %></td>
                           <td><%= user.role %></td>
                           <td>
-                            <a
-                              href="/users/<%= user._id %>/update"
-                              class="editLink"
-                              style="color: blue; display: inline"
-                              >Edit</a
-                            >
+                            <% linkItems.forEach(function(item) { %> 
+                              <% if (item.id  ==='edit-user-link'&&item.visible) { %>
+                              <a
+                                id="<%= item.id %>"
+                                href="/users/<%= user._id %>/update"
+                                class="editlink"
+                                style="color: blue; display: inline"
+                                >Edit
+                              </a>
+                              <% } %>
+                               <% }); %>
                             <!-- 链接的href属性: 使用href="javascript:void(0)"避免页面跳转，确保点击链接时不会重定向。
                             onclick事件: 直接调用JavaScript函数confirmDeletion('<%= user._id %>')来处理删除逻辑。
                             #代替javascript:void(0)可能会跳转到顶部 -->
@@ -102,18 +107,7 @@
                               onclick="confirmDeletion('<%= user._id %>')"
                               >Delete</a
                             >
-                            <form
-                              id="delete-form-<%= user._id %>"
-                              action="/users/<%= user._id %>/delete"
-                              method="post"
-                              style="display: none"
-                            >
-                              <input
-                                type="hidden"
-                                name="_method"
-                                value="DELETE"
-                              />
-                            </form>
+                         
                           </td>
                         </tr>
                         <% }); %>
@@ -152,22 +146,42 @@
     <script src="/assets/js/dataTables/jquery.dataTables.js"></script>
     <script src="/assets/js/dataTables/dataTables.bootstrap.js"></script>
     <script>
-      // 1.当文档加载完成并且 DOM 准备就绪时，执行内部的函数
       $(document).ready(function () {
-        // 初始化 DataTable 插件，并将其绑定到 ID 为 dataTables-example 的表格元素
-        // # 是用来选择元素的 ID 属性的选择器
         var table = $('#dataTables-example').DataTable();
+      });
+    </script>
 
-        // 2.在过滤器区域添加 "Add User" 按钮
+    <!-- 在过滤器区域添加 "Add User" 按钮 -->
+    <% buttonItems.forEach(function(item) { %> <% if (item.id === 'add-user-btn'
+    && item.visible) { %>
+    <script>
+      $(document).ready(function () {
         $('#dataTables-example_filter').append(
-          '<button id="addUser" class="btn btn-primary add-user-btn">Add User</button>',
+          '<button id="<%= item.id %>" class="btn btn-primary add-user-btn" data-href="<%= item.href %>"><%= item.name %></button>',
         );
+
         // 处理 "Add User" 按钮点击事件
-        $('#addUser').on('click', function () {
-          window.location.href = '/users/new';
+        $(document).on('click', '#<%= item.id %>', function () {
+          var href = $(this).data('href'); // 获取按钮的 data-href 属性
+          window.location.href = href; // 重定向到相应的链接
         });
       });
+    </script>
+    <% } %> <% }); %>
+      <script>
+    //处理动态生成的编辑链接点击事件
+    $(document).on('click', '.editlink', function (event) {  //.edit-link是类
+      event.preventDefault(); // 阻止默认行为
+      var href = $(this).attr('href'); // 获取链接的 href 属性
+      window.location.href = href; // 重定向到相应的链接
+    });
+ 
+</script>
+
+    </script>
+    <script>
       //3.添加删除对话框
+      // 在实际运行时，confirmDeletion 函数接收到的 _id 参数就是 user._id 的值。
       async function confirmDeletion(_id) {
         if (confirm('Are you sure you want to delete this user?')) {
           try {

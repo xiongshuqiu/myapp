@@ -1,4 +1,5 @@
 const axios = require('axios'); // 导入 axios 模块，用于发送 HTTP 请求
+
 axios.defaults.withCredentials = true; // 配置 axios 允许跨域请求时携带 cookies
 
 // 通用错误处理函数
@@ -46,10 +47,14 @@ const getUsers = async (req, res) => {
     const response = await getRequest(apiUrl);
     const users = response.data;
     if (response.success) {
+      // const buttonItems = req.buttonItems;
+      // const linkItems = req.linkItems
       res.render('user/userManagement', {
         activePage: 'user-management',
         users,
-        navItems: req.navItems // 将导航项传递到视图
+        navItems: req.navItems, // 将导航项传递到视图
+        buttonItems:req.buttonItems,
+        linkItems:req.linkItems
       });
     }
   } catch (err) {
@@ -61,6 +66,7 @@ const getUsers = async (req, res) => {
 const renderCreateUserForm = async (req, res) => {
   res.render('user/userCreate.ejs', {
     activePage: 'userManagement',
+    navItems: req.navItems, // 将导航项传递到视图
   });
 };
 //(2)提交新用户信息
@@ -102,8 +108,9 @@ const getUserById = async (req, res) => {
     console.log(user);
     if (response.success) {
       res.render('user/userUpdate.ejs', {
-        activePage: 'userManagement',
+        activePage: 'user-management',
         user,
+        navItems: req.navItems
       });
     }
   } catch (err) {

@@ -1,166 +1,32 @@
 <nav class="navbar-default navbar-side" role="navigation">
   <div class="sidebar-collapse">
+    <!--定义一个包含侧边栏内容的容器，class="sidebar-collapse"：应用自定义类，用于控制侧边栏的折叠状态-->
+    <!--collapse:折叠收缩-->
     <ul class="nav" id="main-menu">
-      <% const getIconClass = (id) => {
-        const iconClasses = {
-          'dashboard': 'fa-dashboard',
-          'user-management': 'fa-user',
-          'elderly-management': 'fa-blind',
-          'visitor-management': 'fa-user-friends',
-          'employee-management': 'fa-users-cog',
-          'bed-management': 'fa-bed',
-          'catering-management': 'fa-utensils',
-          'health-management': 'fa-user-md',
-          'financial-management': 'fa-dollar-sign',
-          'notifications': 'fa-bullhorn'
-        };
-        return iconClasses[id] || 'fa-user';
-      }; %>
-
-  
-
       <% navItems.forEach(item => { %>
-        <% if (item.visible) { %> <!-- 检查可见性 -->
+        <% if (item.visible) { %>
           <li class="<%= (activePage === item.id) ? 'active-menu' : '' %>">
-            <a href="<%= item.href %>" id="<%= item.id %>">
-              <i class="fa <%= getIconClass(item.id) %> fa-fw"></i>
+            <a href="<%= item.href %>">
+              <i class="fa <%= item.icon %>"></i>
               <%= item.name %>
+              <% if (item.subMenu.length > 0) { %>
+                <span class="fa arrow"></span>
+              <% } %>
             </a>
+            <% if (item.subMenu.length > 0) { %>
+              <ul class="nav nav-second-level">
+                <% item.subMenu.forEach(subItem => { %>
+                  <% if (subItem.visible) { %>
+                    <li>
+                      <a href="<%= subItem.href %>"><%= subItem.name %></a>
+                    </li>
+                  <% } %>
+                <% }) %>
+              </ul>
+            <% } %>
           </li>
         <% } %>
       <% }) %>
-
-      <!--老人管理菜单-->
-      <li class="<%= (activePage === 'elderly-management') ? 'active-menu' : '' %>">
-        <a href="#" id="elderly-management-link">
-          <i class="fa fa-blind fa-fw"></i>
-          Elderly Management
-          <span class="fa arrow"></span>
-        </a>
-        <ul class="nav nav-second-level">
-          <li>
-            <a href="/elderly-records" id="elderly-records-link">Elderly Records</a>
-          </li>
-          <li>
-            <a href="/admission-discharge" id="admission-discharge-link">Admission & Discharge</a>
-          </li>
-          <li>
-            <a href="/leave-management" id="leave-management-link">Leave Management</a>
-          </li>
-        </ul>
-      </li>
-
-      <li class="<%= (activePage === 'visitor-management') ? 'active-menu' : '' %>">
-        <a href="#" id="visitor-management-link">
-          <i class="fa fa-user-friends fa-fw"></i>
-          Visitor Management
-          <span class="fa arrow"></span>
-        </a>
-        <ul class="nav nav-second-level">
-          <li>
-            <a href="/appointment-registration" id="appointment-registration-link">Appointment Registration</a>
-          </li>
-          <li>
-            <a href="/visitor-registration" id="visitor-registration-link">Visitor Registration</a>
-          </li>
-        </ul>
-      </li>
-
-      <li class="<%= (activePage === 'employee-management') ? 'active-menu' : '' %>">
-        <a href="#" id="employee-management-link">
-          <i class="fa fa-users-cog fa-fw"></i>
-          Employee Management
-          <span class="fa arrow"></span>
-        </a>
-        <ul class="nav nav-second-level">
-          <li>
-            <a href="/employee-records" id="employee-records-link">Employee Records</a>
-          </li>
-          <li>
-            <a href="/shift-scheduling" id="shift-scheduling-link">Shift Scheduling</a>
-          </li>
-        </ul>
-      </li>
-
-      <li class="<%= (activePage === 'bed-management') ? 'active-menu' : '' %>">
-        <a href="#" id="bed-management-link">
-          <i class="fa fa-bed fa-fw"></i>
-          Bed Management
-          <span class="fa arrow"></span>
-        </a>
-        <ul class="nav nav-second-level">
-          <li>
-            <a href="/bed-status" id="bed-status-link">Bed Status</a>
-          </li>
-          <li>
-            <a href="/bed-assignment" id="bed-assignment-link">Bed Assignment</a>
-          </li>
-        </ul>
-      </li>
-
-      <li class="<%= (activePage === 'catering-management') ? 'active-menu' : '' %>">
-        <a href="#" id="catering-management-link">
-          <i class="fa fa-utensils fa-fw"></i>
-          Catering Management
-          <span class="fa arrow"></span>
-        </a>
-        <ul class="nav nav-second-level">
-          <li>
-            <a href="/meal-scheduling" id="meal-scheduling-link">Meal Scheduling</a>
-          </li>
-          <li>
-            <a href="/meal-planning" id="meal-planning-link">Meal Planning</a>
-          </li>
-          <li>
-            <a href="/personalized-diets" id="personalized-diets-link">Personalized Diets</a>
-          </li>
-        </ul>
-      </li>
-
-      <li class="<%= (activePage === 'health-management') ? 'active-menu' : '' %>">
-        <a href="#" id="health-management-link">
-          <i class="fa fa-user-md fa-fw"></i>
-          Health Management
-          <span class="fa arrow"></span>
-        </a>
-        <ul class="nav nav-second-level">
-          <li>
-            <a href="/health-records" id="health-records-link">Health Records</a>
-          </li>
-          <li>
-            <a href="/care-management" id="care-management-link">Care Management</a>
-          </li>
-          <li>
-            <a href="/medical-checkup" id="medical-checkup-link">Medical Checkup</a>
-          </li>
-        </ul>
-      </li>
-
-      <li class="<%= (activePage === 'financial-management') ? 'active-menu' : '' %>">
-        <a href="#" id="financial-management-link">
-          <i class="fa fa-dollar-sign fa-fw"></i>
-          Financial Management
-          <span class="fa arrow"></span>
-        </a>
-        <ul class="nav nav-second-level">
-          <li>
-            <a href="/payment-records" id="payment-records-link">Payment Records</a>
-          </li>
-          <li>
-            <a href="/refund-records" id="refund-records-link">Refund Records</a>
-          </li>
-          <li>
-            <a href="/salary-inquiry" id="salary-inquiry-link">Salary Inquiry</a>
-          </li>
-        </ul>
-      </li>
-
-      <li class="<%= (activePage === 'notifications') ? 'active-menu' : '' %>">
-        <a href="#" id="notifications-link">
-          <i class="fa fa-bullhorn fa-fw"></i>
-          Notifications
-        </a>
-      </li>
     </ul>
-  </div>
+  
 </nav>

@@ -35,8 +35,9 @@ exports.getAccount = async (req, res) => {
     const user = response.data // user内容为： res.status(200).json({ sucess: true, message:'get user',user });
     console.log(user);
       res.render('account/userProfile.ejs', {
-        activePage: 'userProfile',
-        user // 传递 user 对象给 EJS 模板
+        activePage: 'dashboard',
+        user, // 传递 user 对象给 EJS 模板
+        navItems: req.navItems, // 将导航项传递到视图
       })
   } catch (err) {
     handleError(err, res); // 使用通用错误处理函数
