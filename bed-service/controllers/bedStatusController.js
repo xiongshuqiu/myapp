@@ -1,7 +1,6 @@
-const User = require('../models/userModel');
-
-// 1. 查找所有用户信息
-const getUsers = async (req, res) => {
+const User = require('../models/bedStatusModel');
+// 1. 获取所有床位状态
+const getAllBedStatuses = async (req, res) => {
   console.log('Received request to get all users'); // 调试信息
   try {
     const users = await User.find();
@@ -12,8 +11,8 @@ const getUsers = async (req, res) => {
   }
 };
 
-// 2. 新增用户
-const createUser = async (req, res) => {
+// 2. 创建新的床位状态
+const createBedStatus = async (req, res) => {
   const { userId, account, userName, passWord, phoneNumber, email, role } = req.body;
   console.log('Received request to create user with data:', req.body); // 调试信息
 
@@ -47,8 +46,9 @@ const createUser = async (req, res) => {
   }
 };
 
-// 3. 获取特定用户信息
-const getUserById = async (req, res) => {
+// 3. 更新特定床位状态
+// (1) 查找特定床位状态并显示编辑表单
+const getBedStatusById = async (req, res) => {
   const { _id } = req.params;
   console.log(`Received request to get user by ID: ${_id}`); // 调试信息
   try {
@@ -66,8 +66,8 @@ const getUserById = async (req, res) => {
   }
 };
 
-// 3. 更新用户信息
-const updateUser = async (req, res) => {
+// (2) 提交更新后的床位状态数据
+const updateBedStatus = async (req, res) => {
   const { userId, account, userName, passWord, phoneNumber, email, role } = req.body;
   const { _id } = req.params;
 
@@ -97,8 +97,8 @@ const updateUser = async (req, res) => {
   }
 };
 
-// 5. 删除用户数据
-const deleteUser = async (req, res) => {
+// 4. 删除特定床位状态
+const deleteBedStatus = async (req, res) => {
   const { _id } = req.params;
 
   try {
@@ -113,9 +113,9 @@ const deleteUser = async (req, res) => {
 
 // 6. 导出模块
 module.exports = {
-  getUsers, // 获取所有用户数据的方法
-  getUserById, // 获取特定用户数据的方法
-  createUser, // 创建用户数据的方法
-  updateUser, // 更新用户数据的方法
-  deleteUser, // 删除用户数据的方法
+  getAllBedStatuses,
+  createBedStatus,
+  getBedStatusById,
+  updateBedStatus,
+  deleteBedStatus
 };

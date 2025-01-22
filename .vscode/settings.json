@@ -8,7 +8,30 @@
         "**/.hg": true,
         "**/CVS": true,
         "**/.DS_Store": true,
-        "**/Thumbs.db": true
+        "**/Thumbs.db": true,
+        "account-service": true,
+        "auth-service": true,
+        "catering-service": true,
+        "elderly-service": true,
+        "employee-service": true,
+        "financial-service": true,
+        "health-service": true,
+        "visitor-service": true,
+        "node_modules": true,
+        "notification-service": true,
+        "middleware": true
     },
-    "hide-files.files": []
+    "hide-files.files": [
+        "account-service",
+        "auth-service",
+        "catering-service",
+        "elderly-service",
+        "employee-service",
+        "financial-service",
+        "health-service",
+        "visitor-service",
+        "node_modules",
+        "notification-service",
+        "middleware"
+    ]
 }

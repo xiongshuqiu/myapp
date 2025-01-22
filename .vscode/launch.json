@@ -29,6 +29,15 @@
             "console": "integratedTerminal"
         },
         {
+            "name": "bed-service",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run", "dev"],
+            "cwd": "${workspaceFolder}/bed-service",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "api-gateway",
             "type": "node",
             "request": "launch",
