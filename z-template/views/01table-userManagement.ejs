@@ -37,7 +37,7 @@
       <div id="page-wrapper">
         <div class="header">
           <h1 class="page-header">
-            User Management <small> User Information</small>
+            User Management <small> User Information</small> 
           </h1>
           <ol class="breadcrumb">
             <!-- 面包屑导航 -->
@@ -100,6 +100,8 @@
                             <!-- 链接的href属性: 使用href="javascript:void(0)"避免页面跳转，确保点击链接时不会重定向。
                             onclick事件: 直接调用JavaScript函数confirmDeletion('<%= user._id %>')来处理删除逻辑。
                             #代替javascript:void(0)可能会跳转到顶部 -->
+                            <% linkItems.forEach(function(item) { %> 
+                              <% if (item.id  ==='delete-user-link'&&item.visible) { %>
                             <a
                               href="javascript:void(0)"
                               class="deleteLink"
@@ -107,7 +109,8 @@
                               onclick="confirmDeletion('<%= user._id %>')"
                               >Delete</a
                             >
-                         
+                            <% } %>
+                            <% }); %>
                           </td>
                         </tr>
                         <% }); %>

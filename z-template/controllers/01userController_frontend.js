@@ -5,6 +5,7 @@ axios.defaults.withCredentials = true; // 配置 axios 允许跨域请求时携�
 // 通用错误处理函数
 const handleError = (
   err,
+  req, //注意一定要增加这个值（每个handleError都要）
   res,
   targetPage = 'user/userCreate',
   msg = 'Server error',
@@ -14,6 +15,7 @@ const handleError = (
     res.status(err.response?.status || 500).render(targetPage, {
       activePage: 'user-management',
       message: err.response?.data?.message || msg,
+      navItems: req.navItems, // 将导航项传递到视图
     });
   }
 };
@@ -58,30 +60,31 @@ const getUsers = async (req, res) => {
       });
     }
   } catch (err) {
-    handleError(err, res);
+    handleError(err,req,res);
   }
 };
 // 2.新增用户
 //(1)点击AddUser按钮跳转到新增用户的页面
 const renderCreateUserForm = async (req, res) => {
   res.render('user/userCreate.ejs', {
-    activePage: 'userManagement',
+    activePage: 'user-management',
     navItems: req.navItems, // 将导航项传递到视图
   });
 };
 //(2)提交新用户信息
 const createUser = async (req, res) => {
-  const { userId, account, userName, passWord, phoneNumber, email, role } =
+  const {role,userId, account, userName, passWord, phoneNumber, email } =
     req.body;
   try {
     const data = {
+      role,
       userId,
       account,
       userName,
       passWord,
       phoneNumber,
       email,
-      role,
+      
     };
     const apiUrl = `${process.env.API_URL}/api/users/create`;
     const response = await postRequest(apiUrl, data);
@@ -92,7 +95,7 @@ const createUser = async (req, res) => {
     }
   } catch (err) {
     const targetPage = 'user/userCreate'; //用户需要输入新值
-    handleError(err, res, targetPage);
+    handleError(err,req, res, targetPage);
   }
 };
 
@@ -114,7 +117,7 @@ const getUserById = async (req, res) => {
       });
     }
   } catch (err) {
-    handleError(err, res);
+    handleError(err,req, res);
   }
 };
 
@@ -143,7 +146,7 @@ const updateUser = async (req, res) => {
     }
   } catch (err) {
     const targetPage = 'user/userUpdate'; //用户需要输入新值
-    handleError(err, res, targetPage);
+    handleError(err, req,res, targetPage);
   }
 };
 
@@ -158,7 +161,7 @@ const deleteUser = async (req, res) => {
       res.redirect('/users/');
     }
   } catch (err) {
-    handleError(err, res);
+    handleError(err,req, res);
   }
 };
 module.exports = {

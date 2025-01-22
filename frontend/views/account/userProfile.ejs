@@ -247,6 +247,8 @@
           const _id = button.getAttribute('data-user-id'); // 修改点2：从button中获取_id
           // 使用原生JavaScript获取模态框元素
           const modal = document.getElementById('updatePasswordModal');
+
+          
           // 将_id设置到模态框的data属性中
           modal.setAttribute('data-user-id', _id); // 修改点3：确保将_id设置到模态框中
         });

@@ -19,7 +19,7 @@ function getNavItems(role) {
       id: 'user-management',
       name: 'User Management',
       href: '/users',
-      roles: ['admin'],
+      roles: ['admin','medical'],
       icon: 'fa-user fa-fw',
       subMenu: []
     },

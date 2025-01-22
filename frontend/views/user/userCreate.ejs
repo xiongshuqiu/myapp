@@ -50,24 +50,33 @@
                   <div class="row">
                     <div class="col-lg-6">
                       <form action="/users/create" method="post" role="form">
+                        
                         <div class="form-group">
-                          <label for="userId"
-                            >User ID <span style="color: red">*</span></label
-                          >
+                          <label for="role"
+                            >Role <span style="color: red">*</span></label>
+                          <select class="form-control" id="role" name="role">
+                              <option value="admin">admin</option>
+                              <option value="medical">medical</option>
+                              <option value="family">family</option>
+                          </select>
+                      </div>
+                        <div class="form-group">
+                          <label for="userId">
+                            User ID <span style="color: red">*</span>
+                          </label>
                           <input
                             type="text"
                             class="form-control"
                             id="userId"
                             name="userId"
-                            placeholder="Enter User ID (e.g., U001)"
+                            placeholder="Enter User ID"
                             required
-                            pattern="U\d{3}"
-                            title="User ID format should be U followed by three digits (e.g., U001)"
+                            pattern=""
+                            title=""
                           />
-                          <small class="form-text text-muted"
-                            >Format: U followed by three digits (e.g.,
-                            U001)</small
-                          >
+                          <small class="form-text text-muted">
+                            Format: S followed by three digits for admin/medical (e.g., S001) or F followed by three digits for family (e.g., F001)
+                          </small>
                         </div>
 
                         <div class="form-group">
@@ -146,20 +155,6 @@
                           >
                         </div>
 
-                        <div class="form-group">
-                          <label for="role"
-                            >Role <span style="color: red">*</span></label
-                          >
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="role"
-                            name="role"
-                            placeholder="Enter Role"
-                            required
-                          />
-                        </div>
-
                         <button type="submit" class="btn btn-primary">
                           Submit
                         </button>
@@ -202,5 +197,24 @@
     <script src="/assets/js/jquery.metisMenu.js"></script>
     <!-- Custom Js -->
     <script src="/assets/js/custom-scripts.js"></script>
+    <script>
+      function updateUserIdPattern() { // 新增：定义函数用于更新User ID的格式
+        var userIdInput = document.getElementById('userId');
+        var role = document.getElementById('role').value;
+
+        if (role === 'admin' || role === 'medical') {
+          userIdInput.pattern = 'S\\d{3}';
+          userIdInput.title = 'User ID format should be S followed by three digits (e.g., S001)';
+          userIdInput.placeholder = 'Enter User ID (e.g., S001)';
+        } else if (role === 'family') {
+          userIdInput.pattern = 'F\\d{3}';
+          userIdInput.title = 'User ID format should be F followed by three digits (e.g., F001)';
+          userIdInput.placeholder = 'Enter User ID (e.g., F001)';
+        }
+      }
+
+      document.getElementById('role').addEventListener('change', updateUserIdPattern);
+      updateUserIdPattern(); // 新增：在页面加载时立即调用函数
+    </script>
   </body>
 </html>

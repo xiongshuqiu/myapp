@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>chinaz</title>
+    <title>Update User Information</title>
     <!-- 1.框架样式：Bootstrap Styles-->
     <link href="/assets/css/bootstrap.css" rel="stylesheet" />
     <!-- 2.图标样式：FontAwesome Styles-->
@@ -25,19 +25,19 @@
   <body>
     <div id="wrapper">
       <!-- 顶部导航条 -->
-      <%- include('../block/top-navbar.ejs') %>  
+      <%- include('../block/top-navbar.ejs') %>
       <!-- 左侧导航条 -->
       <%- include('../block/navbar-side.ejs') %>
 
       <div id="page-wrapper">
         <div class="header">
           <h1 class="page-header">
-            Forms Page <small>Best form elements.</small>
+            Update User Information <small>Modify the user's details.</small>
           </h1>
           <ol class="breadcrumb">
             <li><a href="#">Home</a></li>
             <li><a href="#">Forms</a></li>
-            <li class="active">Data</li>
+            <li class="active">Update User</li>
           </ol>
         </div>
 
@@ -45,38 +45,28 @@
           <div class="row">
             <div class="col-lg-12">
               <div class="panel panel-default">
-                <div class="panel-heading">Basic Form Elements</div>
+                <div class="panel-heading">User Information</div>
                 <div class="panel-body">
                   <div class="row">
                     <div class="col-lg-6">
-                      <form action="/users/create" method="post" role="form">
-                        
+                      <form
+                        action="/users/<%= user._id %>?_method=PUT"
+                        method="post"
+                        role="form"
+                      >
+                        <input type="hidden" name="_method" value="PUT" />
                         <div class="form-group">
-                          <label for="role"
-                            >Role <span style="color: red">*</span></label>
-                          <select class="form-control" id="role" name="role">
-                              <option value="admin">admin</option>
-                              <option value="medical">medical</option>
-                              <option value="family">family</option>
-                          </select>
-                      </div>
-                        <div class="form-group">
-                          <label for="userId">
-                            User ID <span style="color: red">*</span>
-                          </label>
+                          <label for="userId"
+                            >User ID <span style="color: red">*</span></label
+                          >
                           <input
                             type="text"
                             class="form-control"
                             id="userId"
                             name="userId"
-                            placeholder="Enter User ID"
+                            value="<%= user.userId %>"
                             required
-                            pattern=""
-                            title=""
                           />
-                          <small class="form-text text-muted">
-                            Format: S followed by three digits for admin/medical (e.g., S001) or F followed by three digits for family (e.g., F001)
-                          </small>
                         </div>
 
                         <div class="form-group">
@@ -88,7 +78,7 @@
                             class="form-control"
                             id="account"
                             name="account"
-                            placeholder="Enter Account"
+                            value="<%= user.account %>"
                             required
                           />
                         </div>
@@ -102,7 +92,7 @@
                             class="form-control"
                             id="userName"
                             name="userName"
-                            placeholder="Enter User Name"
+                            value="<%= user.userName %>"
                             required
                           />
                         </div>
@@ -116,7 +106,7 @@
                             class="form-control"
                             id="passWord"
                             name="passWord"
-                            placeholder="Enter Password"
+                            value="<%= user.passWord %>"
                             required
                           />
                         </div>
@@ -131,7 +121,7 @@
                             class="form-control"
                             id="phoneNumber"
                             name="phoneNumber"
-                            placeholder="Enter Phone Number"
+                            value="<%= user.phoneNumber %>"
                             required
                           />
                         </div>
@@ -145,18 +135,29 @@
                             class="form-control"
                             id="email"
                             name="email"
-                            placeholder="Enter Email (e.g., xiongwang@126.com)"
+                            value="<%= user.email %>"
                             required
                             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
                             title="Email format should be similar to xiongwang@126.com"
                           />
-                          <small class="form-text text-muted"
-                            >Format: xiongwang@126.com</small
+                        </div>
+
+                        <div class="form-group">
+                          <label for="role"
+                            >Role <span style="color: red">*</span></label
                           >
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="role"
+                            name="role"
+                            value="<%= user.role %>"
+                            required
+                          />
                         </div>
 
                         <button type="submit" class="btn btn-primary">
-                          Submit
+                          Save Changes
                         </button>
                         <button
                           type="reset"
@@ -166,12 +167,12 @@
                           Return
                         </button>
                       </form>
-                    </form>
-                    <div id="message" class="mt-3">
-                      <% if (typeof message !== 'undefined' && message !== null) { %>
+                      <div id="message">
+                        <% if (typeof message !== 'undefined' && message !==
+                        null) { %>
                         <div class="alert alert-success"><%= message %></div>
-                      <% } %>
-                    </div>
+                        <% } %>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -182,7 +183,6 @@
             <!-- /.col-lg-12 -->
           </div>
         </div>
-
         <!-- /. PAGE INNER  -->
       </div>
       <!-- /. PAGE WRAPPER  -->
@@ -193,28 +193,9 @@
     <script src="/assets/js/jquery-1.10.2.js"></script>
     <!-- Bootstrap Js -->
     <script src="/assets/js/bootstrap.min.js"></script>
-    <!-- Metis Menu Js -->s
+    <!-- Metis Menu Js -->
     <script src="/assets/js/jquery.metisMenu.js"></script>
     <!-- Custom Js -->
     <script src="/assets/js/custom-scripts.js"></script>
-    <script>
-      function updateUserIdPattern() { // 新增：定义函数用于更新User ID的格式
-        var userIdInput = document.getElementById('userId');
-        var role = document.getElementById('role').value;
-
-        if (role === 'admin' || role === 'medical') {
-          userIdInput.pattern = 'S\\d{3}';
-          userIdInput.title = 'User ID format should be S followed by three digits (e.g., S001)';
-          userIdInput.placeholder = 'Enter User ID (e.g., S001)';
-        } else if (role === 'family') {
-          userIdInput.pattern = 'F\\d{3}';
-          userIdInput.title = 'User ID format should be F followed by three digits (e.g., F001)';
-          userIdInput.placeholder = 'Enter User ID (e.g., F001)';
-        }
-      }
-
-      document.getElementById('role').addEventListener('change', updateUserIdPattern);
-      updateUserIdPattern(); // 新增：在页面加载时立即调用函数
-    </script>
   </body>
 </html>

@@ -10,7 +10,7 @@ router.get('/:_id/view', accountController.getAccount);
 router.post('/:_id/password', accountController.updatePassword);
 //2.Login Out
 // 退出账户并跳转到登录页面
-router.get('/:_id/delete', accountController.logOut);
+router.get('/logOut', accountController.logOut);
 
 module.exports = router;
 

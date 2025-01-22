@@ -13,7 +13,7 @@ const authRoutes = require('./routes/authRoutes'); // 引入自定义的路由�
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const userRoutes = require('./routes/userRoutes');
 const accountRoutes = require('./routes/accountRoutes');
-
+const bedRoutes = require('./routes/bedRoutes/bedRoutes');
 // 2. 加载环境变量
 dotenv.config(); // 加载 .env 文件中的环境变量
 
@@ -33,7 +33,7 @@ app.use(express.json()); // 解析 JSON 请求体
 app.use(express.urlencoded({ extended: true })); // 解析 URL 编码的请求体
 
 // 6. 使用 method-override 中间件，用于方法转化
-app.use(methodOverride('_method')); 
+app.use(methodOverride('_method'));
 
 // 7. 使用会话管理和 Cookie 解析中间件
 app.use(cookieParser()); // 使用cookie-parser中间件
@@ -56,10 +56,11 @@ app.use('/auth', authRoutes);
 
 app.use(authenticate);
 app.use(setUsername);
-app.use(navVisibility); 
+app.use(navVisibility);
 app.use('/', dashboardRoutes);
 app.use('/users', userRoutes);
 app.use('/accounts', accountRoutes);
+app.use('/beds', bedRoutes);
 
 // 10. 启动服务器并监听指定端口
 const PORT = process.env.PORT; // 设置服务器端口

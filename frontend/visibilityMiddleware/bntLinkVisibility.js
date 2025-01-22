@@ -30,10 +30,10 @@ function bntLinkVisibility(req, res, next) {
     [
       {
         id: 'edit-user-link',
-        roles: ['admin','medical'],
+        roles: ['admin'],
       },
       {
-        id: 'elderly-user-link',
+        id: 'delete-user-link',
         roles: ['admin'],
       },
 
