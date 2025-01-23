@@ -17,7 +17,8 @@
         "visitor-service": true,
         "node_modules": true,
         "notification-service": true,
-        "middleware": true
+        "middleware": true,
+        "auth-service": true
     },
     "hide-files.files": [
         "account-service",
@@ -28,6 +29,7 @@
         "visitor-service",
         "node_modules",
         "notification-service",
-        "middleware"
+        "middleware",
+        "auth-service"
     ]
 }

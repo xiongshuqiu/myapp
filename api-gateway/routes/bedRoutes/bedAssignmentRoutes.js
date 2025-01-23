@@ -1,35 +1,27 @@
 // #frontend routes
 const express = require('express');
 const router = express.Router();
-const { authorizeRole } = require('../../../middleware/authMiddleware');
 const {
-  bntLinkVisibility,
-} = require('../../visibilityMiddleware/bntLinkVisibility');
-const {
-  getAllBedStatuses,
-  renderNewBedStatusForm,
-  createBedStatus,
-  getBedStatusById,
-  updateBedStatus,
-  deleteBedStatus,
-} = require('../../controllers/bedController/bedStatusController');
+  getAllBedAssignments,
+  createBedAssignment,
+  getBedAssignmentById,
+  updateBedAssignment,
+  deleteBedAssignment
+} = require('../../controllers/bedController/bedAssignmentController');
 
-// 1. 获取所有床位状态
-router.get('/', bntLinkVisibility, getAllBedStatuses);
+// 1. 获取所有床位分配
+router.get('/',getAllBedAssignments);
 
-// 2. 创建新的床位状态
-// (1) 显示新增床位状态表单
-router.get('/new', renderNewBedStatusForm);
-// (2) 提交新的床位状态数据
-router.post('/create', createBedStatus);
+// 2. 创建新的床位分配
+router.post('/create', createBedAssignment);
 
-// 3. 更新特定床位状态
-// (1) 查找特定床位状态并显示编辑表单
-router.get('/:_id/update', getBedStatusById);
-// (2) 提交更新后的床位状态数据
-router.put('/:_id', updateBedStatus);
+// 3. 更新特定床位分配
+// (1) 查找特定床位分配并显示编辑表单
+router.get('/:_id/update', getBedAssignmentById);
+// (2) 提交更新后的床位分配数据
+router.put('/:_id', updateBedAssignment);
 
-// 4. 删除特定床位状态
-router.delete('/:_id/delete', deleteBedStatus);
+// 4. 删除特定床位分配
+router.delete('/:_id/delete', deleteBedAssignment);
 
 module.exports = router;
