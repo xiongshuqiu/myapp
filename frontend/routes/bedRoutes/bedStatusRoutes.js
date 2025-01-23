@@ -15,7 +15,7 @@ const {
 } = require('../../controllers/bedController/bedStatusController');
 
 // 1. 获取所有床位状态
-router.get('/', bntLinkVisibility, getAllBedStatuses);
+router.get('/',bntLinkVisibility,getAllBedStatuses);
 
 // 2. 创建新的床位状态
 // (1) 显示新增床位状态表单

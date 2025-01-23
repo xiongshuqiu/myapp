@@ -27,8 +27,8 @@ const putRequest = async (url, data) => {
   return response.data;
 };
 // 通用Delete请求函数
-const deleteRequest = async (url, data) => {
-  const response = await axios.delete(url, data);
+const deleteRequest = async (url) => {
+  const response = await axios.delete(url);
   return response.data;
 };
 // 1. 获取所有床位状态
@@ -43,19 +43,10 @@ const getAllBedStatuses = async (req, res) => {
 };
 // 2. 创建新的床位状态
 const createBedStatus = async (req, res) => {
-  const { userId, account, userName, passWord, phoneNumber, email, role } =
-    req.body; // 从请求体中获取所有用户信息
+  const { bedId, status} = req.body; // 从请求体中获取所有用户信息
 
   try {
-    const data = {
-      userId,
-      account,
-      userName,
-      passWord,
-      phoneNumber,
-      email,
-      role,
-    };
+    const data = { bedId, status};
     const url = `${process.env.BED_SERVICE_URL}/beds/status/create`;
     const response = await postRequest(url, data); // 发送 POST 请求以创建新用户
     res.status(201).json(response); // 将响应数据返回给前端
@@ -79,18 +70,9 @@ const getBedStatusById = async (req, res) => {
 };
 // (2) 提交更新后的床位状态数据
 const updateBedStatus = async (req, res) => {
-  const { userId, account, userName, passWord, phoneNumber, email, role } =
-    req.body;
+  const {bedId, status } = req.body;
   try {
-    const data = {
-      userId,
-      account,
-      userName,
-      passWord,
-      phoneNumber,
-      email,
-      role,
-    };
+    const data = { bedId, status };
     const { _id } = req.params; // 从参数中获取 _Id
     const url = `${process.env.BED_SERVICE_URL}/beds/status/${_id}`;
     const response = await putRequest(url, data); // 发送 PUT 请求以更新用户信息

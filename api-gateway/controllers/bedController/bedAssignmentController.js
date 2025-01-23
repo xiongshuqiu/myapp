@@ -43,7 +43,7 @@ const deleteRequest = async (url, data) => {
 };
 
 // 1.查找所用用户信息
-const getUsers = async (req, res) => {
+const getAllBedStatuses = async (req, res) => {
   try {
     const apiUrl = `${process.env.API_URL}/api/users/`;
     const response = await getRequest(apiUrl);
@@ -72,7 +72,7 @@ const renderCreateUserForm = async (req, res) => {
   });
 };
 //(2)提交新用户信息
-const createUser = async (req, res) => {
+const createBedStatus = async (req, res) => {
   const {role,userId, account, userName, passWord, phoneNumber, email } =
     req.body;
   try {
@@ -101,7 +101,7 @@ const createUser = async (req, res) => {
 
 // 3.更新用户信息
 // (1)查找特定用户信息并跳转到编辑用户信息页面
-const getUserById = async (req, res) => {
+const getBedStatusById = async (req, res) => {
   const { _id } = req.params; // 从参数中获取 _id
   console.log(`Fetching user with ID: ${_id}`); // 调试信息
   try {
@@ -122,7 +122,7 @@ const getUserById = async (req, res) => {
 };
 
 //(2) 提交已编辑的用户信息
-const updateUser = async (req, res) => {
+const updateBedStatus = async (req, res) => {
   const { userId, account, userName, passWord, phoneNumber, email, role } =
     req.body;
   const { _id } = req.params;
@@ -151,7 +151,7 @@ const updateUser = async (req, res) => {
 };
 
 // 7. 删除用户 (D)
-const deleteUser = async (req, res) => {
+const deleteBedStatus = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取_id
     console.log(_id);
@@ -165,10 +165,9 @@ const deleteUser = async (req, res) => {
   }
 };
 module.exports = {
-  getUsers,
-  renderCreateUserForm,
-  createUser,
-  getUserById,
-  updateUser,
-  deleteUser,
+  getAllBedStatuses,
+  createBedStatus,
+  getBedStatusById,
+  updateBedStatus,
+  deleteBedStatus
 };

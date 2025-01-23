@@ -7,16 +7,18 @@ function bntLinkVisibility(req, res, next) {
   next();
   function getBtnItems(role) {
     const buttonItems = [
+      //用户增加
       {
         id: 'add-user-btn',
         name: 'AddUser',
         href: '/users/new',
         roles: ['admin'],
       },
+      //床位状态增加
       {
-        id: 'add-elderly-btn',
-        name: 'AddElderly',
-        href: '/elderlys/new',
+        id: 'add-bedstatus-btn',
+        name: 'AddBedStatus',
+        href: '/beds/status/new',
         roles: ['admin'],
       },
     ];
@@ -26,8 +28,8 @@ function bntLinkVisibility(req, res, next) {
     }));
   }
   function getLinkItems(role) {
-    const linkItems = 
-    [
+    const linkItems = [
+     //编辑和删除用户
       {
         id: 'edit-user-link',
         roles: ['admin'],
@@ -36,7 +38,15 @@ function bntLinkVisibility(req, res, next) {
         id: 'delete-user-link',
         roles: ['admin'],
       },
-
+       //编辑和删除床位状态
+      {
+        id: 'edit-bedStatus-link',
+        roles: ['admin'],
+      },
+      {
+        id: 'delete-bedStatus-link',
+        roles: ['admin'],
+      },
     ];
     return linkItems.map((item) => ({
       ...item,
@@ -45,4 +55,4 @@ function bntLinkVisibility(req, res, next) {
   }
 }
 
-  module.exports = { bntLinkVisibility}
+module.exports = { bntLinkVisibility };

@@ -37,30 +37,31 @@ const putRequest = async (url, data) => {
   return response.data;
 };
 // 通用Delete请求函数
-const deleteRequest = async (url, data) => {
-  const response = await axios.delete(url, data);
+const deleteRequest = async (url) => {
+  const response = await axios.delete(url);
   return response.data;
 };
 
 // 1.获取所有床位状态
 const getAllBedStatuses = async (req, res) => {
+  const apiUrl = `${process.env.API_URL}/api/beds/status/`;
+  console.log(apiUrl);
   try {
-    const apiUrl = `${process.env.API_URL}/api/beds/status/`;
     const response = await getRequest(apiUrl);
-    const bedStatus = response.data;
+    const bedStatuses = response.data;
     if (response.success) {
       // const buttonItems = req.buttonItems;
       // const linkItems = req.linkItems
       res.render('bed/bedStatus/bedStatusManagement', {
         activePage: 'bed-management',
-        bedStatus,
+        bedStatuses,
         navItems: req.navItems, // 将导航项传递到视图
-        buttonItems:req.buttonItems,
-        linkItems:req.linkItems
+        buttonItems: req.buttonItems,
+        linkItems: req.linkItems,
       });
     }
   } catch (err) {
-    handleError(err,req,res);
+    handleError(err, req, res);
   }
 };
 // 2.创建新的床位状态
@@ -73,19 +74,10 @@ const renderNewBedStatusForm = async (req, res) => {
 };
 //(2)提交新的床位状态数据
 const createBedStatus = async (req, res) => {
-  const {role,bedStatusId, account, bedStatusName, passWord, phoneNumber, email } =
-    req.body;
+  const { bedId, status } = req.body;
   try {
-    const data = {
-      role,
-      bedStatusId,
-      account,
-      bedStatusName,
-      passWord,
-      phoneNumber,
-      email,
-      
-    };
+    const data = { bedId, status };
+
     const apiUrl = `${process.env.API_URL}/api/beds/status/create`;
     const response = await postRequest(apiUrl, data);
     const bedStatus = response.data;
@@ -95,7 +87,7 @@ const createBedStatus = async (req, res) => {
     }
   } catch (err) {
     const targetPage = 'bed/bedStatus/bedStatusCreate'; //用户需要输入新值
-    handleError(err,req, res, targetPage);
+    handleError(err, req, res, targetPage);
   }
 };
 
@@ -113,29 +105,21 @@ const getBedStatusById = async (req, res) => {
       res.render('bed/bedStatus/bedStatusUpdate.ejs', {
         activePage: 'bed-management',
         bedStatus,
-        navItems: req.navItems
+        navItems: req.navItems,
       });
     }
   } catch (err) {
-    handleError(err,req, res);
+    handleError(err, req, res);
   }
 };
 
 //(2) 提交更新后的床位状态数据
 const updateBedStatus = async (req, res) => {
-  const { bedStatusId, account, bedStatusName, passWord, phoneNumber, email, role } =
-    req.body;
+  const { bedId, status } = req.body;
   const { _id } = req.params;
   try {
-    const data = {
-      bedStatusId,
-      account,
-      bedStatusName,
-      passWord,
-      phoneNumber,
-      email,
-      role,
-    };
+    const data = { bedId, status};
+
     // 从请求参数中获取 _id
     const apiUrl = `${process.env.API_URL}/api/beds/status/${_id}`;
     const response = await putRequest(apiUrl, data);
@@ -146,11 +130,11 @@ const updateBedStatus = async (req, res) => {
     }
   } catch (err) {
     const targetPage = 'bed/bedStatus/bedStatusUpdate'; //用户需要输入新值
-    handleError(err, req,res, targetPage);
+    handleError(err, req, res, targetPage);
   }
 };
 
-// 4. 删除特定床位状态 
+// 4. 删除特定床位状态
 const deleteBedStatus = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取_id
@@ -161,7 +145,7 @@ const deleteBedStatus = async (req, res) => {
       res.redirect('/beds/status/');
     }
   } catch (err) {
-    handleError(err,req, res);
+    handleError(err, req, res);
   }
 };
 module.exports = {

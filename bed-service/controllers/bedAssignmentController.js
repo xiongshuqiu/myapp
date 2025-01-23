@@ -1,121 +1,139 @@
-const User = require('../models/userModel');
+const BedStatus = require('../models/bedStatusModel');
 
-// 1. 查找所有用户信息
-const getUsers = async (req, res) => {
-  console.log('Received request to get all users'); // 调试信息
+// 1. 获取所有床位状态
+const getAllBedStatuses = async (req, res) => {
+  console.log('Received request to get all bed statuses'); // 调试信息
   try {
-    const users = await User.find();
-    res.status(200).json({success: true, message: 'Users retrieved successfully', data: users });
+    // 从数据库中获取所有床位状态
+    const bedStatuses = await BedStatus.find();
+    res.status(200).json({
+      success: true,
+      message: 'Bed statuses retrieved successfully',
+      data: bedStatuses,
+    });
   } catch (err) {
-    console.error('Error retrieving users:', err.message); // 调试信息
-    res.status(500).json({success: false, message: err.message });
+    console.error('Error retrieving bed statuses:', err.message); // 调试信息
+    res.status(500).json({ success: false, message: err.message });
   }
 };
 
-// 2. 新增用户
-const createUser = async (req, res) => {
-  const { userId, account, userName, passWord, phoneNumber, email, role } = req.body;
-  console.log('Received request to create user with data:', req.body); // 调试信息
-
-  // 验证用户输入
-  if (!userId || !account || !userName || !passWord || !phoneNumber || !email || !role) {
-    return res.status(400).json({success: false, message: 'Missing required fields' });
-  }
+// 2. 创建新的床位状态
+const createBedStatus = async (req, res) => {
+  const { bedNumber, status } = req.body;
+  console.log('Received request to create bed status with data:', req.body); // 调试信息
 
   try {
-    let existingUser = await User.findOne({ userId });//let可以重新赋值
-    if (existingUser) {
-      console.warn(`UserId already exists: ${userId}`); // 调试信息
-      return res.status(400).json({ success: false, message: 'UserId already exists' });
+    // 检查是否存在相同床位编号的记录
+    const existingBedStatus = await BedStatus.findOne({ bedNumber });
+    if (existingBedStatus) {
+      console.warn(`Bed number already exists: ${bedNumber}`); // 调试信息
+      return res
+        .status(400)
+        .json({ success: false, message: 'Bed number already exists' });
     }
 
-    existingUser = await User.findOne({ email });
-    if (existingUser) {
-      console.warn(`Email already exists: ${email}`); // 调试信息
-      return res.status(400).json({ success: false, message: 'Email already exists' });
-    }
-
-    const userData = { userId, account, userName, passWord, phoneNumber, email, role };
-    const user = new User(userData);
-    const newUser = await user.save();
-    console.log('User created successfully:', newUser); // 调试信息
-
-    return res.status(201).json({ success: true, message: 'User created successfully', data: newUser });
+    // 创建并保存新床位状态
+    const newBedStatus = new BedStatus({ bedNumber, status });
+    await newBedStatus.save();
+    console.log('Bed status created successfully:', newBedStatus); // 调试信息
+    return res.status(201).json({
+      success: true,
+      message: 'Bed status created successfully',
+      data: newBedStatus,
+    });
   } catch (error) {
-    console.error('Error creating user:', error.message); // 调试信息
-    return res.status(500).json({success: false, message: 'An error occurred', error: error.message });
+    console.error('Error creating bed status:', error.message); // 调试信息
+    return res.status(500).json({
+      success: false,
+      message: 'An error occurred',
+      error: error.message,
+    });
   }
 };
 
-// 3. 获取特定用户信息
-const getUserById = async (req, res) => {
+// 3. 获取特定床位状态
+const getBedStatusById = async (req, res) => {
   const { _id } = req.params;
-  console.log(`Received request to get user by ID: ${_id}`); // 调试信息
+  console.log(`Received request to get bed status by ID: ${_id}`); // 调试信息
   try {
-    const user = await User.findOne({ _id });
-    if (user) {
-      console.log('User retrieved successfully:', user); // 调试信息
-      return res.status(200).json({ success: true, message: 'User retrieved successfully', data: user });
+    // 根据ID查找床位状态
+    const bedStatus = await BedStatus.findById(_id);
+    if (bedStatus) {
+      console.log('Bed status retrieved successfully:', bedStatus); // 调试信息
+      return res.status(200).json({
+        success: true,
+        message: 'Bed status retrieved successfully',
+        data: bedStatus,
+      });
     } else {
-      console.warn(`User not found with ID: ${_id}`); // 调试信息
-      return res.status(404).json({ success: false, message: 'User not found' });
+      console.warn(`Bed status not found with ID: ${_id}`); // 调试信息
+      return res
+        .status(404)
+        .json({ success: false, message: 'Bed status not found' });
     }
   } catch (err) {
-    console.error('Error retrieving user:', err.message); // 调试信息
-    return res.status(500).json({  success: false, message: err.message });
+    console.error('Error retrieving bed status:', err.message); // 调试信息
+    return res.status(500).json({ success: false, message: err.message });
   }
 };
 
-// 3. 更新用户信息
-const updateUser = async (req, res) => {
-  const { userId, account, userName, passWord, phoneNumber, email, role } = req.body;
+// 4. 更新特定床位状态
+const updateBedStatus = async (req, res) => {
+  const { bedNumber, status } = req.body;
   const { _id } = req.params;
 
   try {
-    const user = await User.findOne({ _id });
-    if (!user) {
-      console.warn(`User not found with ID: ${_id}`); // 调试信息
-      return res.status(404).json({  success: false, message: 'User not found' });
+    // 查找特定床位状态
+    const bedStatus = await BedStatus.findById(_id);
+    if (!bedStatus) {
+      console.warn(`Bed status not found with ID: ${_id}`); // 调试信息
+      return res
+        .status(404)
+        .json({ success: false, message: 'Bed status not found' });
     }
 
-    const updatedUser = await User.findByIdAndUpdate(
-      user._id,
-      { userId, account, userName, passWord, phoneNumber, email, role },
-      { new: true, runValidators: true }
-    );
+    // 更新床位状态字段
+    bedStatus.bedNumber = bedNumber;
+    bedStatus.status = status;
+    const updatedBedStatus = await bedStatus.save(); // 保存更新后的床位状态
 
-    if (updatedUser) {
-      console.log('User updated successfully:', updatedUser); // 调试信息
-      return res.status(200).json({  success: true, message: 'Update successful', data: updatedUser });
-    } else {
-      console.warn(`Failed to update user with ID: ${_id}`); // 调试信息
-      return res.status(404).json({ success: false, message: 'User not found' });
-    }
+    console.log('Bed status updated successfully:', updatedBedStatus); // 调试信息
+    return res.status(200).json({
+      success: true,
+      message: 'Bed status updated successfully',
+      data: updatedBedStatus,
+    });
   } catch (err) {
-    console.error('Error updating user:', err.message); // 调试信息
-    return res.status(400).json({  success: false, message: err.message });
+    console.error('Error updating bed status:', err.message); // 调试信息
+    return res.status(400).json({ success: false, message: err.message });
   }
 };
 
-// 5. 删除用户数据
-const deleteUser = async (req, res) => {
+// 5. 删除特定床位状态
+const deleteBedStatus = async (req, res) => {
   const { _id } = req.params;
 
   try {
-    await User.findByIdAndDelete(_id);
-    console.log('User deleted successfully:', _id); // 调试信息
-    return res.status(200).json({ success: true, message: 'User deleted successfully' });
+    await BedStatus.findByIdAndDelete(_id); // 根据ID删除床位状态
+    console.log('Bed status deleted successfully:', _id); // 调试信息
+    return res
+      .status(200)
+      .json({ success: true, message: 'Bed status deleted successfully' });
   } catch (error) {
-    console.error('Error deleting user:', error.message); // 调试信息
-    return res.status(400).json({success: false, message: 'An error occurred', error: error.message });
+    console.error('Error deleting bed status:', error.message); // 调试信息
+    return res.status(400).json({
+      success: false,
+      message: 'An error occurred',
+      error: error.message,
+    });
   }
 };
 
 // 6. 导出模块
 module.exports = {
-  getUsers, // 获取所有用户数据的方法
-  getUserById, // 获取特定用户数据的方法
-  createUser, // 创建用户数据的方法
-  updateUser, // 更新用户数据的方法
-  deleteUser, // 删除用户数据的方法
+  getAllBedStatuses,
+  createBedStatus,
+  getBedStatusById,
+  updateBedStatus,
+  deleteBedStatus,
 };

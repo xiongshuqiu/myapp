@@ -17,7 +17,7 @@ router.get('/',getAllBedStatuses);
 router.post('/create', createBedStatus);
 
 // 3. 更新特定床位状态
-// (1) 查找特定床位状态并显示编辑表单
+// (1) 查找特定床位状态
 router.get('/:_id/update', getBedStatusById);
 // (2) 提交更新后的床位状态数据
 router.put('/:_id', updateBedStatus);

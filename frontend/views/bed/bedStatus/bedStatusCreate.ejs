@@ -25,9 +25,10 @@
   <body>
     <div id="wrapper">
       <!-- 顶部导航条 -->
-      <%- include('../block/top-navbar.ejs') %>  
+      <%- include('../../block/top-navbar.ejs') %>
       <!-- 左侧导航条 -->
-      <%- include('../block/navbar-side.ejs') %>
+      <%- include('../../block/navbar-side.ejs') %>
+
 
       <div id="page-wrapper">
         <div class="header">
@@ -49,111 +50,36 @@
                 <div class="panel-body">
                   <div class="row">
                     <div class="col-lg-6">
-                      <form action="/users/create" method="post" role="form">
+                      <form action="/beds/status/create" method="post" role="form">
                         
+            
                         <div class="form-group">
-                          <label for="role"
-                            >Role <span style="color: red">*</span></label>
-                          <select class="form-control" id="role" name="role">
-                              <option value="admin">admin</option>
-                              <option value="medical">medical</option>
-                              <option value="family">family</option>
-                          </select>
-                      </div>
-                        <div class="form-group">
-                          <label for="userId">
-                            User ID <span style="color: red">*</span>
-                          </label>
+                          <label for="bedId">Bed ID <span style="color: red">*</span></label>
                           <input
                             type="text"
                             class="form-control"
-                            id="userId"
-                            name="userId"
-                            placeholder="Enter User ID"
+                            id="bedId"
+                            name="bedId"
+                            placeholder="Enter Bed ID (e.g., 3-7-701s-01)"
                             required
-                            pattern=""
-                            title=""
+                            pattern="^\d-\d-\d{3}[a-zA-Z]?-?\d{2}$"
+                            title="Bed ID format should be Building Number-Floor-Room Number-Bed Number (e.g., 3-7-701s-01)"
                           />
                           <small class="form-text text-muted">
-                            Format: S followed by three digits for admin/medical (e.g., S001) or F followed by three digits for family (e.g., F001)
+                            Format: Building Number-Floor-Room Number-Bed Number (e.g., 3-7-701s-01)
                           </small>
                         </div>
-
+                    
                         <div class="form-group">
-                          <label for="account"
-                            >Account <span style="color: red">*</span></label
-                          >
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="account"
-                            name="account"
-                            placeholder="Enter Account"
-                            required
-                          />
+                          <label for="status">Status <span style="color: red">*</span></label>
+                          <select class="form-control" id="status" name="status" required>
+                            <option value="occupied">occupied</option>
+                            <option value="available">available</option>
+                            <option value="reserved">reserved</option>
+                            <option value="maintenance">maintenance</option>
+                          </select>
                         </div>
-
-                        <div class="form-group">
-                          <label for="userName"
-                            >User Name <span style="color: red">*</span></label
-                          >
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="userName"
-                            name="userName"
-                            placeholder="Enter User Name"
-                            required
-                          />
-                        </div>
-
-                        <div class="form-group">
-                          <label for="passWord"
-                            >Password <span style="color: red">*</span></label
-                          >
-                          <input
-                            type="password"
-                            class="form-control"
-                            id="passWord"
-                            name="passWord"
-                            placeholder="Enter Password"
-                            required
-                          />
-                        </div>
-
-                        <div class="form-group">
-                          <label for="phoneNumber"
-                            >Phone Number
-                            <span style="color: red">*</span></label
-                          >
-                          <input
-                            type="tel"
-                            class="form-control"
-                            id="phoneNumber"
-                            name="phoneNumber"
-                            placeholder="Enter Phone Number"
-                            required
-                          />
-                        </div>
-
-                        <div class="form-group">
-                          <label for="email"
-                            >Email <span style="color: red">*</span></label
-                          >
-                          <input
-                            type="email"
-                            class="form-control"
-                            id="email"
-                            name="email"
-                            placeholder="Enter Email (e.g., xiongwang@126.com)"
-                            required
-                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-                            title="Email format should be similar to xiongwang@126.com"
-                          />
-                          <small class="form-text text-muted"
-                            >Format: xiongwang@126.com</small
-                          >
-                        </div>
+                        
 
                         <button type="submit" class="btn btn-primary">
                           Submit
@@ -161,7 +87,7 @@
                         <button
                           type="reset"
                           class="btn btn-secondary"
-                          onclick="window.location.href='/users/';"
+                          onclick="window.location.href='/beds/status/';"
                         >
                           Return
                         </button>
@@ -197,24 +123,6 @@
     <script src="/assets/js/jquery.metisMenu.js"></script>
     <!-- Custom Js -->
     <script src="/assets/js/custom-scripts.js"></script>
-    <script>
-      function updateUserIdPattern() { // 新增：定义函数用于更新User ID的格式
-        var userIdInput = document.getElementById('userId');
-        var role = document.getElementById('role').value;
-
-        if (role === 'admin' || role === 'medical') {
-          userIdInput.pattern = 'S\\d{3}';
-          userIdInput.title = 'User ID format should be S followed by three digits (e.g., S001)';
-          userIdInput.placeholder = 'Enter User ID (e.g., S001)';
-        } else if (role === 'family') {
-          userIdInput.pattern = 'F\\d{3}';
-          userIdInput.title = 'User ID format should be F followed by three digits (e.g., F001)';
-          userIdInput.placeholder = 'Enter User ID (e.g., F001)';
-        }
-      }
-
-      document.getElementById('role').addEventListener('change', updateUserIdPattern);
-      updateUserIdPattern(); // 新增：在页面加载时立即调用函数
-    </script>
+  
   </body>
 </html>

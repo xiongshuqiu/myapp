@@ -88,13 +88,13 @@ function getNavItems(role) {
     {
       id: 'bed-management',
       name: 'Bed Management',
-      href: '/bed-management',
+      href: '#',
       roles: ['admin','medical'],
       icon: 'fa-bed fa-fw',
       subMenu: [
         {
           name: 'Bed Status',
-          href: '#',
+          href: '/beds/status/',
           roles: ['admin','medical']
         },
         {
