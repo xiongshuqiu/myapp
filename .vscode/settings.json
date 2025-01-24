@@ -9,7 +9,6 @@
         "**/CVS": true,
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
-        "account-service": true,
         "catering-service": true,
         "employee-service": true,
         "financial-service": true,
@@ -17,19 +16,19 @@
         "visitor-service": true,
         "node_modules": true,
         "notification-service": true,
-        "middleware": true,
-        "auth-service": true
+        "auth-service": true,
+        "elderly-service": true,
+        "user-service": true
     },
     "hide-files.files": [
-        "account-service",
-        "catering-service",
         "employee-service",
         "financial-service",
         "health-service",
         "visitor-service",
         "node_modules",
         "notification-service",
-        "middleware",
-        "auth-service"
+        "auth-service",
+        "elderly-service",
+        "user-service"
     ]
 }

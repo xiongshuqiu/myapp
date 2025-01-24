@@ -1,91 +1,88 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edit Bed Status</title>
-  <!-- 这里引入你的样式和其他依赖 -->
-</head>
-<body>
-  <h1>Edit Bed Status</h1>
-  <form action="/api/beds/status/:id" method="POST" id="edit-bed-status-form">
-    <div class="form-group">
-      <label for="bedId">Bed ID <span style="color: red">*</span></label>
-      <input
-        type="text"
-        class="form-control"
-        id="bedId"
-        name="bedId"
-        value="<%= bedStatus.bedId %>"
-        placeholder="Enter Bed ID (e.g., 3-7-701s-01)"
-        required
-        pattern="^\d-\d-\d{3}[a-zA-Z]?-?\d{2}$"
-        title="Bed ID format should be Building Number-Floor-Room Number-Bed Number (e.g., 3-7-701s-01)"
-      />
-      <small class="form-text text-muted">
-        Format: Building Number-Floor-Room Number-Bed Number (e.g., 3-7-701s-01)
-      </small>
-    </div>
+const mongoose = require('mongoose');
+const { Room, Bed, User, FamilyMember, Elderly, BedAssignment } = require('../models/bedAssignmentModel');
 
-    <div class="form-group">
-      <label for="status">Status <span style="color: red">*</span></label>
-      <select class="form-control" id="status" name="status" required>
-        <option value="occupied" <%= bedStatus.status === 'occupied' ? 'selected' : '' %>>occupied</option>
-        <option value="available" <%= bedStatus.status === 'available' ? 'selected' : '' %>>available</option>
-        <option value="reserved" <%= bedStatus.status === 'reserved' ? 'selected' : '' %>>reserved</option>
-        <option value="maintenance" <%= bedStatus.status === 'maintenance' ? 'selected' : '' %>>maintenance</option>
-      </select>
-    </div>
+const getAllBedAssignments = async (req, res) => {
+  console.log('Received request to get all bed statuses'); // 调试信息
+  const { _id } = req.body;
 
-    <button type="submit" class="btn btn-primary">Save Changes</button>
-  </form>
+  try {
+    // 首先根据 _id 查找用户的 userId
+    const user = await User.findById(_id);
+    if (!user) throw new Error('User not found');
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // 获取当前床位状态数据并填充表单
-      const bedStatusId = getBedStatusIdFromURL(); // 需要实现这个函数来从URL中获取ID
-      fetch(`/api/beds/status/${bedStatusId}`)
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            document.getElementById('bedId').value = data.data.bedId;
-            document.getElementById('status').value = data.data.status;
-          } else {
-            console.error('Failed to retrieve bed status:', data.message);
-          }
-        })
-        .catch(error => console.error('Error fetching bed status:', error));
+    const userId = user.userId; // 获取用户的 userId
 
-      // 提交表单
-      document.getElementById('edit-bed-status-form').addEventListener('submit', function(event) {
-        event.preventDefault();
+    // 使用聚合管道进行后续查询
+    const bedAssignments = await User.aggregate([
+      {
+        $match: { _id: mongoose.Types.ObjectId(user._id) }, // 根据 userId 查找用户
+      },
+      {
+        $lookup: {
+          from: 'familymembers', // 从 familymembers 集合中查找与用户关联的家庭成员
+          localField: 'userId', // 当前集合中的字段
+          foreignField: 'userId', // 关联集合中的字段
+          as: 'familyMemberDetails' // 结果保存字段
+        }
+      },
+      {
+        $unwind: '$familyMemberDetails' // 展开数组字段
+      },
+      {
+        $lookup: {
+          from: 'elderlies', // 从 elderlies 集合中查找与家庭成员关联的老人
+          localField: 'familyMemberDetails.familyId', // 当前集合中的字段
+          foreignField: 'familyId', // 关联集合中的字段
+          as: 'elderlyDetails' // 结果保存字段
+        }
+      },
+      {
+        $unwind: '$elderlyDetails' // 展开数组字段
+      },
+      {
+        $lookup: {
+          from: 'bedassignments', // 从 bedassignments 集合中查找与老人关联的床位分配
+          localField: 'elderlyDetails.elderlyId', // 当前集合中的字段
+          foreignField: 'elderlyId', // 关联集合中的字段
+          as: 'bedAssignmentDetails' // 结果保存字段
+        }
+      },
+      {
+        $unwind: '$bedAssignmentDetails' // 展开数组字段
+      },
+      {
+        $lookup: {
+          from: 'beds', // 从 beds 集合中查找与床位分配相关的床位信息
+          localField: 'bedAssignmentDetails.bedId', // 当前集合中的字段
+          foreignField: 'bedId', // 关联集合中的字段
+          as: 'bedDetails' // 结果保存字段
+        }
+      },
+      {
+        $unwind: '$bedDetails' // 展开数组字段
+      },
+      {
+        $lookup: {
+          from: 'rooms', // 从 rooms 集合中查找与床位相关的房间信息
+          localField: 'bedDetails.roomId', // 当前集合中的字段
+          foreignField: 'roomId', // 关联集合中的字段
+          as: 'roomDetails' // 结果保存字段
+        }
+      },
+      {
+        $unwind: '$roomDetails' // 展开数组字段
+      }
+    ]);
 
-        const formData = new FormData(this);
-        const bedStatusId = getBedStatusIdFromURL(); // 需要实现这个函数来从URL中获取ID
-
-        fetch(`/api/beds/status/${bedStatusId}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(Object.fromEntries(formData)),
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            alert('Bed status updated successfully');
-          } else {
-            console.error('Failed to update bed status:', data.message);
-          }
-        })
-        .catch(error => console.error('Error updating bed status:', error));
-      });
+    res.status(200).json({
+      success: true,
+      message: 'Bed assignments retrieved successfully',
+      data: bedAssignments,
     });
+  } catch (err) {
+    console.error('Error retrieving bed assignments:', err.message); // 调试信息
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
 
-    function getBedStatusIdFromURL() {
-      const url = new URL(window.location.href);
-      return url.pathname.split('/').pop();
-    }
-  </script>
-</body>
-</html>
+module.exports = { getAllBedAssignments };

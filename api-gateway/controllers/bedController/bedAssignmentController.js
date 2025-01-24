@@ -3,23 +3,13 @@ const axios = require('axios'); // 导入 axios 模块，用于发送 HTTP 请�
 axios.defaults.withCredentials = true; // 配置 axios 允许跨域请求时携带 cookies
 
 // 通用错误处理函数
-const handleError = (
-  err,
-  req, //注意一定要增加这个值（每个handleError都要）
-  res,
-  targetPage = 'user/userCreate',
-  msg = 'Server error',
-) => {
+const handleError = (err, res, msg = 'Server error') => {
   console.error('Error:', err.response ? err.response.data : err.message); // 输出详细调试信息
-  if (!res.headersSent) {
-    res.status(err.response?.status || 500).render(targetPage, {
-      activePage: 'user-management',
-      message: err.response?.data?.message || msg,
-      navItems: req.navItems, // 将导航项传递到视图
-    });
-  }
+  res.status(err.response?.status || 500).json({
+    success: false,
+    message: err.response?.data?.message || msg,
+  });
 };
-
 // 通用GET请求函数
 const getRequest = async (url) => {
   const response = await axios.get(url);
@@ -37,137 +27,79 @@ const putRequest = async (url, data) => {
   return response.data;
 };
 // 通用Delete请求函数
-const deleteRequest = async (url, data) => {
-  const response = await axios.delete(url, data);
+const deleteRequest = async (url) => {
+  const response = await axios.delete(url);
   return response.data;
 };
-
-// 1.查找所用用户信息
-const getAllBedStatuses = async (req, res) => {
+// 1. 获取所有床位分配
+const getAllBedAssignments = async (req, res) => {
+  const { _id, role } = req.body; // 获取传递的数据
+    const data = { _id, role }; // 组装数据
   try {
-    const apiUrl = `${process.env.API_URL}/api/users/`;
-    const response = await getRequest(apiUrl);
-    const users = response.data;
-    if (response.success) {
-      // const buttonItems = req.buttonItems;
-      // const linkItems = req.linkItems
-      res.render('user/userManagement', {
-        activePage: 'user-management',
-        users,
-        navItems: req.navItems, // 将导航项传递到视图
-        buttonItems:req.buttonItems,
-        linkItems:req.linkItems
-      });
-    }
+    const url = `${process.env.BED_SERVICE_URL}/beds/assignment/`;
+    const response = await getRequest(url,data); // 发送 GET 请求以获取用户信息
+    res.json(response); // 将响应数据返回给前端:包括数据和message
   } catch (err) {
-    handleError(err,req,res);
+    handleError(err, res);
   }
 };
-// 2.新增用户
-//(1)点击AddUser按钮跳转到新增用户的页面
-const renderCreateUserForm = async (req, res) => {
-  res.render('user/userCreate.ejs', {
-    activePage: 'user-management',
-    navItems: req.navItems, // 将导航项传递到视图
-  });
-};
-//(2)提交新用户信息
-const createBedStatus = async (req, res) => {
-  const {role,userId, account, userName, passWord, phoneNumber, email } =
-    req.body;
+// 2. 创建新的床位分配
+const createBedAssignment = async (req, res) => {
+  const { bedId, status} = req.body; // 从请求体中获取所有用户信息
+
   try {
-    const data = {
-      role,
-      userId,
-      account,
-      userName,
-      passWord,
-      phoneNumber,
-      email,
-      
-    };
-    const apiUrl = `${process.env.API_URL}/api/users/create`;
-    const response = await postRequest(apiUrl, data);
+    const data = { bedId, status};
+    const url = `${process.env.BED_SERVICE_URL}/beds/assignment/create`;
+    const response = await postRequest(url, data); // 发送 POST 请求以创建新用户
+    res.status(201).json(response); // 将响应数据返回给前端
+  } catch (err) {
+    handleError(err, res);
+  }
+};
+// 3. 更新特定床位分配
+// (1) 查找特定床位分配并显示编辑表单
+const getBedAssignmentById = async (req, res) => {
+  try {
+    const { _id } = req.params; // 从参数中获取 _id
+    const url = `${process.env.BED_SERVICE_URL}/beds/assignment/${_id}/update`;
+    const response = await getRequest(url); // 发送 GET 请求以获取用户信息
     const user = response.data;
     console.log(user);
-    if (response.success) {
-      res.redirect('/users/');
-    }
+    res.json(response); // 将响应数据返回给前端:包括数据和message
   } catch (err) {
-    const targetPage = 'user/userCreate'; //用户需要输入新值
-    handleError(err,req, res, targetPage);
+    handleError(err, res);
+  }
+};
+// (2) 提交更新后的床位分配数据
+const updateBedAssignment = async (req, res) => {
+  const {bedId, status } = req.body;
+  try {
+    const data = { bedId, status };
+    const { _id } = req.params; // 从参数中获取 _Id
+    const url = `${process.env.BED_SERVICE_URL}/beds/assignment/${_id}`;
+    const response = await putRequest(url, data); // 发送 PUT 请求以更新用户信息
+    res.json(response); // 将响应数据返回给前端
+  } catch (err) {
+    handleError(err, res);
   }
 };
 
-// 3.更新用户信息
-// (1)查找特定用户信息并跳转到编辑用户信息页面
-const getBedStatusById = async (req, res) => {
-  const { _id } = req.params; // 从参数中获取 _id
-  console.log(`Fetching user with ID: ${_id}`); // 调试信息
+// 4. 删除特定床位分配
+const deleteBedAssignment = async (req, res) => {
   try {
-    const apiUrl = `${process.env.API_URL}/api/users/${_id}/update`;
-    const response = await getRequest(apiUrl); // 使用组装的URL进行API调用
-    const user = response.data;
-    console.log(user);
-    if (response.success) {
-      res.render('user/userUpdate.ejs', {
-        activePage: 'user-management',
-        user,
-        navItems: req.navItems
-      });
-    }
+    const { _id } = req.params; // 从参数中获取 userId
+    const url = `${process.env.BED_SERVICE_URL}/beds/assignment/${_id}/delete`;
+    const response = await deleteRequest(url); // 发送 DELETE 请求以删除用户
+    res.json(response); // 将响应数据返回给前端
   } catch (err) {
-    handleError(err,req, res);
+    handleError(err, res);
   }
 };
 
-//(2) 提交已编辑的用户信息
-const updateBedStatus = async (req, res) => {
-  const { userId, account, userName, passWord, phoneNumber, email, role } =
-    req.body;
-  const { _id } = req.params;
-  try {
-    const data = {
-      userId,
-      account,
-      userName,
-      passWord,
-      phoneNumber,
-      email,
-      role,
-    };
-    // 从请求参数中获取 _id
-    const apiUrl = `${process.env.API_URL}/api/users/${_id}`;
-    const response = await putRequest(apiUrl, data);
-    const user = response.data;
-    console.log(user);
-    if (response.success) {
-      res.redirect('/users/');
-    }
-  } catch (err) {
-    const targetPage = 'user/userUpdate'; //用户需要输入新值
-    handleError(err, req,res, targetPage);
-  }
-};
-
-// 7. 删除用户 (D)
-const deleteBedStatus = async (req, res) => {
-  try {
-    const { _id } = req.params; // 从参数中获取_id
-    console.log(_id);
-    const apiUrl = `${process.env.API_URL}/api/users/${_id}/delete`;
-    const response = await deleteRequest(apiUrl);
-    if (response.success) {
-      res.redirect('/users/');
-    }
-  } catch (err) {
-    handleError(err,req, res);
-  }
-};
 module.exports = {
-  getAllBedStatuses,
-  createBedStatus,
-  getBedStatusById,
-  updateBedStatus,
-  deleteBedStatus
+  getAllBedAssignments,
+  createBedAssignment,
+  getBedAssignmentById,
+  updateBedAssignment,
+  deleteBedAssignment
 };
