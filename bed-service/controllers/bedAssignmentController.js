@@ -2,48 +2,50 @@ const { User, Elderly, BedAssignment, BedStatus } = require('../models/bedAssign
 
 const getAllBedAssignments = async (req, res) => {
   console.log('Received request to get all bed statuses'); // 调试信息
-  const { _id } = req.body;
-
+  const { _id,role } = req.body;
+  const userRole = role;
   try {
     // 首先根据 _id 查找用户的 userId
-    const user = await User.findById(_id);
-    if (!user) throw new Error('User not found');
+    if (userRole === medical || falmily) {
+      const user = await User.findById(_id);
+      if (!user) throw new Error('User not found');
 
-    const userId = user.userId; // 获取用户的 userId
+      const userId = user.userId; // 获取用户的 userId
 
-    // 使用聚合管道进行后续查询
-    const bedAssignments = await Elderly.aggregate([
-      {
-        $match: { userId: userId }, // 根据 userId 查找家庭成员
-      },
-      {
-        $lookup: {
-          from: 'bedassignments', // 从 bedassignments 集合中查找与家庭成员关联的床位分配
-          localField: 'elderlyId', // 当前集合中的字段
-          foreignField: 'elderlyId', // 关联集合中的字段
-          as: 'bedassignmentDetails', // 结果保存字段
+      // 使用聚合管道进行后续查询
+      const bedAssignments = await Elderly.aggregate([
+        {
+          $match: { userId: userId }, // 根据 userId 查找家庭成员
         },
-      },
-      {
-        $unwind: '$bedassignmentDetails', // 展开数组字段
-      },
-      {
-        $lookup: {
-          from: 'bedstatuses', // 从 bedstatuses 集合中查找与床位分配关联的床位信息
-          localField: 'bedassignmentDetails.bedId', // 当前集合中的字段
-          foreignField: 'bedId', // 关联集合中的字段
-          as: 'bedStatusDetails', // 结果保存字段
+        {
+          $lookup: {
+            from: 'bedassignments', // 从 bedassignments 集合中查找与家庭成员关联的床位分配
+            localField: 'elderlyId', // 当前集合中的字段
+            foreignField: 'elderlyId', // 关联集合中的字段
+            as: 'bedassignmentDetails', // 结果保存字段
+          },
         },
-      },
-      {
-        $unwind: '$bedStatusDetails', // 展开数组字段
-      },
-    ]);
-    res.status(200).json({
-      success: true,
-      message: 'Bed assignments retrieved successfully',
-      data: bedAssignments,
-    });
+        {
+          $unwind: '$bedassignmentDetails', // 展开数组字段
+        },
+        {
+          $lookup: {
+            from: 'bedstatuses', // 从 bedstatuses 集合中查找与床位分配关联的床位信息
+            localField: 'bedassignmentDetails.bedId', // 当前集合中的字段
+            foreignField: 'bedId', // 关联集合中的字段
+            as: 'bedStatusDetails', // 结果保存字段
+          },
+        },
+        {
+          $unwind: '$bedStatusDetails', // 展开数组字段
+        },
+      ]);
+      res.status(200).json({
+        success: true,
+        message: 'Bed assignments retrieved successfully',
+        data: bedAssignments,
+      });
+    }
   } catch (err) {
     console.error('Error retrieving bed assignments:', err.message); // 调试信息
     res.status(500).json({ success: false, message: err.message });

@@ -29,26 +29,25 @@
 
   <body>
     <div id="wrapper">
-      <!-- 顶部导航条 -->
-      <%- include('../block/top-navbar.ejs') %>
-      <!-- 左侧导航条 -->
-      <%- include('../block/navbar-side.ejs') %>
-
-      <div id="page-wrapper">
-        <div class="header">
-          <h1 class="page-header">
-            User Management <small> User Information</small> 
-          </h1>
-          <ol class="breadcrumb">
-            <!-- 面包屑导航 -->
-            <li><a href="#">Home</a></li>
-            <!-- 首页链接 -->
-            <li><a href="#">User Management</a></li>
-            <!-- 用户管理页面链接 -->
-            <li class="active">User Data</li>
-            <!-- 当前页：用户数据 -->
-          </ol>
-        </div>
+    <!-- 顶部导航条 -->
+    <%- include('../../block/top-navbar.ejs') %>
+    <!-- 左侧导航条 -->
+    <%- include('../../block/navbar-side.ejs') %>
+    <div id="page-wrapper">
+      <div class="header">
+        <h1 class="page-header">
+          Bed Management <small> Bed Information</small> 
+        </h1>
+        <ol class="breadcrumb">
+          <!-- 面包屑导航 -->
+          <li><a href="#">Home</a></li>
+          <!-- 首页链接 -->
+          <li><a href="#">Bed Management</a></li>
+          <!-- 用户管理页面链接 -->
+          <li class="active">BedAssignment Data</li>
+          <!-- 当前页：用户数据 -->
+        </ol>
+      </div>
 
         <!-- 页面内部内容 -->
         <div id="page-inner">
@@ -56,7 +55,7 @@
             <div class="col-md-12">
               <!-- Advanced Tables -->
               <div class="panel panel-default">
-                <div class="panel-heading">User Tables</div>
+                <div class="panel-heading">BedAssignment Tables</div>
                 <div class="panel-body">
                   <div class="table-responsive">
                     <table
@@ -65,26 +64,21 @@
                     >
                       <thead>
                         <tr>
-                          <th>userID</th>
-                          <th>account</th>
-                          <th>userName</th>
-                          <th>password</th>
-                          <th>phoneNumber</th>
-                          <th>email</th>
-                          <th>role</th>
-                          <th>actions</th>
+                          <th>assignmentId</th>
+                          <th>bedId</th>
+                          <th>elderly</th>
+                          <th>assignedDate</th>
+              
                         </tr>
                       </thead>
                       <tbody>
-                        <% users.forEach(function(user) { %>
+                        <% bedAssignments.forEach(function(bedAssignment) { %>
                         <tr class="odd gradeX" style="white-space: nowrap">
-                          <td><%= user.userId %></td>
-                          <td><%= user.account %></td>
-                          <td><%= user.userName %></td>
-                          <td><%= user.passWord %></td>
-                          <td><%= user.phoneNumber %></td>
-                          <td><%= user.email %></td>
-                          <td><%= user.role %></td>
+                          <td><%= bedAssignment.assignmentId %></td>
+                          <td><%= bedAssignment.bedId %></td>
+                          <td><%= bedAssignment.elderlyId %></td>
+                          <td><%= bedAssignment.assignedDate %></td>
+                        
                           <td>
                             <% linkItems.forEach(function(item) { %> 
                               <% if (item.id  ==='edit-user-link'&&item.visible) { %>

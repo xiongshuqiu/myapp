@@ -1,88 +1,47 @@
-const mongoose = require('mongoose');
-const { Room, Bed, User, FamilyMember, Elderly, BedAssignment } = require('../models/bedAssignmentModel');
-
-const getAllBedAssignments = async (req, res) => {
-  console.log('Received request to get all bed statuses'); // 调试信息
-  const { _id } = req.body;
-
+const seedDatabase = async () => {
   try {
-    // 首先根据 _id 查找用户的 userId
-    const user = await User.findById(_id);
-    if (!user) throw new Error('User not found');
+    // 清空集合
+    await Employee.deleteMany({});
+    await BedAssignment.deleteMany({});
 
-    const userId = user.userId; // 获取用户的 userId
+    // 插入 Employee 数据
+    const employees = [
+      {
+        employeeId: 'E001',
+        employeeName: 'Dr. John Doe',
+        position: 'Doctor',
+        contactNumber: '1234567890',
+      },
+      {
+        employeeId: 'E002',
+        employeeName: 'Dr. Jane Smith',
+        position: 'Doctor',
+        contactNumber: '0987654321',
+      },
+    ];
+    await Employee.insertMany(employees);
 
-    // 使用聚合管道进行后续查询
-    const bedAssignments = await User.aggregate([
+    // 插入 Bed Assignment 数据
+    const bedAssignments = [
       {
-        $match: { _id: mongoose.Types.ObjectId(user._id) }, // 根据 userId 查找用户
+        assignmentId: 'A001',
+        bedId: '3-701-b01',
+        elderly: 'E001',
+        assignedDate: new Date('2023-03-01'),
       },
       {
-        $lookup: {
-          from: 'familymembers', // 从 familymembers 集合中查找与用户关联的家庭成员
-          localField: 'userId', // 当前集合中的字段
-          foreignField: 'userId', // 关联集合中的字段
-          as: 'familyMemberDetails' // 结果保存字段
-        }
+        assignmentId: 'A002',
+        bedId: '3-701-b02',
+        elderly: 'E002',
+        assignedDate: new Date('2023-03-01'),
       },
-      {
-        $unwind: '$familyMemberDetails' // 展开数组字段
-      },
-      {
-        $lookup: {
-          from: 'elderlies', // 从 elderlies 集合中查找与家庭成员关联的老人
-          localField: 'familyMemberDetails.familyId', // 当前集合中的字段
-          foreignField: 'familyId', // 关联集合中的字段
-          as: 'elderlyDetails' // 结果保存字段
-        }
-      },
-      {
-        $unwind: '$elderlyDetails' // 展开数组字段
-      },
-      {
-        $lookup: {
-          from: 'bedassignments', // 从 bedassignments 集合中查找与老人关联的床位分配
-          localField: 'elderlyDetails.elderlyId', // 当前集合中的字段
-          foreignField: 'elderlyId', // 关联集合中的字段
-          as: 'bedAssignmentDetails' // 结果保存字段
-        }
-      },
-      {
-        $unwind: '$bedAssignmentDetails' // 展开数组字段
-      },
-      {
-        $lookup: {
-          from: 'beds', // 从 beds 集合中查找与床位分配相关的床位信息
-          localField: 'bedAssignmentDetails.bedId', // 当前集合中的字段
-          foreignField: 'bedId', // 关联集合中的字段
-          as: 'bedDetails' // 结果保存字段
-        }
-      },
-      {
-        $unwind: '$bedDetails' // 展开数组字段
-      },
-      {
-        $lookup: {
-          from: 'rooms', // 从 rooms 集合中查找与床位相关的房间信息
-          localField: 'bedDetails.roomId', // 当前集合中的字段
-          foreignField: 'roomId', // 关联集合中的字段
-          as: 'roomDetails' // 结果保存字段
-        }
-      },
-      {
-        $unwind: '$roomDetails' // 展开数组字段
-      }
-    ]);
+    ];
+    await BedAssignment.insertMany(bedAssignments);
 
-    res.status(200).json({
-      success: true,
-      message: 'Bed assignments retrieved successfully',
-      data: bedAssignments,
-    });
+    console.log('Database seeded successfully');
   } catch (err) {
-    console.error('Error retrieving bed assignments:', err.message); // 调试信息
-    res.status(500).json({ success: false, message: err.message });
+    console.error('Error seeding database:', err.message);
   }
 };
 
-module.exports = { getAllBedAssignments };
+seedDatabase();
