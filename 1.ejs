@@ -1,47 +1,24 @@
-const seedDatabase = async () => {
+// 1.获取所有床位分配
+const getAllBedAssignments = async (req, res) => {
+  const _id = req.user._id;
+  const role = req.user.role;
+  console.log('User data:', { _id, role }); // 调试信息
+  const apiUrl = `${process.env.API_URL}/api/beds/assignment/?_id=${_id}&role=${role}`;
+  console.log('API URL:', apiUrl); // 调试信息
+  
   try {
-    // 清空集合
-    await Employee.deleteMany({});
-    await BedAssignment.deleteMany({});
-
-    // 插入 Employee 数据
-    const employees = [
-      {
-        employeeId: 'E001',
-        employeeName: 'Dr. John Doe',
-        position: 'Doctor',
-        contactNumber: '1234567890',
-      },
-      {
-        employeeId: 'E002',
-        employeeName: 'Dr. Jane Smith',
-        position: 'Doctor',
-        contactNumber: '0987654321',
-      },
-    ];
-    await Employee.insertMany(employees);
-
-    // 插入 Bed Assignment 数据
-    const bedAssignments = [
-      {
-        assignmentId: 'A001',
-        bedId: '3-701-b01',
-        elderly: 'E001',
-        assignedDate: new Date('2023-03-01'),
-      },
-      {
-        assignmentId: 'A002',
-        bedId: '3-701-b02',
-        elderly: 'E002',
-        assignedDate: new Date('2023-03-01'),
-      },
-    ];
-    await BedAssignment.insertMany(bedAssignments);
-
-    console.log('Database seeded successfully');
+    const response = await getRequest(apiUrl);
+    const bedAssignments = response.data;
+    if (response.success) {
+      res.render('bed/bedAssignment/bedAssignmentManagement', {
+        activePage: 'bed-management',
+        bedAssignments,
+        navItems: req.navItems, // 将导航项传递到视图
+        buttonItems: req.buttonItems,
+        linkItems: req.linkItems,
+      });
+    }
   } catch (err) {
-    console.error('Error seeding database:', err.message);
+    handleError(err, req, res);
   }
 };
-
-seedDatabase();

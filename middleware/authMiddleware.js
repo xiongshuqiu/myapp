@@ -11,13 +11,13 @@ const authenticate = async (req, res, next) => {
     try {
       // 使用jsonwebtoken库对Token进行解码和验证
       const decodedToken = jwt.verify(token, 'your_secret_key');
-      console.log(decodedToken);
+     // console.log(decodedToken);
 
       // 将解码后的用户信息存储在请求对象中
       req.user = decodedToken;
       //存储在 res.locals 中的 _id 现在可以直接在同一请求响应周期内渲染的任何 EJS 模板中访问。
       res.locals._id = req.user._id;
-      console.log(res.locals._id);
+     // console.log(res.locals._id);
 
       // 调用下一个中间件或路由处理函数
       return next();

@@ -66,7 +66,10 @@
                       <thead>
                         <tr>
                           <th>bedID</th>
-                          <th>status</th>
+                          <th>building</th>
+                          <th>floor</th>
+                          <th>floor</th>
+                          <th>room</th>
                           <th>actions</th>
                         </tr>
                       </thead>
@@ -74,6 +77,9 @@
                         <% bedStatuses.forEach(function(bedStatus) { %>
                         <tr class="odd gradeX" style="white-space: nowrap">
                           <td><%= bedStatus.bedId %></td>
+                          <td><%= bedStatus.building %></td>
+                          <td><%= bedStatus.floor %></td>
+                          <td><%= bedStatus.room %></td>
                           <td><%= bedStatus.status %></td>
                           <td>
                             <% linkItems.forEach(function(item) { %> 

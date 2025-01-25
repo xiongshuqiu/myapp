@@ -44,14 +44,14 @@ const deleteRequest = async (url) => {
 
 // 1.获取所有床位分配
 const getAllBedAssignments = async (req, res) => {
-  const apiUrl = `${process.env.API_URL}/api/beds/assignment/`;
-  console.log(apiUrl);
   const _id = req.user._id;
   const role = req.user.role;
-  const data = { _id, role }
-  console.log(data);
+  console.log('User data:', { _id, role }); // 调试信息
+  const apiUrl = `${process.env.API_URL}/api/beds/assignment/?_id=${_id}&role=${role}`;
+  console.log('API URL:', apiUrl); // 调试信息
+  
   try {
-    const response = await getRequest(apiUrl,data);
+    const response = await getRequest(apiUrl);
     const bedAssignments = response.data;
     if (response.success) {
       // const buttonItems = req.buttonItems;
@@ -78,16 +78,16 @@ const renderNewBedAssignmentForm = async (req, res) => {
 };
 //(2)提交新的床位分配数据
 const createBedAssignment = async (req, res) => {
-  const { bedId, status } = req.body;
+  const { assignmentId, bedId, elderlyId, assignedDate } = req.body;
   try {
-    const data = { bedId, status };
+    const data = { assignmentId, bedId, elderlyId, assignedDate };
 
     const apiUrl = `${process.env.API_URL}/api/beds/assignment/create`;
     const response = await postRequest(apiUrl, data);
     const bedAssignment = response.data;
     console.log(bedAssignment);
     if (response.success) {
-      res.redirect('/beds/status/');
+      res.redirect('/beds/assignment/');
     }
   } catch (err) {
     const targetPage = 'bed/bedAssignment/bedAssignmentCreate'; //用户需要输入新值
@@ -119,10 +119,10 @@ const getBedAssignmentById = async (req, res) => {
 
 //(2) 提交更新后的床位分配数据
 const updateBedAssignment = async (req, res) => {
-  const { bedId, status } = req.body;
+  const { assignmentId, bedId, elderlyId, assignedDate } = req.body;
   const { _id } = req.params;
   try {
-    const data = { bedId, status };
+    const data = { assignmentId, bedId, elderlyId, assignedDate };
 
     // 从请求参数中获取 _id
     const apiUrl = `${process.env.API_URL}/api/beds/assignment/${_id}`;
@@ -130,7 +130,7 @@ const updateBedAssignment = async (req, res) => {
     const bedAssignment = response.data;
     console.log(bedAssignment);
     if (response.success) {
-      res.redirect('/beds/status/');
+      res.redirect('/beds/assignment/');
     }
   } catch (err) {
     const targetPage = 'bed/bedAssignment/bedAssignmentUpdate'; //用户需要输入新值
@@ -146,7 +146,7 @@ const deleteBedAssignment = async (req, res) => {
     const apiUrl = `${process.env.API_URL}/api/beds/assignment/${_id}/delete`;
     const response = await deleteRequest(apiUrl);
     if (response.success) {
-      res.redirect('/beds/status/');
+      res.redirect('/beds/assignment/');
     }
   } catch (err) {
     handleError(err, req, res);
@@ -158,5 +158,5 @@ module.exports = {
   createBedAssignment,
   getBedAssignmentById,
   updateBedAssignment,
-  deleteBedAssignment
+  deleteBedAssignment,
 };

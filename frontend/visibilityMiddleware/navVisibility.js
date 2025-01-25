@@ -95,12 +95,12 @@ function getNavItems(role) {
         {
           name: 'Bed Status',
           href: '/beds/status/',
-          roles: ['admin','medical']
+          roles: ['admin']
         },
         {
           name: 'Bed Assignment',
-          href: '#',
-          roles: ['admin','medical']
+          href: '/beds/assignment/',
+          roles: ['admin','medical','family']
         }
       ]
     },

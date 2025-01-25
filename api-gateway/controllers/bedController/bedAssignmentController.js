@@ -33,11 +33,10 @@ const deleteRequest = async (url) => {
 };
 // 1. 获取所有床位分配
 const getAllBedAssignments = async (req, res) => {
-  const { _id, role } = req.body; // 获取传递的数据
-    const data = { _id, role }; // 组装数据
+  const { _id, role } = req.query;// 从查询参数中获取传递的数据
   try {
-    const url = `${process.env.BED_SERVICE_URL}/beds/assignment/`;
-    const response = await getRequest(url,data); // 发送 GET 请求以获取用户信息
+    const url = `${process.env.BED_SERVICE_URL}/beds/assignment/?_id=${_id}&role=${role}`;
+    const response = await getRequest(url); // 发送 GET 请求以获取用户信息
     res.json(response); // 将响应数据返回给前端:包括数据和message
   } catch (err) {
     handleError(err, res);
@@ -45,10 +44,10 @@ const getAllBedAssignments = async (req, res) => {
 };
 // 2. 创建新的床位分配
 const createBedAssignment = async (req, res) => {
-  const { bedId, status} = req.body; // 从请求体中获取所有用户信息
+  const { assignmentId, bedId, elderlyId, assignedDate} = req.body; // 从请求体中获取所有用户信息
 
   try {
-    const data = { bedId, status};
+    const data = { assignmentId, bedId, elderlyId, assignedDate};
     const url = `${process.env.BED_SERVICE_URL}/beds/assignment/create`;
     const response = await postRequest(url, data); // 发送 POST 请求以创建新用户
     res.status(201).json(response); // 将响应数据返回给前端
@@ -72,9 +71,9 @@ const getBedAssignmentById = async (req, res) => {
 };
 // (2) 提交更新后的床位分配数据
 const updateBedAssignment = async (req, res) => {
-  const {bedId, status } = req.body;
+  const {assignmentId, bedId, elderlyId, assignedDate } = req.body;
   try {
-    const data = { bedId, status };
+    const data = { assignmentId, bedId, elderlyId, assignedDate };
     const { _id } = req.params; // 从参数中获取 _Id
     const url = `${process.env.BED_SERVICE_URL}/beds/assignment/${_id}`;
     const response = await putRequest(url, data); // 发送 PUT 请求以更新用户信息

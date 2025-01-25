@@ -14,8 +14,8 @@ const User = mongoose.model('User', userSchema);
 
 // Elderly Schema
 const elderlySchema = new mongoose.Schema({
-  elderlyName: { type: String, required: true }, // 老人姓名
   elderlyId: { type: String, required: true, unique: true }, // 老人唯一编号 E001
+  elderlyName: { type: String, required: true }, // 老人姓名
   elderlyPhophe: { type: String, required: true }, 
   emergencyContactName: { type: String, required: true }, // 家庭紧急情况联系人姓名
   userId: { type: String, ref: 'User' }, // 家属登录 Id 唯一编号 F001

@@ -1,10 +1,13 @@
 //1.导入 Mongoose 模块：引入 Mongoose 模块以便与 MongoDB 数据库进行交互。
 const mongoose = require('mongoose');
 
-//2.定义用户模式 (Schema)：使用 Mongoose 的 Schema 类定义用户模式。模式描述了用户文档的结构。
+ //2. BedStatus Schema
 const bedStatusSchema = new mongoose.Schema({
-  bedId: { type: String, required: true }, // Added field: bedNumber
-  status: { type: String, required: true },
+  bedId: { type: String, required: true }, // 床位编号 3-7-701s-01
+  building: { type: String, required: true, index: true }, // 楼栋号
+  floor: { type: String, required: true }, // 楼层
+  room: { type: String, required: true }, // 房间号
+  status: { type: String, required: true }, // 占用状态
 });
 
 //3.创建模型 (Model)：使用 mongoose.model 方法基于定义的模式创建一个名为 bedStatus 的模型。

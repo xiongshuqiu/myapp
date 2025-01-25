@@ -18,7 +18,9 @@
         "notification-service": true,
         "auth-service": true,
         "elderly-service": true,
-        "user-service": true
+        "user-service": true,
+        "account-service": true,
+        ".gitignore": true
     },
     "hide-files.files": [
         "employee-service",
@@ -29,6 +31,8 @@
         "notification-service",
         "auth-service",
         "elderly-service",
-        "user-service"
+        "user-service",
+        "account-service",
+        ".gitignore"
     ]
 }

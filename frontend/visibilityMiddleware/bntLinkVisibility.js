@@ -16,9 +16,16 @@ function bntLinkVisibility(req, res, next) {
       },
       //床位状态增加
       {
-        id: 'add-bedstatus-btn',
+        id: 'add-bedStatus-btn',
         name: 'AddBedStatus',
         href: '/beds/status/new',
+        roles: ['admin'],
+      },
+      //床位分配增加
+      {
+        id: 'add-bedAssignment-btn',
+        name: 'AddBedAssignment',
+        href: '/beds/assignment/new',
         roles: ['admin'],
       },
     ];
@@ -47,6 +54,15 @@ function bntLinkVisibility(req, res, next) {
         id: 'delete-bedStatus-link',
         roles: ['admin'],
       },
+        //编辑和删除床位分配
+        {
+          id: 'edit-bedAssignment-link',
+          roles: ['admin'],
+        },
+        {
+          id: 'delete-bedAssignment-link',
+          roles: ['admin'],
+        },
     ];
     return linkItems.map((item) => ({
       ...item,
