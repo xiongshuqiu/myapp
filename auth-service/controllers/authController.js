@@ -34,12 +34,16 @@ exports.postLogin = async (req, res) => {
         //   sameSite: 'None', // 设置 sameSite 属性
         //   secure: true, // 在 HTTPS 环境下传输 cookie
         // });
+        // res.cookie('jwt', token, {
+        //   httpOnly: true,
+        //   secure: false,
+        //   sameSite: 'Lax',
+        // });
         res.cookie('jwt', token, {
-          httpOnly: true,
-          secure: false,
-          sameSite: 'Lax',
+          httpOnly: true, 
+          secure: process.env.NODE_ENV === 'production', // 生产环境中使用 HTTPS
+          sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax', // 生产环境允许跨站点请求
         });
-        
         
         console.log('Cookie set successfully with token:', token);
 
