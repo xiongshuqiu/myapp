@@ -74,9 +74,9 @@ const renderNewBedStatusForm = async (req, res) => {
 };
 //(2)提交新的床位状态数据
 const createBedStatus = async (req, res) => {
-  const { bedId, building, floor, room, status } = req.body;
+  const { bedId, building, floor, room, roomType, bedNumber, status } = req.body;
   try {
-    const data = { bedId, building, floor, room, status };
+    const data = { bedId, building, floor, room, roomType, bedNumber, status };
 
     const apiUrl = `${process.env.API_URL}/api/beds/status/create`;
     const response = await postRequest(apiUrl, data);
@@ -115,10 +115,10 @@ const getBedStatusById = async (req, res) => {
 
 //(2) 提交更新后的床位状态数据
 const updateBedStatus = async (req, res) => {
-  const { bedId, building, floor, room, status } = req.body;
+  const { bedId, building, floor, room, roomType, bedNumber, status } = req.body;
   const { _id } = req.params;
   try {
-    const data = { bedId, building, floor, room, status };
+    const data = {bedId, building, floor, room, roomType, bedNumber, status };
 
     // 从请求参数中获取 _id
     const apiUrl = `${process.env.API_URL}/api/beds/status/${_id}`;

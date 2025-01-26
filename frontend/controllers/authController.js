@@ -13,7 +13,7 @@ exports.postLogin = async (req, res) => {
   // 2-2 处理登录请求 (try-catch)
   try {
     // 1. 定义后端认证服务的 URL
-    const urll =`${process.env.API_URL}/api/auth/login`;
+    const urll = `${process.env.API_URL}/api/auth/login`;
     console.log(urll);
 
     // 2. 向后端认证服务发送登录请求
@@ -25,10 +25,23 @@ exports.postLogin = async (req, res) => {
       const token = response.data.token;
       if (token) {
         // 4. 将 JWT 设置到 cookie 中
-        res.cookie('jwt', token, {
-          httpOnly: true, // 防止客户端脚本访问 cookie
-          secure: true, // 在 HTTPS 环境下传输 cookie
+        // res.cookie('jwt', token, {
+        //   httpOnly: true, // 防止客户端脚本访问 cookie
+        //   secure: true, // 在 HTTPS 环境下传输 cookie
+        // });
+        // app.post('/login', (req, res) => {
+         // const token = generateToken(user); // 假设你有生成 token 的函数
+         res.cookie('jwt', token, {
+          httpOnly: true, 
+          secure: process.env.NODE_ENV === 'production', // 生产环境中使用 HTTPS
+          sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax', // 生产环境允许跨站点请求
+          domain: process.env.NODE_ENV === 'production' ? 'yourdomain.com' : 'localhost', // 设置域名
+          path: '/' // 设置路径为根目录
         });
+        
+        
+        //   res.send({ message: 'Logged in successfully' });
+        // });
 
         const userName = response.data.userName;
         // 5. 将用户名存储在会话中
@@ -43,7 +56,9 @@ exports.postLogin = async (req, res) => {
     } else {
       // 处理登录失败的情况
       console.error('Login failed:', response.data.message);
-      return res.status(401).json({ success: false, message: response.data.message });
+      return res
+        .status(401)
+        .json({ success: false, message: response.data.message });
     }
   } catch (error) {
     // 处理请求过程中可能出现的错误

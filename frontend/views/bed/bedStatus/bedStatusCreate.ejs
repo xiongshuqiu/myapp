@@ -52,7 +52,66 @@
                     <div class="col-lg-6">
                       <form action="/beds/status/create" method="post" role="form">
                         
-            
+                        
+                        <div class="form-group">
+                          <label for="building">Building <span style="color: red">*</span></label>
+                          <select class="form-control" id="building" name="building" required>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                          </select>
+                        </div>
+                        
+                        <div class="form-group">
+                          <label for="floor">Floor <span style="color: red">*</span></label>
+                          <select class="form-control" id="floor" name="floor" required>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                          </select>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="room">Room <span style="color: red">*</span></label>
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="room"
+                            name="room"
+                            placeholder="Enter Room Number (e.g., 101)"
+                            required
+                            pattern="^\d{3}$"
+                            title="Room format should be Room Number (e.g., 101)"
+                          />
+                          <small class="form-text text-muted">
+                            Format: Room Number (e.g., 101)
+                          </small>
+                        </div>
+                        
+                        <div class="form-group">
+                          <label for="roomType">Room Type <span style="color: red">*</span></label>
+                          <select class="form-control" id="roomType" name="roomType" required>
+                            <option value="s">s</option>
+                            <option value="b">b</option>
+                          </select>
+                          <small class="form-text text-muted">
+                            Select 's' or 'b' (e.g., 701s, 701b)
+                          </small>
+                        </div>
+                        
+                        
+                        <div class="form-group">
+                          <label for="bedNumber">Bed Number <span style="color: red">*</span></label>
+                          <select class="form-control" id="bedNumber" name="bedNumber" required>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                          </select>
+                        </div>
+
                         <div class="form-group">
                           <label for="bedId">Bed ID <span style="color: red">*</span></label>
                           <input
@@ -60,51 +119,16 @@
                             class="form-control"
                             id="bedId"
                             name="bedId"
-                            placeholder="Enter Bed ID (e.g., 3-7-701s-01)"
+                            placeholder="Generated Bed ID will appear here"
                             required
-                            pattern="^\d-\d-\d{3}[a-zA-Z]?-?\d{2}$"
-                            title="Bed ID format should be Building Number-Floor-Room Number-Bed Number (e.g., 3-7-701s-01)"
+                            readonly
                           />
                           <small class="form-text text-muted">
-                            Format: Building Number-Floor-Room Number-Bed Number (e.g., 3-7-701s-01)
+                            Format: Building-Floor-Room Room Type-Bed Number (e.g., 3-7-701s-01)
                           </small>
                         </div>
                         
-                        <div class="form-group">
-                          <label for="building">Building <span style="color: red">*</span></label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="building"
-                            name="building"
-                            placeholder="Enter Building Number"
-                            required
-                          />
-                        </div>
-                        
-                        <div class="form-group">
-                          <label for="floor">Floor <span style="color: red">*</span></label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="floor"
-                            name="floor"
-                            placeholder="Enter Floor"
-                            required
-                          />
-                        </div>
-                        
-                        <div class="form-group">
-                          <label for="room">Room <span style="color: red">*</span></label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="room"
-                            name="room"
-                            placeholder="Enter Room Number"
-                            required
-                          />
-                        </div>
+                        <button type="button" class="btn btn-primary" onclick="generateBedId()">Generate Bed ID</button>
                         
                         <div class="form-group">
                           <label for="status">Status <span style="color: red">*</span></label>
@@ -115,6 +139,27 @@
                             <option value="maintenance">maintenance</option>
                           </select>
                         </div>
+                        
+                        <script>
+                          function generateBedId() {
+                            const building = document.getElementById('building').value;
+                            const floor = document.getElementById('floor').value;
+                            const room = document.getElementById('room').value;
+                            const roomType = document.getElementById('roomType').value;
+                            const bedNumber = document.getElementById('bedNumber').value;
+                            if (building && floor && room && roomType && bedNumber) {
+                             //  如果 roomType 存在（即非空），则返回 room + roomType，即将 roomType 附加在 room 后面。
+                                // 如果 roomType 不存在（即为空），则直接返回 room。
+                              const fullRoom = roomType ? room + roomType : room; // 添加后缀
+                              const bedId = `${building}-${floor}-${fullRoom}-${bedNumber}`;
+                              document.getElementById('bedId').value = bedId;
+                            } else {
+                              alert('Please fill in all fields to generate the Bed ID.');
+                            }
+                          }
+                        </script>
+                        
+                        
                         
                         
 

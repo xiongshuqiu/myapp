@@ -30,22 +30,22 @@
   <body>
     <div id="wrapper">
       <!-- 顶部导航条 -->
-      <%- include('../../block/top-navbar.ejs') %>
+      <%- include('../block/top-navbar.ejs') %>
       <!-- 左侧导航条 -->
-      <%- include('../../block/navbar-side.ejs') %>
+      <%- include('../block/navbar-side.ejs') %>
 
       <div id="page-wrapper">
         <div class="header">
           <h1 class="page-header">
-            Bed Management <small> Bed Information</small>
+            User Management <small> User Information</small> 
           </h1>
           <ol class="breadcrumb">
             <!-- 面包屑导航 -->
             <li><a href="#">Home</a></li>
             <!-- 首页链接 -->
-            <li><a href="#">Bed Management</a></li>
+            <li><a href="#">User Management</a></li>
             <!-- 用户管理页面链接 -->
-            <li class="active">BedStatus Data</li>
+            <li class="active">User Data</li>
             <!-- 当前页：用户数据 -->
           </ol>
         </div>
@@ -56,7 +56,7 @@
             <div class="col-md-12">
               <!-- Advanced Tables -->
               <div class="panel panel-default">
-                <div class="panel-heading">BedStatus Tables</div>
+                <div class="panel-heading">User Tables</div>
                 <div class="panel-body">
                   <div class="table-responsive">
                     <table
@@ -65,49 +65,53 @@
                     >
                       <thead>
                         <tr>
-                          <th>bedID</th>
-                          <th>building</th>
-                          <th>floor</th>
-                          <th>room</th>
-                          <th>roomType</th>
-                          <th>bedNumber</th>
-                          <th>status</th>
+                          <th>userID</th>
+                          <th>account</th>
+                          <th>userName</th>
+                          <th>password</th>
+                          <th>phoneNumber</th>
+                          <th>email</th>
+                          <th>role</th>
                           <th>actions</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <% bedStatuses.forEach(function(bedStatus) { %>
+                        <% users.forEach(function(user) { %>
                         <tr class="odd gradeX" style="white-space: nowrap">
-                          <td><%= bedStatus.bedId %></td>
-                          <td><%= bedStatus.building %></td>
-                          <td><%= bedStatus.floor %></td>
-                          <td><%= bedStatus.room %></td>
-                          <td><%= bedStatus.roomType %></td>
-                          <td><%= bedStatus.bedNumber %></td>
-                          <td><%= bedStatus.status %></td>
+                          <td><%= user.userId %></td>
+                          <td><%= user.account %></td>
+                          <td><%= user.userName %></td>
+                          <td><%= user.passWord %></td>
+                          <td><%= user.phoneNumber %></td>
+                          <td><%= user.email %></td>
+                          <td><%= user.role %></td>
                           <td>
-                            <% linkItems.forEach(function(item) { %> <% if
-                            (item.id ==='edit-bedStatus-link'&&item.visible) {
-                            %>
-                            <a
-                              id="<%= item.id %>"
-                              href="/beds/status/<%= bedStatus._id %>/update"
-                              class="editlink"
-                              style="color: blue; display: inline"
-                              >Edit
-                            </a>
-                            <% } %> <% }); %> <%
-                            linkItems.forEach(function(item) { %> <% if (item.id
-                            ==='delete-bedStatus-link'&&item.visible) { %>
+                            <% linkItems.forEach(function(item) { %> 
+                              <% if (item.id  ==='edit-user-link'&&item.visible) { %>
+                              <a
+                                id="<%= item.id %>"
+                                href="/users/<%= user._id %>/update"
+                                class="editlink"
+                                style="color: blue; display: inline"
+                                >Edit
+                              </a>
+                              <% } %>
+                               <% }); %>
+                            <!-- 链接的href属性: 使用href="javascript:void(0)"避免页面跳转，确保点击链接时不会重定向。
+                            onclick事件: 直接调用JavaScript函数confirmDeletion('<%= user._id %>')来处理删除逻辑。
+                            #代替javascript:void(0)可能会跳转到顶部 -->
+                            <% linkItems.forEach(function(item) { %> 
+                              <% if (item.id  ==='delete-user-link'&&item.visible) { %>
                             <a
                               id="<%= item.id %>"
                               href="javascript:void(0)"
                               class="deleteLink"
                               style="color: red; padding: 5px; display: inline"
-                              onclick="confirmDeletion('<%= bedStatus._id %>')"
+                              onclick="confirmDeletion('<%= user._id %>')"
                               >Delete</a
                             >
-                            <% } %> <% }); %>
+                            <% } %>
+                            <% }); %>
                           </td>
                         </tr>
                         <% }); %>
@@ -131,6 +135,7 @@
           </p>
         </footer>
       </div>
+      <!-- /. PAGE INNER  -->
     </div>
     <!-- /. PAGE WRAPPER  -->
     <!-- /. WRAPPER  -->
@@ -144,26 +149,21 @@
     <!-- DATA TABLE SCRIPTS -->
     <script src="/assets/js/dataTables/jquery.dataTables.js"></script>
     <script src="/assets/js/dataTables/dataTables.bootstrap.js"></script>
-    
-    <!-- /. PAGE INNER  -->
-
+     <!-- Custom Js -->
+     <script src="/assets/js/custom-scripts.js"></script>
     <script>
       $(document).ready(function () {
-
-        //console.log($('#dataTables-example'));
-
-
         var table = $('#dataTables-example').DataTable();
       });
     </script>
 
     <!-- 在过滤器区域添加 "Add User" 按钮 -->
-    <% buttonItems.forEach(function(item) { %> <% if (item.id === 'add-bedStatus-btn'
+    <% buttonItems.forEach(function(item) { %> <% if (item.id === 'add-user-btn'
     && item.visible) { %>
     <script>
       $(document).ready(function () {
         $('#dataTables-example_filter').append(
-          '<button id="<%= item.id %>" class="btn btn-primary add-bedStatus-btn" data-href="<%= item.href %>"><%= item.name %></button>',
+          '<button id="<%= item.id %>" class="btn btn-primary add-user-btn" data-href="<%= item.href %>"><%= item.name %></button>',
         );
 
         // 处理 "Add User" 按钮点击事件
@@ -184,17 +184,17 @@
  
 </script>
 
-    
+    </script>
     <script>
       //3.添加删除对话框
       // 在实际运行时，confirmDeletion 函数接收到的 _id 参数就是 user._id 的值。
       async function confirmDeletion(_id) {
         if (confirm('Are you sure you want to delete this user?')) {
           try {
-            const response = await fetch(`/beds/status/${_id}/delete`, {
+            const response = await fetch(`/users/${_id}/delete`, {
               method: 'DELETE',
             });
-            window.location.href = '/beds/status/';
+            window.location.href = '/users/';
             // const result = await response.json();
             // alert(result.message); // 显示反馈给用户
             location.reload(); // 刷新页面以更新用户表
@@ -205,8 +205,6 @@
         }
       }
     </script>
-    <!-- Custom Js -->
-     <!-- 这一行要放在最后 -->
-    <script src="/assets/js/custom-scripts.js"></script>
+   
   </body>
 </html>

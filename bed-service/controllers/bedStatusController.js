@@ -22,10 +22,10 @@ const getAllBedStatuses = async (req, res) => {
 
 // 创建新的床位状态
 const createBedStatus = async (req, res) => {
-  const { bedId, building,floor,room,status } = req.body;
+  const { bedId, building, floor, room, roomType, bedNumber, status } = req.body;
 
   // 验证输入字段
-  if (!bedId || !building|| !floor|| !room|| !status) {
+  if (!bedId || !building|| !floor|| !room|| !roomType|| !bedNumber|| !status) {
     return res
       .status(400)
       .json({ success: false, message: 'Missing required fields' });
@@ -39,7 +39,7 @@ const createBedStatus = async (req, res) => {
         .json({ success: false, message: 'BedId already exists' });
     }
 
-    const bedStatus = new BedStatus({ bedId, building,floor,room,status });
+    const bedStatus = new BedStatus({ bedId, building, floor, room, roomType, bedNumber, status });
     const newBedStatus = await bedStatus.save();
     return res
       .status(201)
@@ -89,7 +89,7 @@ const getBedStatusById = async (req, res) => {
 
 // 提交更新后的床位状态数据
 const updateBedStatus = async (req, res) => {
-  const { bedId, building,floor,room,status } = req.body;
+  const { bedId, building, floor, room, roomType, bedNumber, status } = req.body;
   const { _id } = req.params;
 
   try {
@@ -100,7 +100,7 @@ const updateBedStatus = async (req, res) => {
         .json({ success: false, message: 'Bed status not found' });
     }
 
-    const updatedData = { bedId, building,floor,room,status };
+    const updatedData = { bedId, building, floor, room, roomType, bedNumber, status };
     const updatedBedStatus = await BedStatus.findByIdAndUpdate(
       _id,
       updatedData,

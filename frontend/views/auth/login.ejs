@@ -14,7 +14,7 @@
             <div class="error-message"><%= message %></div>
         <% } %>
         
-        <form action="/auth/login" method="post">
+        <form action="/auth/login" method="post" id="login-form">
            
             <label for="userName">Username:</label>
             <input type="text" id="userName" name="userName" required>
@@ -25,5 +25,7 @@
             <button type="submit">Login</button>
         </form>
     </div>
+  
 </body>
+
 </html>

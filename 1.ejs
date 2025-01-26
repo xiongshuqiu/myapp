@@ -1,24 +1,55 @@
-// 1.获取所有床位分配
-const getAllBedAssignments = async (req, res) => {
-  const _id = req.user._id;
-  const role = req.user.role;
-  console.log('User data:', { _id, role }); // 调试信息
-  const apiUrl = `${process.env.API_URL}/api/beds/assignment/?_id=${_id}&role=${role}`;
-  console.log('API URL:', apiUrl); // 调试信息
-  
-  try {
-    const response = await getRequest(apiUrl);
-    const bedAssignments = response.data;
-    if (response.success) {
-      res.render('bed/bedAssignment/bedAssignmentManagement', {
-        activePage: 'bed-management',
-        bedAssignments,
-        navItems: req.navItems, // 将导航项传递到视图
-        buttonItems: req.buttonItems,
-        linkItems: req.linkItems,
-      });
-    }
-  } catch (err) {
-    handleError(err, req, res);
-  }
-};
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+</head>
+<body>
+    <div class="login-container">
+        <h1>Login</h1>
+
+        <% if (typeof err !== 'undefined' && err) { %>
+            <div class="error-message"><%= message %></div>
+        <% } %>
+
+        <form action="/auth/login" method="post" id="login-form">
+            <label for="userName">Username:</label>
+            <input type="text" id="userName" name="userName" required>
+            <br>
+            <label for="passWord">Password:</label>
+            <input type="password" id="passWord" name="passWord" required>
+            <br>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+          event.preventDefault(); // 防止表单默认提交行为
+
+          fetch('/auth/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              userName: document.getElementById('userName').value,
+              passWord: document.getElementById('passWord').value
+            }),
+            credentials: 'include' // 包含 cookie
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              console.log('Login successful');
+              // 登录成功后，重定向到受保护的数据页面
+              window.location.href = '/dashboard';
+            } else {
+              console.error('Login failed:', data.message);
+            }
+          })
+          .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

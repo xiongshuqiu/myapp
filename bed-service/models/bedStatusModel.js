@@ -2,13 +2,18 @@
 const mongoose = require('mongoose');
 
  //2. BedStatus Schema
-const bedStatusSchema = new mongoose.Schema({
-  bedId: { type: String, required: true }, // 床位编号 3-7-701s-01
-  building: { type: String, required: true, index: true }, // 楼栋号
-  floor: { type: String, required: true }, // 楼层
-  room: { type: String, required: true }, // 房间号
-  status: { type: String, required: true }, // 占用状态
-});
+ const bedStatusSchema = new mongoose.Schema({
+   bedId: { type: String, required: true, unique: true }, // 床位编号 3-1-101s-01
+   building: { type: Number, required: true }, // 楼栋号 3
+   floor: { type: Number, required: true }, // 楼层1
+   room: { type: String, required: true }, // 房间号101
+   roomType: { type: String, enum: ['s', 'b'], default: 's' }, // 房型s或b
+   bedNumber: { type: String, required: true }, // 床位编号01/02/03/04/05
+   status: { type: String, required: true }, // occupied/available/reserved/maintenance
+ });
+ 
+ module.exports = mongoose.model('BedStatus', bedStatusSchema);
+ 
 
 //3.创建模型 (Model)：使用 mongoose.model 方法基于定义的模式创建一个名为 bedStatus 的模型。
 //该模型代表数据库中的 users 集合，Mongoose 会将模型名称自动转换为小写复数形式。

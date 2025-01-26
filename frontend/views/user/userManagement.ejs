@@ -37,7 +37,7 @@
       <div id="page-wrapper">
         <div class="header">
           <h1 class="page-header">
-            User Management <small> User Information</small> 
+            User Management <small> User Information</small>
           </h1>
           <ol class="breadcrumb">
             <!-- 面包屑导航 -->
@@ -86,32 +86,29 @@
                           <td><%= user.email %></td>
                           <td><%= user.role %></td>
                           <td>
-                            <% linkItems.forEach(function(item) { %> 
-                              <% if (item.id  ==='edit-user-link'&&item.visible) { %>
-                              <a
-                                id="<%= item.id %>"
-                                href="/users/<%= user._id %>/update"
-                                class="editlink"
-                                style="color: blue; display: inline"
-                                >Edit
-                              </a>
-                              <% } %>
-                               <% }); %>
+                            <% linkItems.forEach(function(item) { %> <% if
+                            (item.id ==='edit-user-link'&&item.visible) { %>
+                            <a
+                              id="<%= item.id %>"
+                              href="/users/<%= user._id %>/update"
+                              class="editlink"
+                              style="color: blue; display: inline"
+                              >Edit
+                            </a>
+                            <% } %> <% }); %>
                             <!-- 链接的href属性: 使用href="javascript:void(0)"避免页面跳转，确保点击链接时不会重定向。
                             onclick事件: 直接调用JavaScript函数confirmDeletion('<%= user._id %>')来处理删除逻辑。
                             #代替javascript:void(0)可能会跳转到顶部 -->
-                            <% linkItems.forEach(function(item) { %> 
-                              <% if (item.id  ==='delete-user-link'&&item.visible) { %>
+                            <% linkItems.forEach(function(item) { %> <% if
+                            (item.id ==='delete-user-link'&&item.visible) { %>
                             <a
-                              id="<%= item.id %>"
                               href="javascript:void(0)"
                               class="deleteLink"
                               style="color: red; padding: 5px; display: inline"
                               onclick="confirmDeletion('<%= user._id %>')"
                               >Delete</a
                             >
-                            <% } %>
-                            <% }); %>
+                            <% } %> <% }); %>
                           </td>
                         </tr>
                         <% }); %>
@@ -172,17 +169,16 @@
       });
     </script>
     <% } %> <% }); %>
-      <script>
-    //处理动态生成的编辑链接点击事件
-    $(document).on('click', '.editlink', function (event) {  //.edit-link是类
-      event.preventDefault(); // 阻止默认行为
-      var href = $(this).attr('href'); // 获取链接的 href 属性
-      window.location.href = href; // 重定向到相应的链接
-    });
- 
-</script>
-
+    <script>
+      //处理动态生成的编辑链接点击事件
+      $(document).on('click', '.editlink', function (event) {
+        //.edit-link是类
+        event.preventDefault(); // 阻止默认行为
+        var href = $(this).attr('href'); // 获取链接的 href 属性
+        window.location.href = href; // 重定向到相应的链接
+      });
     </script>
+
     <script>
       //3.添加删除对话框
       // 在实际运行时，confirmDeletion 函数接收到的 _id 参数就是 user._id 的值。

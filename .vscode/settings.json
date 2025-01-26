@@ -16,11 +16,10 @@
         "visitor-service": true,
         "node_modules": true,
         "notification-service": true,
-        "auth-service": true,
         "elderly-service": true,
-        "user-service": true,
         "account-service": true,
-        ".gitignore": true
+        ".gitignore": true,
+        "user-service": true
     },
     "hide-files.files": [
         "employee-service",
@@ -29,10 +28,9 @@
         "visitor-service",
         "node_modules",
         "notification-service",
-        "auth-service",
         "elderly-service",
-        "user-service",
         "account-service",
-        ".gitignore"
+        ".gitignore",
+        "user-service"
     ]
 }

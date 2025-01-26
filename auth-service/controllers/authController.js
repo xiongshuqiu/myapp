@@ -28,12 +28,19 @@ exports.postLogin = async (req, res) => {
         );
         console.log('Generated token:', token);
 
-        // 将 JWT 存入 cookie
+        // // 将 JWT 存入 cookie
+        // res.cookie('jwt', token, {
+        //   httpOnly: true, // 防止客户端脚本访问 cookie
+        //   sameSite: 'None', // 设置 sameSite 属性
+        //   secure: true, // 在 HTTPS 环境下传输 cookie
+        // });
         res.cookie('jwt', token, {
-          httpOnly: true, // 防止客户端脚本访问 cookie
-          sameSite: 'None', // 设置 sameSite 属性
-          secure: true, // 在 HTTPS 环境下传输 cookie
+          httpOnly: true,
+          secure: false,
+          sameSite: 'Lax',
         });
+        
+        
         console.log('Cookie set successfully with token:', token);
 
         // 4. 向api返回结果（数据）
