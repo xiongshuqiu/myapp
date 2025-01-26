@@ -29,20 +29,10 @@ const bedAssignmentSchema = new mongoose.Schema({
   bedId: { type: String, ref: 'BedStatus', required: true }, // 床位引用 3-7-701-B01
   elderlyId: { type: String, ref: 'Elderly', required: true }, // 老人引用 E001
   assignedDate: { type: Date, default: Date.now }, // 分配日期
+  releaseDate: { type: Date } // 释放日期
 });
 const BedAssignment = mongoose.model('BedAssignment', bedAssignmentSchema);
 
-// // BedStatus Schema
-// const bedStatusSchema = new mongoose.Schema({
-//   bedId: { type: String, required: true }, // 床位编号 3-7-701-B01
-//   building: { type: String, required: true, index: true }, // 楼栋号
-//   floor: { type: String, required: true }, // 楼层
-//   room: { type: String, required: true }, // 房间号
-//   status: { type: String, required: true }, // 占用状态
-// });
-// const BedStatus = mongoose.model('BedStatus', bedStatusSchema);
 
-// // 检查是否已经定义了模型并避免重复定义
-// const BedStatus = mongoose.models.BedStatus || mongoose.model('BedStatus', bedStatusSchema);
 
 module.exports = { User, Elderly, BedAssignment };

@@ -29,6 +29,7 @@ const bedAssignmentSchema = new mongoose.Schema({
   bedId: { type: String, ref: 'BedStatus', required: true }, // 床位引用 3-7-701-B01
   elderlyId: { type: String, ref: 'Elderly', required: true }, // 老人引用 E001
   assignedDate: { type: Date, default: Date.now }, // 分配日期
+  releaseDate: { type: Date } // 释放日期
 });
 const BedAssignment = mongoose.model('BedAssignment', bedAssignmentSchema);
 

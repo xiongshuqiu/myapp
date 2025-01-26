@@ -1,55 +1,13 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
-</head>
-<body>
-    <div class="login-container">
-        <h1>Login</h1>
+const mongoose = require('mongoose');
 
-        <% if (typeof err !== 'undefined' && err) { %>
-            <div class="error-message"><%= message %></div>
-        <% } %>
+const bedAssignmentSchema = new mongoose.Schema({
+  assignmentId: { type: String, required: true, unique: true }, // 分配编号 A001
+  bedId: { type: mongoose.Schema.Types.ObjectId, ref: 'BedStatus', required: true }, // 床位引用 3-7-701-B01
+  elderlyId: { type: mongoose.Schema.Types.ObjectId, ref: 'Elderly', required: true }, // 老人引用 E001
+  assignedDate: { type: Date, default: Date.now }, // 分配日期
+  releaseDate: { type: Date } // 释放日期
+});
 
-        <form action="/auth/login" method="post" id="login-form">
-            <label for="userName">Username:</label>
-            <input type="text" id="userName" name="userName" required>
-            <br>
-            <label for="passWord">Password:</label>
-            <input type="password" id="passWord" name="passWord" required>
-            <br>
-            <button type="submit">Login</button>
-        </form>
-    </div>
-    <script>
-        document.getElementById('login-form').addEventListener('submit', function(event) {
-          event.preventDefault(); // 防止表单默认提交行为
+const BedAssignment = mongoose.model('BedAssignment', bedAssignmentSchema);
 
-          fetch('/auth/login', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              userName: document.getElementById('userName').value,
-              passWord: document.getElementById('passWord').value
-            }),
-            credentials: 'include' // 包含 cookie
-          })
-          .then(response => response.json())
-          .then(data => {
-            if (data.success) {
-              console.log('Login successful');
-              // 登录成功后，重定向到受保护的数据页面
-              window.location.href = '/dashboard';
-            } else {
-              console.error('Login failed:', data.message);
-            }
-          })
-          .catch(error => console.error('Error:', error));
-        });
-    </script>
-</body>
-</html>
+module.exports = BedAssignment;

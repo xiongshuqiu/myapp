@@ -45,7 +45,7 @@
             <!-- 首页链接 -->
             <li><a href="#">Bed Management</a></li>
             <!-- 用户管理页面链接 -->
-            <li class="active">BedStatus Data</li>
+            <li class="active">BedAssignment Data</li>
             <!-- 当前页：用户数据 -->
           </ol>
         </div>
@@ -56,61 +56,60 @@
             <div class="col-md-12">
               <!-- Advanced Tables -->
               <div class="panel panel-default">
-                <div class="panel-heading">BedStatus Tables</div>
+                <div class="panel-heading">BedAssignment Tables</div>
                 <div class="panel-body">
                   <div class="table-responsive">
                     <table
                       class="table table-striped table-bordered table-hover"
                       id="dataTables-example"
                     >
-                    <thead>
-                      <tr>
-                        <th>assignmentId</th>
-                        <th>bedId</th>
-                        <th>elderlyName</th>
-                        <th>elderlyId</th>
-                        <th>assignedDate</th>
-                        <th>action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <% bedAssignments.forEach(function(bedAssignment) { %>
-                      <tr class="odd gradeX" style="white-space: nowrap">
-                        <td><%= bedAssignment.bedassignmentDetails.assignmentId %></td>
-                        <td><%= bedAssignment.bedStatusDetails.bedId %></td>
-                        <td><%= bedAssignment.elderlyName %></td>
-                        <td><%= bedAssignment.elderlyId %></td>
-                        <td><%= bedAssignment.bedassignmentDetails.assignedDate %></td>
-                      
-                        <td>
-                          <% linkItems.forEach(function(item) { %> 
-                            <% if (item.id  ==='edit-bedAssignment-link'&&item.visible) { %>
+                      <thead>
+                        <tr>
+                          <th>assignmentId</th>
+                          <th>bedId</th>
+                          <th>elderlyName</th>
+                          <th>elderlyId</th>
+                          <th>assignedDate</th>>
+                          <th>releaseDate</th>>
+                          <th>actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% bedAssignments.forEach(function(bedAssignment) { %>
+                          <tr class="odd gradeX" style="white-space: nowrap">
+                            <td><%= bedAssignment.bedassignmentDetails.assignmentId %></td>
+                            <td><%= bedAssignment.bedStatusDetails.bedId %></td>
+                            <td><%= bedAssignment.elderlyName %></td>
+                            <td><%= bedAssignment.elderlyId %></td>
+                            <td><%= bedAssignment.bedassignmentDetails.assignedDate %></td>
+                            <td><%= bedAssignment.bedassignmentDetails.releaseDate %></td>
+                          <td>
+                            <% linkItems.forEach(function(item) { %> <% if
+                            (item.id ==='edit-bedAssignment-link'&&item.visible) {
+                            %>
                             <a
                               id="<%= item.id %>"
-                              href="/beds/assignment/<%= bedAssignment._id %>/update"
+                              href="/beds/assignment/<%=  bedAssignment.bedassignmentDetails._id %>/update"
                               class="editlink"
                               style="color: blue; display: inline"
                               >Edit
                             </a>
-                            <% } %>
-                             <% }); %>
-                         
-                          <% linkItems.forEach(function(item) { %> 
-                            <% if (item.id  ==='delete-bedAssignment-link'&&item.visible) { %>
-                          <a
-                            id="<%= item.id %>"
-                            href="javascript:void(0)"
-                            class="deleteLink"
-                            style="color: red; padding: 5px; display: inline"
-                            onclick="confirmDeletion('<%= bedAssignment._id %>')"
-                            >Delete</a
-                          >
-                          <% } %>
-                          <% }); %>
-                        </td>
-                      </tr>
-                      <% }); %>
-                    </tbody>
+                            <% } %> <% }); %> <%
+                            linkItems.forEach(function(item) { %> <% if (item.id
+                            ==='delete-bedAssignment-link'&&item.visible) { %>
+                            <a
+                              id="<%= item.id %>"
+                              href="javascript:void(0)"
+                              class="deleteLink"
+                              style="color: red; padding: 5px; display: inline"
+                              onclick="confirmDeletion('<%= bedAssignment._id %>')"
+                              >Delete</a
+                            >
+                            <% } %> <% }); %>
+                          </td>
+                        </tr>
+                        <% }); %>
+                      </tbody>
                     </table>
                   </div>
                 </div>
@@ -157,12 +156,12 @@
     </script>
 
     <!-- 在过滤器区域添加 "Add User" 按钮 -->
-    <% buttonItems.forEach(function(item) { %> <% if (item.id === 'add-bedStatus-btn'
+    <% buttonItems.forEach(function(item) { %> <% if (item.id === 'add-bedAssignment-btn'
     && item.visible) { %>
     <script>
       $(document).ready(function () {
         $('#dataTables-example_filter').append(
-          '<button id="<%= item.id %>" class="btn btn-primary add-bedStatus-btn" data-href="<%= item.href %>"><%= item.name %></button>',
+          '<button id="<%= item.id %>" class="btn btn-primary add-bedAssignment-btn" data-href="<%= item.href %>"><%= item.name %></button>',
         );
 
         // 处理 "Add User" 按钮点击事件
@@ -186,14 +185,14 @@
     
     <script>
       //3.添加删除对话框
-      // 在实际运行时，confirmDeletion 函数接收到的 _id 参数就是 user._id 的值。
+      // 在实际运行时，confirmDeletion 函数接收到的 _id 参数就是 bedAssignment._id 的值。
       async function confirmDeletion(_id) {
-        if (confirm('Are you sure you want to delete this user?')) {
+        if (confirm('Are you sure you want to delete this bedAssignment?')) {
           try {
-            const response = await fetch(`/beds/status/${_id}/delete`, {
+            const response = await fetch(`/beds/bedAssignment/${_id}/delete`, {
               method: 'DELETE',
             });
-            window.location.href = '/beds/status/';
+            window.location.href = '/beds/bedAssignment/';
             // const result = await response.json();
             // alert(result.message); // 显示反馈给用户
             location.reload(); // 刷新页面以更新用户表
