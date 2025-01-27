@@ -1,17 +1,24 @@
-const { User, Elderly, BedAssignment } = require('../models/bedAssignmentModel');
-
+const {
+  User,
+  Elderly,
+  BedAssignment,
+} = require('../models/bedAssignmentModel');
+const BedStatus = require('../models/bedStatusModel');
 const getAllBedAssignments = async (req, res) => {
   console.log('Received request to get all bed statuses'); // 调试信息
   const { _id, role } = req.query;
   console.log('Query parameters:', _id, role); // 调试信息
-  
+
   if (!_id || !role) {
-    return res.status(400).json({ success: false, message: 'Missing required query parameters _id or role' });
+    return res.status(400).json({
+      success: false,
+      message: 'Missing required query parameters _id or role',
+    });
   }
   try {
     // 首先根据 _id 查找用户的 userId
-    if (role === 'medical' || role ==='family') {
-      const user = await User.findById({_id});
+    if (role === 'medical' || role === 'family') {
+      const user = await User.findById({ _id });
       if (!user) throw new Error('User not found');
 
       const userId = user.userId; // 获取用户的 userId
@@ -50,7 +57,7 @@ const getAllBedAssignments = async (req, res) => {
         data: bedAssignments,
       });
       console.log(bedAssignments);
-    } else if(role === 'admin'){
+    } else if (role === 'admin') {
       const bedAssignments = await Elderly.aggregate([
         {
           $lookup: {
@@ -89,31 +96,98 @@ const getAllBedAssignments = async (req, res) => {
 };
 
 // 2. 创建新的床位分配
+// (1) 显示新增床位分配表单(查找available的bedId、未分配床位的elderlyId)
+const renderNewBedAssignmentForm = async (req, res) => {
+  try {
+    // 顺序查找可用的 bedId
+    const availableBedIds = await BedStatus.find({
+      status: 'available',
+    }).select('bedId');
+
+    // 聚合管道查找未分配床位的 elderlyId
+    const unassignedElderlyIds = await Elderly.aggregate([
+      {
+        $lookup: {
+          from: 'bedassignments',
+          localField: 'elderlyId',
+          foreignField: 'elderlyId',
+          as: 'bedAssignment',
+        },
+      },
+      {
+        $match: {
+          'bedAssignment.elderlyId': { $exists: false },
+        },
+      },
+      {
+        $project: {
+          elderlyId: 1,
+          elderlyName: 1, // 您可以根据需要选择其他字段
+        },
+      },
+    ]);
+
+    console.log('Available Bed IDs:', availableBedIds);
+    console.log('Unassigned Elderly IDs:', unassignedElderlyIds);
+
+    return res.status(200).json({
+      success: true,
+      message: 'bedId and unassigned elderlyId retrieved successfully',
+      data: { availableBedIds, unassignedElderlyIds },
+    });
+  } catch (err) {
+    console.error(
+      'Error retrieving bedId and unassigned elderlyId:',
+      err.message,
+    ); // 调试信息
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+// (2) 提交新的床位分配数据
 const createBedAssignment = async (req, res) => {
-  const { bedNumber, status } = req.body;
+  const {
+    availableBedId,
+    unassignedElderlyId,
+    assignmentId,
+    assignedDate,
+    releaseDate,
+  } = req.body;
   console.log('Received request to create bed status with data:', req.body); // 调试信息
 
   try {
     // 检查是否存在相同床位编号的记录
-    const existingBedStatus = await BedStatus.findOne({ bedNumber });
-    if (existingBedStatus) {
-      console.warn(`Bed number already exists: ${bedNumber}`); // 调试信息
+    const existingBedAssignment = await BedAssignment.findOne({ assignmentId });
+    if (existingBedAssignment) {
+      console.warn(`Bed assignmentId already exists: ${assignmentId}`); // 调试信息
       return res
         .status(400)
-        .json({ success: false, message: 'Bed number already exists' });
+        .json({ success: false, message: 'Bed assignmentId already exists' });
     }
 
     // 创建并保存新床位分配
-    const newBedStatus = new BedStatus({ bedNumber, status });
-    await newBedStatus.save();
-    console.log('Bed status created successfully:', newBedStatus); // 调试信息
+    const newBedAssignment = new BedAssignment({
+      bedId: availableBedId,
+      elderlyId: unassignedElderlyId,
+      assignmentId,
+      assignedDate,
+      releaseDate
+    });
+    await newBedAssignment.save();
+
+    // 更新床位状态为 occupied
+    await BedStatus.updateOne(
+      { bedId: availableBedId },// 查找条件
+      { status: 'occupied' }// 更新内容
+    );
+    
+    console.log('Bed assignment created and bed status updated successfully:', newBedAssignment); // 调试信息
     return res.status(201).json({
       success: true,
-      message: 'Bed status created successfully',
-      data: newBedStatus,
+      message: 'Bed assignment created and bed status updated successfully',
+      data: newBedAssignment,
     });
   } catch (error) {
-    console.error('Error creating bed status:', error.message); // 调试信息
+    console.error('Error creating bed assignment:', error.message); // 调试信息
     return res.status(500).json({
       success: false,
       message: 'An error occurred',
@@ -121,6 +195,7 @@ const createBedAssignment = async (req, res) => {
     });
   }
 };
+
 // 3. 更新特定床位分配
 // (1) 查找特定床位分配
 const getBedAssignmentById = async (req, res) => {
@@ -128,7 +203,7 @@ const getBedAssignmentById = async (req, res) => {
   console.log(`Received request to get bed status by ID: ${_id}`); // 调试信息
   try {
     // 根据ID查找床位分配
-    const bedStatus = await BedStatus.findById(_id);
+    const bedStatus = await BedAssignment.findById(_id);
     if (bedStatus) {
       console.log('Bed status retrieved successfully:', bedStatus); // 调试信息
       return res.status(200).json({
@@ -155,7 +230,7 @@ const updateBedAssignment = async (req, res) => {
 
   try {
     // 查找特定床位分配
-    const bedStatus = await BedStatus.findById(_id);
+    const bedStatus = await BedAssignment.findById(_id);
     if (!bedStatus) {
       console.warn(`Bed status not found with ID: ${_id}`); // 调试信息
       return res
@@ -166,13 +241,13 @@ const updateBedAssignment = async (req, res) => {
     // 更新床位分配字段
     bedStatus.bedNumber = bedNumber;
     bedStatus.status = status;
-    const updatedBedStatus = await bedStatus.save(); // 保存更新后的床位分配
+    const updatedBedAssignment = await bedStatus.save(); // 保存更新后的床位分配
 
-    console.log('Bed status updated successfully:', updatedBedStatus); // 调试信息
+    console.log('Bed status updated successfully:', updatedBedAssignment); // 调试信息
     return res.status(200).json({
       success: true,
       message: 'Bed status updated successfully',
-      data: updatedBedStatus,
+      data: updatedBedAssignment,
     });
   } catch (err) {
     console.error('Error updating bed status:', err.message); // 调试信息
@@ -185,7 +260,7 @@ const deleteBedAssignment = async (req, res) => {
   const { _id } = req.params;
 
   try {
-    await BedStatus.findByIdAndDelete(_id); // 根据ID删除床位分配
+    await BedAssignment.findByIdAndDelete(_id); // 根据ID删除床位分配
     console.log('Bed status deleted successfully:', _id); // 调试信息
     return res
       .status(200)
@@ -203,6 +278,7 @@ const deleteBedAssignment = async (req, res) => {
 // 6. 导出模块
 module.exports = {
   getAllBedAssignments,
+  renderNewBedAssignmentForm,
   createBedAssignment,
   getBedAssignmentById,
   updateBedAssignment,

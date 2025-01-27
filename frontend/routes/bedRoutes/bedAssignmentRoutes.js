@@ -11,14 +11,14 @@ const {
   createBedAssignment,
   getBedAssignmentById,
   updateBedAssignment,
-  deleteBedAssignment,
+  deleteBedAssignment
 } = require('../../controllers/bedController/bedAssignmentController');
 
 // 1. 获取所有床位分配
 router.get('/', bntLinkVisibility, getAllBedAssignments);
 
 // 2. 创建新的床位分配
-// (1) 显示新增床位分配表单
+// (1) 显示新增床位分配表单(查找可用的bedId、elderlyId)
 router.get('/new', renderNewBedAssignmentForm);
 // (2) 提交新的床位分配数据
 router.post('/create', createBedAssignment);

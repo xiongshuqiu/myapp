@@ -1,13 +1,30 @@
-const mongoose = require('mongoose');
+// 后端控制器代码
+const renderNewBedAssignmentForm = async (req, res) => {
+  try {
+    // 顺序查找可用的 bedId
+    const availableBedIds = await BedStatus.find({ status: 'available' }).select('bedId');
 
-const bedAssignmentSchema = new mongoose.Schema({
-  assignmentId: { type: String, required: true, unique: true }, // 分配编号 A001
-  bedId: { type: mongoose.Schema.Types.ObjectId, ref: 'BedStatus', required: true }, // 床位引用 3-7-701-B01
-  elderlyId: { type: mongoose.Schema.Types.ObjectId, ref: 'Elderly', required: true }, // 老人引用 E001
-  assignedDate: { type: Date, default: Date.now }, // 分配日期
-  releaseDate: { type: Date } // 释放日期
-});
+    // 顺序查找存在的 elderlyId
+    const existingElderlyIds = await Elderly.find().select('elderlyId');
 
-const BedAssignment = mongoose.model('BedAssignment', bedAssignmentSchema);
+    console.log('Available Bed IDs:', availableBedIds);
+    console.log('Existing Elderly IDs:', existingElderlyIds);
 
-module.exports = BedAssignment;
+    return res.status(200).json({
+      success: true,
+      message: 'bedId and elderlyId retrieved successfully',
+      data: { availableBedIds, existingElderlyIds },
+    });
+  } catch (err) {
+    console.error('Error retrieving bedId and elderlyId:', err.message); // 调试信息
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// 确保正确配置路由
+const express = require('express');
+const router = express.Router();
+
+router.get('/beds/assignment/new', renderNewBedAssignmentForm);
+
+module.exports = router;

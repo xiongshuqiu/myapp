@@ -49,7 +49,7 @@ const getAllBedAssignments = async (req, res) => {
   console.log('User data:', { _id, role }); // 调试信息
   const apiUrl = `${process.env.API_URL}/api/beds/assignment/?_id=${_id}&role=${role}`;
   console.log('API URL:', apiUrl); // 调试信息
-  
+
   try {
     const response = await getRequest(apiUrl);
     const bedAssignments = response.data;
@@ -71,16 +71,46 @@ const getAllBedAssignments = async (req, res) => {
 // 2.创建新的床位分配
 //(1)显示新增床位分配表单
 const renderNewBedAssignmentForm = async (req, res) => {
-  res.render('bed/bedAssignment/bedAssignmentCreate.ejs', {
-    activePage: 'bed-management',
-    navItems: req.navItems, // 将导航项传递到视图
-  });
+  const apiUrl = `${process.env.API_URL}/api/beds/assignment/new`;
+  console.log('API URL:', apiUrl); // 调试信息
+  try {
+    const response = await getRequest(apiUrl);
+
+    if (response.success) {
+      const { availableBedIds, unassignedElderlyIds } = response.data;
+
+      res.render('bed/bedAssignment/bedAssignmentCreate.ejs', {
+        activePage: 'bed-management',
+        navItems: req.navItems, // 将导航项传递到视图
+        availableBedIds, // 传递可用的 bedId 到视图
+        unassignedElderlyIds, // 传递存在的 elderlyId 到视图
+      });
+    } else {
+      throw new Error('Failed to retrieve data from API');
+    }
+  } catch (err) {
+    console.error('Error in renderNewBedAssignmentForm:', err);
+    handleError(err, req, res);
+  }
 };
+
 //(2)提交新的床位分配数据
 const createBedAssignment = async (req, res) => {
-  const { assignmentId, bedId, elderlyId, assignedDate } = req.body;
+  const {
+    availableBedId,
+    unassignedElderlyId,
+    assignmentId,
+    assignedDate,
+    releaseDate,
+  } = req.body;
   try {
-    const data = { assignmentId, bedId, elderlyId, assignedDate };
+    const data = {
+      availableBedId,
+      unassignedElderlyId,
+      assignmentId,
+      assignedDate,
+      releaseDate,
+    };
 
     const apiUrl = `${process.env.API_URL}/api/beds/assignment/create`;
     const response = await postRequest(apiUrl, data);
