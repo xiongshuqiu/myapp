@@ -93,9 +93,9 @@ const getBedAssignmentById = async (req, res) => {
 };
 // (2) 提交更新后的床位分配数据
 const updateBedAssignment = async (req, res) => {
-  const { availableBedId, elderlyId, assignmentId, assignedDate,releaseDate  } = req.body;
+  const { bedId, elderlyId, assignmentId, assignedDate,releaseDate  } = req.body;
   try {
-    const data = { availableBedId, elderlyId, assignmentId, assignedDate,releaseDate  };
+    const data = { bedId, elderlyId, assignmentId, assignedDate,releaseDate  };
     const { _id } = req.params; // 从参数中获取 _Id
     const url = `${process.env.BED_SERVICE_URL}/beds/assignment/${_id}`;
     const response = await putRequest(url, data); // 发送 PUT 请求以更新用户信息

@@ -151,10 +151,10 @@ const getBedAssignmentById = async (req, res) => {
 
 //(2) 提交更新后的床位分配数据
 const updateBedAssignment = async (req, res) => {
-  const { availableBedId, elderlyId, assignmentId, assignedDate,releaseDate } = req.body;
+  const { bedId, elderlyId, assignmentId, assignedDate,releaseDate } = req.body;
   const { _id } = req.params;
   try {
-    const data = { availableBedId, elderlyId, assignmentId, assignedDate,releaseDate  };
+    const data = { bedId, elderlyId, assignmentId, assignedDate,releaseDate  };
 
     // 从请求参数中获取 _id
     const apiUrl = `${process.env.API_URL}/api/beds/assignment/${_id}`;

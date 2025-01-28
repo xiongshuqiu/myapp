@@ -71,21 +71,21 @@
                       </div>
                       
                     
-                        <div class="form-group">
-                          <label for="unassignedElderlyId"> Elderly ID(Name) <span style="color: red">*</span></label>
-                          <select class="form-control" id="unassignedElderlyId" name="elderlyId" required>
-                            <% if (elderlyIds && elderlyIds.length > 0) { %>
-                              <% elderlyIds.forEach(function(elderly) { %>
-                                <option value="<%= elderly.ederlyId %>" <%= bedAssignment.elderlyId === elderly.ederlyId ? 'selected' : '' %>>
-            
-                                     ID: <%= elderly.ederlyId %>(<%= elderly.elderlyName %>)
-                                </option>
-                              <% }); %>
-                            <% } else { %>
-                              <option value="">No existing elderlyId</option>
-                            <% } %>
-                          </select>
-                        </div>
+                      <div class="form-group">
+                        <label for="unassignedElderlyId"> Elderly ID(Name) <span style="color: red">*</span></label>
+                        <select class="form-control" id="elderlyId" name="elderlyId" required>
+                          <% if (elderlyIds && elderlyIds.length > 0) { %>
+                            <% elderlyIds.forEach(function(elderly) { %>
+                              <option value="<%= elderly.elderlyId %>" <%= bedAssignment.elderlyId === elderly.elderlyId ? 'selected' : '' %>>
+                                ID: <%= elderly.elderlyId %> (<%= elderly.elderlyName %>)
+                              </option>
+                            <% }); %>
+                          <% } else { %>
+                            <option value="">No existing elderlyId</option>
+                          <% } %>
+                        </select>
+                      </div>
+                      
                     
                         <div class="form-group">
                           <label for="assignmentId">Assignment ID <span style="color: red">*</span></label>

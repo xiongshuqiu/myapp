@@ -245,7 +245,7 @@ const getBedAssignmentById = async (req, res) => {
 // (2) 提交更新后的床位分配数据
 const updateBedAssignment = async (req, res) => {
   const { _id } = req.params; // 从 URL 参数中获取 assignmentId
-  const { availableBedId, elderlyId, assignmentId, assignedDate, releaseDate } =
+  const { bedId, elderlyId, assignmentId, assignedDate,releaseDate } =
     req.body;
 
   console.log('Received request to update bed assignment with data:', req.body); // 调试信息
@@ -261,7 +261,7 @@ const updateBedAssignment = async (req, res) => {
     }
 
     // 如果 bedId 发生变化，则更新旧床位和新床位的状态
-    if (existingBedAssignment.bedId !== availableBedId) {
+    if (existingBedAssignment.bedId !== bedId) {
       // 更新旧床位状态为 available
       await BedStatus.updateOne(
         { bedId: existingBedAssignment.bedId },
@@ -270,15 +270,15 @@ const updateBedAssignment = async (req, res) => {
 
       // 更新新床位状态为 occupied
       await BedStatus.updateOne(
-        { bedId: availableBedId },
+        { bedId: bedId },
         { status: 'occupied' },
       );
     }
 
     // 更新床位分配记录
-    existingBedAssignment.bedId = availableBedId;
+    existingBedAssignment.bedId = bedId;
     existingBedAssignment.elderlyId = elderlyId;
-    existingBedAssignment.elderlyId = assignmentId;
+    existingBedAssignment.assignmentId = assignmentId;
     existingBedAssignment.assignedDate = assignedDate;
     existingBedAssignment.releaseDate = releaseDate;
     await existingBedAssignment.save();
