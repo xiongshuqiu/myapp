@@ -54,7 +54,16 @@
             "runtimeArgs": ["run", "dev"],
             "cwd": "${workspaceFolder}/frontend",
             "console": "integratedTerminal"
-        }
+        },
+        {
+            "name": "data-management",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run", "dev"],
+            "cwd": "${workspaceFolder}/z-DataBase",
+            "console": "integratedTerminal"
+        },
     ],
     "compounds": [
         {

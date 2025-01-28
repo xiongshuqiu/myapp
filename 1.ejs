@@ -1,30 +1,53 @@
-// 后端控制器代码
-const renderNewBedAssignmentForm = async (req, res) => {
-  try {
-    // 顺序查找可用的 bedId
-    const availableBedIds = await BedStatus.find({ status: 'available' }).select('bedId');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Update Bed Assignment</title>
+</head>
+<body>
+  <h1>Update Bed Assignment</h1>
+  <form action="/beds/assignment/<%= bedAssignment._id %>/update" method="post">
+    <div class="form-group">
+      <label for="availableBedId">Available Bed Id <span style="color: red">*</span></label>
+      <select class="form-control" id="availableBedId" name="availableBedId" required>
+        <% if (availableBedIds && availableBedIds.length > 0) { %>
+          <% availableBedIds.forEach(function(availableBedId) { %>
+            <option value="<%= availableBedId.bedId %>" <%= bedAssignment.bedId === availableBedId.bedId ? 'selected' : '' %>>
+              <%= availableBedId.bedId %>
+            </option>
+          <% }); %>
+        <% } else { %>
+          <option value="">No available availableBedId</option>
+        <% } %>
+      </select>
+    </div>
 
-    // 顺序查找存在的 elderlyId
-    const existingElderlyIds = await Elderly.find().select('elderlyId');
+    <div class="form-group">
+      <label for="unassignedElderlyId">Unassigned Elderly ID <span style="color: red">*</span></label>
+      <select class="form-control" id="unassignedElderlyId" name="unassignedElderlyId" required>
+        <% if (elderlyIds && elderlyIds.length > 0) { %>
+          <% elderlyIds.forEach(function(elderlyId) { %>
+            <option value="<%= elderlyId.id %>" <%= bedAssignment.elderlyId === elderlyId.id ? 'selected' : '' %>>
+              <%= elderlyId.name %> (ID: <%= elderlyId.id %>)
+            </option>
+          <% }); %>
+        <% } else { %>
+          <option value="">No existing elderlyId</option>
+        <% } %>
+      </select>
+    </div>
 
-    console.log('Available Bed IDs:', availableBedIds);
-    console.log('Existing Elderly IDs:', existingElderlyIds);
+    <div class="form-group">
+      <label for="assignmentId">Assignment ID <span style="color: red">*</span></label>
+      <input type="text" class="form-control" id="assignmentId" name="assignmentId" placeholder="Enter Assignment ID (e.g., A001)" value="<%= bedAssignment.assignmentId %>" required />
+    </div>
 
-    return res.status(200).json({
-      success: true,
-      message: 'bedId and elderlyId retrieved successfully',
-      data: { availableBedIds, existingElderlyIds },
-    });
-  } catch (err) {
-    console.error('Error retrieving bedId and elderlyId:', err.message); // 调试信息
-    res.status(500).json({ success: false, message: err.message });
-  }
-};
+    <div class="form-group">
+      <label for="assignedDate">Assigned Date <span style="color: red">*</span></label>
+      <input type="date" class="form-control" id="assignedDate" name="assignedDate" value="<%= bedAssignment.assignedDate ? new Date(bedAssignment.assignedDate).toISOString().split('T')[0] : new Date().toISOString().split('T')[0] %>" required />
+    </div>
 
-// 确保正确配置路由
-const express = require('express');
-const router = express.Router();
-
-router.get('/beds/assignment/new', renderNewBedAssignmentForm);
-
-module.exports = router;
+    <button type="submit">Update</button>
+  </form>
+</body>
+</html>

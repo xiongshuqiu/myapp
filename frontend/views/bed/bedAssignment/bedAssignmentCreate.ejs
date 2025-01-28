@@ -56,7 +56,8 @@
                       >
                         <div class="form-group">
                           <label for="bedId"
-                            >Available Bed Id <span style="color: red">*</span></label
+                            >Available Bed ID
+                            <span style="color: red">*</span></label
                           >
                           <select
                             class="form-control"
@@ -65,20 +66,24 @@
                             required
                           >
                             <% if (availableBedIds && availableBedIds.length >
-                            0) { %> <% availableBedIds.forEach(function(availableBedId) {
+                            0) { %> <%
+                            availableBedIds.forEach(function(availableBedId) {
                             %>
                             <option value="<%= availableBedId.bedId %>">
                               <%= availableBedId.bedId %>
                             </option>
                             <% }) %> <% } else { %>
-                            <option value="">No available availableBedId</option>
+                            <option value="">
+                              No available availableBedId
+                            </option>
                             <% } %>
                           </select>
-                        </div> 
+                        </div>
 
-                       <div class="form-group">
-                          <label for="elderlyId"
-                            > Unassigned Elderly ID <span style="color: red">*</span></label
+                        <div class="form-group">
+                          <label for="elderlyId">
+                            Unassigned Elderly Id(Name)
+                            <span style="color: red">*</span></label
                           >
                           <select
                             class="form-control"
@@ -88,17 +93,22 @@
                           >
                             <% if (unassignedElderlyIds &&
                             unassignedElderlyIds.length > 0) { %> <%
-                              unassignedElderlyIds.forEach(function(unassignedElderlyId) { %>
-                            <option value="<%= unassignedElderlyId.elderlyId %>">
-                              <%= unassignedElderlyId.elderlyId %>
+                            unassignedElderlyIds.forEach(function(unassignedElderlyId)
+                            { %>
+                            <option
+                              value="<%= unassignedElderlyId.elderlyId %>"
+                            >
+                              <!-- <%= unassignedElderlyId.elderlyId %> -->
+                              ID:<%= unassignedElderlyId.elderlyId %> (<%=
+                              unassignedElderlyId.elderlyName %>)
                             </option>
                             <% }) %> <% } else { %>
                             <option value="">No existing elderlyId</option>
                             <% } %>
                           </select>
-                        </div> 
-                      
-                      <div class="form-group">
+                        </div>
+
+                        <div class="form-group">
                           <label for="assignmentId"
                             >Assignment ID
                             <span style="color: red">*</span></label
@@ -110,34 +120,43 @@
                             name="assignmentId"
                             placeholder="Enter Assignment ID (e.g., A001)"
                             required
+                            pattern="A\d{3}"
+                            title="The Assignment ID should follow the format: a capital letter followed by three digits (e.g., A001)."
                           />
+                          <small class="form-text text-muted">
+                            The Assignment ID should follow the format: a
+                            capital letter followed by three digits (e.g.,
+                            A001).
+                          </small>
                         </div>
-
-                      
 
                         <div class="form-group">
                           <label for="assignedDate"
                             >Assigned Date
-                            <span style="color: red">*</span></label
-                          >
-                          <input
-                            type="date"
-                            class="form-control"
-                            id="assignedDate"
-                            name="assignedDate"
-                            value="<%= new Date().toISOString().split('T')[0] %>"
-                            required
-                          />
+                            <span style="color: red">*</span>
+                          </label>
+                          <div class="input-wrapper">
+                            <input
+                              type="date"
+                              class="form-control date-input"
+                              id="assignedDate"
+                              name="assignedDate"
+                              value="<%= new Date().toISOString().split('T')[0] %>"
+                              required
+                            />
+                          </div>
                         </div>
 
                         <div class="form-group">
                           <label for="releaseDate">Release Date</label>
-                          <input
-                            type="date"
-                            class="form-control"
-                            id="releaseDate"
-                            name="releaseDate"
-                          />
+                          <div class="input-wrapper">
+                            <input
+                              type="date"
+                              class="form-control date-input"
+                              id="releaseDate"
+                              name="releaseDate"
+                            />
+                          </div>
                         </div>
 
                         <button type="submit" class="btn btn-primary">
@@ -159,7 +178,8 @@
                       </div>
                     </div>
                   </div>
-                </div> -->
+                </div>
+                -->
                 <!-- /.panel-body -->
               </div>
               <!-- /.panel -->
