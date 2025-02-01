@@ -38,6 +38,15 @@
             "console": "integratedTerminal"
         },
         {
+            "name": "employee-service",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run", "dev"],
+            "cwd": "${workspaceFolder}/employee-service",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "api-gateway",
             "type": "node",
             "request": "launch",
@@ -68,7 +77,7 @@
     "compounds": [
         {
             "name": "启动所有微服务",
-            "configurations": ["auth-service","account-service","user-service","bed-service","api-gateway", "frontend"]
+            "configurations": ["auth-service","account-service","user-service","bed-service","employee-service","api-gateway", "frontend"]
         }
     ]
 }

@@ -54,61 +54,38 @@
                         method="post"
                         role="form"
                       >
-                      
-                      <!-- 将在生成的HTML中插入value= availableBedId.bedId 的实际值。 -->
-                      <!-- <div class="form-group">
-                        <label for="availableBedId">Available Bed Id <span style="color: red">*</span></label>
-                        <select class="form-control" id="availableBedId" name="availableBedId" required>
-                          <% if (availableBedIds && availableBedIds.length > 0) { %>
-                            <% availableBedIds.forEach(function (availableBedId) { %>
-                              <option value="<%= availableBedId.bedId %>" <%= bedAssignment.bedId === availableBedId.bedId ? 'selected' : '' %>>
-                                <%= availableBedId.bedId %>
+                  
+                      <div class="form-group">
+                        <label for="bedId">Bed ID(Status) <span style="color: red">*</span></label>
+                        <select class="form-control" id="bedId" name="bedId" required>
+                          <% if (bedIds && bedIds.length > 0) { %>
+                            <% bedIds.forEach(function(bed) { %>
+                              <option value="<%= bed.bedId %>" <%= bedAssignment.bedId === bed.bedId ? 'selected' : '' %>>
+                                bedId: <%= bed.bedId %> (<%= bed.status %>)
                               </option>
                             <% }); %>
                           <% } else { %>
-                            <option value="">No available beds</option>
-                          <% } %>
-                        </select>
-                      </div> -->
-                      <div class="form-group">
-                        <label for="availableBedId">Available Bed Id <span style="color: red">*</span></label>
-                        <select class="form-control" id="availableBedId" name="availableBedId" required>
-                          <% if (availableBedIds && availableBedIds.length > 0) { %>
-                            <!-- 显示当前分配的床位 -->
-                            <option value="<%= bedAssignment.bedId %>" selected>
-                              <%= bedAssignment.bedId %>
-                            </option>
-                            
-                            <!-- 显示其他可用床位，但排除当前分配的床位 -->
-                            <% availableBedIds.forEach(function (availableBedId) { %>
-                              <% if (availableBedId.bedId !== bedAssignment.bedId) { %>
-                                <option value="<%= availableBedId.bedId %>">
-                                  <%= availableBedId.bedId %>
-                                </option>
-                              <% } %>
-                            <% }); %>
-                          <% } else { %>
-                            <option value="">No available beds</option>
+                            <option value="">No existing bedId</option>
                           <% } %>
                         </select>
                       </div>
                       
                     
-                        <div class="form-group">
-                          <label for="unassignedElderlyId"> Elderly ID(Name) <span style="color: red">*</span></label>
-                          <select class="form-control" id="unassignedElderlyId" name="elderlyId" required>
-                            <% if (elderlyIds && elderlyIds.length > 0) { %>
-                              <% elderlyIds.forEach(function(elderlyId) { %>
-                                <option value="<%= elderlyId.id %>" <%= bedAssignment.elderlyId === elderlyId.id ? 'selected' : '' %>>
-                                  <!-- <%= elderlyId.name %> (ID: <%= elderlyId.id %>) -->
-                                     ID: <%= elderlyId.id %>(<%= elderlyId.name %>)
-                                </option>
-                              <% }); %>
-                            <% } else { %>
-                              <option value="">No existing elderlyId</option>
-                            <% } %>
-                          </select>
-                        </div>
+                      <div class="form-group">
+                        <label for="unassignedElderlyId"> Elderly ID(Name) <span style="color: red">*</span></label>
+                        <select class="form-control" id="elderlyId" name="elderlyId" required>
+                          <% if (elderlyIds && elderlyIds.length > 0) { %>
+                            <% elderlyIds.forEach(function(elderly) { %>
+                              <option value="<%= elderly.elderlyId %>" <%= bedAssignment.elderlyId === elderly.elderlyId ? 'selected' : '' %>>
+                                ID: <%= elderly.elderlyId %> (<%= elderly.elderlyName %>)
+                              </option>
+                            <% }); %>
+                          <% } else { %>
+                            <option value="">No existing elderlyId</option>
+                          <% } %>
+                        </select>
+                      </div>
+                      
                     
                         <div class="form-group">
                           <label for="assignmentId">Assignment ID <span style="color: red">*</span></label>
@@ -117,7 +94,6 @@
                             class="form-control"
                             id="assignmentId"
                             name="assignmentId"
-                            placeholder="Enter Assignment ID (e.g., A001)"
                             value="<%= bedAssignment.assignmentId %>"
                             required
                             pattern="A\d{3}"

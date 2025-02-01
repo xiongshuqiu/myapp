@@ -7,6 +7,7 @@ const authRoutes = require('./routes/authRoutes'); // 引入自定义的authRout
 const userRoutes = require('./routes/userRoutes'); 
 const accountRoutes = require('./routes/accountRoutes');
 const bedRoutes = require('./routes/bedRoutes/bedRoutes');
+const employeeRoutes = require('./routes/employeeRoutes/employeeRoutes');
 
 // 2.加载环境变量
 dotenv.config(); // 加载根目录中的.env文件中的环境变量
@@ -29,6 +30,7 @@ app.use('/api/auth', authRoutes); // 当请求路径以/api/auth开头时，使�
 app.use('/api/users', userRoutes); // 当请求路径以/api/auth开头时，使用authRoutes路由
 app.use('/api/accounts', accountRoutes);
 app.use('/api/beds', bedRoutes);
+app.use('/api/employees', employeeRoutes);
 // 6.调试环境变量
 console.log('Loaded PORT:', process.env.PORT); // 输出环境变量值以调试
 

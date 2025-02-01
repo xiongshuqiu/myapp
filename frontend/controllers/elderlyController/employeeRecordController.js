@@ -7,7 +7,7 @@ const handleError = (
   err,
   req, //注意一定要增加这个值（每个handleError都要）
   res,
-  targetPage = 'bed/bedAssignment/bedAssignmentCreate',
+  targetPage = 'bed/bedStatus/bedStatusCreate',
   msg = 'Server error',
 ) => {
   console.error('Error:', err.response ? err.response.data : err.message); // 输出详细调试信息
@@ -42,24 +42,18 @@ const deleteRequest = async (url) => {
   return response.data;
 };
 
-// 1.获取所有床位分配
-const getAllBedAssignments = async (req, res) => {
-  const _id = req.user._id;
-  const role = req.user.role;
-  console.log('User data:', { _id, role }); // 调试信息
-  const apiUrl = `${process.env.API_URL}/api/beds/assignment/?_id=${_id}&role=${role}`;
-  console.log('API URL:', apiUrl); // 调试信息
-
+// 1.获取所有员工档案
+const getAllEmployeeRecords = async (req, res) => {
+  const apiUrl = `${process.env.API_URL}/api/employees/record/`;
+  console.log(apiUrl);
   try {
     const response = await getRequest(apiUrl);
-    const bedAssignments = response.data;
+    const bedStatuses = response.data;
     if (response.success) {
-      // const buttonItems = req.buttonItems;
-      // const linkItems = req.linkItems
-      console.log(response);
-      res.render('bed/bedAssignment/bedAssignmentManagement', {
+
+      res.render('bed/bedStatus/bedStatusManagement', {
         activePage: 'bed-management',
-        bedAssignments,
+        bedStatuses,
         navItems: req.navItems, // 将导航项传递到视图
         buttonItems: req.buttonItems,
         linkItems: req.linkItems,
@@ -69,10 +63,10 @@ const getAllBedAssignments = async (req, res) => {
     handleError(err, req, res);
   }
 };
-// 2.创建新的床位分配
-//(1)显示新增床位分配表单
-const renderNewBedAssignmentForm = async (req, res) => {
-  const apiUrl = `${process.env.API_URL}/api/beds/assignment/new`;
+// 2.创建新的员工档案
+//(1)显示新增员工档案表单
+const renderNewEmployeeRecordForm = async (req, res) => {
+  const apiUrl = `${process.env.API_URL}/api/employees/record/new`;
   console.log('API URL:', apiUrl); // 调试信息
   try {
     const response = await getRequest(apiUrl);
@@ -93,57 +87,40 @@ const renderNewBedAssignmentForm = async (req, res) => {
     handleError(err, req, res);
   }
 };
-
-//(2)提交新的床位分配数据
-const createBedAssignment = async (req, res) => {
-  const {
-    availableBedId,
-    unassignedElderlyId,
-    assignmentId,
-    assignedDate,
-    releaseDate,
-  } = req.body;
+//(2)提交新的员工档案数据
+const createEmployeeRecord = async (req, res) => {
+  const { bedId, building, floor, room, roomType, bedNumber, status } = req.body;
   try {
-    const data = {
-      availableBedId,
-      unassignedElderlyId,
-      assignmentId,
-      assignedDate,
-      releaseDate,
-    };
+    const data = { bedId, building, floor, room, roomType, bedNumber, status };
 
-    const apiUrl = `${process.env.API_URL}/api/beds/assignment/create`;
+    const apiUrl = `${process.env.API_URL}/api/employees/record/create`;
     const response = await postRequest(apiUrl, data);
-    const bedAssignment = response.data;
-    console.log(bedAssignment);
+    const bedStatus = response.data;
+    console.log(bedStatus);
     if (response.success) {
-      console.log(response);
-      res.redirect('/beds/assignment/');
+      res.redirect('/employees/record/');
     }
   } catch (err) {
-    const targetPage = 'bed/bedAssignment/bedAssignmentCreate'; //用户需要输入新值
+    const targetPage = 'bed/bedStatus/bedStatusCreate'; //用户需要输入新值
     handleError(err, req, res, targetPage);
   }
 };
 
-// 3.更新特定床位分配
-// (1)查找特定床位分配并显示编辑表单
-const getBedAssignmentById = async (req, res) => {
+// 3.更新特定员工档案
+// (1)查找特定员工档案并显示编辑表单
+const getEmployeeRecordById = async (req, res) => {
   const { _id } = req.params; // 从参数中获取 _id
-  console.log(`Fetching bedAssignment with ID: ${_id}`); // 调试信息
+  console.log(`Fetching bedStatus with ID: ${_id}`); // 调试信息
   try {
-    const apiUrl = `${process.env.API_URL}/api/beds/assignment/${_id}/update`;
-    console.log(apiUrl);
+    const apiUrl = `${process.env.API_URL}/api/employees/record/${_id}/update`;
     const response = await getRequest(apiUrl); // 使用组装的URL进行API调用
-    const {bedAssignment, bedIds, elderlyIds} = response.data;
+    const bedStatus = response.data;
+    console.log(bedStatus);
     if (response.success) {
-      console.log(response);
-      res.render('bed/bedAssignment/bedAssignmentUpdate.ejs', {
-        activePage: 'bed-management',     
+      res.render('bed/bedStatus/bedStatusUpdate.ejs', {
+        activePage: 'bed-management',
+        bedStatus,
         navItems: req.navItems,
-        bedAssignment,
-        bedIds, //beIds包括：bedId、status
-        elderlyIds //包括elderlyId、elderlyName
       });
     }
   } catch (err) {
@@ -151,47 +128,46 @@ const getBedAssignmentById = async (req, res) => {
   }
 };
 
-//(2) 提交更新后的床位分配数据
-const updateBedAssignment = async (req, res) => {
-  const { bedId, elderlyId, assignmentId, assignedDate,releaseDate } = req.body;
+//(2) 提交更新后的员工档案数据
+const updateEmployeeRecord = async (req, res) => {
+  const { bedId, building, floor, room, roomType, bedNumber, status } = req.body;
   const { _id } = req.params;
   try {
-    const data = { bedId, elderlyId, assignmentId, assignedDate,releaseDate  };
+    const data = {bedId, building, floor, room, roomType, bedNumber, status };
 
     // 从请求参数中获取 _id
-    const apiUrl = `${process.env.API_URL}/api/beds/assignment/${_id}`;
+    const apiUrl = `${process.env.API_URL}/api/employees/record/${_id}`;
     const response = await putRequest(apiUrl, data);
-    // const bedAssignment = response.data;
+    const bedStatus = response.data;
+    console.log(bedStatus);
     if (response.success) {
-      console.log(response);
-      res.redirect('/beds/assignment/');
+      res.redirect('/employees/record/');
     }
   } catch (err) {
-    const targetPage = 'bed/bedAssignment/bedAssignmentUpdate'; //用户需要输入新值
+    const targetPage = 'bed/bedStatus/bedStatusUpdate'; //用户需要输入新值
     handleError(err, req, res, targetPage);
   }
 };
 
-// 4. 删除特定床位分配
-const deleteBedAssignment = async (req, res) => {
+// 4. 删除特定员工档案
+const deleteEmployeeRecord = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取_id
     console.log(_id);
-    const apiUrl = `${process.env.API_URL}/api/beds/assignment/${_id}/delete`;
+    const apiUrl = `${process.env.API_URL}/api/employees/record/${_id}/delete`;
     const response = await deleteRequest(apiUrl);
     if (response.success) {
-      console.log(response);
-      res.redirect('/beds/assignment/');
+      res.redirect('/employees/record/');
     }
   } catch (err) {
     handleError(err, req, res);
   }
 };
 module.exports = {
-  getAllBedAssignments,
-  renderNewBedAssignmentForm,
-  createBedAssignment,
-  getBedAssignmentById,
-  updateBedAssignment,
-  deleteBedAssignment,
+  getAllEmployeeRecords,
+  renderNewEmployeeRecordForm,
+  createEmployeeRecord,
+  getEmployeeRecordById,
+  updateEmployeeRecord,
+  deleteEmployeeRecord
 };

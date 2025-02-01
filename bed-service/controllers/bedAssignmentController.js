@@ -154,7 +154,6 @@ const createBedAssignment = async (req, res) => {
     releaseDate,
   } = req.body;
   console.log('Received request to create bed status with data:', req.body); // 调试信息
-
   try {
     // 检查是否存在相同床位编号的记录
     const existingBedAssignment = await BedAssignment.findOne({ assignmentId });
@@ -215,12 +214,6 @@ const getBedAssignmentById = async (req, res) => {
       const bedIds = await BedStatus.find().select('bedId status');
       // 查找所有老人信息
       const elderlyIds = await Elderly.find().select('elderlyId elderlyName');
-      // 将数据重构为所需格式
-      // const elderlyIds = elderlyData.map((elder) => ({
-      //   id: elder.elderlyId,
-      //   name: elder.elderlyName,
-      // }));
-
       return res.status(200).json({
         success: true,
         message:

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>chinaz</title>
+    <!-- 1.框架样式：Bootstrap Styles-->
+    <link href="/assets/css/bootstrap.css" rel="stylesheet" />
+    <!-- 2.图标样式：FontAwesome Styles-->
+    <link href="/assets/css/font-awesome.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <!--3.普通样式：Custom Styles-->
+    <link href="/assets/css/custom-styles.css" rel="stylesheet" />
+    <!-- 4.字体样式：Google Fonts-->
+    <link
+      href="http://fonts.useso.com/css?family=Open+Sans"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+
+  <body>
+    <div id="wrapper">
+      <!-- 顶部导航条 -->
+      <%- include('../../block/top-navbar.ejs') %>
+      <!-- 左侧导航条 -->
+      <%- include('../../block/navbar-side.ejs') %>
+
+
+      <div id="page-wrapper">
+        <div class="header">
+          <h1 class="page-header">
+            Forms Page <small>Best form elements.</small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Forms</a></li>
+            <li class="active">Data</li>
+          </ol>
+        </div>
+
+        <div id="page-inner">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="panel panel-default">
+                <div class="panel-heading">Basic Form Elements</div>
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <form action="/beds/status/create" method="post" role="form">
+                        
+                        
+                        <div class="form-group">
+                          <label for="building">Building <span style="color: red">*</span></label>
+                          <select class="form-control" id="building" name="building" required>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                          </select>
+                        </div>
+                        
+                        <div class="form-group">
+                          <label for="floor">Floor <span style="color: red">*</span></label>
+                          <select class="form-control" id="floor" name="floor" required>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                          </select>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="room">Room <span style="color: red">*</span></label>
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="room"
+                            name="room"
+                            placeholder="Enter Room Number (e.g., 101)"
+                            required
+                            pattern="^\d{3}$"
+                            title="Room format should be Room Number (e.g., 101)"
+                          />
+                          <small class="form-text text-muted">
+                            Format: Room Number (e.g., 101)
+                          </small>
+                        </div>
+                        
+                        <div class="form-group">
+                          <label for="roomType">Room Type <span style="color: red">*</span></label>
+                          <select class="form-control" id="roomType" name="roomType" required>
+                            <option value="s">s</option>
+                            <option value="b">b</option>
+                          </select>
+                          <small class="form-text text-muted">
+                            Select 's' or 'b' (e.g., 701s, 701b)
+                          </small>
+                        </div>
+                        
+                        
+                        <div class="form-group">
+                          <label for="bedNumber">Bed Number <span style="color: red">*</span></label>
+                          <select class="form-control" id="bedNumber" name="bedNumber" required>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                          </select>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="bedId">Bed ID <span style="color: red">*</span></label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="bedId"
+                            name="bedId"
+                            placeholder="Generated Bed ID will appear here"
+                            required
+                            readonly
+                          />
+                          <small class="form-text text-muted">
+                            Format: Building-Floor-Room Room Type-Bed Number (e.g., 3-7-701s-01)
+                          </small>
+                        </div>
+                        
+                        <button type="button" class="btn btn-primary" onclick="generateBedId()">Generate Bed ID</button>
+                        
+                        <div class="form-group">
+                          <label for="status">Status <span style="color: red">*</span></label>
+                          <select class="form-control" id="status" name="status" required>
+                            <option value="occupied">occupied</option>
+                            <option value="available">available</option>
+                            <option value="reserved">reserved</option>
+                            <option value="maintenance">maintenance</option>
+                          </select>
+                        </div>
+                        
+                        <script>
+                          function generateBedId() {
+                            const building = document.getElementById('building').value;
+                            const floor = document.getElementById('floor').value;
+                            const room = document.getElementById('room').value;
+                            const roomType = document.getElementById('roomType').value;
+                            const bedNumber = document.getElementById('bedNumber').value;
+                            if (building && floor && room && roomType && bedNumber) {
+                             //  如果 roomType 存在（即非空），则返回 room + roomType，即将 roomType 附加在 room 后面。
+                                // 如果 roomType 不存在（即为空），则直接返回 room。
+                              const fullRoom = roomType ? room + roomType : room; // 添加后缀
+                              const bedId = `${building}-${floor}-${fullRoom}-${bedNumber}`;
+                              document.getElementById('bedId').value = bedId;
+                            } else {
+                              alert('Please fill in all fields to generate the Bed ID.');
+                            }
+                          }
+                        </script>
+                        
+                        
+                        
+                        
+
+                        <button type="submit" class="btn btn-primary">
+                          Submit
+                        </button>
+                        <button
+                          type="reset"
+                          class="btn btn-secondary"
+                          onclick="window.location.href='/beds/status/';"
+                        >
+                          Return
+                        </button>
+                      </form>
+                    </form>
+                    <div id="message" class="mt-3">
+                      <% if (typeof message !== 'undefined' && message !== null) { %>
+                        <div class="alert alert-success"><%= message %></div>
+                      <% } %>
+                    </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /.panel-body -->
+              </div>
+              <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+          </div>
+        </div>
+
+        <!-- /. PAGE INNER  -->
+      </div>
+      <!-- /. PAGE WRAPPER  -->
+    </div>
+    <!-- /. WRAPPER  -->
+    <!-- JS Scripts-->
+    <!-- jQuery Js -->
+    <script src="/assets/js/jquery-1.10.2.js"></script>
+    <!-- Bootstrap Js -->
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <!-- Metis Menu Js -->s
+    <script src="/assets/js/jquery.metisMenu.js"></script>
+    <!-- Custom Js -->
+    <script src="/assets/js/custom-scripts.js"></script>
+  
+  </body>
+</html>

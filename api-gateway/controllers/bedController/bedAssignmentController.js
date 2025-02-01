@@ -38,6 +38,9 @@ const getAllBedAssignments = async (req, res) => {
     const url = `${process.env.BED_SERVICE_URL}/beds/assignment/?_id=${_id}&role=${role}`;
     const response = await getRequest(url); // 发送 GET 请求以获取用户信息
     res.json(response); // 将响应数据返回给前端:包括数据和message
+    if (response.success) {
+      console.log(response)
+    }
   } catch (err) {
     handleError(err, res);
   }
@@ -50,6 +53,9 @@ const renderNewBedAssignmentForm = async (req, res) => {
     const url = `${process.env.BED_SERVICE_URL}/beds/assignment/new`;
     const response = await getRequest(url); // 发送 GET 请求以获取用户信息
     res.json(response); // 将响应数据返回给前端:包括数据和message
+    if (response.success) {
+      console.log(response)
+    }
   } catch (err) {
     handleError(err, res);
   }
@@ -75,6 +81,9 @@ const createBedAssignment = async (req, res) => {
     const url = `${process.env.BED_SERVICE_URL}/beds/assignment/create`;
     const response = await postRequest(url, data); // 发送 POST 请求以创建新用户
     res.status(201).json(response); // 将响应数据返回给前端
+    if (response.success) {
+      console.log(response)
+    }
   } catch (err) {
     handleError(err, res);
   }
@@ -87,6 +96,9 @@ const getBedAssignmentById = async (req, res) => {
     const url = `${process.env.BED_SERVICE_URL}/beds/assignment/${_id}/update`;
     const response = await getRequest(url); // 发送 GET 请求以获取用户信息
     res.json(response); // 将响应数据返回给前端:包括数据和message
+    if (response.success) {
+      console.log(response)
+    }
   } catch (err) {
     handleError(err, res);
   }
@@ -100,6 +112,9 @@ const updateBedAssignment = async (req, res) => {
     const url = `${process.env.BED_SERVICE_URL}/beds/assignment/${_id}`;
     const response = await putRequest(url, data); // 发送 PUT 请求以更新用户信息
     res.json(response); // 将响应数据返回给前端
+    if (response.success) {
+      console.log(response)
+    }
   } catch (err) {
     handleError(err, res);
   }
@@ -112,6 +127,9 @@ const deleteBedAssignment = async (req, res) => {
     const url = `${process.env.BED_SERVICE_URL}/beds/assignment/${_id}/delete`;
     const response = await deleteRequest(url); // 发送 DELETE 请求以删除用户
     res.json(response); // 将响应数据返回给前端
+    if (response.success) {
+      console.log(response)
+    }
   } catch (err) {
     handleError(err, res);
   }
