@@ -1,4 +1,4 @@
-const  { Employee } = require('../models/employeeRecordModel');
+const  { User, Employee } = require('../models/employeeRecordModel');
 // 1. 获取所有员工档案
 const getAllEmployeeRecords = async (req, res) => {
   try {
@@ -8,7 +8,7 @@ const getAllEmployeeRecords = async (req, res) => {
       .status(200)
       .json({
         success: true,
-        message: 'Employee records retrieved successfully',
+        message: 'Employee ecords retrieved successfully',
         data: employeeRecords,
       });
   } catch (err) {
@@ -23,50 +23,43 @@ const getAllEmployeeRecords = async (req, res) => {
 // (1) 显示新增员工档案表单
 const renderNewEmployeeRecordForm = async (req, res) => {
   try {
-    // 顺序查找可用的 bedId
-    const availableBedIds = await BedStatus.find({
-      status: 'available',
-    }).select('bedId');
-
-    // 聚合管道查找未分配床位的 elderlyId
-    const unassignedElderlyIds = await Elderly.aggregate([
+    // 聚合管道查找未分配的 userId
+    const unassignedUserIds = await User.aggregate([
       {
         $lookup: {
-          from: 'bedassignments',
-          localField: 'elderlyId',
-          foreignField: 'elderlyId',
-          as: 'bedAssignment',
+          from: 'employees',
+          localField: 'userId',
+          foreignField: 'userId',
+          as: 'employeeRecord',
         },
       },
       {
         $match: {
-          'bedAssignment.elderlyId': { $exists: false },
+          'employeeRecord.userId': { $exists: false },
         },
       },
       {
         $project: {
-          elderlyId: 1,
-          elderlyName: 1, // 您可以根据需要选择其他字段
+          userId: 1,
+          userName: 1, // 您可以根据需要选择其他字段
         },
       },
     ]);
-
-    console.log('Available Bed IDs:', availableBedIds);
-    console.log('Unassigned Elderly IDs:', unassignedElderlyIds);
-
+    console.log('Unassigned User IDs:', unassignedUserIds);
     return res.status(200).json({
       success: true,
-      message: 'bedId and unassigned elderlyId retrieved successfully',
-      data: { availableBedIds, unassignedElderlyIds },
+      message: 'bedId and unassigned userId retrieved successfully',
+      data: {  unassignedUserIds },
     });
   } catch (err) {
     console.error(
-      'Error retrieving bedId and unassigned elderlyId:',
+      'Error retrieving bedId and unassigned userId:',
       err.message,
     ); // 调试信息
     res.status(500).json({ success: false, message: err.message });
   }
 };
+
 // (2) 提交新的员工档案数据
 const createEmployeeRecord = async (req, res) => {
   const {

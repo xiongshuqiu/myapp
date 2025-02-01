@@ -71,12 +71,11 @@ const renderNewEmployeeRecordForm = async (req, res) => {
     const response = await getRequest(apiUrl);
 
     if (response.success) {
-      const { availableBedIds, unassignedElderlyIds } = response.data;
+      const { unassignedUserIds } = response.data;
       res.render('employee/employeeRecord/employeeRecordCreate.ejs', {
         activePage: 'employee-management',
         navItems: req.navItems, // 将导航项传递到视图
-        availableBedIds, // 传递可用的 bedId 到视图
-        unassignedElderlyIds, // 传递存在的 elderlyId 到视图
+        unassignedUserIds, // 传递存在的 elderlyId 到视图
       });
     } else {
       throw new Error('Failed to retrieve data from API');

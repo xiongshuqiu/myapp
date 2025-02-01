@@ -2,7 +2,7 @@ const employees = [
   {
       employeeId: 'S001',
       employeeName: 'Dr. John Doe',
-      position: 'Super Admin',
+      position: 'Management',
       contactNumber: '1234567890',
       email: 'john.doe@example.com',
       userId: 'U001'
@@ -82,7 +82,7 @@ const employees = [
   {
       employeeId: 'S011',
       employeeName: 'Dr. Anna Taylor',
-      position: 'service',
+      position: 'Other',
       contactNumber: '9900112233',
       email: 'anna.taylor@example.com',
       userId: 'U011'
@@ -90,7 +90,7 @@ const employees = [
   {
       employeeId: 'S012',
       employeeName: 'Dr. William Harris',
-      position: 'service',
+      position: 'Finance',
       contactNumber: '1100223344',
       email: 'william.harris@example.com',
       userId: 'U012'
@@ -98,7 +98,7 @@ const employees = [
   {
       employeeId: 'S013',
       employeeName: 'Dr. Sophia Martinez',
-      position: 'service',
+      position: 'Catering',
       contactNumber: '2200334455',
       email: 'sophia.martinez@example.com',
       userId: 'U013'
