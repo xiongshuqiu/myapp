@@ -87,24 +87,24 @@
                           <td><%= bedStatus.status %></td>
                           <td>
                             <% linkItems.forEach(function(item) { %> <% if
-                            (item.id ==='edit-bedStatus-link'&&item.visible) {
+                            (item.id ==='edit-employeeRecord-link'&&item.visible) {
                             %>
                             <a
                               id="<%= item.id %>"
-                              href="/beds/status/<%= bedStatus._id %>/update"
+                              href="/employees/record/<%= employeeRecord._id %>/update"
                               class="editlink"
                               style="color: blue; display: inline"
                               >Edit
                             </a>
                             <% } %> <% }); %> <%
                             linkItems.forEach(function(item) { %> <% if (item.id
-                            ==='delete-bedStatus-link'&&item.visible) { %>
+                            ==='delete-employeeRecord-link'&&item.visible) { %>
                             <a
                               id="<%= item.id %>"
                               href="javascript:void(0)"
                               class="deleteLink"
                               style="color: red; padding: 5px; display: inline"
-                              onclick="confirmDeletion('<%= bedStatus._id %>')"
+                              onclick="confirmDeletion('<%= employeeRecord._id %>')"
                               >Delete</a
                             >
                             <% } %> <% }); %>
@@ -158,12 +158,12 @@
     </script>
 
     <!-- 在过滤器区域添加 "Add User" 按钮 -->
-    <% buttonItems.forEach(function(item) { %> <% if (item.id === 'add-bedStatus-btn'
+    <% buttonItems.forEach(function(item) { %> <% if (item.id === 'add-employeeRecord-btn'
     && item.visible) { %>
     <script>
       $(document).ready(function () {
         $('#dataTables-example_filter').append(
-          '<button id="<%= item.id %>" class="btn btn-primary add-bedStatus-btn" data-href="<%= item.href %>"><%= item.name %></button>',
+          '<button id="<%= item.id %>" class="btn btn-primary add-employeeRecord-btn" data-href="<%= item.href %>"><%= item.name %></button>',
         );
 
         // 处理 "Add User" 按钮点击事件
@@ -191,10 +191,10 @@
       async function confirmDeletion(_id) {
         if (confirm('Are you sure you want to delete this user?')) {
           try {
-            const response = await fetch(`/beds/status/${_id}/delete`, {
+            const response = await fetch(`/employees/record/${_id}/delete`, {
               method: 'DELETE',
             });
-            window.location.href = '/beds/status/';
+            window.location.href = '/employees/record/';
             // const result = await response.json();
             // alert(result.message); // 显示反馈给用户
             location.reload(); // 刷新页面以更新用户表

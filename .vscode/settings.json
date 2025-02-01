@@ -10,7 +10,6 @@
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
         "catering-service": true,
-        "employee-service": true,
         "financial-service": true,
         "health-service": true,
         "visitor-service": true,
@@ -22,7 +21,6 @@
         "user-service": true
     },
     "hide-files.files": [
-        "employee-service",
         "financial-service",
         "health-service",
         "visitor-service",

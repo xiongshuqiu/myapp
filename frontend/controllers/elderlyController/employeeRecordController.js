@@ -7,13 +7,13 @@ const handleError = (
   err,
   req, //注意一定要增加这个值（每个handleError都要）
   res,
-  targetPage = 'bed/bedStatus/bedStatusCreate',
+  targetPage = 'employee/employeeRecord/employeeRecordCreate',
   msg = 'Server error',
 ) => {
   console.error('Error:', err.response ? err.response.data : err.message); // 输出详细调试信息
   if (!res.headersSent) {
     res.status(err.response?.status || 500).render(targetPage, {
-      activePage: 'bed-management',
+      activePage: 'employee-management',
       message: err.response?.data?.message || msg,
       navItems: req.navItems, // 将导航项传递到视图
     });
@@ -50,9 +50,8 @@ const getAllEmployeeRecords = async (req, res) => {
     const response = await getRequest(apiUrl);
     const bedStatuses = response.data;
     if (response.success) {
-
-      res.render('bed/bedStatus/bedStatusManagement', {
-        activePage: 'bed-management',
+      res.render('employee/employeeRecord/employeeRecordManagement', {
+        activePage: 'employee-management',
         bedStatuses,
         navItems: req.navItems, // 将导航项传递到视图
         buttonItems: req.buttonItems,
@@ -73,8 +72,8 @@ const renderNewEmployeeRecordForm = async (req, res) => {
 
     if (response.success) {
       const { availableBedIds, unassignedElderlyIds } = response.data;
-      res.render('bed/bedAssignment/bedAssignmentCreate.ejs', {
-        activePage: 'bed-management',
+      res.render('employee/employeeRecord/employeeRecordCreate.ejs', {
+        activePage: 'employee-management',
         navItems: req.navItems, // 将导航项传递到视图
         availableBedIds, // 传递可用的 bedId 到视图
         unassignedElderlyIds, // 传递存在的 elderlyId 到视图
@@ -83,7 +82,7 @@ const renderNewEmployeeRecordForm = async (req, res) => {
       throw new Error('Failed to retrieve data from API');
     }
   } catch (err) {
-    console.error('Error in renderNewBedAssignmentForm:', err);
+    console.error('Error in renderNewEmployeeRecordForm:', err);
     handleError(err, req, res);
   }
 };
@@ -101,7 +100,7 @@ const createEmployeeRecord = async (req, res) => {
       res.redirect('/employees/record/');
     }
   } catch (err) {
-    const targetPage = 'bed/bedStatus/bedStatusCreate'; //用户需要输入新值
+    const targetPage = 'employee/employeeRecord/employeeRecordCreate'; //用户需要输入新值
     handleError(err, req, res, targetPage);
   }
 };
@@ -117,8 +116,8 @@ const getEmployeeRecordById = async (req, res) => {
     const bedStatus = response.data;
     console.log(bedStatus);
     if (response.success) {
-      res.render('bed/bedStatus/bedStatusUpdate.ejs', {
-        activePage: 'bed-management',
+      res.render('employee/employeeRecord/employeeRecordUpdate.ejs', {
+        activePage: 'employee-management',
         bedStatus,
         navItems: req.navItems,
       });
@@ -144,7 +143,7 @@ const updateEmployeeRecord = async (req, res) => {
       res.redirect('/employees/record/');
     }
   } catch (err) {
-    const targetPage = 'bed/bedStatus/bedStatusUpdate'; //用户需要输入新值
+    const targetPage = 'employee/employeeRecord/employeeRecordUpdate'; //用户需要输入新值
     handleError(err, req, res, targetPage);
   }
 };

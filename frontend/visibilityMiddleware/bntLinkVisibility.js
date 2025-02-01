@@ -28,6 +28,20 @@ function bntLinkVisibility(req, res, next) {
         href: '/beds/assignment/new',
         roles: ['admin'],
       },
+        //员工档案增加
+        {
+          id: 'add-employeeRecord-btn',
+          name: 'AddEmployeeRecord',
+          href: '/employees/record/new',
+          roles: ['admin'],
+      },
+         //员工值班安排增加
+         {
+          id: 'add-employeeShiftSchedule-btn',
+          name: 'AddShiftSchedule',
+          href: '/employees/record/new',
+          roles: ['admin','medical'],
+        },
     ];
     return buttonItems.map((item) => ({
       ...item,
@@ -62,7 +76,25 @@ function bntLinkVisibility(req, res, next) {
         {
           id: 'delete-bedAssignment-link',
           roles: ['admin'],
+      },
+        //编辑和删除员工档案
+        {
+          id: 'edit-employeeRecord-link',
+          roles: ['admin'],
         },
+        {
+          id: 'delete-employeeRecord-link',
+          roles: ['admin'],
+      },
+          //编辑和删除员工值班记录
+          {
+            id: 'edit-employeeShiftSchedule-link',
+            roles: ['admin'],
+          },
+          {
+            id: 'delete-employeeShiftSchedule-link',
+            roles: ['admin'],
+          },
     ];
     return linkItems.map((item) => ({
       ...item,

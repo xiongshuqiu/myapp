@@ -75,12 +75,12 @@ function getNavItems(role) {
       subMenu: [
         {
           name: 'Employee Records',
-          href: '#',
+          href: '/employees/record/',
           roles: ['admin']
         },
         {
           name: 'Shift Scheduling',
-          href: '#',
+          href: '/employees/shiftSchedule/',
           roles: ['admin','medical']
         }
       ]
