@@ -37,15 +37,15 @@
       <div id="page-wrapper">
         <div class="header">
           <h1 class="page-header">
-            Bed Management <small> Bed Information</small>
+            Employee Management <small> Employee Information</small>
           </h1>
           <ol class="breadcrumb">
             <!-- 面包屑导航 -->
             <li><a href="#">Home</a></li>
             <!-- 首页链接 -->
-            <li><a href="#">Bed Management</a></li>
+            <li><a href="#">Employee Management</a></li>
             <!-- 用户管理页面链接 -->
-            <li class="active">BedStatus Data</li>
+            <li class="active">EmployeeRecord Data</li>
             <!-- 当前页：用户数据 -->
           </ol>
         </div>
@@ -56,7 +56,7 @@
             <div class="col-md-12">
               <!-- Advanced Tables -->
               <div class="panel panel-default">
-                <div class="panel-heading">BedStatus Tables</div>
+                <div class="panel-heading">EmployeeRecord Tables</div>
                 <div class="panel-body">
                   <div class="table-responsive">
                     <table
@@ -65,26 +65,24 @@
                     >
                       <thead>
                         <tr>
-                          <th>bedID</th>
-                          <th>building</th>
-                          <th>floor</th>
-                          <th>room</th>
-                          <th>roomType</th>
-                          <th>bedNumber</th>
-                          <th>status</th>
+                          <th>employeeId</th>
+                          <th>employeeName</th>
+                          <th>position</th>
+                          <th>contactNumber</th>
+                          <th>email</th>
+                          <th>userId</th>
                           <th>actions</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <% bedStatuses.forEach(function(bedStatus) { %>
+                        <% employeeRecords.forEach(function(employeeRecord) { %>
                         <tr class="odd gradeX" style="white-space: nowrap">
-                          <td><%= bedStatus.bedId %></td>
-                          <td><%= bedStatus.building %></td>
-                          <td><%= bedStatus.floor %></td>
-                          <td><%= bedStatus.room %></td>
-                          <td><%= bedStatus.roomType %></td>
-                          <td><%= bedStatus.bedNumber %></td>
-                          <td><%= bedStatus.status %></td>
+                          <td><%= employeeRecord.employeeId %></td>
+                          <td><%= employeeRecord.employeeName %></td>
+                          <td><%= employeeRecord.position %></td>
+                          <td><%= employeeRecord.contactNumber %></td>
+                          <td><%= employeeRecord.email %></td>
+                          <td><%= employeeRecord.userId %></td>
                           <td>
                             <% linkItems.forEach(function(item) { %> <% if
                             (item.id ==='edit-employeeRecord-link'&&item.visible) {

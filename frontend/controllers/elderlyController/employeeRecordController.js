@@ -48,11 +48,11 @@ const getAllEmployeeRecords = async (req, res) => {
   console.log(apiUrl);
   try {
     const response = await getRequest(apiUrl);
-    const bedStatuses = response.data;
+    const employeeRecords = response.data;
     if (response.success) {
       res.render('employee/employeeRecord/employeeRecordManagement', {
         activePage: 'employee-management',
-        bedStatuses,
+        employeeRecords,
         navItems: req.navItems, // 将导航项传递到视图
         buttonItems: req.buttonItems,
         linkItems: req.linkItems,

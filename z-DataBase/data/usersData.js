@@ -2,7 +2,7 @@
 
 const users = [
   {
-    userId: 'S001',
+    userId: 'U001',
     account: 'xiongshuqiu1',
     userName: 'xiongshuqiu1',
     passWord: '123456',
@@ -11,7 +11,7 @@ const users = [
     role: 'admin',
   },
   {
-    userId: 'S002',
+    userId: 'U002',
     account: 'xiongshuqiu2',
     userName: 'xiongshuqiu2',
     passWord: '123456',

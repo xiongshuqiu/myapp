@@ -75,7 +75,7 @@
                             title=""
                           />
                           <small class="form-text text-muted">
-                            Format: S followed by three digits for admin/medical (e.g., S001) or F followed by three digits for family (e.g., F001)
+                            Format: U followed by three digits for admin/medical (e.g., U001) or F followed by three digits for family (e.g., F001)
                           </small>
                         </div>
 
@@ -203,9 +203,9 @@
         var role = document.getElementById('role').value;
 
         if (role === 'admin' || role === 'medical') {
-          userIdInput.pattern = 'S\\d{3}';
-          userIdInput.title = 'User ID format should be S followed by three digits (e.g., S001)';
-          userIdInput.placeholder = 'Enter User ID (e.g., S001)';
+          userIdInput.pattern = 'U\\d{3}';
+          userIdInput.title = 'User ID format should be S followed by three digits (e.g., U001)';
+          userIdInput.placeholder = 'Enter User ID (e.g., U001)';
         } else if (role === 'family') {
           userIdInput.pattern = 'F\\d{3}';
           userIdInput.title = 'User ID format should be F followed by three digits (e.g., F001)';

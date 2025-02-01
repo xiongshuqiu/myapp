@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 // User Schema
 const userSchema = new mongoose.Schema({
-  userId: { type: String, required: true }, // 用户唯一编号 S002
+  userId: { type: String, required: true }, // 用户唯一编号 管理员U001，医护U002（员工）、家属F001
   account: { type: String, required: true },
   userName: { type: String, required: true },
   passWord: { type: String, required: true },
@@ -26,7 +26,7 @@ const Elderly = mongoose.model('Elderly', elderlySchema);
 // Bed Assignment Schema
 const bedAssignmentSchema = new mongoose.Schema({
   assignmentId: { type: String, required: true, unique: true }, // 分配编号 A001
-  bedId: { type: String, ref: 'BedStatus', required: true }, // 床位引用 3-7-701-B01
+  bedId: { type: String, ref: 'BedStatus', required: true }, // 床位引用 3-1-101s-01
   elderlyId: { type: String, ref: 'Elderly', required: true }, // 老人引用 E001
   assignedDate: { type: Date, default: Date.now }, // 分配日期
   releaseDate: { type: Date } // 释放日期
@@ -46,11 +46,15 @@ const bedStatusSchema = new mongoose.Schema({
 const BedStatus = mongoose.model('BedStatus', bedStatusSchema);
 // Employee Schema
 const employeeSchema = new mongoose.Schema({
-  employeeId: { type: String, required: true, unique: true }, // 员工唯一编号
+  employeeId: { type: String, required: true, unique: true }, // 员工唯一编号S001
   employeeName: { type: String, required: true }, // 员工姓名
   position: { type: String, required: true }, // 员工职位
   contactNumber: { type: String, required: true }, // 联系电话
+  email: { type: String, required: true, unique: true }, // 电子邮件
+  userId: { type: String, ref: 'User' }, // 医护登录 Id 唯一编号 U002
 });
 const Employee = mongoose.model('Employee', employeeSchema);
 
 module.exports = { User, Elderly, BedAssignment, BedStatus, Employee };
+
+

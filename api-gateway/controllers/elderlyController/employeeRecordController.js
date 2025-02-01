@@ -33,7 +33,6 @@ const deleteRequest = async (url) => {
 };
 // 1. 获取所有员工档案
 const getAllEmployeeRecords = async (req, res) => {
-  const { _id, role } = req.query; // 从查询参数中获取传递的数据
   try {
     const url = `${process.env.EMPLOYEE_SERVICE_URL}/employees/record/`;
     const response = await getRequest(url); // 发送 GET 请求以获取用户信息

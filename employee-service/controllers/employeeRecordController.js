@@ -1,15 +1,15 @@
-const BedStatus = require('../models/employeeRecordModel');
+const  { Employee } = require('../models/employeeRecordModel');
 // 1. 获取所有员工档案
 const getAllEmployeeRecords = async (req, res) => {
   try {
-    const bedStatuses = await BedStatus.find();
-    console.log(bedStatuses);
+    const employeeRecords = await Employee.find();
+    console.log(employeeRecords);
     res
       .status(200)
       .json({
         success: true,
-        message: 'Bed statuses retrieved successfully',
-        data: bedStatuses,
+        message: 'Employee records retrieved successfully',
+        data: employeeRecords,
       });
   } catch (err) {
     console.error('Error retrieving bed statuses:', err.message);
@@ -18,6 +18,7 @@ const getAllEmployeeRecords = async (req, res) => {
       .json({ success: false, message: 'Error retrieving bed statuses' });
   }
 };
+
 // 2. 创建新的员工档案
 // (1) 显示新增员工档案表单
 const renderNewEmployeeRecordForm = async (req, res) => {

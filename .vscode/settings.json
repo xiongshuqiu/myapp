@@ -18,6 +18,7 @@
         "elderly-service": true,
         "account-service": true,
         ".gitignore": true,
+        "auth-service": true,
         "user-service": true
     },
     "hide-files.files": [
@@ -29,6 +30,7 @@
         "elderly-service",
         "account-service",
         ".gitignore",
+        "auth-service",
         "user-service"
     ]
 }
