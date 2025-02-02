@@ -71,7 +71,8 @@ const createEmployeeRecord = async (req, res) => {
     position,
     contactNumber,
     email,
-    unassignedUserId
+    unassignedUserId,
+    status
   } = req.body;
   console.log('Received request to create employee record with data:', req.body); // 调试信息
   try {
@@ -91,7 +92,8 @@ const createEmployeeRecord = async (req, res) => {
       position,
       contactNumber,
       email,
-      userId: unassignedUserId // 直接使用前端传输过来的 userId
+      userId: unassignedUserId, // 直接使用前端传输过来的 userId
+      status
     });
     await newEmployee.save();
 
@@ -120,60 +122,79 @@ const getEmployeeRecordById = async (req, res) => {
   const { _id } = req.params;
 
   try {
-    const bedStatus = await BedStatus.findById(_id);
-    if (bedStatus) {
+    const employeeRecord = await Employee.findById(_id);
+    if (employeeRecord) {
+       // 查找所有的 userId(过滤角色为family的userId)
+       const userIds = await User.find({role:{$ne:'family'}}).select('userId status');
       return res
         .status(200)
         .json({
           success: true,
-          message: 'Bed status retrieved successfully',
-          data: bedStatus,
+          message: 'Employee record retrieved successfully',
+          data: { employeeRecord, userIds }
         });
     } else {
       return res
         .status(404)
-        .json({ success: false, message: 'Bed status not found' });
+        .json({ success: false, message: 'Employee record not found' });
     }
   } catch (err) {
-    console.error('Error retrieving bed status:', err.message);
+    console.error('Error retrieving employee record:', err.message);
     return res
       .status(500)
-      .json({ success: false, message: 'Error retrieving bed status' });
+      .json({ success: false, message: 'Error retrieving employee record' });
   }
 };
 
 // (2) 提交更新后的员工档案数据
 const updateEmployeeRecord = async (req, res) => {
-  const { bedId, building, floor, room, roomType, bedNumber, status } = req.body;
   const { _id } = req.params;
+  const {
+    employeeId, employeeName, position, contactNumber, email, userId,status
+  } = req.body;
 
+  console.log('Received request to update employee record with data:', req.body); // 调试信息
   try {
-    const bedStatus = await BedStatus.findById(_id);
-    if (!bedStatus) {
+    const existingEmployee = await Employee.findById(_id);
+    if (!existingEmployee) {
+      console.warn(`Employee record not found with ID: ${_id}`); // 调试信息
       return res
         .status(404)
-        .json({ success: false, message: 'Bed status not found' });
+        .json({ success: false, message: 'Employee record not found' });
     }
 
-    const updatedData = { bedId, building, floor, room, roomType, bedNumber, status };
-    const updatedBedStatus = await BedStatus.findByIdAndUpdate(
-      _id,
-      updatedData,
-      { new: true, runValidators: true },
-    );
+    // 如果 userId 改变，更新原来的 userId 状态为 'Available'
+    if (existingEmployee.userId && existingEmployee.userId !== userId) {
+      await User.findOneAndUpdate({ userId: existingEmployee.userId }, { status: 'Available' });
+    }
 
-    return res
-      .status(200)
-      .json({
-        success: true,
-        message: 'Bed status updated successfully',
-        data: updatedBedStatus,
-      });
-  } catch (err) {
-    console.error('Error updating bed status:', err.message);
-    return res
-      .status(500)
-      .json({ success: false, message: 'Error updating bed status' });
+    // 更新员工档案
+    existingEmployee.employeeId = employeeId;
+    existingEmployee.employeeName = employeeName;
+    existingEmployee.position = position;
+    existingEmployee.contactNumber = contactNumber;
+    existingEmployee.email = email;
+    existingEmployee.userId = userId;
+    existingEmployee.status = status;
+
+    await existingEmployee.save();
+
+    console.log(
+      'Employee record updated successfully:',
+      existingEmployee,
+    ); // 调试信息
+    return res.status(200).json({
+      success: true,
+      message: 'Employee record updated successfully',
+      data: existingEmployee,
+    });
+  } catch (error) {
+    console.error('Error updating employee record:', error.message); // 调试信息
+    return res.status(500).json({
+      success: false,
+      message: 'An error occurred',
+      error: error.message,
+    });
   }
 };
 

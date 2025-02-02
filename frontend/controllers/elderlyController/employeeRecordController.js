@@ -94,6 +94,7 @@ const createEmployeeRecord = async (req, res) => {
     contactNumber,
     email,
     unassignedUserId,
+    status,
   } = req.body;
   try {
     const data = {
@@ -103,6 +104,7 @@ const createEmployeeRecord = async (req, res) => {
       contactNumber,
       email,
       unassignedUserId,
+      status,
     };
 
     const apiUrl = `${process.env.API_URL}/api/employees/record/create`;
@@ -122,16 +124,17 @@ const createEmployeeRecord = async (req, res) => {
 // (1)查找特定员工档案并显示编辑表单
 const getEmployeeRecordById = async (req, res) => {
   const { _id } = req.params; // 从参数中获取 _id
-  console.log(`Fetching bedStatus with ID: ${_id}`); // 调试信息
+  console.log(`Fetching employeeRecord with ID: ${_id}`); // 调试信息
   try {
     const apiUrl = `${process.env.API_URL}/api/employees/record/${_id}/update`;
     const response = await getRequest(apiUrl); // 使用组装的URL进行API调用
-    const bedStatus = response.data;
-    console.log(bedStatus);
+    const { employeeRecord, userIds } = response.data;
+    console.log(userIds);
     if (response.success) {
       res.render('employee/employeeRecord/employeeRecordUpdate.ejs', {
         activePage: 'employee-management',
-        bedStatus,
+        employeeRecord,
+        userIds,
         navItems: req.navItems,
       });
     }
@@ -142,11 +145,11 @@ const getEmployeeRecordById = async (req, res) => {
 
 //(2) 提交更新后的员工档案数据
 const updateEmployeeRecord = async (req, res) => {
-  const { bedId, building, floor, room, roomType, bedNumber, status } =
+  const { employeeId, employeeName, position, contactNumber, email, userId,status } =
     req.body;
   const { _id } = req.params;
   try {
-    const data = { bedId, building, floor, room, roomType, bedNumber, status };
+    const data = { employeeId, employeeName, position, contactNumber, email, userId,status};
 
     // 从请求参数中获取 _id
     const apiUrl = `${process.env.API_URL}/api/employees/record/${_id}`;

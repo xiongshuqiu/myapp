@@ -68,6 +68,7 @@ const createEmployeeRecord = async (req, res) => {
     contactNumber,
     email,
     unassignedUserId,
+    status,
   } = req.body; // 从请求体中获取所有用户信息
 
   try {
@@ -78,6 +79,7 @@ const createEmployeeRecord = async (req, res) => {
       contactNumber,
       email,
       unassignedUserId,
+      status,
     };
     const url = `${process.env.EMPLOYEE_SERVICE_URL}/employees/record/create`;
     const response = await postRequest(url, data); // 发送 POST 请求以创建新用户
@@ -106,10 +108,10 @@ const getEmployeeRecordById = async (req, res) => {
 };
 // (2) 提交更新后的员工档案数据
 const updateEmployeeRecord = async (req, res) => {
-  const { bedId, elderlyId, assignmentId, assignedDate, releaseDate } =
+  const { employeeId, employeeName, position, contactNumber, email, userId,status } =
     req.body;
   try {
-    const data = { bedId, elderlyId, assignmentId, assignedDate, releaseDate };
+    const data = { employeeId, employeeName, position, contactNumber, email, userId,status };
     const { _id } = req.params; // 从参数中获取 _Id
     const url = `${process.env.EMPLOYEE_SERVICE_URL}/employees/record/${_id}`;
     const response = await putRequest(url, data); // 发送 PUT 请求以更新用户信息

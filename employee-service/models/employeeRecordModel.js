@@ -16,12 +16,15 @@ const User = mongoose.model('User', userSchema);
 const employeeSchema = new mongoose.Schema({
   employeeId: { type: String, required: true, unique: true }, // 员工唯一编号S001
   employeeName: { type: String, required: true }, // 员工姓名
-  position: { type: String, required: true }, // 员工职位
+  position: { type: String, required: true }, // 员工职位:Management\Doctor\Catering\Finance\Other
   contactNumber: { type: String, required: true }, // 联系电话
   email: { type: String, required: true, unique: true }, // 电子邮件
   userId: { type: String, ref: 'User' }, // 医护登录 Id 唯一编号 U002
+  status:{ type: String, required: true } //status:Active/Inactive
 });
 const Employee = mongoose.model('Employee', employeeSchema);
+
+
  
 
 //4.导出模型：导出 User 模型，以便在其他文件中可以通过 require 语句引入并使用该模型进行数据库操作。

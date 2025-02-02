@@ -71,6 +71,7 @@
                           <th>contactNumber</th>
                           <th>email</th>
                           <th>userId</th>
+                          <th>status</th>
                           <th>actions</th>
                         </tr>
                       </thead>
@@ -83,6 +84,7 @@
                           <td><%= employeeRecord.contactNumber %></td>
                           <td><%= employeeRecord.email %></td>
                           <td><%= employeeRecord.userId %></td>
+                          <td><%= employeeRecord.status %></td>
                           <td>
                             <% linkItems.forEach(function(item) { %> <% if
                             (item.id ==='edit-employeeRecord-link'&&item.visible) {

@@ -44,13 +44,13 @@ const getUsers = async (req, res) => {
 };
 // 2. 创建用户 (C)
 const createUser = async (req, res) => {
-  const { userId, account, userName, passWord, phoneNumber, email, role } =
+  const { userId, status, userName, passWord, phoneNumber, email, role } =
     req.body; // 从请求体中获取所有用户信息
 
   try {
     const data = {
       userId,
-      account,
+      status,
       userName,
       passWord,
       phoneNumber,
@@ -80,12 +80,12 @@ const getUserById = async (req, res) => {
 };
 //(2)更新用户信息
 const updateUser = async (req, res) => {
-  const { userId, account, userName, passWord, phoneNumber, email, role } =
+  const { userId, status, userName, passWord, phoneNumber, email, role } =
   req.body; 
   try {
     const data = {
       userId,
-      account,
+      status,
       userName,
       passWord,
       phoneNumber,

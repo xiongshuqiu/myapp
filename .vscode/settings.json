@@ -16,9 +16,7 @@
         "node_modules": true,
         "notification-service": true,
         "elderly-service": true,
-        "account-service": true,
         ".gitignore": true,
-        "user-service": true,
         "auth-service": true
     },
     "hide-files.files": [
@@ -28,9 +26,7 @@
         "node_modules",
         "notification-service",
         "elderly-service",
-        "account-service",
         ".gitignore",
-        "user-service",
         "auth-service"
     ]
 }

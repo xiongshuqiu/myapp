@@ -1,7 +1,7 @@
 const users = [
   {
     userId: 'U001',
-    account: 'xiongshuqiu1',
+    status: 'Occupied',
     userName: 'xiongshuqiu1',
     passWord: '123456',
     phoneNumber: '1234567890',
@@ -10,7 +10,7 @@ const users = [
   },
   {
     userId: 'U002',
-    account: 'xiongshuqiu2',
+    status: 'Occupied',
     userName: 'xiongshuqiu2',
     passWord: '123456',
     phoneNumber: '1234567890',
@@ -19,7 +19,7 @@ const users = [
   },
   {
     userId: 'U003',
-    account: 'xiongshuqiu3',
+    status: 'Occupied',
     userName: 'xiongshuqiu3',
     passWord: '123456',
     phoneNumber: '1234567890',
@@ -28,7 +28,7 @@ const users = [
   },
   {
     userId: 'U004',
-    account: 'xiongshuqiu4',
+    status: 'Occupied',
     userName: 'xiongshuqiu4',
     passWord: '123456',
     phoneNumber: '1234567890',
@@ -37,7 +37,7 @@ const users = [
   },
   {
     userId: 'U005',
-    account: 'xiongshuqiu5',
+    status: 'Occupied',
     userName: 'xiongshuqiu5',
     passWord: '123456',
     phoneNumber: '1234567890',
@@ -46,7 +46,7 @@ const users = [
   },
   {
     userId: 'U006',
-    account: 'xiongshuqiu6',
+    status: 'Occupied',
     userName: 'xiongshuqiu6',
     passWord: '123456',
     phoneNumber: '1234567890',
@@ -55,7 +55,7 @@ const users = [
   },
   {
     userId: 'U007',
-    account: 'xiongshuqiu7',
+    status: 'Occupied',
     userName: 'xiongshuqiu7',
     passWord: '123456',
     phoneNumber: '1234567890',
@@ -64,7 +64,7 @@ const users = [
   },
   {
     userId: 'U008',
-    account: 'xiongshuqiu8',
+    status: 'Occupied',
     userName: 'xiongshuqiu8',
     passWord: '123456',
     phoneNumber: '1234567890',
@@ -73,7 +73,7 @@ const users = [
   },
   {
     userId: 'U009',
-    account: 'xiongshuqiu9',
+    status: 'Occupied',
     userName: 'xiongshuqiu9',
     passWord: '123456',
     phoneNumber: '1234567890',
@@ -82,7 +82,7 @@ const users = [
   },
   {
     userId: 'U010',
-    account: 'xiongshuqiu10',
+    status: 'Occupied',
     userName: 'xiongshuqiu10',
     passWord: '123456',
     phoneNumber: '1234567890',
@@ -91,7 +91,7 @@ const users = [
   },
   {
     userId: 'U011',
-    account: 'xiongshuqiu11',
+    status: 'Available',
     userName: 'xiongshuqiu11',
     passWord: '123456',
     phoneNumber: '1234567890',
@@ -100,7 +100,7 @@ const users = [
   },
   {
     userId: 'U012',
-    account: 'xiongshuqiu12',
+    status: 'Available',
     userName: 'xiongshuqiu12',
     passWord: '123456',
     phoneNumber: '1234567890',
@@ -109,7 +109,7 @@ const users = [
   },
   {
     userId: 'U013',
-    account: 'xiongshuqiu13',
+    status: 'Available',
     userName: 'xiongshuqiu13',
     passWord: '123456',
     phoneNumber: '1234567890',
@@ -118,7 +118,7 @@ const users = [
   },
   {
     userId: 'U014',
-    account: 'xiongshuqiu14',
+    status: 'Available',
     userName: 'xiongshuqiu14',
     passWord: '123456',
     phoneNumber: '1234567890',
@@ -127,7 +127,7 @@ const users = [
   },
   {
     userId: 'U015',
-    account: 'xiongshuqiu15',
+    status: 'Available',
     userName: 'xiongshuqiu15',
     passWord: '123456',
     phoneNumber: '1234567890',
@@ -136,7 +136,7 @@ const users = [
   },
   {
     userId: 'U016',
-    account: 'xiongshuqiu16',
+    status: 'Available',
     userName: 'xiongshuqiu16',
     passWord: '123456',
     phoneNumber: '1234567890',
@@ -145,7 +145,7 @@ const users = [
   },
   {
     userId: 'U017',
-    account: 'xiongshuqiu17',
+    status: 'Available',
     userName: 'xiongshuqiu17',
     passWord: '123456',
     phoneNumber: '1234567890',
@@ -154,7 +154,7 @@ const users = [
   },
   {
     userId: 'U018',
-    account: 'xiongshuqiu18',
+    status: 'Available',
     userName: 'xiongshuqiu18',
     passWord: '123456',
     phoneNumber: '1234567890',
@@ -163,7 +163,7 @@ const users = [
   },
   {
     userId: 'U019',
-    account: 'xiongshuqiu19',
+    status: 'Available',
     userName: 'xiongshuqiu19',
     passWord: '123456',
     phoneNumber: '1234567890',
@@ -172,7 +172,7 @@ const users = [
   },
   {
     userId: 'U020',
-    account: 'xiongshuqiu20',
+    status: 'Available',
     userName: 'xiongshuqiu20',
     passWord: '123456',
     phoneNumber: '1234567890',
@@ -181,7 +181,7 @@ const users = [
   },
   {
     userId: 'F001',
-    account: 'xiongshuqiu21',
+    status: 'Available',
     userName: 'xiongshuqiu21',
     passWord: '123456',
     phoneNumber: '1234567890',
@@ -190,7 +190,7 @@ const users = [
   },
   {
     userId: 'F002',
-    account: 'user22',
+    status: 'Available',
     userName: 'John Doe',
     passWord: '123456',
     phoneNumber: '1234567890',
@@ -199,7 +199,7 @@ const users = [
   },
   {
     userId: 'F003',
-    account: 'user23',
+    status: 'Available',
     userName: 'Jane Doe',
     passWord: '123456',
     phoneNumber: '0987654321',

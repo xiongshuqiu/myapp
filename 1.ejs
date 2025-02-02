@@ -1,53 +1,84 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Update Bed Assignment</title>
-</head>
-<body>
-  <h1>Update Bed Assignment</h1>
-  <form action="/beds/assignment/<%= bedAssignment._id %>/update" method="post">
-    <div class="form-group">
-      <label for="availableBedId">Available Bed Id <span style="color: red">*</span></label>
-      <select class="form-control" id="availableBedId" name="availableBedId" required>
-        <% if (availableBedIds && availableBedIds.length > 0) { %>
-          <% availableBedIds.forEach(function(availableBedId) { %>
-            <option value="<%= availableBedId.bedId %>" <%= bedAssignment.bedId === availableBedId.bedId ? 'selected' : '' %>>
-              <%= availableBedId.bedId %>
-            </option>
-          <% }); %>
-        <% } else { %>
-          <option value="">No available availableBedId</option>
-        <% } %>
-      </select>
-    </div>
+// (1) 查找特定员工档案并显示编辑表单
+const getEmployeeRecordById = async (req, res) => {
+  const { _id } = req.params;
 
-    <div class="form-group">
-      <label for="unassignedElderlyId">Unassigned Elderly ID <span style="color: red">*</span></label>
-      <select class="form-control" id="unassignedElderlyId" name="unassignedElderlyId" required>
-        <% if (elderlyIds && elderlyIds.length > 0) { %>
-          <% elderlyIds.forEach(function(elderlyId) { %>
-            <option value="<%= elderlyId.id %>" <%= bedAssignment.elderlyId === elderlyId.id ? 'selected' : '' %>>
-              <%= elderlyId.name %> (ID: <%= elderlyId.id %>)
-            </option>
-          <% }); %>
-        <% } else { %>
-          <option value="">No existing elderlyId</option>
-        <% } %>
-      </select>
-    </div>
+  try {
+    const employeeRecord = await Employee.findById(_id);
+    if (employeeRecord) {
+      // 查找所有的 userId (过滤角色为family的userId)
+      const userIds = await User.find({ role: { $ne: 'family' } }).select('userId status');
+      return res
+        .status(200)
+        .json({
+          success: true,
+          message: 'Employee record retrieved successfully',
+          data: { employeeRecord, userIds }
+        });
+    } else {
+      return res
+        .status(404)
+        .json({ success: false, message: 'Employee record not found' });
+    }
+  } catch (err) {
+    console.error('Error retrieving employee record:', err.message);
+    return res
+      .status(500)
+      .json({ success: false, message: 'Error retrieving employee record' });
+  }
+};
 
-    <div class="form-group">
-      <label for="assignmentId">Assignment ID <span style="color: red">*</span></label>
-      <input type="text" class="form-control" id="assignmentId" name="assignmentId" placeholder="Enter Assignment ID (e.g., A001)" value="<%= bedAssignment.assignmentId %>" required />
-    </div>
+// (2) 提交更新后的员工档案数据
+const updateEmployeeRecord = async (req, res) => {
+  const { _id } = req.params;
+  const {
+    employeeId,
+    employeeName,
+    position,
+    contactNumber,
+    email,
+    unassignedUserId
+  } = req.body;
 
-    <div class="form-group">
-      <label for="assignedDate">Assigned Date <span style="color: red">*</span></label>
-      <input type="date" class="form-control" id="assignedDate" name="assignedDate" value="<%= bedAssignment.assignedDate ? new Date(bedAssignment.assignedDate).toISOString().split('T')[0] : new Date().toISOString().split('T')[0] %>" required />
-    </div>
+  console.log('Received request to update employee record with data:', req.body); // 调试信息
+  try {
+    const existingEmployeeRecord = await Employee.findById(_id);
+    if (!existingEmployeeRecord) {
+      console.warn(`Employee record not found with ID: ${_id}`); // 调试信息
+      return res
+        .status(404)
+        .json({ success: false, message: 'Employee record not found' });
+    }
 
-    <button type="submit">Update</button>
-  </form>
-</body>
-</html>
+    // 如果 userId 改变，更新原来的 userId 状态为 'Available'
+    if (existingEmployeeRecord.userId && existingEmployeeRecord.userId !== unassignedUserId) {
+      await User.findOneAndUpdate({ userId: existingEmployeeRecord.userId }, { status: 'Available' });
+    }
+
+    // 更新员工档案
+    existingEmployeeRecord.employeeId = employeeId;
+    existingEmployeeRecord.employeeName = employeeName;
+    existingEmployeeRecord.position = position;
+    existingEmployeeRecord.contactNumber = contactNumber;
+    existingEmployeeRecord.email = email;
+    existingEmployeeRecord.userId = unassignedUserId;
+
+    await existingEmployeeRecord.save();
+
+    console.log(
+      'Employee record updated successfully:',
+      existingEmployeeRecord,
+    ); // 调试信息
+    return res.status(200).json({
+      success: true,
+      message: 'Employee record updated successfully',
+      data: existingEmployeeRecord,
+    });
+  } catch (error) {
+    console.error('Error updating employee record:', error.message); // 调试信息
+    return res.status(500).json({
+      success: false,
+      message: 'An error occurred',
+      error: error.message,
+    });
+  }
+};

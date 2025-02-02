@@ -14,11 +14,11 @@ const getUsers = async (req, res) => {
 
 // 2. 新增用户
 const createUser = async (req, res) => {
-  const { userId, account, userName, passWord, phoneNumber, email, role } = req.body;
+  const { userId, status, userName, passWord, phoneNumber, email, role } = req.body;
   console.log('Received request to create user with data:', req.body); // 调试信息
 
   // 验证用户输入
-  if (!userId || !account || !userName || !passWord || !phoneNumber || !email || !role) {
+  if (!userId || !status || !userName || !passWord || !phoneNumber || !email || !role) {
     return res.status(400).json({success: false, message: 'Missing required fields' });
   }
 
@@ -35,7 +35,7 @@ const createUser = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Email already exists' });
     }
 
-    const userData = { userId, account, userName, passWord, phoneNumber, email, role };
+    const userData = { userId, status, userName, passWord, phoneNumber, email, role };
     const user = new User(userData);
     const newUser = await user.save();
     console.log('User created successfully:', newUser); // 调试信息
@@ -68,7 +68,7 @@ const getUserById = async (req, res) => {
 
 // 3. 更新用户信息
 const updateUser = async (req, res) => {
-  const { userId, account, userName, passWord, phoneNumber, email, role } = req.body;
+  const { userId, status, userName, passWord, phoneNumber, email, role } = req.body;
   const { _id } = req.params;
 
   try {
@@ -78,22 +78,23 @@ const updateUser = async (req, res) => {
       return res.status(404).json({  success: false, message: 'User not found' });
     }
 
-    const updatedUser = await User.findByIdAndUpdate(
-      user._id,
-      { userId, account, userName, passWord, phoneNumber, email, role },
-      { new: true, runValidators: true }
-    );
+    // 更新用户信息
+    user.userId = userId;
+    user.status = status;
+    user.userName = userName;
+    user.passWord = passWord;
+    user.phoneNumber = phoneNumber;
+    user.email = email;
+    user.role = role;
 
-    if (updatedUser) {
-      console.log('User updated successfully:', updatedUser); // 调试信息
-      return res.status(200).json({  success: true, message: 'Update successful', data: updatedUser });
-    } else {
-      console.warn(`Failed to update user with ID: ${_id}`); // 调试信息
-      return res.status(404).json({ success: false, message: 'User not found' });
-    }
+    // 保存更新后的用户信息
+    await user.save();
+
+    console.log('User updated successfully:', user); // 调试信息
+    return res.status(200).json({ success: true, message: 'Update successful', data: user });
   } catch (err) {
     console.error('Error updating user:', err.message); // 调试信息
-    return res.status(400).json({  success: false, message: err.message });
+    return res.status(400).json({ success: false, message: err.message });
   }
 };
 
