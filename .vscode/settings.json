@@ -17,7 +17,10 @@
         "notification-service": true,
         "elderly-service": true,
         ".gitignore": true,
-        "auth-service": true
+        "auth-service": true,
+        "bed-service": true,
+        "account-service": true,
+        "user-service": true
     },
     "hide-files.files": [
         "financial-service",
@@ -27,6 +30,9 @@
         "notification-service",
         "elderly-service",
         ".gitignore",
-        "auth-service"
+        "auth-service",
+        "bed-service",
+        "account-service",
+        "user-service"
     ]
 }

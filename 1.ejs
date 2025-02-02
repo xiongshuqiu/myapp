@@ -1,56 +1,39 @@
-// (2) 提交更新后的员工档案数据
-const updateEmployeeRecord = async (req, res) => {
-  const { _id } = req.params;
-  const {
-    employeeId, employeeName, position, contactNumber, email, userId, status
-  } = req.body;
+const { User, Elderly, BedAssignment, BedStatus, Employee, EmployeeShiftSchedule } = require('./models/allModels');
+const users = require('./data/usersData');
+const elderlies = require('./data/elderliesData');
+const bedStatuses = require('./data/bedStatusesData');
+const bedAssignments = require('./data/bedAssignmentsData');
+const employees = require('./data/employeesData');
+const generateWeeklyShifts = require('./data/generateWeeklyShifts'); // 导入数据生成函数
 
-  console.log('Received request to update employee record with data:', req.body); // 调试信息
+// 初始化数据库
+const initializeDatabase = async () => {
   try {
-    const existingEmployee = await Employee.findById(_id);
-    if (!existingEmployee) {
-      console.warn(`Employee record not found with ID: ${_id}`); // 调试信息
-      return res
-        .status(404)
-        .json({ success: false, message: 'Employee record not found' });
-    }
+    await User.deleteMany({});
+    await Elderly.deleteMany({});
+    await BedStatus.deleteMany({});
+    await BedAssignment.deleteMany({});
+    await Employee.deleteMany({});
+    await EmployeeShiftSchedule.deleteMany({});
 
-    // 如果 userId 改变，更新原来的 userId 状态为 'Available'
-    if (existingEmployee.userId && existingEmployee.userId !== userId) {
-      await User.findOneAndUpdate({ userId: existingEmployee.userId }, { status: 'Available' });
-    }
+    await User.insertMany(users);
+    await Elderly.insertMany(elderlies);
+    await BedStatus.insertMany(bedStatuses);
+    await BedAssignment.insertMany(bedAssignments);
+    await Employee.insertMany(employees);
 
-    // 如果新的 userId 被使用，更新 userId 状态为 'Occupied'
-    if (userId) {
-      await User.findOneAndUpdate({ userId: userId }, { status: 'Occupied' });
-    }
+    const startDate = new Date();
+    const numWeeks = 1; // 可根据需要调整周数
+    const employeeShiftSchedules = await generateWeeklyShifts(startDate, numWeeks); // 生成班次数据
 
-    // 更新员工档案
-    existingEmployee.employeeId = employeeId;
-    existingEmployee.employeeName = employeeName;
-    existingEmployee.position = position;
-    existingEmployee.contactNumber = contactNumber;
-    existingEmployee.email = email;
-    existingEmployee.userId = userId;
-    existingEmployee.status = status;
+    console.log(`Generated Employee Shifts: ${JSON.stringify(employeeShiftSchedules)}`);
 
-    await existingEmployee.save();
+    await EmployeeShiftSchedule.insertMany(employeeShiftSchedules);
 
-    console.log(
-      'Employee record updated successfully:',
-      existingEmployee,
-    ); // 调试信息
-    return res.status(200).json({
-      success: true,
-      message: 'Employee record updated successfully',
-      data: existingEmployee,
-    });
+    console.log('Database initialized successfully');
   } catch (error) {
-    console.error('Error updating employee record:', error.message); // 调试信息
-    return res.status(500).json({
-      success: false,
-      message: 'An error occurred',
-      error: error.message,
-    });
+    console.error('Error initializing database:', error);
   }
 };
+
+module.exports = initializeDatabase;

@@ -39,7 +39,7 @@ function bntLinkVisibility(req, res, next) {
          {
           id: 'add-employeeShiftSchedule-btn',
           name: 'AddShiftSchedule',
-          href: '/employees/record/new',
+          href: '/employees/shiftSchedule/new',
           roles: ['admin','medical'],
         },
     ];
