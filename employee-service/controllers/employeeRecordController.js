@@ -164,8 +164,14 @@ const updateEmployeeRecord = async (req, res) => {
     }
 
     // 如果 userId 改变，更新原来的 userId 状态为 'Available'
+    //为存储数据前，如果Employee中的userId值不等于新的userId值，及发生了改变，把现有的User模型中userId状态变为Available
     if (existingEmployee.userId && existingEmployee.userId !== userId) {
       await User.findOneAndUpdate({ userId: existingEmployee.userId }, { status: 'Available' });
+    }
+
+    // 如果新的 userId 被使用，更新 userId 状态为 'Occupied'
+    if (userId) {
+      await User.findOneAndUpdate({ userId: userId }, { status: 'Occupied' });
     }
 
     // 更新员工档案
@@ -203,21 +209,21 @@ const deleteEmployeeRecord = async (req, res) => {
   const { _id } = req.params;
 
   try {
-    const bedStatus = await BedStatus.findByIdAndDelete(_id);
+    const employeeRecord = await Employee.findByIdAndDelete(_id);
     if (bedStatus) {
       return res
         .status(200)
-        .json({ success: true, message: 'Bed status deleted successfully' });
+        .json({ success: true, message: 'Employee record  deleted successfully' });
     } else {
       return res
         .status(404)
-        .json({ success: false, message: 'Bed status not found' });
+        .json({ success: false, message: 'Employee record not found' });
     }
   } catch (error) {
-    console.error('Error deleting bed status:', error.message);
+    console.error('Error deleting employee record:', error.message);
     return res
       .status(500)
-      .json({ success: false, message: 'Error deleting bed status' });
+      .json({ success: false, message: 'Error deleting employee record' });
   }
 };
 

@@ -1,48 +1,14 @@
-// (1) 查找特定员工档案并显示编辑表单
-const getEmployeeRecordById = async (req, res) => {
-  const { _id } = req.params;
-
-  try {
-    const employeeRecord = await Employee.findById(_id);
-    if (employeeRecord) {
-      // 查找所有的 userId (过滤角色为family的userId)
-      const userIds = await User.find({ role: { $ne: 'family' } }).select('userId status');
-      return res
-        .status(200)
-        .json({
-          success: true,
-          message: 'Employee record retrieved successfully',
-          data: { employeeRecord, userIds }
-        });
-    } else {
-      return res
-        .status(404)
-        .json({ success: false, message: 'Employee record not found' });
-    }
-  } catch (err) {
-    console.error('Error retrieving employee record:', err.message);
-    return res
-      .status(500)
-      .json({ success: false, message: 'Error retrieving employee record' });
-  }
-};
-
 // (2) 提交更新后的员工档案数据
 const updateEmployeeRecord = async (req, res) => {
   const { _id } = req.params;
   const {
-    employeeId,
-    employeeName,
-    position,
-    contactNumber,
-    email,
-    unassignedUserId
+    employeeId, employeeName, position, contactNumber, email, userId, status
   } = req.body;
 
   console.log('Received request to update employee record with data:', req.body); // 调试信息
   try {
-    const existingEmployeeRecord = await Employee.findById(_id);
-    if (!existingEmployeeRecord) {
+    const existingEmployee = await Employee.findById(_id);
+    if (!existingEmployee) {
       console.warn(`Employee record not found with ID: ${_id}`); // 调试信息
       return res
         .status(404)
@@ -50,28 +16,34 @@ const updateEmployeeRecord = async (req, res) => {
     }
 
     // 如果 userId 改变，更新原来的 userId 状态为 'Available'
-    if (existingEmployeeRecord.userId && existingEmployeeRecord.userId !== unassignedUserId) {
-      await User.findOneAndUpdate({ userId: existingEmployeeRecord.userId }, { status: 'Available' });
+    if (existingEmployee.userId && existingEmployee.userId !== userId) {
+      await User.findOneAndUpdate({ userId: existingEmployee.userId }, { status: 'Available' });
+    }
+
+    // 如果新的 userId 被使用，更新 userId 状态为 'Occupied'
+    if (userId) {
+      await User.findOneAndUpdate({ userId: userId }, { status: 'Occupied' });
     }
 
     // 更新员工档案
-    existingEmployeeRecord.employeeId = employeeId;
-    existingEmployeeRecord.employeeName = employeeName;
-    existingEmployeeRecord.position = position;
-    existingEmployeeRecord.contactNumber = contactNumber;
-    existingEmployeeRecord.email = email;
-    existingEmployeeRecord.userId = unassignedUserId;
+    existingEmployee.employeeId = employeeId;
+    existingEmployee.employeeName = employeeName;
+    existingEmployee.position = position;
+    existingEmployee.contactNumber = contactNumber;
+    existingEmployee.email = email;
+    existingEmployee.userId = userId;
+    existingEmployee.status = status;
 
-    await existingEmployeeRecord.save();
+    await existingEmployee.save();
 
     console.log(
       'Employee record updated successfully:',
-      existingEmployeeRecord,
+      existingEmployee,
     ); // 调试信息
     return res.status(200).json({
       success: true,
       message: 'Employee record updated successfully',
-      data: existingEmployeeRecord,
+      data: existingEmployee,
     });
   } catch (error) {
     console.error('Error updating employee record:', error.message); // 调试信息

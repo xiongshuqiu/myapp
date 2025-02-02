@@ -127,13 +127,10 @@
                         </small>
                       </div>
 
-                      
                       <div class="form-group">
                         <label for="userId">User ID(role) <span style="color: red">*</span></label>
-                        <select class="form-control" id="userId" name="userId" required>
-                          <option value="<%= employeeRecord.userId %>" >
-                            userId: <%= employeeRecord.userId %> 
-                          </option>
+                        <select class="form-control" id="userId" name="userId" >
+                          <option value="" <%= !employeeRecord.userId ? 'selected' : '' %>>No userId</option>
                           <% if (userIds && userIds.length > 0) { %>
                             <% userIds.forEach(function(user) { %>
                               <option value="<%= user.userId %>" <%= employeeRecord.userId === user.userId ? 'selected' : '' %>>
@@ -145,6 +142,11 @@
                           <% } %>
                         </select>
                       </div>
+                      
+                      
+                      
+                      
+                      
 
                       <div class="form-group">
                         <label for="status">Status <span style="color: red">*</span></label>
