@@ -87,9 +87,23 @@ const renderNewEmployeeRecordForm = async (req, res) => {
 };
 //(2)提交新的员工档案数据
 const createEmployeeRecord = async (req, res) => {
-  const { bedId, building, floor, room, roomType, bedNumber, status } = req.body;
+  const {
+    employeeId,
+    employeeName,
+    position,
+    contactNumber,
+    email,
+    unassignedUserId,
+  } = req.body;
   try {
-    const data = { bedId, building, floor, room, roomType, bedNumber, status };
+    const data = {
+      employeeId,
+      employeeName,
+      position,
+      contactNumber,
+      email,
+      unassignedUserId,
+    };
 
     const apiUrl = `${process.env.API_URL}/api/employees/record/create`;
     const response = await postRequest(apiUrl, data);
@@ -128,10 +142,11 @@ const getEmployeeRecordById = async (req, res) => {
 
 //(2) 提交更新后的员工档案数据
 const updateEmployeeRecord = async (req, res) => {
-  const { bedId, building, floor, room, roomType, bedNumber, status } = req.body;
+  const { bedId, building, floor, room, roomType, bedNumber, status } =
+    req.body;
   const { _id } = req.params;
   try {
-    const data = {bedId, building, floor, room, roomType, bedNumber, status };
+    const data = { bedId, building, floor, room, roomType, bedNumber, status };
 
     // 从请求参数中获取 _id
     const apiUrl = `${process.env.API_URL}/api/employees/record/${_id}`;
@@ -167,5 +182,5 @@ module.exports = {
   createEmployeeRecord,
   getEmployeeRecordById,
   updateEmployeeRecord,
-  deleteEmployeeRecord
+  deleteEmployeeRecord,
 };

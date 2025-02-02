@@ -88,6 +88,7 @@
                             <option value="Doctor">Doctor</option>
                             <option value="Finance">Finance</option>
                             <option value="Catering">Catering</option>
+                            <option value="Other">Other</option>
                           </select>
                         </div>
 
@@ -124,15 +125,14 @@
                         
                         <div class="form-group">
                           <label for="userId">
-                            Unassigned User ID(Name)
-                            <span style="color: red">*</span></label
-                          >
+                            Unassigned User ID(Role)
+                          </label>
                           <select
                             class="form-control"
                             id="unassignedUserId"
                             name="unassignedUserId"
-                            required
                           >
+                          <option value=" ">Not Set UserId</option>
                             <% if (unassignedUserIds &&
                             unassignedUserIds.length > 0) { %> <%
                               unassignedUserIds.forEach(function(unassignedUserId)
@@ -141,7 +141,7 @@
                               value="<%= unassignedUserId.userId %>"
                             >
                               ID:<%= unassignedUserId.userId %> (<%=
-                              unassignedUserId.userName %>)
+                              unassignedUserId.role %>)
                             </option>
                             <% }) %> <% } else { %>
                             <option value="">No existing userId</option>

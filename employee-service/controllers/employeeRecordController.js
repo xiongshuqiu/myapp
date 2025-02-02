@@ -36,12 +36,14 @@ const renderNewEmployeeRecordForm = async (req, res) => {
       {
         $match: {
           'employeeRecord.userId': { $exists: false },
+          role: { $ne: 'family' } // 过滤掉角色为 family 的用户
         },
       },
       {
         $project: {
           userId: 1,
           userName: 1, // 您可以根据需要选择其他字段
+          role:1
         },
       },
     ]);
@@ -61,52 +63,49 @@ const renderNewEmployeeRecordForm = async (req, res) => {
 };
 
 // (2) 提交新的员工档案数据
+// (2) 提交新的员工档案数据
 const createEmployeeRecord = async (req, res) => {
   const {
-    availableBedId,
-    unassignedElderlyId,
-    assignmentId,
-    assignedDate,
-    releaseDate,
+    employeeId,
+    employeeName,
+    position,
+    contactNumber,
+    email,
+    unassignedUserId
   } = req.body;
-  console.log('Received request to create bed status with data:', req.body); // 调试信息
+  console.log('Received request to create employee record with data:', req.body); // 调试信息
   try {
-    // 检查是否存在相同床位编号的记录
-    const existingBedAssignment = await BedAssignment.findOne({ assignmentId });
-    if (existingBedAssignment) {
-      console.warn(`Bed assignmentId already exists: ${assignmentId}`); // 调试信息
+    // 检查是否存在相同员工编号的记录
+    const existingEmployeeRecord = await Employee.findOne({ employeeId });
+    if (existingEmployeeRecord) {
+      console.warn(`EmployeeId already exists: ${employeeId}`); // 调试信息
       return res
         .status(400)
-        .json({ success: false, message: 'Bed assignmentId already exists' });
+        .json({ success: false, message: 'employeeId already exists' });
     }
 
-    // 创建并保存新床位分配
-    const newBedAssignment = new BedAssignment({
-      bedId: availableBedId,
-      elderlyId: unassignedElderlyId,
-      assignmentId,
-      assignedDate,
-      releaseDate,
+    // 创建并保存员工档案
+    const newEmployee = new Employee({
+      employeeId,
+      employeeName,
+      position,
+      contactNumber,
+      email,
+      userId: unassignedUserId // 直接使用前端传输过来的 userId
     });
-    await newBedAssignment.save();
-
-    // 更新床位状态为 occupied
-    await BedStatus.updateOne(
-      { bedId: availableBedId }, // 查找条件
-      { status: 'occupied' }, // 更新内容
-    );
+    await newEmployee.save();
 
     console.log(
-      'Bed assignment created and bed status updated successfully:',
-      newBedAssignment,
+      'Employee record created successfully:',
+      newEmployee,
     ); // 调试信息
     return res.status(201).json({
       success: true,
-      message: 'Bed assignment created and bed status updated successfully',
-      data: newBedAssignment,
+      message: 'Employee record created successfully',
+      data: newEmployee,
     });
   } catch (error) {
-    console.error('Error creating bed assignment:', error.message); // 调试信息
+    console.error('Error creating employee record:', error.message); // 调试信息
     return res.status(500).json({
       success: false,
       message: 'An error occurred',
@@ -114,6 +113,7 @@ const createEmployeeRecord = async (req, res) => {
     });
   }
 };
+
 // 3. 更新特定员工档案
 // (1) 查找特定员工档案并显示编辑表单
 const getEmployeeRecordById = async (req, res) => {
