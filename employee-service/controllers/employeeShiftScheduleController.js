@@ -1,4 +1,6 @@
-const { EmployeeShiftSchedule } = require('../models/employeeShiftScheduleModel');
+const {
+  EmployeeShiftSchedule,
+} = require('../models/employeeShiftScheduleModel');
 const { User, Employee } = require('../models/employeeRecordModel');
 // 1.获取所有值班安排
 const getAllEmployeeShiftSchedules = async (req, res) => {
@@ -35,110 +37,196 @@ const getAllEmployeeShiftSchedules = async (req, res) => {
   }
 };
 
+// 定义生成唯一排班表ID的函数
+const generateUniqueShiftScheduleId = async () => {
+  // 查询当前最大的 shiftScheduleId
+  const lastSchedule = await EmployeeShiftSchedule.findOne()
+    .sort({ shiftScheduleId: -1 })
+    .exec();
+  let shiftCounter = 1;
 
+  if (lastSchedule && lastSchedule.shiftScheduleId) {
+    // 提取数字部分并递增
+    shiftCounter = parseInt(lastSchedule.shiftScheduleId.slice(2)) + 1;
+  }
 
-// 2. 创建新的值班安排
-// (1) 显示新增值班安排表单(查找available的bedId、未分配床位的elderlyId)
-const renderNewEmployeeShiftScheduleForm = async (req, res) => {
+  // 生成新的 shiftScheduleId
+  const shiftScheduleId = `SS${shiftCounter.toString().padStart(4, '0')}`;
+  return shiftScheduleId;
+};
+
+// 获取最新的排班信息
+const getLastShiftInfo = async () => {
+  const lastSchedule = await EmployeeShiftSchedule.findOne()
+    .sort({ endTime: -1 })
+    .exec();
+  const lastEmployeeId = lastSchedule ? lastSchedule.employeeId : null;
+  const lastEndDate = lastSchedule
+    ? new Date(lastSchedule.endTime)
+    : new Date();
+  return {
+    lastEndDate,
+    lastEmployeeId,
+    lastScheduleId: lastSchedule ? lastSchedule.shiftScheduleId : 'SS0000',
+  };
+};
+
+// 根据时间来确定班次类型
+const getShiftType = (startTime) => {
+  const hour = startTime.getHours();
+  if (hour >= 0 && hour < 8) {
+    return 'Night';
+  } else if (hour >= 8 && hour < 16) {
+    return 'Morning';
+  } else {
+    return 'Evening';
+  }
+};
+
+// 生成一个月的排班表
+const generateShiftSchedules = async (
+  startDate,
+  endDate,
+  lastEmployeeId,
+  shiftCounter = 1 // 这里给 shiftCounter 赋予初始值
+) => {
+  const employees = await Employee.find({ status: 'Active' });
+  const newShiftSchedules = [];
+
+  // 找到最后一个排班的员工的索引
+  let lastEmployeeIndex = lastEmployeeId
+    ? employees.findIndex((emp) => emp.employeeId === lastEmployeeId) + 1
+    : 0;
+
+  // 开始日期设置为最后结束时间
+  let currentDate = new Date(startDate);
+
+  while (currentDate <= endDate) {
+    const startTime = new Date(currentDate);
+    const endTime = new Date(startTime);
+    endTime.setHours(startTime.getHours() + 8);
+
+    const shiftType = getShiftType(startTime);
+    const employee = employees[(lastEmployeeIndex) % employees.length];
+
+    const shiftScheduleId = `SS${(shiftCounter++)
+      .toString()
+      .padStart(4, '0')}`;
+    newShiftSchedules.push(
+      new EmployeeShiftSchedule({
+        shiftScheduleId,
+        employeeId: employee.employeeId,
+        shiftType,
+        startTime,
+        endTime,
+      })
+    );
+
+    // 更新 currentDate 到班次结束时间
+    currentDate = new Date(endTime);
+    lastEmployeeIndex++;
+  }
+
+  return newShiftSchedules;
+};
+
+// 将新排班表保存到数据库
+const saveShiftSchedules = async (shiftSchedules, res) => {
   try {
-    // 顺序查找可用的 bedId
-    const availableBedIds = await BedStatus.find({
-      status: 'available',
-    }).select('bedId');
+    await EmployeeShiftSchedule.insertMany(shiftSchedules);
+    res.json({ success: true, message: 'Shift schedules saved successfully' });
+  } catch (err) {
+    console.error('Error saving shift schedules:', err.message);
+    res.status(500).json({
+      success: false,
+      message: 'Error saving shift schedules',
+      details: err.message,
+    });
+  }
+};
 
-    // 聚合管道查找未分配床位的 elderlyId
-    const unassignedElderlyIds = await Elderly.aggregate([
-      {
-        $lookup: {
-          from: 'bedassignments',
-          localField: 'elderlyId',
-          foreignField: 'elderlyId',
-          as: 'bedAssignment',
-        },
-      },
-      {
-        $match: {
-          'bedAssignment.elderlyId': { $exists: false },
-        },
-      },
-      {
-        $project: {
-          elderlyId: 1,
-          elderlyName: 1, // 您可以根据需要选择其他字段
-        },
-      },
-    ]);
+// 生成按月的排班表
+const generateMonthlyShiftSchedule = async (req, res) => {
+  const { lastEndDate, lastEmployeeId, lastScheduleId } = await getLastShiftInfo(); // 获取最新的排班日期和员工编号
+  const startDate = new Date(lastEndDate);
+  const endDate = new Date(
+    startDate.getFullYear(),
+    startDate.getMonth() + 1,
+    0
+  ); // 设定结束日期为下个月的最后一天
 
-    console.log('Available Bed IDs:', availableBedIds);
-    console.log('Unassigned Elderly IDs:', unassignedElderlyIds);
+  let shiftCounter = parseInt(lastScheduleId.slice(2)) + 1; // 获取最新的编号并递增
 
-    return res.status(200).json({
+  try {
+    const newShiftSchedules = await generateShiftSchedules(
+      startDate,
+      endDate,
+      lastEmployeeId,
+      shiftCounter
+    );
+    await saveShiftSchedules(newShiftSchedules, res);
+  } catch (err) {
+    console.error("Error generating monthly shift schedules:", err.message);
+    res.status(500).json({
+      success: false,
+      message: "Error generating monthly shift schedules",
+      details: err.message
+    });
+  }
+};
+
+// 获取最近一周的起始日期
+const getWeekStart = (currentDate) => {
+  const weekStart = new Date(
+    currentDate.setDate(currentDate.getDate() - currentDate.getDay())
+  );
+  return new Date(weekStart.setHours(0, 0, 0, 0));
+};
+
+// 获取最近一周的结束日期
+const getWeekEnd = (weekStart) => {
+  const weekEnd = new Date(weekStart);
+  weekEnd.setDate(weekEnd.getDate() + 6);
+  return new Date(weekEnd.setHours(23, 59, 59, 999));
+};
+
+// 获取本周排班表
+const getCurrentWeekShiftSchedule = async (req, res) => {
+  const currentDate = new Date();
+  const weekStart = getWeekStart(currentDate);
+  const weekEnd = getWeekEnd(weekStart);
+
+  try {
+    const currentWeekSchedules = await EmployeeShiftSchedule.find({
+      startTime: { $gte: weekStart, $lt: weekEnd },
+      employeeId: {
+        $in: (await Employee.find({ status: "Active" })).map((emp) => emp.employeeId)
+      }
+    });
+
+    res.json({
       success: true,
-      message: 'bedId and unassigned elderlyId retrieved successfully',
-      data: { availableBedIds, unassignedElderlyIds },
+      data: currentWeekSchedules,
+      message: "Current week shift schedules retrieved successfully"
     });
   } catch (err) {
     console.error(
-      'Error retrieving bedId and unassigned elderlyId:',
-      err.message,
-    ); // 调试信息
-    res.status(500).json({ success: false, message: err.message });
-  }
-};
-// (2) 提交新的值班安排数据
-const createEmployeeShiftSchedule = async (req, res) => {
-  const {
-    availableBedId,
-    unassignedElderlyId,
-    assignmentId,
-    assignedDate,
-    releaseDate,
-  } = req.body;
-  console.log('Received request to create bed status with data:', req.body); // 调试信息
-  try {
-    // 检查是否存在相同床位编号的记录
-    const existingBedAssignment = await BedAssignment.findOne({ assignmentId });
-    if (existingBedAssignment) {
-      console.warn(`Bed assignmentId already exists: ${assignmentId}`); // 调试信息
-      return res
-        .status(400)
-        .json({ success: false, message: 'Bed assignmentId already exists' });
-    }
-
-    // 创建并保存新值班安排
-    const newBedAssignment = new BedAssignment({
-      bedId: availableBedId,
-      elderlyId: unassignedElderlyId,
-      assignmentId,
-      assignedDate,
-      releaseDate,
-    });
-    await newBedAssignment.save();
-
-    // 更新床位状态为 occupied
-    await BedStatus.updateOne(
-      { bedId: availableBedId }, // 查找条件
-      { status: 'occupied' }, // 更新内容
+      "Error retrieving current week shift schedules:",
+      err.message
     );
-
-    console.log(
-      'Bed assignment created and bed status updated successfully:',
-      newBedAssignment,
-    ); // 调试信息
-    return res.status(201).json({
-      success: true,
-      message: 'Bed assignment created and bed status updated successfully',
-      data: newBedAssignment,
-    });
-  } catch (error) {
-    console.error('Error creating bed assignment:', error.message); // 调试信息
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
-      message: 'An error occurred',
-      error: error.message,
+      message: "Error retrieving current week shift schedules",
+      details: err.message
     });
   }
 };
+
+// 确保索引创建
+EmployeeShiftSchedule.createIndexes([
+  { key: { shiftScheduleId: 1 }, unique: true }
+]);
+
 
 // 3. 更新特定值班安排
 // (1) 查找特定值班安排
@@ -179,7 +267,7 @@ const getEmployeeShiftScheduleById = async (req, res) => {
 // (2) 提交更新后的值班安排数据
 const updateEmployeeShiftSchedule = async (req, res) => {
   const { _id } = req.params; // 从 URL 参数中获取 assignmentId
-  const { bedId, elderlyId, assignmentId, assignedDate,releaseDate } =
+  const { bedId, elderlyId, assignmentId, assignedDate, releaseDate } =
     req.body;
 
   console.log('Received request to update bed assignment with data:', req.body); // 调试信息
@@ -203,10 +291,7 @@ const updateEmployeeShiftSchedule = async (req, res) => {
       );
 
       // 更新新床位状态为 occupied
-      await BedStatus.updateOne(
-        { bedId: bedId },
-        { status: 'occupied' },
-      );
+      await BedStatus.updateOne({ bedId: bedId }, { status: 'occupied' });
     }
 
     // 更新值班安排记录
@@ -256,9 +341,9 @@ const deleteEmployeeShiftSchedule = async (req, res) => {
 // 6. 导出模块
 module.exports = {
   getAllEmployeeShiftSchedules,
-  renderNewEmployeeShiftScheduleForm,
-  createEmployeeShiftSchedule,
+  generateMonthlyShiftSchedule,
+  getCurrentWeekShiftSchedule,
   getEmployeeShiftScheduleById,
   updateEmployeeShiftSchedule,
-  deleteEmployeeShiftSchedule
+  deleteEmployeeShiftSchedule,
 };

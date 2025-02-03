@@ -7,8 +7,8 @@ const {
 } = require('../../visibilityMiddleware/bntLinkVisibility');
 const {
   getAllEmployeeShiftSchedules,
-  renderNewEmployeeShiftScheduleForm,
-  createEmployeeShiftSchedule,
+  generateMonthlyShiftSchedule,
+  getCurrentWeekShiftSchedule,
   getEmployeeShiftScheduleById,
   updateEmployeeShiftSchedule,
   deleteEmployeeShiftSchedule
@@ -18,10 +18,11 @@ const {
 router.get('/', bntLinkVisibility, getAllEmployeeShiftSchedules);
 
 // 2. 创建新的值班安排
-// (1) 显示新增值班安排表单
-router.get('/new', renderNewEmployeeShiftScheduleForm);
-// (2) 提交新的值班安排数据
-router.post('/create', createEmployeeShiftSchedule);
+// (1) 生成按月的排班表
+router.post('/generate-monthly-schedule', generateMonthlyShiftSchedule);
+// (2) 获取本周排班表
+router.get('/current-week-schedule', getCurrentWeekShiftSchedule);
+
 
 // 3. 更新特定值班安排
 // (1) 查找特定值班安排并显示编辑表单

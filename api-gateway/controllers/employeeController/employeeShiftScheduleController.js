@@ -45,12 +45,12 @@ const getAllEmployeeShiftSchedules = async (req, res) => {
   }
 };
 
-// 2. 创建新的员工档案
-// (1) 显示新增员工档案表单(查找可用的bedId、elderlyId)
-const renderNewEmployeeShiftScheduleForm = async (req, res) => {
+// 2. 创建新的值班安排
+// (1) 生成按月的排班表
+const generateMonthlyShiftSchedule = async (req, res) => {
   try {
-    const url = `${process.env.EMPLOYEE_SERVICE_URL}/employees/shiftSchedule/new`;
-    const response = await getRequest(url); // 发送 GET 请求以获取用户信息
+    const url = `${process.env.EMPLOYEE_SERVICE_URL}/employees/shiftSchedule/generate-monthly-schedule`;
+    const response = await postRequest(url); // 发送 GET 请求以获取用户信息
     res.json(response); // 将响应数据返回给前端:包括数据和message
     if (response.success) {
       console.log(response);
@@ -59,30 +59,12 @@ const renderNewEmployeeShiftScheduleForm = async (req, res) => {
     handleError(err, res);
   }
 };
-// (2) 提交新的员工档案数据
-const createEmployeeShiftSchedule = async (req, res) => {
-  const {
-    employeeId,
-    employeeName,
-    position,
-    contactNumber,
-    email,
-    unassignedUserId,
-    status,
-  } = req.body; // 从请求体中获取所有用户信息
+// (2) 获取本周排班表
+const getCurrentWeekShiftSchedule = async (req, res) => {
 
   try {
-    const data = {
-      employeeId,
-      employeeName,
-      position,
-      contactNumber,
-      email,
-      unassignedUserId,
-      status,
-    };
-    const url = `${process.env.EMPLOYEE_SERVICE_URL}/employees/shiftSchedule/create`;
-    const response = await postRequest(url, data); // 发送 POST 请求以创建新用户
+    const url = `${process.env.EMPLOYEE_SERVICE_URL}/employees/shiftSchedule/current-week-schedule`;
+    const response = await getRequest(url, data); // 发送 POST 请求以创建新用户
     res.status(201).json(response); // 将响应数据返回给前端
     if (response.success) {
       console.log(response);
@@ -141,8 +123,8 @@ const deleteEmployeeShiftSchedule = async (req, res) => {
 
 module.exports = {
   getAllEmployeeShiftSchedules,
-  renderNewEmployeeShiftScheduleForm,
-  createEmployeeShiftSchedule,
+  generateMonthlyShiftSchedule,
+  getCurrentWeekShiftSchedule,
   getEmployeeShiftScheduleById,
   updateEmployeeShiftSchedule,
   deleteEmployeeShiftSchedule
