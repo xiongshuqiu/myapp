@@ -179,39 +179,39 @@
             // Call API to generate monthly schedule
             await fetch('/employees/shiftSchedule/generate-monthly-schedule', { method: 'POST' });
 
-            // Get current week shift schedule
-            const response = await fetch('/employees/shiftSchedule/current-week-schedule', {
-              method: 'GET',
-            });
-            if (!response.ok) {
-              throw new Error('Failed to fetch current week schedule');
-            }
-            const shiftSchedules = await response.json();
+            // // Get current week shift schedule
+            // const response = await fetch('/employees/shiftSchedule/current-week-schedule', {
+            //   method: 'GET',
+            // });
+            // if (!response.ok) {
+            //   throw new Error('Failed to fetch current week schedule');
+            // }
+            // const shiftSchedules = await response.json();
 
-            // Clear the existing table content
-            const tableBody = $('#dataTables-example tbody');
-            tableBody.empty();
+            // // Clear the existing table content
+            // const tableBody = $('#dataTables-example tbody');
+            // tableBody.empty();
 
-            // Populate the table with new data
-            shiftSchedules.forEach((schedule) => {
-              const row = `<tr class="odd gradeX" style="white-space: nowrap">
-                    <td>${schedule.shiftScheduleId}</td>
-                    <td>${schedule.employeeId}</td>
-                    <td>${schedule.employeeName}</td>
-                    <td>${schedule.shiftType}</td>
-                    <td>${new Date(schedule.startTime).toLocaleString()}</td>
-                    <td>${new Date(schedule.endTime).toLocaleString()}</td>
-                    <td>
-                      <a href="/employees/shiftSchedule/${
-                        schedule._id
-                      }/update" class="editlink" style="color: blue; display: inline">Edit</a>
-                      <a href="javascript:void(0)" class="deleteLink" style="color: red; padding: 5px; display: inline" onclick="confirmDeletion('${
-                        schedule._id
-                      }')">Delete</a>
-                    </td>
-                  </tr>`;
-              tableBody.append(row);
-            });
+            // // Populate the table with new data
+            // shiftSchedules.forEach((schedule) => {
+            //   const row = `<tr class="odd gradeX" style="white-space: nowrap">
+            //         <td>${schedule.shiftScheduleId}</td>
+            //         <td>${schedule.employeeId}</td>
+            //         <td>${schedule.employeeName}</td>
+            //         <td>${schedule.shiftType}</td>
+            //         <td>${new Date(schedule.startTime).toLocaleString()}</td>
+            //         <td>${new Date(schedule.endTime).toLocaleString()}</td>
+            //         <td>
+            //           <a href="/employees/shiftSchedule/${
+            //             schedule._id
+            //           }/update" class="editlink" style="color: blue; display: inline">Edit</a>
+            //           <a href="javascript:void(0)" class="deleteLink" style="color: red; padding: 5px; display: inline" onclick="confirmDeletion('${
+            //             schedule._id
+            //           }')">Delete</a>
+            //         </td>
+            //       </tr>`;
+            //   tableBody.append(row);
+            // });
           } catch (err) {
             alert('Failed to fetch current week schedule');
           }

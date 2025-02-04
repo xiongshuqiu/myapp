@@ -14,4 +14,4 @@ const EmployeeShiftSchedule = mongoose.model(
   employeeShiftScheduleSchema
 );
 
-module.exports = { EmployeeShiftSchedule };
+module.exports = EmployeeShiftSchedule;

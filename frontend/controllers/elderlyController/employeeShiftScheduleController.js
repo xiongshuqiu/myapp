@@ -93,28 +93,28 @@ const generateMonthlyShiftSchedule = async (req, res) => {
   }
 };
 
-// (2) 获取本周排班表
-const getCurrentWeekShiftSchedule = async (req, res) => {
+// // (2) 获取本周排班表
+// const getCurrentWeekShiftSchedule = async (req, res) => {
 
-  try {
-    const apiUrl = `${process.env.API_URL}/api/employees/shiftSchedule/current-week-schedule`;
-    const response = await getRequest(apiUrl, data);
-    const shiftSchedules = response.data;
-    console.log(currentWeekSchedules);
-    if (response.success) {
-      res.render('employee/employeeShiftSchedule/employeeShiftScheduleManagement.ejs', {
-        activePage: 'employee-management',
-        navItems: req.navItems, // 将导航项传递到视图
-        shiftSchedules
-      });
-    } else {
-      throw new Error('Failed to retrieve current week shift schedules from API');
-    }
-  } catch (err) {
-    const targetPage = 'employee/employeeShiftSchedule/employeeShiftScheduleCreate'; //用户需要输入新值
-    handleError(err, req, res, targetPage);
-  }
-};
+//   try {
+//     const apiUrl = `${process.env.API_URL}/api/employees/shiftSchedule/current-week-schedule`;
+//     const response = await getRequest(apiUrl, data);
+//     const shiftSchedules = response.data;
+//     console.log(currentWeekSchedules);
+//     if (response.success) {
+//       res.render('employee/employeeShiftSchedule/employeeShiftScheduleManagement.ejs', {
+//         activePage: 'employee-management',
+//         navItems: req.navItems, // 将导航项传递到视图
+//         shiftSchedules
+//       });
+//     } else {
+//       throw new Error('Failed to retrieve current week shift schedules from API');
+//     }
+//   } catch (err) {
+//     const targetPage = 'employee/employeeShiftSchedule/employeeShiftScheduleCreate'; //用户需要输入新值
+//     handleError(err, req, res, targetPage);
+//   }
+// };
 
 // 3.更新特定值班安排
 // (1)查找特定值班安排并显示编辑表单
@@ -180,8 +180,9 @@ const deleteEmployeeShiftSchedule = async (req, res) => {
 module.exports = {
   getAllEmployeeShiftSchedules,
   generateMonthlyShiftSchedule,
-  getCurrentWeekShiftSchedule,
+ 
   getEmployeeShiftScheduleById,
   updateEmployeeShiftSchedule,
   deleteEmployeeShiftSchedule
 };
+// getCurrentWeekShiftSchedule,

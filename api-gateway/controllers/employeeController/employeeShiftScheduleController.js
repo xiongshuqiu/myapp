@@ -60,19 +60,19 @@ const generateMonthlyShiftSchedule = async (req, res) => {
   }
 };
 // (2) 获取本周排班表
-const getCurrentWeekShiftSchedule = async (req, res) => {
+// const getCurrentWeekShiftSchedule = async (req, res) => {
 
-  try {
-    const url = `${process.env.EMPLOYEE_SERVICE_URL}/employees/shiftSchedule/current-week-schedule`;
-    const response = await getRequest(url, data); // 发送 POST 请求以创建新用户
-    res.status(201).json(response); // 将响应数据返回给前端
-    if (response.success) {
-      console.log(response);
-    }
-  } catch (err) {
-    handleError(err, res);
-  }
-};
+//   try {
+//     const url = `${process.env.EMPLOYEE_SERVICE_URL}/employees/shiftSchedule/current-week-schedule`;
+//     const response = await getRequest(url, data); // 发送 POST 请求以创建新用户
+//     res.status(201).json(response); // 将响应数据返回给前端
+//     if (response.success) {
+//       console.log(response);
+//     }
+//   } catch (err) {
+//     handleError(err, res);
+//   }
+// };
 // 3. 更新特定员工档案
 // (1) 查找特定员工档案并显示编辑表单
 const getEmployeeShiftScheduleById = async (req, res) => {
@@ -124,8 +124,9 @@ const deleteEmployeeShiftSchedule = async (req, res) => {
 module.exports = {
   getAllEmployeeShiftSchedules,
   generateMonthlyShiftSchedule,
-  getCurrentWeekShiftSchedule,
+
   getEmployeeShiftScheduleById,
   updateEmployeeShiftSchedule,
   deleteEmployeeShiftSchedule
 };
+// getCurrentWeekShiftSchedule,

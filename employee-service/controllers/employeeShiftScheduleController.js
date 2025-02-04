@@ -1,11 +1,9 @@
-const {
-  EmployeeShiftSchedule,
-} = require('../models/employeeShiftScheduleModel');
-const { User, Employee } = require('../models/employeeRecordModel');
-// 1.获取所有值班安排
+const EmployeeShiftSchedule = require('../models/EmployeeShiftSchedule');
+const Employee = require('../models/Employee');
+//1.获取所有值班安排
 const getAllEmployeeShiftSchedules = async (req, res) => {
   console.log('Received request to get all employee shift schedules'); // 调试信息
-
+  
   try {
     const employeeShiftSchedules = await EmployeeShiftSchedule.aggregate([
       {
@@ -88,7 +86,7 @@ const generateShiftSchedules = async (
   startDate,
   endDate,
   lastEmployeeId,
-  shiftCounter = 1 // 这里给 shiftCounter 赋予初始值
+  shiftCounter = 1, // 这里给 shiftCounter 赋予初始值
 ) => {
   const employees = await Employee.find({ status: 'Active' });
   const newShiftSchedules = [];
@@ -107,11 +105,9 @@ const generateShiftSchedules = async (
     endTime.setHours(startTime.getHours() + 8);
 
     const shiftType = getShiftType(startTime);
-    const employee = employees[(lastEmployeeIndex) % employees.length];
+    const employee = employees[lastEmployeeIndex % employees.length];
 
-    const shiftScheduleId = `SS${(shiftCounter++)
-      .toString()
-      .padStart(4, '0')}`;
+    const shiftScheduleId = `SS${(shiftCounter++).toString().padStart(4, '0')}`;
     newShiftSchedules.push(
       new EmployeeShiftSchedule({
         shiftScheduleId,
@@ -119,7 +115,7 @@ const generateShiftSchedules = async (
         shiftType,
         startTime,
         endTime,
-      })
+      }),
     );
 
     // 更新 currentDate 到班次结束时间
@@ -147,12 +143,13 @@ const saveShiftSchedules = async (shiftSchedules, res) => {
 
 // 生成按月的排班表
 const generateMonthlyShiftSchedule = async (req, res) => {
-  const { lastEndDate, lastEmployeeId, lastScheduleId } = await getLastShiftInfo(); // 获取最新的排班日期和员工编号
+  const { lastEndDate, lastEmployeeId, lastScheduleId } =
+    await getLastShiftInfo(); // 获取最新的排班日期和员工编号
   const startDate = new Date(lastEndDate);
   const endDate = new Date(
     startDate.getFullYear(),
     startDate.getMonth() + 1,
-    0
+    0,
   ); // 设定结束日期为下个月的最后一天
 
   let shiftCounter = parseInt(lastScheduleId.slice(2)) + 1; // 获取最新的编号并递增
@@ -162,71 +159,70 @@ const generateMonthlyShiftSchedule = async (req, res) => {
       startDate,
       endDate,
       lastEmployeeId,
-      shiftCounter
+      shiftCounter,
     );
     await saveShiftSchedules(newShiftSchedules, res);
   } catch (err) {
-    console.error("Error generating monthly shift schedules:", err.message);
+    console.error('Error generating monthly shift schedules:', err.message);
     res.status(500).json({
       success: false,
-      message: "Error generating monthly shift schedules",
-      details: err.message
+      message: 'Error generating monthly shift schedules',
+      details: err.message,
     });
   }
 };
 
-// 获取最近一周的起始日期
-const getWeekStart = (currentDate) => {
-  const weekStart = new Date(
-    currentDate.setDate(currentDate.getDate() - currentDate.getDay())
-  );
-  return new Date(weekStart.setHours(0, 0, 0, 0));
-};
+// // 获取最近一周的起始日期
+// const getWeekStart = (currentDate) => {
+//   const weekStart = new Date(
+//     currentDate.setDate(currentDate.getDate() - currentDate.getDay())
+//   );
+//   return new Date(weekStart.setHours(0, 0, 0, 0));
+// };
 
-// 获取最近一周的结束日期
-const getWeekEnd = (weekStart) => {
-  const weekEnd = new Date(weekStart);
-  weekEnd.setDate(weekEnd.getDate() + 6);
-  return new Date(weekEnd.setHours(23, 59, 59, 999));
-};
+// // 获取最近一周的结束日期
+// const getWeekEnd = (weekStart) => {
+//   const weekEnd = new Date(weekStart);
+//   weekEnd.setDate(weekEnd.getDate() + 6);
+//   return new Date(weekEnd.setHours(23, 59, 59, 999));
+// };
 
-// 获取本周排班表
-const getCurrentWeekShiftSchedule = async (req, res) => {
-  const currentDate = new Date();
-  const weekStart = getWeekStart(currentDate);
-  const weekEnd = getWeekEnd(weekStart);
+// // 获取本周排班表
+// const getCurrentWeekShiftSchedule = async (req, res) => {
+//   const currentDate = new Date();
+//   const weekStart = getWeekStart(currentDate);
+//   const weekEnd = getWeekEnd(weekStart);
 
-  try {
-    const currentWeekSchedules = await EmployeeShiftSchedule.find({
-      startTime: { $gte: weekStart, $lt: weekEnd },
-      employeeId: {
-        $in: (await Employee.find({ status: "Active" })).map((emp) => emp.employeeId)
-      }
-    });
+//   try {
+//     const currentWeekSchedules = await EmployeeShiftSchedule.find({
+//       startTime: { $gte: weekStart, $lt: weekEnd },
+//       employeeId: {
+//         $in: (await Employee.find({ status: "Active" })).map((emp) => emp.employeeId)
+//       }
+//     });
 
-    res.json({
-      success: true,
-      data: currentWeekSchedules,
-      message: "Current week shift schedules retrieved successfully"
-    });
-  } catch (err) {
-    console.error(
-      "Error retrieving current week shift schedules:",
-      err.message
-    );
-    res.status(500).json({
-      success: false,
-      message: "Error retrieving current week shift schedules",
-      details: err.message
-    });
-  }
-};
+//     res.json({
+//       success: true,
+//       data: currentWeekSchedules,
+//       message: "Current week shift schedules retrieved successfully"
+//     });
+//   } catch (err) {
+//     console.error(
+//       "Error retrieving current week shift schedules:",
+//       err.message
+//     );
+//     res.status(500).json({
+//       success: false,
+//       message: "Error retrieving current week shift schedules",
+//       details: err.message
+//     });
+//   }
+// };
 
-// 确保索引创建
-EmployeeShiftSchedule.createIndexes([
-  { key: { shiftScheduleId: 1 }, unique: true }
-]);
-
+// // 确保索引创建
+// EmployeeShiftSchedule.createIndexes([
+//   { key: { shiftScheduleId: 1 }, unique: true }
+// ]);
 
 // 3. 更新特定值班安排
 // (1) 查找特定值班安排
@@ -342,8 +338,9 @@ const deleteEmployeeShiftSchedule = async (req, res) => {
 module.exports = {
   getAllEmployeeShiftSchedules,
   generateMonthlyShiftSchedule,
-  getCurrentWeekShiftSchedule,
   getEmployeeShiftScheduleById,
   updateEmployeeShiftSchedule,
   deleteEmployeeShiftSchedule,
 };
+
+// getCurrentWeekShiftSchedule,

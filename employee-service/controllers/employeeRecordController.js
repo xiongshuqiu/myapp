@@ -1,16 +1,15 @@
-const  { User, Employee } = require('../models/employeeRecordModel');
+const User = require('../models/User');
+const Employee = require('../models/Employee');
 // 1. 获取所有员工档案
 const getAllEmployeeRecords = async (req, res) => {
   try {
     const employeeRecords = await Employee.find();
     console.log(employeeRecords);
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: 'Employee ecords retrieved successfully',
-        data: employeeRecords,
-      });
+    res.status(200).json({
+      success: true,
+      message: 'Employee ecords retrieved successfully',
+      data: employeeRecords,
+    });
   } catch (err) {
     console.error('Error retrieving bed statuses:', err.message);
     res
@@ -36,14 +35,14 @@ const renderNewEmployeeRecordForm = async (req, res) => {
       {
         $match: {
           'employeeRecord.userId': { $exists: false },
-          role: { $ne: 'family' } // 过滤掉角色为 family 的用户
+          role: { $ne: 'family' }, // 过滤掉角色为 family 的用户
         },
       },
       {
         $project: {
           userId: 1,
           userName: 1, // 您可以根据需要选择其他字段
-          role:1
+          role: 1,
         },
       },
     ]);
@@ -51,13 +50,10 @@ const renderNewEmployeeRecordForm = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: 'bedId and unassigned userId retrieved successfully',
-      data: {  unassignedUserIds },
+      data: { unassignedUserIds },
     });
   } catch (err) {
-    console.error(
-      'Error retrieving bedId and unassigned userId:',
-      err.message,
-    ); // 调试信息
+    console.error('Error retrieving bedId and unassigned userId:', err.message); // 调试信息
     res.status(500).json({ success: false, message: err.message });
   }
 };
@@ -72,9 +68,12 @@ const createEmployeeRecord = async (req, res) => {
     contactNumber,
     email,
     unassignedUserId,
-    status
+    status,
   } = req.body;
-  console.log('Received request to create employee record with data:', req.body); // 调试信息
+  console.log(
+    'Received request to create employee record with data:',
+    req.body,
+  ); // 调试信息
   try {
     // 检查是否存在相同员工编号的记录
     const existingEmployeeRecord = await Employee.findOne({ employeeId });
@@ -93,14 +92,11 @@ const createEmployeeRecord = async (req, res) => {
       contactNumber,
       email,
       userId: unassignedUserId, // 直接使用前端传输过来的 userId
-      status
+      status,
     });
     await newEmployee.save();
 
-    console.log(
-      'Employee record created successfully:',
-      newEmployee,
-    ); // 调试信息
+    console.log('Employee record created successfully:', newEmployee); // 调试信息
     return res.status(201).json({
       success: true,
       message: 'Employee record created successfully',
@@ -124,15 +120,15 @@ const getEmployeeRecordById = async (req, res) => {
   try {
     const employeeRecord = await Employee.findById(_id);
     if (employeeRecord) {
-       // 查找所有的 userId(过滤角色为family的userId)
-       const userIds = await User.find({role:{$ne:'family'}}).select('userId status');
-      return res
-        .status(200)
-        .json({
-          success: true,
-          message: 'Employee record retrieved successfully',
-          data: { employeeRecord, userIds }
-        });
+      // 查找所有的 userId(过滤角色为family的userId)
+      const userIds = await User.find({ role: { $ne: 'family' } }).select(
+        'userId status',
+      );
+      return res.status(200).json({
+        success: true,
+        message: 'Employee record retrieved successfully',
+        data: { employeeRecord, userIds },
+      });
     } else {
       return res
         .status(404)
@@ -150,10 +146,19 @@ const getEmployeeRecordById = async (req, res) => {
 const updateEmployeeRecord = async (req, res) => {
   const { _id } = req.params;
   const {
-    employeeId, employeeName, position, contactNumber, email, userId,status
+    employeeId,
+    employeeName,
+    position,
+    contactNumber,
+    email,
+    userId,
+    status,
   } = req.body;
 
-  console.log('Received request to update employee record with data:', req.body); // 调试信息
+  console.log(
+    'Received request to update employee record with data:',
+    req.body,
+  ); // 调试信息
   try {
     const existingEmployee = await Employee.findById(_id);
     if (!existingEmployee) {
@@ -166,7 +171,10 @@ const updateEmployeeRecord = async (req, res) => {
     // 如果 userId 改变，更新原来的 userId 状态为 'Available'
     //为存储数据前，如果Employee中的userId值不等于新的userId值，及发生了改变，把现有的User模型中userId状态变为Available
     if (existingEmployee.userId && existingEmployee.userId !== userId) {
-      await User.findOneAndUpdate({ userId: existingEmployee.userId }, { status: 'Available' });
+      await User.findOneAndUpdate(
+        { userId: existingEmployee.userId },
+        { status: 'Available' },
+      );
     }
 
     // 如果新的 userId 被使用，更新 userId 状态为 'Occupied'
@@ -185,10 +193,7 @@ const updateEmployeeRecord = async (req, res) => {
 
     await existingEmployee.save();
 
-    console.log(
-      'Employee record updated successfully:',
-      existingEmployee,
-    ); // 调试信息
+    console.log('Employee record updated successfully:', existingEmployee); // 调试信息
     return res.status(200).json({
       success: true,
       message: 'Employee record updated successfully',
@@ -213,7 +218,10 @@ const deleteEmployeeRecord = async (req, res) => {
     if (bedStatus) {
       return res
         .status(200)
-        .json({ success: true, message: 'Employee record  deleted successfully' });
+        .json({
+          success: true,
+          message: 'Employee record  deleted successfully',
+        });
     } else {
       return res
         .status(404)
@@ -234,5 +242,5 @@ module.exports = {
   createEmployeeRecord,
   getEmployeeRecordById,
   updateEmployeeRecord,
-  deleteEmployeeRecord
+  deleteEmployeeRecord,
 };

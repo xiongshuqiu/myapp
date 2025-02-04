@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
-const Employee = require('../models/allModels').Employee;  // 导入 Employee 模型
+const Employee = require('../models/allModels').Employee; // 导入 Employee 模型
 const EmployeeShiftSchedule = require('../models/allModels').EmployeeShiftSchedule; // 导入 EmployeeShiftSchedule 模型
+
+let shiftCounter = 1; // 初始计数器
 
 async function generateWeeklyShifts(startDate, numWeeks) {
   const shifts = [];
@@ -23,25 +25,28 @@ async function generateWeeklyShifts(startDate, numWeeks) {
 
         // 确保 Night 班次从 0:00:00 开始，Morning 班次从 8:00:00 开始，Evening 班次从 16:00:00 开始
         if (shiftType === 'Night') {
-          start.setHours(3, 0, 0, 0);
+          start.setHours(0, 0, 0, 0);
         } else if (shiftType === 'Morning') {
-          start.setHours(11, 0, 0, 0);
+          start.setHours(8, 0, 0, 0);
         } else if (shiftType === 'Evening') {
-          start.setHours(19, 0, 0, 0);
+          start.setHours(16, 0, 0, 0);
         }
 
         const end = new Date(start);
         end.setHours(start.getHours() + 8); // 确保每个班次持续 8 小时
 
-        const employeeIndex = (week * 21 + day * 3 + index) % employeeIds.length;  // 循环分配员工ID
+        const employeeIndex = (week * 21 + day * 3 + index) % employeeIds.length; // 循环分配员工ID
 
         const shift = {
-          shiftScheduleId: `SS${(week * 21 + day * 3 + index + 1).toString().padStart(3, '0')}`,
-          employeeId: employeeIds[employeeIndex],  // 使用从数据库中获取的员工ID
+          shiftScheduleId: `SS${shiftCounter.toString().padStart(4, '0')}`, // 从 SS0001 开始编号，依次递增
+          employeeId: employeeIds[employeeIndex], // 使用从数据库中获取的员工ID
           shiftType: shiftType, // 确保正确地分配班次类型
           startTime: start, // 确保从0点起算
-          endTime: end // 确保分配结束时间
+          endTime: end, // 确保分配结束时间
         };
+
+        // 递增计数器
+        shiftCounter++;
 
         // 打印调试信息
         console.log(`Generated Shift: ${JSON.stringify(shift)}`);

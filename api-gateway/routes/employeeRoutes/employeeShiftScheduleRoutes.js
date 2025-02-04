@@ -17,7 +17,7 @@ router.get('/', getAllEmployeeShiftSchedules);
 // (1) 生成按月的排班表
 router.post('/generate-monthly-schedule', generateMonthlyShiftSchedule);
 // (2) 获取本周排班表
-router.get('/current-week-schedule', getCurrentWeekShiftSchedule);
+//router.get('/current-week-schedule', getCurrentWeekShiftSchedule);
 
 // 3. 更新特定值班安排
 // (1) 查找特定值班安排并显示编辑表单
