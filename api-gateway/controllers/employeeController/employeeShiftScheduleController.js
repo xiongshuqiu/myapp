@@ -46,11 +46,11 @@ const getAllEmployeeShiftSchedules = async (req, res) => {
 };
 
 // 2. 创建新的值班安排
-// (1) 生成按月的排班表
-const generateMonthlyShiftSchedule = async (req, res) => {
+//(1)获取新的排班初始值
+const getShiftInitialValues = async (req, res) => {
   try {
-    const url = `${process.env.EMPLOYEE_SERVICE_URL}/employees/shiftSchedule/generate-monthly-schedule`;
-    const response = await postRequest(url); // 发送 GET 请求以获取用户信息
+    const url = `${process.env.EMPLOYEE_SERVICE_URL}/employees/shiftSchedule/new`;
+    const response = await getRequest(url); // 发送 GET 请求以获取用户信息
     res.json(response); // 将响应数据返回给前端:包括数据和message
     if (response.success) {
       console.log(response);
@@ -59,20 +59,22 @@ const generateMonthlyShiftSchedule = async (req, res) => {
     handleError(err, res);
   }
 };
-// (2) 获取本周排班表
-// const getCurrentWeekShiftSchedule = async (req, res) => {
+// (2) 生成新的排班表
+const generateMonthlyShiftSchedule = async (req, res) => {
+  const { startDate, days, startShiftType, startEmployeeId } = req.body;
+  try {
+    const data={startDate, days, startShiftType, startEmployeeId}
+    const url = `${process.env.EMPLOYEE_SERVICE_URL}/employees/shiftSchedule/create`;
+    const response = await postRequest(url,data); // 发送 GET 请求以获取用户信息
+    res.json(response); // 将响应数据返回给前端:包括数据和message
+    if (response.success) {
+      console.log(response);
+    }
+  } catch (err) {
+    handleError(err, res);
+  }
+};
 
-//   try {
-//     const url = `${process.env.EMPLOYEE_SERVICE_URL}/employees/shiftSchedule/current-week-schedule`;
-//     const response = await getRequest(url, data); // 发送 POST 请求以创建新用户
-//     res.status(201).json(response); // 将响应数据返回给前端
-//     if (response.success) {
-//       console.log(response);
-//     }
-//   } catch (err) {
-//     handleError(err, res);
-//   }
-// };
 // 3. 更新特定员工档案
 // (1) 查找特定员工档案并显示编辑表单
 const getEmployeeShiftScheduleById = async (req, res) => {
@@ -123,10 +125,9 @@ const deleteEmployeeShiftSchedule = async (req, res) => {
 
 module.exports = {
   getAllEmployeeShiftSchedules,
+  getShiftInitialValues,
   generateMonthlyShiftSchedule,
-
   getEmployeeShiftScheduleById,
   updateEmployeeShiftSchedule,
   deleteEmployeeShiftSchedule
 };
-// getCurrentWeekShiftSchedule,

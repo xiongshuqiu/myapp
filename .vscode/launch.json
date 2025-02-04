@@ -73,11 +73,13 @@
             "cwd": "${workspaceFolder}/z-DataBase",
             "console": "integratedTerminal"
         },
+       
     ],
     "compounds": [
         {
-            "name": "启动所有微服务",
+            "name": "启动所有服务",
             "configurations": ["auth-service","account-service","user-service","bed-service","employee-service","api-gateway", "frontend"]
-        }
+        },
+        
     ]
 }

@@ -7,23 +7,21 @@ const {
 } = require('../../visibilityMiddleware/bntLinkVisibility');
 const {
   getAllEmployeeShiftSchedules,
+  getShiftInitialValues,
   generateMonthlyShiftSchedule,
-  getCurrentWeekShiftSchedule,
   getEmployeeShiftScheduleById,
   updateEmployeeShiftSchedule,
   deleteEmployeeShiftSchedule
-} = require('../../controllers/elderlyController/employeeShiftScheduleController');
+} = require('../../controllers/employeeController/employeeShiftScheduleController');
 
 // 1. 获取所有值班安排
 router.get('/', bntLinkVisibility, getAllEmployeeShiftSchedules);
 
 // 2. 创建新的值班安排
-// (1) 生成按月的排班表
-router.post('/generate-monthly-schedule', generateMonthlyShiftSchedule);
-// (2) 获取本周排班表
-//router.get('/current-week-schedule', getCurrentWeekShiftSchedule);
-
-
+//(1)(1)获取新的排班初始值
+router.get('/new', getShiftInitialValues);
+// (2) 生成新的排班表
+router.post('/create', generateMonthlyShiftSchedule);
 // 3. 更新特定值班安排
 // (1) 查找特定值班安排并显示编辑表单
 router.get('/:_id/update', getEmployeeShiftScheduleById);

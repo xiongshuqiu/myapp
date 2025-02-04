@@ -7,7 +7,7 @@ const handleError = (
   err,
   req, //注意一定要增加这个值（每个handleError都要）
   res,
-  targetPage = 'employee/employeeShiftSchedule/employeeShiftScheduleManagement.ejs',
+  targetPage = 'employee/employeeShiftSchedule/employeeShiftScheduleCreate.ejs',
   msg = 'Server error',
 ) => {
   console.error('Error:', err.response ? err.response.data : err.message); // 输出详细调试信息
@@ -70,20 +70,42 @@ const getAllEmployeeShiftSchedules = async (req, res) => {
   }
 };
 // 2. 创建新的值班安排
-// (1) 生成按月的排班表
-const generateMonthlyShiftSchedule = async (req, res) => {
-  const apiUrl = `${process.env.API_URL}/api/employees/shiftSchedule/generate-monthly-schedule`;
+//(1)获取新的排班初始值
+const getShiftInitialValues = async (req, res) => {
+  const apiUrl = `${process.env.API_URL}/api/employees/shiftSchedule/new`;
   console.log('API URL:', apiUrl); // 调试信息
   try {
-    const response = await postRequest(apiUrl);
-
+    const response = await getRequest(apiUrl);
+    const employees = response.data;
+    console.log(employees);
     if (response.success) {
-      res.render('employee/employeeShiftSchedule/employeeShiftScheduleManagement.ejs', {
+      res.render('employee/employeeShiftSchedule/employeeShiftScheduleCreate.ejs', {
         activePage: 'employee-management',
         navItems: req.navItems, // 将导航项传递到视图
         buttonItems: req.buttonItems,
         linkItems: req.linkItems,
+        employees
       });
+    } else {
+      throw new Error('Failed to retrieve data from API');
+    }
+  } catch (err) {
+    console.error('Error Shift initial values:', err);
+    handleError(err, req, res);
+  }
+};
+// (2) 生成新的排班表
+const generateMonthlyShiftSchedule = async (req, res) => {
+  const apiUrl = `${process.env.API_URL}/api/employees/shiftSchedule/create`;
+  console.log('API URL:', apiUrl); // 调试信息
+  const { startDate, days, startShiftType, startEmployeeId } = req.body;
+  try {
+    const data = { startDate, days, startShiftType, startEmployeeId};
+    const response = await postRequest(apiUrl,data);
+
+    if (response.success) {
+      res.redirect('/employees/shiftSchedule/');
+     
     } else {
       throw new Error('Failed to retrieve data from API');
     }
@@ -93,28 +115,7 @@ const generateMonthlyShiftSchedule = async (req, res) => {
   }
 };
 
-// // (2) 获取本周排班表
-// const getCurrentWeekShiftSchedule = async (req, res) => {
 
-//   try {
-//     const apiUrl = `${process.env.API_URL}/api/employees/shiftSchedule/current-week-schedule`;
-//     const response = await getRequest(apiUrl, data);
-//     const shiftSchedules = response.data;
-//     console.log(currentWeekSchedules);
-//     if (response.success) {
-//       res.render('employee/employeeShiftSchedule/employeeShiftScheduleManagement.ejs', {
-//         activePage: 'employee-management',
-//         navItems: req.navItems, // 将导航项传递到视图
-//         shiftSchedules
-//       });
-//     } else {
-//       throw new Error('Failed to retrieve current week shift schedules from API');
-//     }
-//   } catch (err) {
-//     const targetPage = 'employee/employeeShiftSchedule/employeeShiftScheduleCreate'; //用户需要输入新值
-//     handleError(err, req, res, targetPage);
-//   }
-// };
 
 // 3.更新特定值班安排
 // (1)查找特定值班安排并显示编辑表单
@@ -179,10 +180,9 @@ const deleteEmployeeShiftSchedule = async (req, res) => {
 };
 module.exports = {
   getAllEmployeeShiftSchedules,
+  getShiftInitialValues,
   generateMonthlyShiftSchedule,
- 
   getEmployeeShiftScheduleById,
   updateEmployeeShiftSchedule,
   deleteEmployeeShiftSchedule
 };
-// getCurrentWeekShiftSchedule,

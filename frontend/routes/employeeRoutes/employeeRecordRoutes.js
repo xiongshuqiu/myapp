@@ -12,7 +12,7 @@ const {
   getEmployeeRecordById,
   updateEmployeeRecord,
   deleteEmployeeRecord
-} = require('../../controllers/elderlyController/employeeRecordController');
+} = require('../../controllers/employeeController/employeeRecordController');
 
 // 1. 获取所有员工档案
 router.get('/',bntLinkVisibility,getAllEmployeeRecords);

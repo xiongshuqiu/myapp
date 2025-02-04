@@ -1,5 +1,5 @@
-const User = require('../models/User');
-const Employee = require('../models/Employee');
+const User = require('../models/userModel');
+const Employee = require('../models/employeeModel');
 // 1. 获取所有员工档案
 const getAllEmployeeRecords = async (req, res) => {
   try {
