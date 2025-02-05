@@ -1,61 +1,77 @@
-const EmployeeShiftSchedule = require('../models/employeeShiftScheduleModel');
-const Employee = require('../models/employeeModel');
 
-// (2) 生成新的排班表
-const generateUniqueShiftScheduleId = async () => {
+
+let shiftCounter = 1; // 初始计数器
+
+async function generateMonthlyShiftSchedule(req, res) {
   const { startDate, days, startShiftType, startEmployeeId } = req.body;
-  const generateUniqueShiftScheduleId = async (req, res) => {
-    const { startDate, days, startShiftType, startEmployeeId } = req.body;
-  
-    // 数据库查询现有的排班表
-    const existingShiftSchedules = await ShiftSchedule.find().sort({ shiftScheduleId: -1 });
-  
+  console.log(startEmployeeId);
+  try {
+    // 获取状态为 Active 的员工的 employeeId
+    const employees = await Employee.find({ status: 'Active' }).select('employeeId');
+    const employeeIds = employees.map(emp => emp.employeeId);
+
+    console.log(`Employee IDs: ${employeeIds}`);
+
     let newShiftScheduleId;
+    const existingShiftSchedules = await EmployeeShiftSchedule.find().sort({ shiftScheduleId: -1 });
     if (existingShiftSchedules.length > 0) {
-      // 获取最后一个排班表的编号
       const lastId = existingShiftSchedules[0].shiftScheduleId;
-      // 提取编号中的数字部分，并增加1
       const numericPart = parseInt(lastId.slice(2)) + 1;
       newShiftScheduleId = `SS${numericPart.toString().padStart(4, '0')}`;
     } else {
       newShiftScheduleId = 'SS0001';
     }
-  
-    // 获取在岗员工列表
-    const activeEmployees = await Employee.find({ status: 'Active' });
-  
-    // 查找起始员工索引
-    const startEmployeeIndex = activeEmployees.findIndex(emp => emp.employeeId === startEmployeeId);
-  
-    // 班次类型
+
     const shiftTypes = ['Morning', 'Evening', 'Night'];
-    let currentShiftIndex = shiftTypes.indexOf(startShiftType);
-  
+    let currentShiftType = startShiftType;
+    let startDateTime = new Date(startDate);
+    const shiftStartHours = { 'Morning': 8, 'Evening': 16, 'Night': 0 };
+
+    // 调整startDate到起始班次的时间
+    startDateTime.setHours(shiftStartHours[currentShiftType], 0, 0, 0);
+    let lastEndTime = startDateTime;
+
     // 生成排班表
-    for (let i = 0; i < days; i++) {
-      const employeeIndex = (startEmployeeIndex + i) % activeEmployees.length;
-      const employee = activeEmployees[employeeIndex];
-      const shiftType = shiftTypes[currentShiftIndex];
-  
-      // 计算开始时间和结束时间
-      const startTime = new Date(startDate);
-      startTime.setHours(startTime.getHours() + (8 * currentShiftIndex));
+    for (let i = 0; i < days * 3; i++) { // 确保所有天数的所有班次都会排到
+      const employeeIndex = (parseInt(startEmployeeId.slice(2)) + i) % employeeIds.length;
+      const employeeId = employeeIds[employeeIndex];
+
+      const startTime = new Date(lastEndTime);
       const endTime = new Date(startTime);
-      endTime.setHours(endTime.getHours() + 8);
-  
+      endTime.setHours(startTime.getHours() + 8); // 每个班次8小时
+
       const shiftSchedule = new EmployeeShiftSchedule({
         shiftScheduleId: newShiftScheduleId,
-        employeeId: employee.employeeId,
-        shiftType: shiftType,
+        employeeId: employeeId,
+        shiftType: currentShiftType,
         startTime: startTime,
-        endTime: endTime
+        endTime: endTime,
       });
-  
+
       await shiftSchedule.save();
-  
-      // 班次轮换
-      currentShiftIndex = (currentShiftIndex + 1) % shiftTypes.length;
+
+      lastEndTime = endTime; // 更新lastEndTime为当前班次的结束时间
+
+      const lastNumericPart = parseInt(newShiftScheduleId.slice(2));
+      newShiftScheduleId = `SS${(lastNumericPart + 1).toString().padStart(4, '0')}`;
+
+      // 判断下一个班次的类型
+      if (currentShiftType === 'Morning') {
+        currentShiftType = 'Evening';
+      } else if (currentShiftType === 'Evening') {
+        currentShiftType = 'Night';
+      } else if (currentShiftType === 'Night') {
+        currentShiftType = 'Morning';
+        lastEndTime.setDate(lastEndTime.getDate() + 1); // 跨天的情况
+        lastEndTime.setHours(shiftStartHours[currentShiftType], 0, 0, 0); // 确保新的开始时间从早班8:00开始
+      }
     }
-  
+
     res.status(201).json({ message: 'Shift schedule created successfully' });
-  };
+  } catch (error) {
+    console.error('Error generating shift schedule:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+module.exports = { generateMonthlyShiftSchedule };

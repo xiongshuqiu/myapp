@@ -25,11 +25,11 @@ async function generateWeeklyShifts(startDate, numWeeks) {
 
         // 确保 Night 班次从 0:00:00 开始，Morning 班次从 8:00:00 开始，Evening 班次从 16:00:00 开始
         if (shiftType === 'Night') {
-          start.setHours(0, 0, 0, 0);
+          start.setHours(3, 0, 0, 0);
         } else if (shiftType === 'Morning') {
-          start.setHours(8, 0, 0, 0);
+          start.setHours(11, 0, 0, 0);
         } else if (shiftType === 'Evening') {
-          start.setHours(16, 0, 0, 0);
+          start.setHours(17, 0, 0, 0);
         }
 
         const end = new Date(start);

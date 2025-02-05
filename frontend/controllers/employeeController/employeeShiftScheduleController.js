@@ -99,8 +99,10 @@ const generateMonthlyShiftSchedule = async (req, res) => {
   const apiUrl = `${process.env.API_URL}/api/employees/shiftSchedule/create`;
   console.log('API URL:', apiUrl); // 调试信息
   const { startDate, days, startShiftType, startEmployeeId } = req.body;
+  const data = { startDate, days, startShiftType, startEmployeeId };
+  console.log(data)
   try {
-    const data = { startDate, days, startShiftType, startEmployeeId};
+   
     const response = await postRequest(apiUrl,data);
 
     if (response.success) {

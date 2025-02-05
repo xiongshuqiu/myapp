@@ -62,8 +62,9 @@ const getShiftInitialValues = async (req, res) => {
 // (2) 生成新的排班表
 const generateMonthlyShiftSchedule = async (req, res) => {
   const { startDate, days, startShiftType, startEmployeeId } = req.body;
+  const data = { startDate, days, startShiftType, startEmployeeId };
+  console.log(data);
   try {
-    const data={startDate, days, startShiftType, startEmployeeId}
     const url = `${process.env.EMPLOYEE_SERVICE_URL}/employees/shiftSchedule/create`;
     const response = await postRequest(url,data); // 发送 GET 请求以获取用户信息
     res.json(response); // 将响应数据返回给前端:包括数据和message

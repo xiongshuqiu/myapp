@@ -59,7 +59,6 @@ const renderNewEmployeeRecordForm = async (req, res) => {
 };
 
 // (2) 提交新的员工档案数据
-// (2) 提交新的员工档案数据
 const createEmployeeRecord = async (req, res) => {
   const {
     employeeId,
