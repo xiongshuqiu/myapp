@@ -128,15 +128,15 @@ const getEmployeeShiftScheduleById = async (req, res) => {
     const apiUrl = `${process.env.API_URL}/api/employees/shiftSchedule/${_id}/update`;
     console.log(apiUrl);
     const response = await getRequest(apiUrl); // 使用组装的URL进行API调用
-    const {bedAssignment, bedIds, elderlyIds} = response.data;
+    const {employeeIds, employeeShiftSchedule} = response.data;
     if (response.success) {
       console.log(response);
-      res.render('employee/employeeShiftSchedule/bedAssignmentUpdate.ejs', {
+      res.render('employee/employeeShiftSchedule/employeeShiftScheduleUpdate.ejs', {
         activePage: 'employee-management',     
         navItems: req.navItems,
-        bedAssignment,
-        bedIds, //beIds包括：bedId、status
-        elderlyIds //包括elderlyId、elderlyName
+        employeeIds,//employeeIds包括：employeeId、employeeName
+        employeeShiftSchedule, 
+        
       });
     }
   } catch (err) {
@@ -146,10 +146,10 @@ const getEmployeeShiftScheduleById = async (req, res) => {
 
 //(2) 提交更新后的值班安排数据
 const updateEmployeeShiftSchedule = async (req, res) => {
-  const { bedId, elderlyId, assignmentId, assignedDate,releaseDate } = req.body;
+  const { shiftScheduleId, employeeId, shiftType, startTime,endTime } = req.body;
   const { _id } = req.params;
   try {
-    const data = { bedId, elderlyId, assignmentId, assignedDate,releaseDate  };
+    const data = { shiftScheduleId, employeeId, shiftType, startTime,endTime  };
 
     // 从请求参数中获取 _id
     const apiUrl = `${process.env.API_URL}/api/employees/shiftSchedule/${_id}`;

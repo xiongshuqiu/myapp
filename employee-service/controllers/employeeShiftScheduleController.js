@@ -163,84 +163,69 @@ async function generateMonthlyShiftSchedule(req, res) {
 // (1) 查找特定值班安排
 const getEmployeeShiftScheduleById = async (req, res) => {
   const { _id } = req.params;
-  console.log(`Received request to get bed assignment by ID: ${_id}`); // 调试信息
+  console.log(`Received request to get employee Shift schedule by ID: ${_id}`); // 调试信息
   try {
     // 根据ID查找值班安排
-    const bedAssignment = await BedAssignment.findById(_id);
-    if (bedAssignment) {
-      console.log('Bed assignment retrieved successfully:', bedAssignment); // 调试信息
+    const employeeShiftSchedule = await EmployeeShiftSchedule.findById(_id);
+    if (employeeShiftSchedule) {
+      console.log('Shift schedule retrieved successfully:', employeeShiftSchedule); // 调试信息
 
-      // 查找所有的 bedId
-      const bedIds = await BedStatus.find().select('bedId status');
-      // 查找所有老人信息
-      const elderlyIds = await Elderly.find().select('elderlyId elderlyName');
+      // 查找所有的 employeeIds
+      const employeeIds = await Employee.find({status:'Active'}).select('employeeId employeeName');
       return res.status(200).json({
         success: true,
         message:
-          'Bed assignment, available bedIds, and elderlyIds retrieved successfully',
+          'Employee Shift Schedule and available employeeIds retrieved successfully',
         data: {
-          bedAssignment,
-          bedIds, //包括bedId、status
-          elderlyIds, //包括elderlyId、elderlyName
-        },
+          employeeShiftSchedule,
+          employeeIds //employeeIds包括：employeeId、employeeName
+        }
       });
     } else {
-      console.warn(`Bed assignment not found with ID: ${_id}`); // 调试信息
+      console.warn(`Employee shiftSchedule not found with ID: ${_id}`); // 调试信息
       return res
         .status(404)
-        .json({ success: false, message: 'Bed assignment not found' });
+        .json({ success: false, message: 'Employee shiftSchedule not found' });
     }
   } catch (err) {
-    console.error('Error retrieving bed assignment:', err.message); // 调试信息
+    console.error('Error retrieving employee shift schedule:', err.message); // 调试信息
     return res.status(500).json({ success: false, message: err.message });
   }
 };
 // (2) 提交更新后的值班安排数据
 const updateEmployeeShiftSchedule = async (req, res) => {
   const { _id } = req.params; // 从 URL 参数中获取 assignmentId
-  const { bedId, elderlyId, assignmentId, assignedDate, releaseDate } =
+  const { shiftScheduleId, employeeId, shiftType, startTime, endTime } =
     req.body;
 
-  console.log('Received request to update bed assignment with data:', req.body); // 调试信息
+  console.log('Received request to update employee shiftSchedule with data:', req.body); // 调试信息
 
   try {
     // 查找现有值班安排记录
-    const existingBedAssignment = await BedAssignment.findOne({ _id });
-    if (!existingBedAssignment) {
-      console.warn(`Bed assignmentId not found: ${_id}`); // 调试信息
+    const existingEmployeeShiftSchedule = await EmployeeShiftSchedule.findOne({ _id });
+    if (!existingEmployeeShiftSchedule) {
+      console.warn(`Employee shiftScheduleId not found: ${_id}`); // 调试信息
       return res
         .status(404)
-        .json({ success: false, message: 'Bed assignmentId not found' });
-    }
-
-    // 如果 bedId 发生变化，则更新旧床位和新床位的状态
-    if (existingBedAssignment.bedId !== bedId) {
-      // 更新旧床位状态为 available
-      await BedStatus.updateOne(
-        { bedId: existingBedAssignment.bedId },
-        { status: 'available' },
-      );
-
-      // 更新新床位状态为 occupied
-      await BedStatus.updateOne({ bedId: bedId }, { status: 'occupied' });
+        .json({ success: false, message: 'Employee shiftScheduleId not found' });
     }
 
     // 更新值班安排记录
-    existingBedAssignment.bedId = bedId;
-    existingBedAssignment.elderlyId = elderlyId;
-    existingBedAssignment.assignmentId = assignmentId;
-    existingBedAssignment.assignedDate = assignedDate;
-    existingBedAssignment.releaseDate = releaseDate;
-    await existingBedAssignment.save();
+    existingEmployeeShiftSchedule.shiftScheduleId = shiftScheduleId;
+    existingEmployeeShiftSchedule.employeeId = employeeId;
+    existingEmployeeShiftSchedule.shiftType = shiftType;
+    existingEmployeeShiftSchedule.startTime = startTime;
+    existingEmployeeShiftSchedule.endTime = endTime;
+    await existingEmployeeShiftSchedule.save();
 
-    console.log('Bed assignment updated successfully:', existingBedAssignment); // 调试信息
+    console.log('Bed assignment updated successfully:', existingEmployeeShiftSchedule); // 调试信息
     return res.status(200).json({
       success: true,
       message: 'Bed assignment updated successfully',
-      data: existingBedAssignment,
+      data: existingEmployeeShiftSchedule,
     });
   } catch (error) {
-    console.error('Error updating bed assignment:', error.message); // 调试信息
+    console.error('Error updating employee ShiftSchedule:', error.message); // 调试信息
     return res.status(500).json({
       success: false,
       message: 'An error occurred',
@@ -254,13 +239,13 @@ const deleteEmployeeShiftSchedule = async (req, res) => {
   const { _id } = req.params;
 
   try {
-    await BedAssignment.findByIdAndDelete(_id); // 根据ID删除值班安排
-    console.log('Bed status deleted successfully:', _id); // 调试信息
+    await EmployeeShiftSchedule.findByIdAndDelete(_id); // 根据ID删除值班安排
+    console.log('Employee shift schedule deleted successfully:', _id); // 调试信息
     return res
       .status(200)
-      .json({ success: true, message: 'Bed status deleted successfully' });
+      .json({ success: true, message: 'Employee shift schedule deleted successfully' });
   } catch (error) {
-    console.error('Error deleting bed status:', error.message); // 调试信息
+    console.error('Error deleting Employee shift schedule:', error.message); // 调试信息
     return res.status(400).json({
       success: false,
       message: 'An error occurred',

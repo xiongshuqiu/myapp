@@ -37,15 +37,15 @@
       <div id="page-wrapper">
         <div class="header">
           <h1 class="page-header">
-            Employee Management <small> Employee Information</small>
+            Bed Management <small> Bed Information</small>
           </h1>
           <ol class="breadcrumb">
             <!-- 面包屑导航 -->
             <li><a href="#">Home</a></li>
             <!-- 首页链接 -->
-            <li><a href="#">Employee Management</a></li>
+            <li><a href="#">Bed Management</a></li>
             <!-- 用户管理页面链接 -->
-            <li class="active">EmployeeShiftSchedule Data</li>
+            <li class="active">BedAssignment Data</li>
             <!-- 当前页：用户数据 -->
           </ol>
         </div>
@@ -60,7 +60,7 @@
                 <div class="panel-body">：面板的主体内容区域
                 <div class="panel-footer">：面板的页脚区域（如果需要） -->
               <div class="panel panel-default"> 
-                <div class="panel-heading">EmployeeShiftSchedule Tables</div>
+                <div class="panel-heading">BedAssignment Tables</div>
                 <div class="panel-body">
                   <div class="table-responsive">
                     <table
@@ -69,44 +69,44 @@
                     >
                       <thead>
                         <tr>
-                          <th>shiftScheduleId</th> 
-                          <th>employeeId</th>
-                          <th>employeeName</th>
-                          <th>shiftType</th>
-                          <th>startTime</th>
-                          <th>endTime</th>
-                          <th>action</th>
+                          <th>assignmentId</th> 
+                          <th>bedId</th>
+                          <th>elderlyName</th>
+                          <th>elderlyId</th>
+                          <th>assignedDate</th>
+                          <th>releaseDate</th>
+                          <th>actions</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <% employeeShiftSchedules.forEach(function(ShiftSchedule) { %>
+                        <% bedAssignments.forEach(function(bedAssignment) { %>
                           <tr class="odd gradeX" style="white-space: nowrap">
-                            <td><%= ShiftSchedule.shiftScheduleId %></td>
-                            <td><%= ShiftSchedule.employeeDetails.employeeId %></td>
-                            <td><%= ShiftSchedule.employeeDetails.employeeName %></td>
-                            <td><%= ShiftSchedule.shiftType %></td>
-                            <td><%= ShiftSchedule.startTime %></td>
-                            <td><%= ShiftSchedule.endTime %></td>
+                            <td><%= bedAssignment.bedassignmentDetails.assignmentId %></td>
+                            <td><%= bedAssignment.bedStatusDetails.bedId %></td>
+                            <td><%= bedAssignment.elderlyName %></td>
+                            <td><%= bedAssignment.elderlyId %></td>
+                            <td><%= bedAssignment.bedassignmentDetails.assignedDate %></td>
+                            <td><%= bedAssignment.bedassignmentDetails.releaseDate %></td>
                           <td>
                             <% linkItems.forEach(function(item) { %> <% if
-                            (item.id ==='edit-employeeShiftSchedule-link'&&item.visible) {
+                            (item.id ==='edit-bedAssignment-link'&&item.visible) {
                             %>
                             <a
                               id="<%= item.id %>"
-                              href="/employees/shiftSchedule/<%=  ShiftSchedule._id %>/update"
+                              href="/beds/assignment/<%=  bedAssignment.bedassignmentDetails._id %>/update"
                               class="editlink"
                               style="color: blue; display: inline"
                               >Edit
                             </a>
                             <% } %> <% }); %> <%
                             linkItems.forEach(function(item) { %> <% if (item.id
-                            ==='delete-employeeShiftSchedule-link'&&item.visible) { %>
+                            ==='delete-bedAssignment-link'&&item.visible) { %>
                             <a
                               id="<%= item.id %>"
                               href="javascript:void(0)"
                               class="deleteLink"
                               style="color: red; padding: 5px; display: inline"
-                              onclick="confirmDeletion('<%= ShiftSchedule._id %>')"
+                              onclick="confirmDeletion('<%= bedAssignment.bedassignmentDetails._id %>')"
                               >Delete</a
                             >
                             <% } %> <% }); %>
@@ -157,12 +157,12 @@
     </script>
 
     <!-- 在过滤器区域添加 "Add User" 按钮 -->
-    <% buttonItems.forEach(function(item) { %> <% if (item.id === 'add-employeeShiftSchedule-btn'
+    <% buttonItems.forEach(function(item) { %> <% if (item.id === 'add-bedAssignment-btn'
     && item.visible) { %>
     <script>
       $(document).ready(function () {
         $('#dataTables-example_filter').append(
-          '<button id="<%= item.id %>" class="btn btn-primary add-employeeShiftSchedule-btn" data-href="<%= item.href %>"><%= item.name %></button>',
+          '<button id="<%= item.id %>" class="btn btn-primary add-bedAssignment-btn" data-href="<%= item.href %>"><%= item.name %></button>',
         );
 
         // 处理 "Add User" 按钮点击事件
@@ -188,17 +188,17 @@
       //3.添加删除对话框
       // 在实际运行时，confirmDeletion 函数接收到的 _id 参数就是 bedAssignment._id 的值。
       async function confirmDeletion(_id) {
-        if (confirm('Are you sure you want to delete this shiftSchedule?')) {
+        if (confirm('Are you sure you want to delete this bedAssignment?')) {
           try {
-            const response = await fetch(`/employees/shiftSchedule/${_id}/delete`, {
+            const response = await fetch(`/beds/assignment/${_id}/delete`, {
               method: 'DELETE',
             });
-            window.location.href = '/employees/shiftSchedule/';
+            window.location.href = '/beds/bedAssignment/';
             // const result = await response.json();
             // alert(result.message); // 显示反馈给用户
             location.reload(); // 刷新页面以更新用户表
           } catch (error) {
-            alert('An error occurred while deleting the shiftSchedule.');
+            alert('An error occurred while deleting the user.');
             console.error('Error:', error);
           }
         }

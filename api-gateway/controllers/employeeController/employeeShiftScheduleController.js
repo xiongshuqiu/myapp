@@ -66,7 +66,7 @@ const generateMonthlyShiftSchedule = async (req, res) => {
   console.log(data);
   try {
     const url = `${process.env.EMPLOYEE_SERVICE_URL}/employees/shiftSchedule/create`;
-    const response = await postRequest(url,data); // 发送 GET 请求以获取用户信息
+    const response = await postRequest(url, data); // 发送 GET 请求以获取用户信息
     res.json(response); // 将响应数据返回给前端:包括数据和message
     if (response.success) {
       console.log(response);
@@ -76,8 +76,8 @@ const generateMonthlyShiftSchedule = async (req, res) => {
   }
 };
 
-// 3. 更新特定员工档案
-// (1) 查找特定员工档案并显示编辑表单
+// 3. 更新特定值班安排
+// (1) 查找特定值班安排并显示编辑表单
 const getEmployeeShiftScheduleById = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取 _id
@@ -91,12 +91,18 @@ const getEmployeeShiftScheduleById = async (req, res) => {
     handleError(err, res);
   }
 };
-// (2) 提交更新后的员工档案数据
+// (2) 提交更新后的值班安排数据
 const updateEmployeeShiftSchedule = async (req, res) => {
-  const { employeeId, employeeName, position, contactNumber, email, userId,status } =
+  const { shiftScheduleId, employeeId, shiftType, startTime, endTime } =
     req.body;
   try {
-    const data = { employeeId, employeeName, position, contactNumber, email, userId,status };
+    const data = {
+      shiftScheduleId,
+      employeeId,
+      shiftType,
+      startTime,
+      endTime
+    };
     const { _id } = req.params; // 从参数中获取 _Id
     const url = `${process.env.EMPLOYEE_SERVICE_URL}/employees/shiftSchedule/${_id}`;
     const response = await putRequest(url, data); // 发送 PUT 请求以更新用户信息
@@ -130,5 +136,5 @@ module.exports = {
   generateMonthlyShiftSchedule,
   getEmployeeShiftScheduleById,
   updateEmployeeShiftSchedule,
-  deleteEmployeeShiftSchedule
+  deleteEmployeeShiftSchedule,
 };

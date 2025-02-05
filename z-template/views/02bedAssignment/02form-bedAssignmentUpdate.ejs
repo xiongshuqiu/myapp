@@ -32,12 +32,12 @@
       <div id="page-wrapper">
         <div class="header">
           <h1 class="page-header">
-            Update EmployeeShiftSchedule Information <small>Modify the EmployeeShiftSchedule's details.</small>
+            Update BedAssignment Information <small>Modify the BedAssignment's details.</small>
           </h1>
           <ol class="breadcrumb">
             <li><a href="#">Home</a></li>
             <li><a href="#">Forms</a></li>
-            <li class="active">Update EmployeeShiftSchedule</li>
+            <li class="active">Update BedAssignment</li>
           </ol>
         </div>
 
@@ -45,98 +45,103 @@
           <div class="row">
             <div class="col-lg-12">
               <div class="panel panel-default">
-                <div class="panel-heading">EmployeeShiftSchedule Information</div>
+                <div class="panel-heading">BedAssignment Information</div>
                 <div class="panel-body">
                   <div class="row">
                     <div class="col-lg-6">
                       <form
-                        action="/employees/shiftSchedule/<%= employeeShiftSchedule._id  %>?_method=PUT"
+                        action="/beds/assignment/<%= bedAssignment._id  %>?_method=PUT"
                         method="post"
                         role="form"
                       >
                   
                       <div class="form-group">
-                        <label for="shiftScheduleId">Shift Schedule ID <span style="color: red">*</span></label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="shiftScheduleId"
-                          name="shiftScheduleId"
-                          value="<%= employeeShiftSchedule.shiftScheduleId %>"
-                          required
-                          pattern="SS\d{4}"
-                          title="The Shift Schedule ID should follow the format: two capital letter followed by four digits (e.g., SS0001)."
-                        />
-                        <small class="form-text text-muted">
-                          The Shift Schedule ID  should follow the format: two capital letter followed by four digits (e.g., SS0001).
-                        </small>
-                      </div>
-
-                      <div class="form-group">
-                        <label for="employeeId">Employee ID(Name) <span style="color: red">*</span></label>
-                        <select class="form-control" id="employeeId" name="employeeId" required>
-                          <% if (employeeIds && employeeIds.length > 0) { %>
-                            <% employeeIds.forEach(function(employee) { %>
-                              <option value="<%= employee.employeeId %>" <%= employeeShiftSchedule.employeeId === employee.employeeId ? 'selected' : '' %>>
-                                employeeId: <%= employee.employeeId %> (<%= employee.employeeName %>)
+                        <label for="bedId">Bed ID(Status) <span style="color: red">*</span></label>
+                        <select class="form-control" id="bedId" name="bedId" required>
+                          <% if (bedIds && bedIds.length > 0) { %>
+                            <% bedIds.forEach(function(bed) { %>
+                              <option value="<%= bed.bedId %>" <%= bedAssignment.bedId === bed.bedId ? 'selected' : '' %>>
+                                bedId: <%= bed.bedId %> (<%= bed.status %>)
                               </option>
                             <% }); %>
                           <% } else { %>
-                            <option value="">No existing employeeId</option>
+                            <option value="">No existing bedId</option>
                           <% } %>
                         </select>
                       </div>
                       
                     
                       <div class="form-group">
-                        <label for="shiftType"> Shift Type <span style="color: red">*</span></label>
-                        <select class="form-control" id="shiftType" name="shiftType" required>
-            
-                              <option value="Morning" <%= employeeShiftSchedule.shiftType === 'Morning' ? 'selected' : '' %>>
-                                Morning
+                        <label for="unassignedElderlyId"> Elderly ID(Name) <span style="color: red">*</span></label>
+                        <select class="form-control" id="elderlyId" name="elderlyId" required>
+                          <% if (elderlyIds && elderlyIds.length > 0) { %>
+                            <% elderlyIds.forEach(function(elderly) { %>
+                              <option value="<%= elderly.elderlyId %>" <%= bedAssignment.elderlyId === elderly.elderlyId ? 'selected' : '' %>>
+                                ID: <%= elderly.elderlyId %> (<%= elderly.elderlyName %>)
                               </option>
-                              <option value="Evening" <%= employeeShiftSchedule.shiftType === 'Evening' ? 'selected' : '' %>>
-                                Evening
-                              </option>
-                              <option value="Night" <%= employeeShiftSchedule.shiftType === 'Night' ? 'selected' : '' %>>
-                                Night
-                              </option>
+                            <% }); %>
+                          <% } else { %>
+                            <option value="">No existing elderlyId</option>
+                          <% } %>
                         </select>
                       </div>
-                                     
+                      
+                    
                         <div class="form-group">
-                          <label for="startTime">Start Time <span style="color: red">*</span></label>
+                          <label for="assignmentId">Assignment ID <span style="color: red">*</span></label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="assignmentId"
+                            name="assignmentId"
+                            value="<%= bedAssignment.assignmentId %>"
+                            required
+                            pattern="A\d{3}"
+                            title="The Assignment ID should follow the format: a capital letter followed by three digits (e.g., A001)."
+                          />
+                          <small class="form-text text-muted">
+                            The Assignment ID should follow the format: a capital letter followed by three digits (e.g., A001).
+                          </small>
+                        </div>
+
+        
+                        
+                        <div class="form-group">
+                          <label for="assignedDate">Assigned Date <span style="color: red">*</span></label>
                           <div class="input-wrapper">
                             <input
                               type="date"
                               class="form-control date-input"
-                              id="startTime"
-                              name="startTime"
-                              value="<%= employeeShiftSchedule.startTime ? new Date(employeeShiftSchedule.startTime).toISOString().split('T')[0] : '' %>"
-                               />
-                            </div>
-                          </div>
-                       
-                        <div class="form-group">
-                          <label for="endTime">End Time </label>
-                          <div class="input-wrapper">
-                            <input
-                              type="date"
-                              class="form-control date-input"
-                              id="endTime"
-                              name="endTime"
-                              value="<%= employeeShiftSchedule.endTime ? new Date(employeeShiftSchedule.endTime).toISOString().split('T')[0] : '' %>" 
-                              />
+                              id="assignedDate"
+                              name="assignedDate"
+                              value="<%= bedAssignment.assignedDate ? new Date(bedAssignment.assignedDate).toISOString().split('T')[0] : new Date().toISOString().split('T')[0] %>"
+                            />
                           </div>
                         </div>
                         
+                        <div class="form-group">
+                          <label for="releaseDate">Release Date </label>
+                          <div class="input-wrapper">
+                            <input
+                              type="date"
+                              class="form-control date-input"
+                              id="releaseDate"
+                              name="releaseDate"
+                              value="<%= bedAssignment.releaseDate ? new Date(bedAssignment.releaseDate).toISOString().split('T')[0] : new Date().toISOString().split('T')[0] %>"
+                            />
+                          </div>
+                        </div>
+                        
+                        
+                        
+
                         <button type="submit" class="btn btn-primary">
                           Save Changes
                         </button>
                         <button
                           type="reset"
                           class="btn btn-secondary"
-                          onclick="window.location.href='/employees/shiftSchedule/';"
+                          onclick="window.location.href='/beds/assignment/';"
                         >
                           Return
                         </button>
