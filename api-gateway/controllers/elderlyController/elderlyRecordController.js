@@ -32,7 +32,7 @@ const deleteRequest = async (url) => {
   return response.data;
 };
 // 1. 获取所有床位分配
-const getAllBedAssignments = async (req, res) => {
+const getAllElderlyRecords = async (req, res) => {
   const { _id, role } = req.query; // 从查询参数中获取传递的数据
   try {
     const url = `${process.env.BED_SERVICE_URL}/beds/assignment/?_id=${_id}&role=${role}`;
@@ -48,7 +48,7 @@ const getAllBedAssignments = async (req, res) => {
 
 // 2. 创建新的床位分配
 // (1) 显示新增床位分配表单(查找可用的bedId、elderlyId)
-const renderNewBedAssignmentForm = async (req, res) => {
+const renderNewElderlyRecordForm = async (req, res) => {
   try {
     const url = `${process.env.BED_SERVICE_URL}/beds/assignment/new`;
     const response = await getRequest(url); // 发送 GET 请求以获取用户信息
@@ -61,7 +61,7 @@ const renderNewBedAssignmentForm = async (req, res) => {
   }
 };
 // (2) 提交新的床位分配数据
-const createBedAssignment = async (req, res) => {
+const createElderlyRecord = async (req, res) => {
   const {
     availableBedId,
     unassignedElderlyId,
@@ -90,7 +90,7 @@ const createBedAssignment = async (req, res) => {
 };
 // 3. 更新特定床位分配
 // (1) 查找特定床位分配并显示编辑表单
-const getBedAssignmentById = async (req, res) => {
+const getElderlyRecordById = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取 _id
     const url = `${process.env.BED_SERVICE_URL}/beds/assignment/${_id}/update`;
@@ -104,7 +104,7 @@ const getBedAssignmentById = async (req, res) => {
   }
 };
 // (2) 提交更新后的床位分配数据
-const updateBedAssignment = async (req, res) => {
+const updateElderlyRecord = async (req, res) => {
   const { bedId, elderlyId, assignmentId, assignedDate,releaseDate  } = req.body;
   try {
     const data = { bedId, elderlyId, assignmentId, assignedDate,releaseDate  };
@@ -121,7 +121,7 @@ const updateBedAssignment = async (req, res) => {
 };
 
 // 4. 删除特定床位分配
-const deleteBedAssignment = async (req, res) => {
+const deleteElderlyRecord = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取 userId
     const url = `${process.env.BED_SERVICE_URL}/beds/assignment/${_id}/delete`;
@@ -136,10 +136,10 @@ const deleteBedAssignment = async (req, res) => {
 };
 
 module.exports = {
-  getAllBedAssignments,
-  renderNewBedAssignmentForm,
-  createBedAssignment,
-  getBedAssignmentById,
-  updateBedAssignment,
-  deleteBedAssignment,
+  getAllElderlyRecords,
+  renderNewElderlyRecordForm,
+  createElderlyRecord,
+  getElderlyRecordById,
+  updateElderlyRecord,
+  deleteElderlyRecord
 };

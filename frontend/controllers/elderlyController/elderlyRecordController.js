@@ -43,7 +43,7 @@ const deleteRequest = async (url) => {
 };
 
 // 1.获取所有床位分配
-const getAllBedAssignments = async (req, res) => {
+const getAllElderlyRecords = async (req, res) => {
   const _id = req.user._id;
   const role = req.user.role;
   console.log('User data:', { _id, role }); // 调试信息
@@ -71,7 +71,7 @@ const getAllBedAssignments = async (req, res) => {
 };
 // 2.创建新的床位分配
 //(1)显示新增床位分配表单
-const renderNewBedAssignmentForm = async (req, res) => {
+const renderNewElderlyRecordForm = async (req, res) => {
   const apiUrl = `${process.env.API_URL}/api/beds/assignment/new`;
   console.log('API URL:', apiUrl); // 调试信息
   try {
@@ -95,7 +95,7 @@ const renderNewBedAssignmentForm = async (req, res) => {
 };
 
 //(2)提交新的床位分配数据
-const createBedAssignment = async (req, res) => {
+const createElderlyRecord = async (req, res) => {
   const {
     availableBedId,
     unassignedElderlyId,
@@ -128,7 +128,7 @@ const createBedAssignment = async (req, res) => {
 
 // 3.更新特定床位分配
 // (1)查找特定床位分配并显示编辑表单
-const getBedAssignmentById = async (req, res) => {
+const getElderlyRecordById = async (req, res) => {
   const { _id } = req.params; // 从参数中获取 _id
   console.log(`Fetching bedAssignment with ID: ${_id}`); // 调试信息
   try {
@@ -152,7 +152,7 @@ const getBedAssignmentById = async (req, res) => {
 };
 
 //(2) 提交更新后的床位分配数据
-const updateBedAssignment = async (req, res) => {
+const updateElderlyRecord = async (req, res) => {
   const { bedId, elderlyId, assignmentId, assignedDate,releaseDate } = req.body;
   const { _id } = req.params;
   try {
@@ -173,7 +173,7 @@ const updateBedAssignment = async (req, res) => {
 };
 
 // 4. 删除特定床位分配
-const deleteBedAssignment = async (req, res) => {
+const deleteElderlyRecord = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取_id
     console.log(_id);
@@ -188,10 +188,10 @@ const deleteBedAssignment = async (req, res) => {
   }
 };
 module.exports = {
-  getAllBedAssignments,
-  renderNewBedAssignmentForm,
-  createBedAssignment,
-  getBedAssignmentById,
-  updateBedAssignment,
-  deleteBedAssignment,
+  getAllElderlyRecords,
+  renderNewElderlyRecordForm,
+  createElderlyRecord,
+  getElderlyRecordById,
+  updateElderlyRecord,
+  deleteElderlyRecord
 };

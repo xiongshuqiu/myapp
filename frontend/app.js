@@ -15,6 +15,7 @@ const userRoutes = require('./routes/userRoutes');
 const accountRoutes = require('./routes/accountRoutes');
 const bedRoutes = require('./routes/bedRoutes/bedRoutes');
 const employeeRoutes = require('./routes/employeeRoutes/employeeRoutes');
+const elderlyRoutes = require('./routes/elderlyRoutes/elderlyRoutes');
 
 
 // 2. 加载环境变量
@@ -65,7 +66,7 @@ app.use('/users', userRoutes);
 app.use('/accounts', accountRoutes);
 app.use('/beds', bedRoutes);
 app.use('/employees', employeeRoutes);
-
+app.use('/elderly', elderlyRoutes);
 // 10. 启动服务器并监听指定端口
 const PORT = process.env.PORT; // 设置服务器端口
 app.listen(PORT, () => {

@@ -18,7 +18,9 @@
         ".gitignore": true,
         "auth-service": true,
         "account-service": true,
-        "user-service": true
+        "user-service": true,
+        "bed-service": true,
+        "employee-service": true
     },
     "hide-files.files": [
         "financial-service",
@@ -29,6 +31,8 @@
         ".gitignore",
         "auth-service",
         "account-service",
-        "user-service"
+        "user-service",
+        "bed-service",
+        "employee-service"
     ]
 }

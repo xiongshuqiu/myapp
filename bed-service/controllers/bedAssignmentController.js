@@ -1,8 +1,3 @@
-// const {
-//   User,
-//   Elderly,
-//   BedAssignment,
-// } = require('../models/bedAssignmentModel');
 const User = require('../models/userModel');
 const Elderly = require('../models/elderlyModel');
 const BedAssignment = require('../models/bedAssignmentModel');

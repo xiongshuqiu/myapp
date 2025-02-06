@@ -1,13 +1,13 @@
 // #frontend routes
 const express = require('express');
 const router = express.Router();
-const bedStatusRoutes = require('./bedStatusRoutes.js');
-const bedAssignmentRoutes = require('./bedAssignmentRoutes.js');
+const elderlyRecordRoutes = require('./elderlyRecordRoutes.js');
+// const elderlyLeaveRoutes = require('./elderlyLeaveRoutes.js');
+// const elderlyResidentRoutes = require('./elderlyResidentRoutes.js');
 
-router.use('/status',bedStatusRoutes);
-router.use('/assignment',bedAssignmentRoutes);
+router.use('/record',elderlyRecordRoutes);
+// router.use('/leave', elderlyLeaveRoutes);
+// router.use('/resident',elderlyResidentRoutes);
 module.exports = router;
-
-
 
 

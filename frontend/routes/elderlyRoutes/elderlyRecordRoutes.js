@@ -6,30 +6,29 @@ const {
   bntLinkVisibility,
 } = require('../../visibilityMiddleware/bntLinkVisibility');
 const {
-  getAllBedAssignments,
-  renderNewBedAssignmentForm,
-  createBedAssignment,
-  getBedAssignmentById,
-  updateBedAssignment,
-  deleteBedAssignment
-} = require('../../controllers/bedController/bedAssignmentController');
+  getAllElderlyRecords,
+  renderNewElderlyRecordForm,
+  createElderlyRecord,
+  getElderlyRecordById,
+  updateElderlyRecord,
+  deleteElderlyRecord
+} = require('../../controllers/elderlyController/elderlyRecordController');
+// 1. 获取所有老人信息
+router.get('/', bntLinkVisibility, getAllElderlyRecords);
 
-// 1. 获取所有床位分配
-router.get('/', bntLinkVisibility, getAllBedAssignments);
+// 2. 创建新的老人信息
+// (1) 显示新增老人信息表单(查找可用的bedId、elderlyId)
+router.get('/new', renderNewElderlyRecordForm);
+// (2) 提交新的老人信息数据
+router.post('/create', createElderlyRecord);
 
-// 2. 创建新的床位分配
-// (1) 显示新增床位分配表单(查找可用的bedId、elderlyId)
-router.get('/new', renderNewBedAssignmentForm);
-// (2) 提交新的床位分配数据
-router.post('/create', createBedAssignment);
+// 3. 更新特定老人信息
+// (1) 查找特定老人信息并显示编辑表单
+router.get('/:_id/update', getElderlyRecordById);
+// (2) 提交更新后的老人信息数据
+router.put('/:_id', updateElderlyRecord);
 
-// 3. 更新特定床位分配
-// (1) 查找特定床位分配并显示编辑表单
-router.get('/:_id/update', getBedAssignmentById);
-// (2) 提交更新后的床位分配数据
-router.put('/:_id', updateBedAssignment);
-
-// 4. 删除特定床位分配
-router.delete('/:_id/delete', deleteBedAssignment);
+// 4. 删除特定老人信息
+router.delete('/:_id/delete', deleteElderlyRecord);
 
 module.exports = router;
