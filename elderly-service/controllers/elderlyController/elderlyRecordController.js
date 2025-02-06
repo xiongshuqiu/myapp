@@ -330,7 +330,7 @@ const deleteElderlyRecord = async (req, res) => {
   const { _id } = req.params;
 
   try {
-    await BedAssignment.findByIdAndDelete(_id); // 根据ID删除老人档案
+    await Elderly.findByIdAndDelete(_id); // 根据ID删除老人档案
     console.log('Bed status deleted successfully:', _id); // 调试信息
     return res
       .status(200)
