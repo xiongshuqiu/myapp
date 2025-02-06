@@ -1,3 +1,0 @@
-employee-service\models\employeeModel.js
-employee-service\models\employeeShiftScheduleModel.js
-employee-service\models\userModel.js

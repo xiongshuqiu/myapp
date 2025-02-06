@@ -15,10 +15,8 @@
         "visitor-service": true,
         "node_modules": true,
         "notification-service": true,
-        "elderly-service": true,
         ".gitignore": true,
         "auth-service": true,
-        "bed-service": true,
         "account-service": true,
         "user-service": true
     },
@@ -28,10 +26,8 @@
         "visitor-service",
         "node_modules",
         "notification-service",
-        "elderly-service",
         ".gitignore",
         "auth-service",
-        "bed-service",
         "account-service",
         "user-service"
     ]
