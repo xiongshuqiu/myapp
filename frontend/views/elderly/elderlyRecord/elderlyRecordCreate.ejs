@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>chinaz</title>
+    <!-- 1.框架样式：Bootstrap Styles-->
+    <link href="/assets/css/bootstrap.css" rel="stylesheet" />
+    <!-- 2.图标样式：FontAwesome Styles-->
+    <link href="/assets/css/font-awesome.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <!--3.普通样式：Custom Styles-->
+    <link href="/assets/css/custom-styles.css" rel="stylesheet" />
+    <!-- 4.字体样式：Google Fonts-->
+    <link
+      href="http://fonts.useso.com/css?family=Open+Sans"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+
+  <body>
+    <div id="wrapper">
+      <!-- 顶部导航条 -->
+      <%- include('../../block/top-navbar.ejs') %>
+      <!-- 左侧导航条 -->
+      <%- include('../../block/navbar-side.ejs') %>
+
+
+      <div id="page-wrapper">
+        <div class="header">
+          <h1 class="page-header">
+            Forms Page <small>Best form elements.</small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Forms</a></li>
+            <li class="active">Data</li>
+          </ol>
+        </div>
+
+        <div id="page-inner">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="panel panel-default">
+                <div class="panel-heading">Basic Form Elements</div>
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <form action="/elderly/record/create" method="post" role="form">
+                        
+                        <div class="form-group">
+                          <label for="elderlyId">Elderly ID <span style="color: red">*</span></label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="elderlyId"
+                            name="elderlyId"
+                            placeholder="Enter Elderly ID (e.g., E001)"
+                            required
+                            pattern="^E\d{3}$"
+                            title="Room format should be Elderly ID (e.g., E001)"
+                          />
+                          <small class="form-text text-muted">
+                            Format: Elderly ID (e.g., E001)
+                          </small>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="elderlyName">Elderly Name  <span style="color: red">*</span></label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="elderlyName"
+                            name="elderlyName"
+                            placeholder="Enter Elderly Name "
+                            required
+                          />
+                        </div>
+
+                        <div class="form-group">
+                          <label for="elderlyPhone">Elderly Phone <span style="color: red">*</span></label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="elderlyPhone"
+                            name="elderlyPhone"
+                            placeholder="Enter Elderly Phone "
+                            required
+                          />
+                        </div>
+
+                        <div class="form-group">
+                          <label for="dateOfBirth">Birthday <span style="color: red">*</span></label>
+                          <div class="input-wrapper">
+                            <input
+                              type="date"
+                              class="form-control date-input"
+                              id="dateOfBirth"
+                              name="dateOfBirth"
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="gender">Gender <span style="color: red">*</span></label>
+                          <select class="form-control" id="gender" name="gender" required>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                          </select>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="address">Address <span style="color: red">*</span></label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="address"
+                            name="address"
+                            placeholder="Enter Address "
+                            required
+                          />
+                        </div>
+
+                        <div class="form-group">
+                          <label for="medicalHistory">Medical History </label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="medicalHistory"
+                            name="medicalHistory"
+                            placeholder="Enter Medical History "
+                          />
+                        </div>
+
+                        <div class="form-group">
+                          <label for="allergies">Allergies </label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="allergies"
+                            name="allergies"
+                            placeholder="Enter Allergies "
+                          />
+                        </div>
+
+                        <div class="form-group">
+                          <label for="emergencyContactName">Emergency Contact Name <span style="color: red">*</span></label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="emergencyContactName"
+                            name="emergencyContactName"
+                            placeholder="Enter Emergency Contact Name "
+                            required
+                          />
+                        </div>
+
+                        <div class="form-group">
+                          <label for="emergencyContactPhone">Emergency Contact Phone <span style="color: red">*</span></label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="emergencyContactPhone"
+                            name="emergencyContactPhone"
+                            placeholder="Enter Emergency Contact Phone "
+                            required
+                          />
+                        </div>
+                        
+                        <div class="form-group">
+                          <label for="userId">
+                            User ID(Role)
+                          </label>
+                          <select
+                            class="form-control"
+                            id="userId"
+                            name="userId"
+                          >
+                          <option value=" ">Not Set UserId</option>
+                            <% if (userIds &&
+                            userIds.length > 0) { %> <%
+                              userIds.forEach(function(user)
+                            { %>
+                            <option
+                              value="<%= user.userId %>"
+                            >
+                              ID:<%= user.userId %> (<%=
+                              user.role %>)
+                            </option>
+                            <% }) %> <% } else { %>
+                            <option value="">No existing userId</option>
+                            <% } %>
+                          </select>
+                        </div>
+                        
+                        <div class="form-group">
+                          <label for="employeeId">
+                            Employee ID(Name)
+                            <span style="color: red">*</span></label
+                          >
+                          <select
+                            class="form-control"
+                            id="employeeId"
+                            name="employeeId"
+                            required
+                          >
+                            <% if (employeeIds &&
+                            employeeIds.length > 0) { %> <%
+                              employeeIds.forEach(function(employee)
+                            { %>
+                            <option
+                              value="<%= employee.employeeId %>"
+                            >
+                              ID:<%= employee.employeeId %> (<%=
+                              employee.employeeName %>)
+                            </option>
+                            <% }) %> <% } else { %>
+                            <option value="">No existing employeeId</option>
+                            <% } %>
+                          </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                          Submit
+                        </button>
+                        <button
+                          type="reset"
+                          class="btn btn-secondary"
+                          onclick="window.location.href='/elderly/record/';"
+                        >
+                          Return
+                        </button>
+                      </form>
+                    </form>
+                    <div id="message" class="mt-3">
+                      <% if (typeof message !== 'undefined' && message !== null) { %>
+                        <div class="alert alert-success"><%= message %></div>
+                      <% } %>
+                    </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /.panel-body -->
+              </div>
+              <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+          </div>
+        </div>
+
+        <!-- /. PAGE INNER  -->
+      </div>
+      <!-- /. PAGE WRAPPER  -->
+    </div>
+    <!-- /. WRAPPER  -->
+    <!-- JS Scripts-->
+    <!-- jQuery Js -->
+    <script src="/assets/js/jquery-1.10.2.js"></script>
+    <!-- Bootstrap Js -->
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <!-- Metis Menu Js -->s
+    <script src="/assets/js/jquery.metisMenu.js"></script>
+    <!-- Custom Js -->
+    <script src="/assets/js/custom-scripts.js"></script>
+  
+  </body>
+</html>

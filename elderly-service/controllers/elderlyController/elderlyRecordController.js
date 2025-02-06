@@ -6,9 +6,9 @@ const ElderlyResident = require('../../models/elderlyResidentModel');
 const Employee = require('../../models/employeeModel');
 const User = require('../../models/userModel');
 
-// 1.获取所有床位分配
+// 1.获取所有老人档案
 const getAllElderlyRecords = async (req, res) => {
-  console.log('Received request to get all bed statuses'); // 调试信息
+  console.log('Received request to get all elderly records'); // 调试信息
   const { _id, role } = req.query;
   console.log('Query parameters:', _id, role); // 调试信息
 
@@ -27,172 +27,206 @@ const getAllElderlyRecords = async (req, res) => {
       const userId = user.userId; // 获取用户的 userId
 
       // 使用聚合管道进行后续查询
-      const bedAssignments = await Elderly.aggregate([
+      //查找思路：（1）根据userId筛选Elderly中的老人
+      //（2）根据userId在User中查找userName形成新的字段userDetails
+      //（3）根据employeeId在Employeer中查找employeerName、contactNumber形成新的字段employeeDetails
+      const elderlyRecords = await Elderly.aggregate([
         {
           $match: { userId: userId }, // 根据 userId 查找家庭成员
         },
         {
           $lookup: {
-            from: 'bedassignments', // 从 bedassignments 集合中查找与家庭成员关联的床位分配
-            localField: 'elderlyId', // 当前集合中的字段
-            foreignField: 'elderlyId', // 关联集合中的字段
-            as: 'bedassignmentDetails', // 结果保存字段
+            from: 'users', // 从 bedassignments 集合中查找与家庭成员关联的老人档案
+            localField: 'userId', // 当前集合中的字段
+            foreignField: 'userId', // 关联集合中的字段
+            as: 'userDetails', // 结果保存字段
           },
         },
         {
-          $unwind: '$bedassignmentDetails', // 展开数组字段
+          $unwind: '$userDetails', // 展开数组字段
         },
         {
           $lookup: {
-            from: 'bedstatuses', // 从 bedstatuses 集合中查找与床位分配关联的床位信息
-            localField: 'bedassignmentDetails.bedId', // 当前集合中的字段
-            foreignField: 'bedId', // 关联集合中的字段
-            as: 'bedStatusDetails', // 结果保存字段
+            from: 'employees', // 从 bedstatuses 集合中查找与老人档案关联的床位信息
+            localField: 'employeeId', // 当前集合中的字段
+            foreignField: 'employeeId', // 关联集合中的字段
+            as: 'employeeDetails', // 结果保存字段
           },
         },
         {
-          $unwind: '$bedStatusDetails', // 展开数组字段
+          $unwind: '$employeeDetails', // 展开数组字段
+        },
+        {
+          $project: {
+            elderlyId: 1, // 保留 elderlyId 字段
+            elderlyName: 1, // 保留 elderlyName 字段
+            elderlyPhone: 1, // 保留 elderlyPhone 字段
+            dateOfBirth: 1, // 保留 dateOfBirth 字段
+            age: {
+              $subtract: [
+                { $year: new Date() }, // 当前年份
+                { $year: '$dateOfBirth' }, // 出生年份
+              ],
+            },
+            gender: 1, // 保留 gender 字段
+            address: 1, // 保留 address 字段
+            medicalHistory: 1, // 保留 medicalHistory 字段
+            allergies: 1, // 保留 allergies 字段
+            emergencyContactName: 1, // 保留 emergencyContactName 字段
+            emergencyContactPhone: 1, // 保留 emergencyContactPhone 字段
+            userId: '$userDetails.userId', // 保留 userDetails 中的 userId 字段
+            userName: '$userDetails.userName', // 保留 userDetails 中的 userName 字段
+            employeeId: '$employeeDetails.employeeId', // 保留 employeeDetails 中的 employeeId 字段
+            employeeName: '$employeeDetails.name', // 保留 employeeDetails 中的 name 字段
+            employeeContactNumber: '$employeeDetails.contactNumber', // 保留 employeeDetails 中的 contactNumber 字段
+          },
         },
       ]);
       res.status(200).json({
         success: true,
-        message: 'Bed assignments retrieved successfully',
-        data: bedAssignments,
+        message: 'Elderly records retrieved successfully',
+        data: elderlyRecords,
       });
-      console.log(bedAssignments);
+      console.log(elderlyRecords);
     } else if (role === 'admin') {
-      const bedAssignments = await Elderly.aggregate([
+      const elderlyRecords = await Elderly.aggregate([
         {
           $lookup: {
-            from: 'bedassignments', // 从 bedassignments 集合中查找与家庭成员关联的床位分配
-            localField: 'elderlyId', // 当前集合中的字段
-            foreignField: 'elderlyId', // 关联集合中的字段
-            as: 'bedassignmentDetails', // 结果保存字段
+            from: 'users', // 从 bedassignments 集合中查找与家庭成员关联的老人档案
+            localField: 'userId', // 当前集合中的字段
+            foreignField: 'userId', // 关联集合中的字段
+            as: 'userDetails', // 结果保存字段
           },
         },
         {
-          $unwind: '$bedassignmentDetails', // 展开数组字段
+          $unwind: '$userDetails', // 展开数组字段
         },
         {
           $lookup: {
-            from: 'bedstatuses', // 从 bedstatuses 集合中查找与床位分配关联的床位信息
-            localField: 'bedassignmentDetails.bedId', // 当前集合中的字段
-            foreignField: 'bedId', // 关联集合中的字段
-            as: 'bedStatusDetails', // 结果保存字段
+            from: 'employees', // 从 bedstatuses 集合中查找与老人档案关联的床位信息
+            localField: 'employeeId', // 当前集合中的字段
+            foreignField: 'employeeId', // 关联集合中的字段
+            as: 'employeeDetails', // 结果保存字段
           },
         },
         {
-          $unwind: '$bedStatusDetails', // 展开数组字段
+          $unwind: '$employeeDetails', // 展开数组字段
+        },
+        {
+          $project: {
+            elderlyId: 1, // 保留 elderlyId 字段
+            elderlyName: 1, // 保留 elderlyName 字段
+            elderlyPhone: 1, // 保留 elderlyPhone 字段
+            dateOfBirth: 1, // 保留 dateOfBirth 字段
+            age: {
+              $subtract: [
+                { $year: new Date() }, // 当前年份
+                { $year: '$dateOfBirth' }, // 出生年份
+              ],
+            },
+            gender: 1, // 保留 gender 字段
+            address: 1, // 保留 address 字段
+            medicalHistory: 1, // 保留 medicalHistory 字段
+            allergies: 1, // 保留 allergies 字段
+            emergencyContactName: 1, // 保留 emergencyContactName 字段
+            emergencyContactPhone: 1, // 保留 emergencyContactPhone 字段
+            userId: '$userDetails.userId', // 保留 userDetails 中的 userId 字段
+            userName: '$userDetails.userName', // 保留 userDetails 中的 userName 字段
+            employeeId: '$employeeDetails.employeeId', // 保留 employeeDetails 中的 employeeId 字段
+            employeeName: '$employeeDetails.employeeName', // 保留 employeeDetails 中的 name 字段
+            employeeContactNumber: '$employeeDetails.contactNumber', // 保留 employeeDetails 中的 contactNumber 字段
+          },
         },
       ]);
-      console.log(bedAssignments);
+      console.log(elderlyRecords);
       res.status(200).json({
         success: true,
-        message: 'Bed assignments retrieved successfully',
-        data: bedAssignments,
+        message: 'Elderly records retrieved successfully',
+        data: elderlyRecords,
       });
     }
   } catch (err) {
-    console.error('Error retrieving bed assignments:', err.message); // 调试信息
+    console.error('Error retrieving elderly records:', err.message); // 调试信息
     res.status(500).json({ success: false, message: err.message });
   }
 };
 
-// 2. 创建新的床位分配
-// (1) 显示新增床位分配表单(查找available的bedId、未分配床位的elderlyId)
+// 2. 创建新的老人档案
+// (1) 显示新增老人档案表单(查找available的bedId、未分配床位的elderlyId)
 const renderNewElderlyRecordForm = async (req, res) => {
   try {
-    // 顺序查找可用的 bedId
-    const availableBedIds = await BedStatus.find({
-      status: 'available',
-    }).select('bedId');
+    // 顺序查找 userId
+    const userIds = await User.find({role:'family'}).select('userId role');
 
-    // 聚合管道查找未分配床位的 elderlyId
-    const unassignedElderlyIds = await Elderly.aggregate([
-      {
-        $lookup: {
-          from: 'bedassignments',
-          localField: 'elderlyId',
-          foreignField: 'elderlyId',
-          as: 'bedAssignment',
-        },
-      },
-      {
-        $match: {
-          'bedAssignment.elderlyId': { $exists: false },
-        },
-      },
-      {
-        $project: {
-          elderlyId: 1,
-          elderlyName: 1, // 您可以根据需要选择其他字段
-        },
-      },
-    ]);
-
-    console.log('Available Bed IDs:', availableBedIds);
-    console.log('Unassigned Elderly IDs:', unassignedElderlyIds);
+    // 顺序查找 employeeId
+    const employeeIds = await Employee.find().select(
+      'employeeId employeeName',
+    );
+    console.log('User IDs:', userIds);
+    console.log(' Employee IDs:', employeeIds);
 
     return res.status(200).json({
       success: true,
-      message: 'bedId and unassigned elderlyId retrieved successfully',
-      data: { availableBedIds, unassignedElderlyIds },
+      message: 'UserIds and employeeIds retrieved successfully',
+      data: { employeeIds, userIds },
     });
   } catch (err) {
-    console.error(
-      'Error retrieving bedId and unassigned elderlyId:',
-      err.message,
-    ); // 调试信息
+    console.error('Error retrieving userIds and employeeIds:', err.message); // 调试信息
     res.status(500).json({ success: false, message: err.message });
   }
 };
-// (2) 提交新的床位分配数据
+// (2) 提交新的老人档案数据
 const createElderlyRecord = async (req, res) => {
   const {
-    availableBedId,
-    unassignedElderlyId,
-    assignmentId,
-    assignedDate,
-    releaseDate,
+    elderlyId,
+    elderlyName,
+    elderlyPhone,
+    dateOfBirth,
+    gender,
+    address,
+    medicalHistory,
+    allergies,
+    emergencyContactName,
+    emergencyContactPhone,
+    userId,
+    employeeId,
   } = req.body;
-  console.log('Received request to create bed status with data:', req.body); // 调试信息
+  console.log('Received request to create elderly record with data:', req.body); // 调试信息
   try {
     // 检查是否存在相同床位编号的记录
-    const existingBedAssignment = await BedAssignment.findOne({ assignmentId });
-    if (existingBedAssignment) {
-      console.warn(`Bed assignmentId already exists: ${assignmentId}`); // 调试信息
+    const existingElderly = await Elderly.findOne({ elderlyId });
+    if (existingElderly) {
+      console.warn(`Elderly id already exists: ${elderlyId}`); // 调试信息
       return res
         .status(400)
-        .json({ success: false, message: 'Bed assignmentId already exists' });
+        .json({ success: false, message: 'Elderly id already exists' });
     }
 
-    // 创建并保存新床位分配
-    const newBedAssignment = new BedAssignment({
-      bedId: availableBedId,
-      elderlyId: unassignedElderlyId,
-      assignmentId,
-      assignedDate,
-      releaseDate,
+    // 创建并保存新老人档案
+    const newElderly = new Elderly({
+      elderlyId: elderlyId, // 老人唯一编号 E001
+      elderlyName: elderlyName, // 老人姓名
+      elderlyPhone: elderlyPhone, // 老人电话
+      dateOfBirth: dateOfBirth, // 生日
+      gender: gender, // 性别
+      address: address, // 地址
+      medicalHistory: medicalHistory, // 医疗史
+      allergies: allergies, // 过敏史
+      emergencyContactName: emergencyContactName, // 紧急联系人姓名
+      emergencyContactPhone: emergencyContactPhone, // 紧急联系人电话
+      userId: userId, // 家属登录 Id 唯一编号 F001
+      employeeId: employeeId, // 关联负责的医生S002
     });
-    await newBedAssignment.save();
 
-    // 更新床位状态为 occupied
-    await BedStatus.updateOne(
-      { bedId: availableBedId }, // 查找条件
-      { status: 'occupied' }, // 更新内容
-    );
-
-    console.log(
-      'Bed assignment created and bed status updated successfully:',
-      newBedAssignment,
-    ); // 调试信息
+    await newElderly.save();
+    console.log(' Elderly record created successfully:', newElderly); // 调试信息
     return res.status(201).json({
       success: true,
-      message: 'Bed assignment created and bed status updated successfully',
-      data: newBedAssignment,
+      message: 'Elderly record created successfully',
+      data: newElderly,
     });
   } catch (error) {
-    console.error('Error creating bed assignment:', error.message); // 调试信息
+    console.error('Error creating elderly record:', error.message); // 调试信息
     return res.status(500).json({
       success: false,
       message: 'An error occurred',
@@ -201,20 +235,20 @@ const createElderlyRecord = async (req, res) => {
   }
 };
 
-// 3. 更新特定床位分配
-// (1) 查找特定床位分配
+// 3. 更新特定老人档案
+// (1) 查找特定老人档案
 const getElderlyRecordById = async (req, res) => {
   const { _id } = req.params;
   console.log(`Received request to get bed assignment by ID: ${_id}`); // 调试信息
   try {
-    // 根据ID查找床位分配
+    // 根据ID查找老人档案
     const bedAssignment = await BedAssignment.findById(_id);
     if (bedAssignment) {
       console.log('Bed assignment retrieved successfully:', bedAssignment); // 调试信息
 
       // 查找所有的 bedId
       const bedIds = await BedStatus.find().select('bedId status');
-      // 查找所有老人信息
+      // 查找所有老人档案
       const elderlyIds = await Elderly.find().select('elderlyId elderlyName');
       return res.status(200).json({
         success: true,
@@ -237,16 +271,16 @@ const getElderlyRecordById = async (req, res) => {
     return res.status(500).json({ success: false, message: err.message });
   }
 };
-// (2) 提交更新后的床位分配数据
+// (2) 提交更新后的老人档案数据
 const updateElderlyRecord = async (req, res) => {
   const { _id } = req.params; // 从 URL 参数中获取 assignmentId
-  const { bedId, elderlyId, assignmentId, assignedDate,releaseDate } =
+  const { bedId, elderlyId, assignmentId, assignedDate, releaseDate } =
     req.body;
 
   console.log('Received request to update bed assignment with data:', req.body); // 调试信息
 
   try {
-    // 查找现有床位分配记录
+    // 查找现有老人档案记录
     const existingBedAssignment = await BedAssignment.findOne({ _id });
     if (!existingBedAssignment) {
       console.warn(`Bed assignmentId not found: ${_id}`); // 调试信息
@@ -264,13 +298,10 @@ const updateElderlyRecord = async (req, res) => {
       );
 
       // 更新新床位状态为 occupied
-      await BedStatus.updateOne(
-        { bedId: bedId },
-        { status: 'occupied' },
-      );
+      await BedStatus.updateOne({ bedId: bedId }, { status: 'occupied' });
     }
 
-    // 更新床位分配记录
+    // 更新老人档案记录
     existingBedAssignment.bedId = bedId;
     existingBedAssignment.elderlyId = elderlyId;
     existingBedAssignment.assignmentId = assignmentId;
@@ -294,12 +325,12 @@ const updateElderlyRecord = async (req, res) => {
   }
 };
 
-// 4. 删除特定床位分配
+// 4. 删除特定老人档案
 const deleteElderlyRecord = async (req, res) => {
   const { _id } = req.params;
 
   try {
-    await BedAssignment.findByIdAndDelete(_id); // 根据ID删除床位分配
+    await BedAssignment.findByIdAndDelete(_id); // 根据ID删除老人档案
     console.log('Bed status deleted successfully:', _id); // 调试信息
     return res
       .status(200)
@@ -321,5 +352,5 @@ module.exports = {
   createElderlyRecord,
   getElderlyRecordById,
   updateElderlyRecord,
-  deleteElderlyRecord
+  deleteElderlyRecord,
 };

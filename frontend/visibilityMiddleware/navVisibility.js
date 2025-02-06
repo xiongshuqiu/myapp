@@ -13,96 +13,96 @@ function getNavItems(role) {
       href: '/dashboard',
       roles: ['admin', 'family', 'medical'],
       icon: 'fa-dashboard',
-      subMenu: []
+      subMenu: [],
     },
     {
       id: 'user-management',
       name: 'User Management',
       href: '/users',
-      roles: ['admin','medical'],
+      roles: ['admin', 'medical'],
       icon: 'fa-user fa-fw',
-      subMenu: []
+      subMenu: [],
     },
     {
       id: 'elderly-management',
       name: 'Elderly Management',
-      href: '/elderly-management',
+      href: '#',
       roles: ['admin', 'family', 'medical'],
       icon: 'fa-blind fa-fw',
       subMenu: [
         {
           name: 'Elderly Records',
-          href: '#',
-          roles: ['admin', 'family', 'medical']
+          href: '/elderly/record/',
+          roles: ['admin', 'family', 'medical'],
         },
         {
           name: 'Admission & Discharge',
-          href: '#',
-          roles: ['admin','family',]
+          href: '/elderly/leave/',
+          roles: ['admin', 'family', 'medical'],
         },
         {
           name: 'Leave Management',
-          href: '#',
-          roles: ['admin','family']
-        }
-      ]
+          href: '/elderly/resident/',
+          roles: ['admin', 'family', 'medical'],
+        },
+      ],
     },
     {
       id: 'visitor-management',
       name: 'Visitor Management',
       href: '/visitor-management',
-      roles: ['admin','family'],
+      roles: ['admin', 'family'],
       icon: 'fa-user-friends fa-fw',
       subMenu: [
         {
           name: 'Appointment Registration',
           href: '#',
-          roles: ['admin', 'family']
+          roles: ['admin', 'family'],
         },
         {
           name: 'Visitor Registration',
           href: '#',
-          roles: ['admin', 'family']
-        }
-      ]
+          roles: ['admin', 'family'],
+        },
+      ],
     },
     {
       id: 'employee-management',
       name: 'Employee Management',
-      href: '/employee-management',
-      roles: ['admin','medical'],
+      href: '#',
+      roles: ['admin', 'medical'],
       icon: 'fa-users-cog fa-fw',
       subMenu: [
         {
           name: 'Employee Records',
           href: '/employees/record/',
-          roles: ['admin']
+          roles: ['admin'],
         },
         {
           name: 'Shift Scheduling',
           href: '/employees/shiftSchedule/',
-          roles: ['admin','medical']
-        }
-      ]
+          roles: ['admin', 'medical'],
+        },
+      ],
     },
     {
       id: 'bed-management',
       name: 'Bed Management',
       href: '#',
-      roles: ['admin','medical','family'],
+      roles: ['admin', 'medical', 'family'],
       icon: 'fa-bed fa-fw',
       subMenu: [
         {
           name: 'Bed Status',
           href: '/beds/status/',
-          roles: ['admin']
+          roles: ['admin'],
         },
         {
           name: 'Bed Assignment',
           href: '/beds/assignment/',
-          roles: ['admin','medical','family']
-        }
-      ]
+          roles: ['admin', 'medical', 'family'],
+        },
+      ],
     },
     {
       id: 'catering-management',
@@ -114,19 +114,19 @@ function getNavItems(role) {
         {
           name: 'Meal Scheduling',
           href: '#',
-          roles: ['admin', 'family']
+          roles: ['admin', 'family'],
         },
         {
           name: 'Meal Planning',
           href: '#',
-          roles: ['admin', 'family']
+          roles: ['admin', 'family'],
         },
         {
           name: 'Personalized Diets',
           href: '#',
-          roles: ['admin','family']
-        }
-      ]
+          roles: ['admin', 'family'],
+        },
+      ],
     },
     {
       id: 'health-management',
@@ -138,19 +138,19 @@ function getNavItems(role) {
         {
           name: 'Health Records',
           href: '#',
-          roles: ['admin', 'family', 'medical']
+          roles: ['admin', 'family', 'medical'],
         },
         {
           name: 'Care Management',
           href: '#',
-          roles: ['admin', 'family', 'medical']
+          roles: ['admin', 'family', 'medical'],
         },
         {
           name: 'Medical Checkup',
           href: '#',
-          roles: ['admin', 'family', 'medical']
-        }
-      ]
+          roles: ['admin', 'family', 'medical'],
+        },
+      ],
     },
     {
       id: 'financial-management',
@@ -162,19 +162,19 @@ function getNavItems(role) {
         {
           name: 'Payment Records',
           href: '#',
-          roles: ['admin','medical']
+          roles: ['admin', 'medical'],
         },
         {
           name: 'Refund Records',
           href: '#',
-          roles: ['admin','family']
+          roles: ['admin', 'family'],
         },
         {
           name: 'Salary Inquiry',
           href: '#',
-          roles: ['admin','medical']
-        }
-      ]
+          roles: ['admin', 'medical'],
+        },
+      ],
     },
     {
       id: 'notifications',
@@ -182,8 +182,8 @@ function getNavItems(role) {
       href: '/notifications',
       roles: ['admin', 'family', 'medical'],
       icon: 'fa-bullhorn',
-      subMenu: []
-    }
+      subMenu: [],
+    },
   ];
 
   return navItems.map((item) => ({
@@ -191,9 +191,9 @@ function getNavItems(role) {
     visible: item.roles.includes(role), // 根据角色设置可见性
     subMenu: item.subMenu.map((subItem) => ({
       ...subItem,
-      visible: subItem.roles.includes(role) // 根据角色设置二级菜单项的可见性
-    }))
+      visible: subItem.roles.includes(role), // 根据角色设置二级菜单项的可见性
+    })),
   }));
 }
 
-module.exports = {navVisibility};
+module.exports = { navVisibility };

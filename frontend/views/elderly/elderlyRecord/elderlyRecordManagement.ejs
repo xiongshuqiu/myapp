@@ -37,15 +37,15 @@
       <div id="page-wrapper">
         <div class="header">
           <h1 class="page-header">
-            Employee Management <small> Employee Information</small>
+            Elderly Management <small> Elderly Information</small>
           </h1>
           <ol class="breadcrumb">
             <!-- 面包屑导航 -->
             <li><a href="#">Home</a></li>
             <!-- 首页链接 -->
-            <li><a href="#">Employee Management</a></li>
+            <li><a href="#">Elderly Management</a></li>
             <!-- 用户管理页面链接 -->
-            <li class="active">EmployeeRecord Data</li>
+            <li class="active">ElderlyRecord Data</li>
             <!-- 当前页：用户数据 -->
           </ol>
         </div>
@@ -56,7 +56,7 @@
             <div class="col-md-12">
               <!-- Advanced Tables -->
               <div class="panel panel-default">
-                <div class="panel-heading">EmployeeRecord Tables</div>
+                <div class="panel-heading">ElderlyRecord Tables</div>
                 <div class="panel-body">
                   <div class="table-responsive">
                     <table
@@ -65,46 +65,65 @@
                     >
                       <thead>
                         <tr>
+                          <th>elderlyId</th>
+                          <th>elderlyName</th>
+                          <th>elderlyPhone</th>
+                          <th>dateOfBirth</th>
+                          <th>age</th>
+                          <th>gender</th>
+                          <th>address</th>
+                          <th>medicalHistory</th>
+                          <th>allergies</th>
+                          <th>emergencyContactName</th>
+                          <th>emergencyContactPhone</th>
+                          <th>userId</th>
+                          <th>userName</th>
                           <th>employeeId</th>
                           <th>employeeName</th>
-                          <th>position</th>
-                          <th>contactNumber</th>
-                          <th>email</th>
-                          <th>userId</th>
-                          <th>status</th>
+                          <th>employeeContactNumber</th>
                           <th>actions</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <% employeeRecords.forEach(function(employeeRecord) { %>
+                        <% elderlyRecords.forEach(function(elderlyRecord) { %>
                         <tr class="odd gradeX" style="white-space: nowrap">
-                          <td><%= employeeRecord.employeeId %></td>
-                          <td><%= employeeRecord.employeeName %></td>
-                          <td><%= employeeRecord.position %></td>
-                          <td><%= employeeRecord.contactNumber %></td>
-                          <td><%= employeeRecord.email %></td>
-                          <td><%= employeeRecord.userId %></td>
-                          <td><%= employeeRecord.status %></td>
+                          <td><%= elderlyRecord.employeeId %></td>
+                          <td><%= elderlyRecord.employeeName %></td>
+                          <td><%= elderlyRecord.elderlyPhone %></td>
+                          <td><%= elderlyRecord.dateOfBirth %></td>
+                          <td><%= elderlyRecord.age %></td>
+                          <td><%= elderlyRecord.gender %></td>
+                          <td><%= elderlyRecord.address %></td>
+                          <td><%= elderlyRecord.medicalHistory %></td>
+                          <td><%= elderlyRecord.allergies %></td>
+                          <td><%= elderlyRecord.emergencyContactName %></td>
+                          <td><%= elderlyRecord.emergencyContactPhone %></td>
+                          <td><%= elderlyRecord.userId %></td>
+                          <td><%= elderlyRecord.userName %></td>
+                          <td><%= elderlyRecord.employeeId %></td>
+                          <td><%= elderlyRecord.employeeName %></td>
+                          <td><%= elderlyRecord.employeeContactNumber %></td>
+                       
                           <td>
                             <% linkItems.forEach(function(item) { %> <% if
-                            (item.id ==='edit-employeeRecord-link'&&item.visible) {
+                            (item.id ==='edit-elderlyRecord-link'&&item.visible) {
                             %>
                             <a
                               id="<%= item.id %>"
-                              href="/employees/record/<%= employeeRecord._id %>/update"
+                              href="/elderly/record/<%= elderlyRecord._id %>/update"
                               class="editlink"
                               style="color: blue; display: inline"
                               >Edit
                             </a>
                             <% } %> <% }); %> <%
                             linkItems.forEach(function(item) { %> <% if (item.id
-                            ==='delete-employeeRecord-link'&&item.visible) { %>
+                            ==='delete-elderlyRecord-link'&&item.visible) { %>
                             <a
                               id="<%= item.id %>"
                               href="javascript:void(0)"
                               class="deleteLink"
                               style="color: red; padding: 5px; display: inline"
-                              onclick="confirmDeletion('<%= employeeRecord._id %>')"
+                              onclick="confirmDeletion('<%= elderlyRecord._id %>')"
                               >Delete</a
                             >
                             <% } %> <% }); %>
@@ -158,12 +177,12 @@
     </script>
 
     <!-- 在过滤器区域添加 "Add User" 按钮 -->
-    <% buttonItems.forEach(function(item) { %> <% if (item.id === 'add-employeeRecord-btn'
+    <% buttonItems.forEach(function(item) { %> <% if (item.id === 'add-elderlyRecord-btn'
     && item.visible) { %>
     <script>
       $(document).ready(function () {
         $('#dataTables-example_filter').append(
-          '<button id="<%= item.id %>" class="btn btn-primary add-employeeRecord-btn" data-href="<%= item.href %>"><%= item.name %></button>',
+          '<button id="<%= item.id %>" class="btn btn-primary add-elderlyRecord-btn" data-href="<%= item.href %>"><%= item.name %></button>',
         );
 
         // 处理 "Add User" 按钮点击事件
@@ -189,12 +208,12 @@
       //3.添加删除对话框
       // 在实际运行时，confirmDeletion 函数接收到的 _id 参数就是 user._id 的值。
       async function confirmDeletion(_id) {
-        if (confirm('Are you sure you want to delete this user?')) {
+        if (confirm('Are you sure you want to delete this elderly record?')) {
           try {
-            const response = await fetch(`/employees/record/${_id}/delete`, {
+            const response = await fetch(`/elderly/record/${_id}/delete`, {
               method: 'DELETE',
             });
-            window.location.href = '/employees/record/';
+            window.location.href = '/elderly/record/';
             // const result = await response.json();
             // alert(result.message); // 显示反馈给用户
             location.reload(); // 刷新页面以更新用户表

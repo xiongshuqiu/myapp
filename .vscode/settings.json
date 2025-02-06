@@ -19,7 +19,6 @@
         "auth-service": true,
         "account-service": true,
         "user-service": true,
-        "bed-service": true,
         "employee-service": true
     },
     "hide-files.files": [
@@ -32,7 +31,6 @@
         "auth-service",
         "account-service",
         "user-service",
-        "bed-service",
         "employee-service"
     ]
 }

@@ -28,20 +28,41 @@ function bntLinkVisibility(req, res, next) {
         href: '/beds/assignment/new',
         roles: ['admin'],
       },
-        //员工档案增加
-        {
-          id: 'add-employeeRecord-btn',
-          name: 'AddEmployeeRecord',
-          href: '/employees/record/new',
-          roles: ['admin'],
+      //员工档案增加
+      {
+        id: 'add-employeeRecord-btn',
+        name: 'AddEmployeeRecord',
+        href: '/employees/record/new',
+        roles: ['admin'],
       },
-         //员工值班安排增加
-         {
-          id: 'add-employeeShiftSchedule-btn',
-          name: 'AddShiftSchedule',
-          href: '/employees/shiftSchedule/new',
-          roles: ['admin','medical'],
-        },
+      //员工值班安排增加
+      {
+        id: 'add-employeeShiftSchedule-btn',
+        name: 'AddShiftSchedule',
+        href: '/employees/shiftSchedule/new',
+        roles: ['admin', 'medical'],
+      },
+      //老人档案增加
+      {
+        id: 'add-elderlyRecord-btn',
+        name: 'AddElderlyRecord',
+        href: '/elderly/record/new',
+        roles: ['admin'],
+      },
+      //老人入住退住增加
+      {
+        id: 'add-elderlyResident-btn',
+        name: 'AddElderlyResident',
+        href: '/elderly/resident/new',
+        roles: ['admin'],
+      },
+      //老人请假增加
+      {
+        id: 'add-elderlyLeave-btn',
+        name: 'AddElderlyLeave',
+        href: '/elderly/leave/new',
+        roles: ['family'],
+      },
     ];
     return buttonItems.map((item) => ({
       ...item,
@@ -50,7 +71,7 @@ function bntLinkVisibility(req, res, next) {
   }
   function getLinkItems(role) {
     const linkItems = [
-     //编辑和删除用户
+      //编辑和删除用户
       {
         id: 'edit-user-link',
         roles: ['admin'],
@@ -59,7 +80,7 @@ function bntLinkVisibility(req, res, next) {
         id: 'delete-user-link',
         roles: ['admin'],
       },
-       //编辑和删除床位状态
+      //编辑和删除床位状态
       {
         id: 'edit-bedStatus-link',
         roles: ['admin'],
@@ -68,33 +89,60 @@ function bntLinkVisibility(req, res, next) {
         id: 'delete-bedStatus-link',
         roles: ['admin'],
       },
-        //编辑和删除床位分配
+      //编辑和删除床位分配
+      {
+        id: 'edit-bedAssignment-link',
+        roles: ['admin'],
+      },
+      {
+        id: 'delete-bedAssignment-link',
+        roles: ['admin'],
+      },
+      //编辑和删除员工档案
+      {
+        id: 'edit-employeeRecord-link',
+        roles: ['admin'],
+      },
+      {
+        id: 'delete-employeeRecord-link',
+        roles: ['admin'],
+      },
+      //编辑和删除员工值班记录
+      {
+        id: 'edit-employeeShiftSchedule-link',
+        roles: ['admin'],
+      },
+      {
+        id: 'delete-employeeShiftSchedule-link',
+        roles: ['admin'],
+      },
+        //编辑和删除老人档案
         {
-          id: 'edit-bedAssignment-link',
+          id: 'edit-elderlyRecord-link',
           roles: ['admin'],
         },
         {
-          id: 'delete-bedAssignment-link',
+          id: 'delete-elderlyRecord-link',
           roles: ['admin'],
       },
-        //编辑和删除员工档案
+          //编辑和删除老人入住退住
+      {
+        id: 'edit-elderlyResident-link',
+        roles: ['admin'],
+      },
+      {
+        id: 'delete-elderlyResident-link',
+        roles: ['admin'],
+      },
+        //编辑和删除老人请假
         {
-          id: 'edit-employeeRecord-link',
+          id: 'edit-elderlyLeave-link',
           roles: ['admin'],
         },
         {
-          id: 'delete-employeeRecord-link',
+          id: 'delete-elderlyLeave-link',
           roles: ['admin'],
-      },
-          //编辑和删除员工值班记录
-          {
-            id: 'edit-employeeShiftSchedule-link',
-            roles: ['admin'],
-          },
-          {
-            id: 'delete-employeeShiftSchedule-link',
-            roles: ['admin'],
-          },
+        },
     ];
     return linkItems.map((item) => ({
       ...item,
