@@ -156,12 +156,10 @@ const getAllElderlyRecords = async (req, res) => {
 const renderNewElderlyRecordForm = async (req, res) => {
   try {
     // 顺序查找 userId
-    const userIds = await User.find({role:'family'}).select('userId role');
+    const userIds = await User.find({ role: 'family' }).select('userId role');
 
     // 顺序查找 employeeId
-    const employeeIds = await Employee.find().select(
-      'employeeId employeeName',
-    );
+    const employeeIds = await Employee.find().select('employeeId employeeName');
     console.log('User IDs:', userIds);
     console.log(' Employee IDs:', employeeIds);
 
@@ -239,84 +237,92 @@ const createElderlyRecord = async (req, res) => {
 // (1) 查找特定老人档案
 const getElderlyRecordById = async (req, res) => {
   const { _id } = req.params;
-  console.log(`Received request to get bed assignment by ID: ${_id}`); // 调试信息
+  console.log(`Received request to get elderly record by ID: ${_id}`); // 调试信息
   try {
     // 根据ID查找老人档案
-    const bedAssignment = await BedAssignment.findById(_id);
-    if (bedAssignment) {
-      console.log('Bed assignment retrieved successfully:', bedAssignment); // 调试信息
+    const elderlyRecord = await Elderly.findById(_id);
+    if (elderlyRecord) {
+      console.log('Elderly record retrieved successfully:', elderlyRecord); // 调试信息
 
-      // 查找所有的 bedId
-      const bedIds = await BedStatus.find().select('bedId status');
+      // 查找所有的 userId
+      const userIds = await User.find().select('userId role');
       // 查找所有老人档案
-      const elderlyIds = await Elderly.find().select('elderlyId elderlyName');
+      const employeeIds = await Employee.find().select('employeeId employeeName');
       return res.status(200).json({
         success: true,
         message:
-          'Bed assignment, available bedIds, and elderlyIds retrieved successfully',
+          'Elderly record, userIds and employeeIds retrieved successfully',
         data: {
-          bedAssignment,
-          bedIds, //包括bedId、status
-          elderlyIds, //包括elderlyId、elderlyName
+          elderlyRecord,
+          userIds, //包括bedId、status
+          employeeIds, //包括elderlyId、elderlyName
         },
       });
     } else {
-      console.warn(`Bed assignment not found with ID: ${_id}`); // 调试信息
+      console.warn(`Elderly record not found with ID: ${_id}`); // 调试信息
       return res
         .status(404)
-        .json({ success: false, message: 'Bed assignment not found' });
+        .json({ success: false, message: 'Elderly record not found' });
     }
   } catch (err) {
-    console.error('Error retrieving bed assignment:', err.message); // 调试信息
+    console.error('Error retrieving elderly record:', err.message); // 调试信息
     return res.status(500).json({ success: false, message: err.message });
   }
 };
 // (2) 提交更新后的老人档案数据
 const updateElderlyRecord = async (req, res) => {
   const { _id } = req.params; // 从 URL 参数中获取 assignmentId
-  const { bedId, elderlyId, assignmentId, assignedDate, releaseDate } =
-    req.body;
+  const {
+    elderlyId,
+    elderlyName,
+    elderlyPhone,
+    dateOfBirth,
+    gender,
+    address,
+    medicalHistory,
+    allergies,
+    emergencyContactName,
+    emergencyContactPhone,
+    userId,
+    employeeId,
+  } = req.body;
 
-  console.log('Received request to update bed assignment with data:', req.body); // 调试信息
+  console.log('Received request to update elderly record with data:', req.body); // 调试信息
 
   try {
     // 查找现有老人档案记录
-    const existingBedAssignment = await BedAssignment.findOne({ _id });
-    if (!existingBedAssignment) {
-      console.warn(`Bed assignmentId not found: ${_id}`); // 调试信息
+    const existingElderly = await Elderly.findOne({ _id });
+    if (!existingElderly) {
+      console.warn(`Elderly _id not found: ${_id}`); // 调试信息
       return res
         .status(404)
-        .json({ success: false, message: 'Bed assignmentId not found' });
-    }
-
-    // 如果 bedId 发生变化，则更新旧床位和新床位的状态
-    if (existingBedAssignment.bedId !== bedId) {
-      // 更新旧床位状态为 available
-      await BedStatus.updateOne(
-        { bedId: existingBedAssignment.bedId },
-        { status: 'available' },
-      );
-
-      // 更新新床位状态为 occupied
-      await BedStatus.updateOne({ bedId: bedId }, { status: 'occupied' });
+        .json({ success: false, message: 'Elderly _id  not found' });
     }
 
     // 更新老人档案记录
-    existingBedAssignment.bedId = bedId;
-    existingBedAssignment.elderlyId = elderlyId;
-    existingBedAssignment.assignmentId = assignmentId;
-    existingBedAssignment.assignedDate = assignedDate;
-    existingBedAssignment.releaseDate = releaseDate;
-    await existingBedAssignment.save();
-
-    console.log('Bed assignment updated successfully:', existingBedAssignment); // 调试信息
+   
+    existingElderly.elderlyId = elderlyId, // 老人唯一编号 E001
+    existingElderly.elderlyName=elderlyName, // 老人姓名
+    existingElderly.elderlyPhone=elderlyPhone, // 老人电话
+    existingElderly.dateOfBirth=dateOfBirth, // 生日
+    existingElderly.gender=gender, // 性别
+    existingElderly.address=address, // 地址
+    existingElderly.medicalHistory=medicalHistory, // 医疗史
+    existingElderly.allergies=allergies, // 过敏史
+    existingElderly.emergencyContactName=emergencyContactName, // 紧急联系人姓名
+    existingElderly.emergencyContactPhone=emergencyContactPhone, // 紧急联系人电话
+    existingElderly.userId=userId, // 家属登录 Id 唯一编号 F001
+    existingElderly.employeeId=employeeId, // 关联负责的医生S002
+   await existingElderly.save();
+   
+    console.log('Elderly record updated successfully:', existingElderly); // 调试信息
     return res.status(200).json({
       success: true,
-      message: 'Bed assignment updated successfully',
-      data: existingBedAssignment,
+      message: 'Elderly record updated successfully',
+      data: existingElderly,
     });
   } catch (error) {
-    console.error('Error updating bed assignment:', error.message); // 调试信息
+    console.error('Error updating elderly record:', error.message); // 调试信息
     return res.status(500).json({
       success: false,
       message: 'An error occurred',

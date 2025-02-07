@@ -39,7 +39,7 @@ const getAllElderlyRecords = async (req, res) => {
     const response = await getRequest(url); // 发送 GET 请求以获取用户信息
     res.json(response); // 将响应数据返回给前端:包括数据和message
     if (response.success) {
-      console.log(response)
+      console.log(response);
     }
   } catch (err) {
     handleError(err, res);
@@ -54,7 +54,7 @@ const renderNewElderlyRecordForm = async (req, res) => {
     const response = await getRequest(url); // 发送 GET 请求以获取用户信息
     res.json(response); // 将响应数据返回给前端:包括数据和message
     if (response.success) {
-      console.log(response)
+      console.log(response);
     }
   } catch (err) {
     handleError(err, res);
@@ -96,7 +96,7 @@ const createElderlyRecord = async (req, res) => {
     const response = await postRequest(url, data); // 发送 POST 请求以创建新用户
     res.status(201).json(response); // 将响应数据返回给前端
     if (response.success) {
-      console.log(response)
+      console.log(response);
     }
   } catch (err) {
     handleError(err, res);
@@ -111,7 +111,7 @@ const getElderlyRecordById = async (req, res) => {
     const response = await getRequest(url); // 发送 GET 请求以获取用户信息
     res.json(response); // 将响应数据返回给前端:包括数据和message
     if (response.success) {
-      console.log(response)
+      console.log(response);
     }
   } catch (err) {
     handleError(err, res);
@@ -119,15 +119,41 @@ const getElderlyRecordById = async (req, res) => {
 };
 // (2) 提交更新后的老人档案数据
 const updateElderlyRecord = async (req, res) => {
-  const { bedId, elderlyId, assignmentId, assignedDate,releaseDate  } = req.body;
+  const {
+    elderlyId,
+    elderlyName,
+    elderlyPhone,
+    dateOfBirth,
+    gender,
+    address,
+    medicalHistory,
+    allergies,
+    emergencyContactName,
+    emergencyContactPhone,
+    userId,
+    employeeId,
+  } = req.body;
   try {
-    const data = { bedId, elderlyId, assignmentId, assignedDate,releaseDate  };
+    const data = {
+      elderlyId,
+      elderlyName,
+      elderlyPhone,
+      dateOfBirth,
+      gender,
+      address,
+      medicalHistory,
+      allergies,
+      emergencyContactName,
+      emergencyContactPhone,
+      userId,
+      employeeId,
+    };
     const { _id } = req.params; // 从参数中获取 _Id
     const url = `${process.env.ELDERLY_SERVICE_URL}/elderly/record/${_id}`;
     const response = await putRequest(url, data); // 发送 PUT 请求以更新用户信息
     res.json(response); // 将响应数据返回给前端
     if (response.success) {
-      console.log(response)
+      console.log(response);
     }
   } catch (err) {
     handleError(err, res);
@@ -142,7 +168,7 @@ const deleteElderlyRecord = async (req, res) => {
     const response = await deleteRequest(url); // 发送 DELETE 请求以删除用户
     res.json(response); // 将响应数据返回给前端
     if (response.success) {
-      console.log(response)
+      console.log(response);
     }
   } catch (err) {
     handleError(err, res);
@@ -155,5 +181,5 @@ module.exports = {
   createElderlyRecord,
   getElderlyRecordById,
   updateElderlyRecord,
-  deleteElderlyRecord
+  deleteElderlyRecord,
 };

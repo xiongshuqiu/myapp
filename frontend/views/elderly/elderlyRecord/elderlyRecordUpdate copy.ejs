@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Update BedStatus Information</title>
+    <!-- 1.框架样式：Bootstrap Styles-->
+    <link href="/assets/css/bootstrap.css" rel="stylesheet" />
+    <!-- 2.图标样式：FontAwesome Styles-->
+    <link href="/assets/css/font-awesome.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <!--3.普通样式：Custom Styles-->
+    <link href="/assets/css/custom-styles.css" rel="stylesheet" />
+    <!-- 4.字体样式：Google Fonts-->
+    <link
+      href="http://fonts.useso.com/css?family=Open+Sans"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+
+  <body>
+    <div id="wrapper">
+       <!-- 顶部导航条 -->
+       <%- include('../../block/top-navbar.ejs') %>
+       <!-- 左侧导航条 -->
+       <%- include('../../block/navbar-side.ejs') %>
+
+      <div id="page-wrapper">
+        <div class="header">
+          <h1 class="page-header">
+            Update EmployeeRecord Information <small>Modify the employee record details.</small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Forms</a></li>
+            <li class="active">Update EmployeeRecord</li>
+          </ol>
+        </div>
+
+        <div id="page-inner">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="panel panel-default">
+                <div class="panel-heading">EmployeeRecord Information</div>
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <form
+                        action="/employees/record/<%= employeeRecord._id %>?_method=PUT"
+                        method="post"
+                        role="form"
+                      >
+
+                      <div class="form-group">
+                        <label for="employeeId">Employee ID <span style="color: red">*</span></label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="employeeId"
+                          name="employeeId"
+                          value="<%= employeeRecord.employeeId %>"
+                          required
+                          pattern="^S\d{3}$"
+                          title="Employee ID format should be S followed by three digits (e.g., S001)"
+                        />
+                        <small class="form-text text-muted">
+                          Format: Employee ID (e.g., S001)
+                        </small>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="employeeName">Employee Name <span style="color: red">*</span></label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="employeeName"
+                          name="employeeName"
+                          value="<%= employeeRecord.employeeName %>"
+                          required
+                        />
+                      </div>
+
+                      <div class="form-group">
+                        <label for="position">Position <span style="color: red">*</span></label>
+                        <select class="form-control" id="position" name="position" required>
+                          <option value="Management" <%= employeeRecord.position === 'Management' ? 'selected' : '' %>>Management</option>
+                          <option value="Doctor" <%= employeeRecord.position === 'Doctor' ? 'selected' : '' %>>Doctor</option>
+                          <option value="Catering" <%= employeeRecord.position === 'Catering' ? 'selected' : '' %>>Catering</option>
+                          <option value="Finance" <%= employeeRecord.position === 'Finance' ? 'selected' : '' %>>Finance</option>
+                          <option value="Other" <%= employeeRecord.position === 'Other' ? 'selected' : '' %>>Other</option>
+                        </select>
+                      </div>
+                      
+
+                      <div class="form-group">
+                        <label for="contactNumber">Contact Number <span style="color: red">*</span></label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="contactNumber"
+                          name="contactNumber"
+                          value="<%= employeeRecord.contactNumber %>"
+                          required
+                        />
+                      </div>
+
+                      <div class="form-group">
+                        <label for="email"
+                          >Email <span style="color: red">*</span></label
+                        >
+                        <input
+                          type="email"
+                          class="form-control"
+                          id="email"
+                          name="email"
+                          value="<%= employeeRecord.email %>"
+                          required
+                          pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                          title="Email format should be similar to xiongwang@126.com"
+                        />
+                        <small class="form-text text-muted">
+                          Format: Email(e.g., xiongwang@126.com)
+                        </small>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="userId">User ID(role) <span style="color: red">*</span></label>
+                        <select class="form-control" id="userId" name="userId" >
+                          <option value="" <%= !employeeRecord.userId ? 'selected' : '' %>>No userId</option>
+                          <% if (userIds && userIds.length > 0) { %>
+                            <% userIds.forEach(function(user) { %>
+                              <option value="<%= user.userId %>" <%= employeeRecord.userId === user.userId ? 'selected' : '' %>>
+                                userId: <%= user.userId %> (<%= user.status %>)
+                              </option>
+                            <% }); %>
+                          <% } else { %>
+                            <option value="">No existing userId</option>
+                          <% } %>
+                        </select>
+                      </div>
+                      
+                      
+                      
+                      
+                      
+
+                      <div class="form-group">
+                        <label for="status">Status <span style="color: red">*</span></label>
+                        <select class="form-control" id="status" name="status" required>
+                          <option value="Active" <%= employeeRecord.status === 'Active' ? 'selected' : '' %>>Active</option>
+                          <option value="Inactive" <%= employeeRecord.status === 'Inactive' ? 'selected' : '' %>>Inactive</option>
+                        </select>
+                      </div>
+                      
+
+                        <button type="submit" class="btn btn-primary">
+                          Save Changes
+                        </button>
+                        <button
+                          type="reset"
+                          class="btn btn-secondary"
+                          onclick="window.location.href='/beds/status/';"
+                        >
+                          Return
+                        </button>
+                      </form>
+                      <div id="message">
+                        <% if (typeof message !== 'undefined' && message !==
+                        null) { %>
+                        <div class="alert alert-success"><%= message %></div>
+                        <% } %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /.panel-body -->
+              </div>
+              <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+          </div>
+        </div>
+        <!-- /. PAGE INNER  -->
+      </div>
+      <!-- /. PAGE WRAPPER  -->
+    </div>
+    <!-- /. WRAPPER  -->
+    <!-- JS Scripts-->
+    <!-- jQuery Js -->
+    <script src="/assets/js/jquery-1.10.2.js"></script>
+    <!-- Bootstrap Js -->
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <!-- Metis Menu Js -->
+    <script src="/assets/js/jquery.metisMenu.js"></script>
+    <!-- Custom Js -->
+    <script src="/assets/js/custom-scripts.js"></script>
+  </body>
+</html>

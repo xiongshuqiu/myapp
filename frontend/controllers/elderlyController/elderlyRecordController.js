@@ -146,15 +146,15 @@ const getElderlyRecordById = async (req, res) => {
     const apiUrl = `${process.env.API_URL}/api/elderly/record/${_id}/update`;
     console.log(apiUrl);
     const response = await getRequest(apiUrl); // 使用组装的URL进行API调用
-    const { bedAssignment, bedIds, elderlyIds } = response.data;
+    const { elderlyRecord, userIds, employeeIds } = response.data;
     if (response.success) {
       console.log(response);
       res.render('elderly/elderlyRecord/elderlyRecordUpdate.ejs', {
         activePage: 'elderly-management',
         navItems: req.navItems,
-        bedAssignment,
-        bedIds, //beIds包括：bedId、status
-        elderlyIds, //包括elderlyId、elderlyName
+        elderlyRecord,
+        userIds, //userIds包括userId、role
+        employeeIds, //包括employeeId、employeeName
       });
     }
   } catch (err) {
@@ -164,16 +164,41 @@ const getElderlyRecordById = async (req, res) => {
 
 //(2) 提交更新后的老人档案数据
 const updateElderlyRecord = async (req, res) => {
-  const { bedId, elderlyId, assignmentId, assignedDate, releaseDate } =
-    req.body;
+  const {
+    elderlyId,
+    elderlyName,
+    elderlyPhone,
+    dateOfBirth,
+    gender,
+    address,
+    medicalHistory,
+    allergies,
+    emergencyContactName,
+    emergencyContactPhone,
+    userId,
+    employeeId,
+  } = req.body;
   const { _id } = req.params;
   try {
-    const data = { bedId, elderlyId, assignmentId, assignedDate, releaseDate };
+    const data = {
+      elderlyId,
+      elderlyName,
+      elderlyPhone,
+      dateOfBirth,
+      gender,
+      address,
+      medicalHistory,
+      allergies,
+      emergencyContactName,
+      emergencyContactPhone,
+      userId,
+      employeeId,
+    };
 
     // 从请求参数中获取 _id
     const apiUrl = `${process.env.API_URL}/api/elderly/record/${_id}`;
     const response = await putRequest(apiUrl, data);
-    // const bedAssignment = response.data;
+    //const elderlyRecord  = response.data;
     if (response.success) {
       console.log(response);
       res.redirect('/elderly/record/');
