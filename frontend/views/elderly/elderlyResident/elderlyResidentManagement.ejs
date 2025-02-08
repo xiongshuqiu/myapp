@@ -37,15 +37,15 @@
       <div id="page-wrapper">
         <div class="header">
           <h1 class="page-header">
-            Employee Management <small> Employee Information</small>
+            Elderly Management <small> Elderly Information</small>
           </h1>
           <ol class="breadcrumb">
             <!-- 面包屑导航 -->
             <li><a href="#">Home</a></li>
             <!-- 首页链接 -->
-            <li><a href="#">Employee Management</a></li>
+            <li><a href="#">Elderly Management</a></li>
             <!-- 用户管理页面链接 -->
-            <li class="active">EmployeeShiftSchedule Data</li>
+            <li class="active">ElderlyResident Data</li>
             <!-- 当前页：用户数据 -->
           </ol>
         </div>
@@ -60,7 +60,7 @@
                 <div class="panel-body">：面板的主体内容区域
                 <div class="panel-footer">：面板的页脚区域（如果需要） -->
               <div class="panel panel-default">
-                <div class="panel-heading">EmployeeShiftSchedule Tables</div>
+                <div class="panel-heading">ElderlyResident Tables</div>
                 <div class="panel-body">
                   <div class="table-responsive">
                     <table
@@ -69,52 +69,54 @@
                     >
                       <thead>
                         <tr>
-                          <th>shiftScheduleId</th>
-                          <th>employeeId</th>
-                          <th>employeeName</th>
-                          <th>shiftType</th>
-                          <th>startTime</th>
-                          <th>endTime</th>
+                          <th>residentId</th>
+                          <th>elderlyId</th>
+                          <th>elderlyName</th>
+                          <th>bedId</th>
+                          <th>checkInTime</th>
+                          <th>checkOutTime</th>
+                          <th>status</th>
                           <th>action</th>
                         </tr>
                       </thead>
                       <tbody>
                         <%
-                        employeeShiftSchedules.forEach(function(ShiftSchedule) {
+                        elderlyResidents.forEach(function(elderlyResident) {
                         %>
                         <tr class="odd gradeX" style="white-space: nowrap">
-                          <td><%= ShiftSchedule.shiftScheduleId %></td>
+                          <td><%= elderlyResident.residentId %></td>
                           <td>
-                            <%= ShiftSchedule.employeeDetails.employeeId %>
+                            <%= elderlyResident.elderlyId %>
                           </td>
                           <td>
-                            <%= ShiftSchedule.employeeDetails.employeeName %>
+                            <%= elderlyResident.elderlyName%>
                           </td>
-                          <td><%= ShiftSchedule.shiftType %></td>
-                          <td><%= ShiftSchedule.startTime %></td>
-                          <td><%= ShiftSchedule.endTime %></td>
+                          <td><%= elderlyResident.bedId %></td>
+                          <td><%= elderlyResident.checkInTime %></td>
+                          <td><%= elderlyResident.checkOutTime %></td>
+                          <td><%= elderlyResident.status %></td>
                           <td>
                             <% linkItems.forEach(function(item) { %> <% if
                             (item.id
-                            ==='edit-employeeShiftSchedule-link'&&item.visible)
+                            ==='edit-elderlyResident-link'&&item.visible)
                             { %>
                             <a
                               id="<%= item.id %>"
-                              href="/employees/shiftSchedule/<%=  ShiftSchedule._id %>/update"
+                              href="/elderly/resident/<%=  elderlyResident._id %>/update"
                               class="editlink"
                               style="color: blue; display: inline"
                               >Edit
                             </a>
                             <% } %> <% }); %> <%
                             linkItems.forEach(function(item) { %> <% if (item.id
-                            ==='delete-employeeShiftSchedule-link'&&item.visible)
+                            ==='delete-elderlyResident-link'&&item.visible)
                             { %>
                             <a
                               id="<%= item.id %>"
                               href="javascript:void(0)"
                               class="deleteLink"
                               style="color: red; padding: 5px; display: inline"
-                              onclick="confirmDeletion('<%= ShiftSchedule._id %>')"
+                              onclick="confirmDeletion('<%= elderlyResident._id %>')"
                               >Delete</a
                             >
                             <% } %> <% }); %>
@@ -166,11 +168,11 @@
 
     <!-- 在过滤器区域添加 "Add User" 按钮 -->
     <% buttonItems.forEach(function(item) { %> <% if (item.id ===
-    'add-employeeShiftSchedule-btn' && item.visible) { %>
+    'add-elderlyResident-btn' && item.visible) { %>
     <script>
       $(document).ready(function () {
         $('#dataTables-example_filter').append(
-          '<button id="<%= item.id %>" class="btn btn-primary add-employeeShiftSchedule-btn" data-href="<%= item.href %>"><%= item.name %></button>',
+          '<button id="<%= item.id %>" class="btn btn-primary add-elderlyResident-btn" data-href="<%= item.href %>"><%= item.name %></button>',
         );
 
         // 处理 "Add User" 按钮点击事件
@@ -199,12 +201,12 @@
         if (confirm('Are you sure you want to delete this shiftSchedule?')) {
           try {
             const response = await fetch(
-              `/employees/shiftSchedule/${_id}/delete`,
+              `/elderly/resident/${_id}/delete`,
               {
                 method: 'DELETE',
               },
             );
-            window.location.href = '/employees/shiftSchedule/';
+            window.location.href = '/elderly/resident/';
             // const result = await response.json();
             // alert(result.message); // 显示反馈给用户
             location.reload(); // 刷新页面以更新用户表

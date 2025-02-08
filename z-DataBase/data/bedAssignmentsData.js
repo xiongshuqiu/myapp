@@ -1,7 +1,7 @@
 const bedAssignments = [
   {
     assignmentId: 'A001',
-    bedId: '3-1-101s-01',
+    bedId: '3-1-101s-01', 
     elderlyId: 'E001',
     assignedDate: new Date('2024-03-01'),
     releaseDate: new Date('2024-04-01') // 示例释放日期
@@ -69,6 +69,7 @@ const bedAssignments = [
     assignedDate: new Date('2024-03-01'),
     releaseDate: new Date('2024-04-01') // 示例释放日期
   },
+ 
 ];
 
 module.exports = bedAssignments;

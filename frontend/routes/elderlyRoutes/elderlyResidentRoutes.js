@@ -6,30 +6,29 @@ const {
   bntLinkVisibility,
 } = require('../../visibilityMiddleware/bntLinkVisibility');
 const {
-  getAllBedStatuses,
-  renderNewBedStatusForm,
-  createBedStatus,
-  getBedStatusById,
-  updateBedStatus,
-  deleteBedStatus,
-} = require('../../controllers/bedController/bedStatusController');
+  getAllElderlyResidents,
+  renderNewElderlyResidentForm,
+  createElderlyResident,
+  getElderlyResidentById,
+  updateElderlyResident,
+  deleteElderlyResident,
+} = require('../../controllers/elderlyController/elderlyResidentController');
+// 1. 获取所有老人入住退住数据
+router.get('/',bntLinkVisibility,getAllElderlyResidents);
 
-// 1. 获取所有床位状态
-router.get('/',bntLinkVisibility,getAllBedStatuses);
+// 2. 创建新的老人入住退住数据
+// (1) 显示新增老人入住退住表单
+router.get('/new', renderNewElderlyResidentForm);
+// (2) 提交新的老人入住退住数据
+router.post('/create', createElderlyResident);
 
-// 2. 创建新的床位状态
-// (1) 显示新增床位状态表单
-router.get('/new', renderNewBedStatusForm);
-// (2) 提交新的床位状态数据
-router.post('/create', createBedStatus);
+// 3. 更新特定老人入住退住数据
+// (1) 查找特定老人入住退住并显示编辑表单
+router.get('/:_id/update', getElderlyResidentById);
+// (2) 提交更新后的老人入住退住数据
+router.put('/:_id', updateElderlyResident);
 
-// 3. 更新特定床位状态
-// (1) 查找特定床位状态并显示编辑表单
-router.get('/:_id/update', getBedStatusById);
-// (2) 提交更新后的床位状态数据
-router.put('/:_id', updateBedStatus);
-
-// 4. 删除特定床位状态
-router.delete('/:_id/delete', deleteBedStatus);
+// 4. 删除特定老人入住退住数据
+router.delete('/:_id/delete', deleteElderlyResident);
 
 module.exports = router;

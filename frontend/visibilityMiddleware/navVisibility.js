@@ -37,12 +37,12 @@ function getNavItems(role) {
         },
         {
           name: 'Admission & Discharge',
-          href: '/elderly/leave/',
+          href: '/elderly/resident/',
           roles: ['admin', 'family', 'medical'],
         },
         {
           name: 'Leave Management',
-          href: '/elderly/resident/',
+          href: '/elderly/leave/',
           roles: ['admin', 'family', 'medical'],
         },
       ],

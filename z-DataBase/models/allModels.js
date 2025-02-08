@@ -95,7 +95,7 @@ const ElderlyResident = mongoose.model(
   elderlyResidentSchema,
 );
 
-// LeaveResident Schema
+// ElderlyLeave Schema
 const elderlyLeaveSchema = new mongoose.Schema({
   leaveId: { type: String, required: true, unique: true }, // 申请编号 L001
   elderlyId: { type: String, ref: 'Elderly', required: true }, // 老人引用 E001
