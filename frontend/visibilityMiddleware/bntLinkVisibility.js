@@ -59,7 +59,7 @@ function bntLinkVisibility(req, res, next) {
       //老人请假增加
       {
         id: 'add-elderlyLeave-btn',
-        name: 'AddElderlyLeave',
+        name: 'Leave Request',
         href: '/elderly/leave/new',
         roles: ['family'],
       },

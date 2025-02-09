@@ -139,6 +139,10 @@ border-radius: 0;
 }
 .closed i{color:#F09B22;
 }
+
+/*----------------------------------------------
+    COMMON  STYLES    #是id选择器，.是类选择器 ,自定义的类
+------------------------------------------------*/
 /* 在 custom-styles.css 文件中添加以下样式 */
 
 .input-wrapper {
@@ -156,6 +160,10 @@ border-radius: 0;
     box-sizing: border-box; /* 包括内边距和边框在内的宽度和高度计算 */
   }
   
+  /* 新增隐藏列的类 */
+.hide-column {
+    display: none;          /* 隐藏该列 */
+}
   
   
   

@@ -50,61 +50,104 @@
                   <div class="row">
                     <div class="col-lg-6">
                       <form
-                        action="/employees/shiftSchedule/create"
+                        action="/elderly/resident/create"
                         method="post"
                         role="form"
                       >
                       <div class="form-group">
-                        <label for="startDate">Start Date<span style="color: red">*</span></label>
-                        <input type="date" class="form-control" id="startDate" name="startDate" required />
+                        <label for="residentId"
+                          >Resident ID
+                          <span style="color: red">*</span></label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="residentId"
+                          name="residentId"
+                          placeholder="Enter Resident ID (e.g., R001)"
+                          required
+                          pattern="R\d{3}"
+                          title="The Resident ID should follow the format: a capital letter followed by three digits (e.g., R001)."
+                        />
+                        <small class="form-text text-muted">
+                          The Resident ID should follow the format: a
+                          capital letter followed by three digits (e.g.,
+                          R001).
+                        </small>
                       </div>
                       
                       <div class="form-group">
-                        <label for="days">Number of Days<span style="color: red">*</span></label>
-                        <select class="form-control" id="days" name="days" required>
-                          <% for (let i = 1; i <= 31; i++) { %>
-                            <option value="<%= i %>"><%= i %></option>
-                          <% } %>
-                        </select>
-                      </div>
-                      
-                      <div class="form-group">
-                        <label for="startShiftType">Start Shift Type<span style="color: red">*</span></label>
-                        <select class="form-control" id="startShiftType" name="startShiftType" required>
-                          <option value="Morning">Morning</option>
-                          <option value="Evening">Evening</option>
-                          <option value="Night">Night</option>
-                        </select>
-                      </div>
-                      
-                      <div class="form-group">
-                        <label for="employeeId">
-                          Employee ID(Name)
-                        </label>
+                        <label for="elderlyId">
+                          UnResidented Elderly Id(Name)
+                          <span style="color: red">*</span></label
+                        >
                         <select
                           class="form-control"
-                          id="startEmployeeId"
-                          name="startEmployeeId"
+                          id="elderlyId"
+                          name="elderlyId"
+                          required
                         >
-                      
-                          <% if (employees &&
-                          employees.length > 0) { %> <%
-                            employees.forEach(function(employee)
+                          <% if (unResidentedElderlyIds &&
+                          unResidentedElderlyIds.length > 0) { %> <%
+                          unResidentedElderlyIds.forEach(function(unResidentedElderlyId)
                           { %>
                           <option
-                            value="<%= employee.employeeId %>"
+                            value="<%= unResidentedElderlyId.elderlyId %>"
                           >
-                            ID:<%= employee.employeeId %> (<%=
-                            employee.employeeName %>)
+                            <!-- <%= unResidentedElderlyId.elderlyId %> -->
+                            ID:<%= unResidentedElderlyId.elderlyId %> (<%=
+                            unResidentedElderlyId.elderlyName %>)
                           </option>
                           <% }) %> <% } else { %>
-                          <option value="">No existing employeeId</option>
+                          <option value="">No existing elderlyId</option>
                           <% } %>
                         </select>
-               
+                      </div>
+
+                      <div class="form-group">
+                        <label for="checkInTime"
+                          >Check In Time
+                          <span style="color: red">*</span>
+                        </label>
+                        <div class="input-wrapper">
+                          <input
+                            type="date"
+                            class="form-control date-input"
+                            id="checkInTime"
+                            name="checkInTime"
+                            value="<%= new Date().toISOString().split('T')[0] %>"
+                            required
+                          />
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="checkOutTime"
+                          >Check Out Time
+                        </label>
+                        <div class="input-wrapper">
+                          <input
+                            type="date"
+                            class="form-control date-input"
+                            id="checkOutTime"
+                            name="checkOutTime"
+                            value="<%= new Date().toISOString().split('T')[0] %>"
+                            required
+                          />
+                        </div>
                       </div>
                       
-                      <button type="submit" class="btn btn-primary">Generate Shift Schedule</button>
+                      <div class="form-group">
+                        <label for="status">Status<span style="color: red">*</span></label>
+                        <select class="form-control" id="status" name="status" required>
+                          <option value="Active">Active</option>
+                          <option value="Inactive">Inactive</option>
+                        </select>
+                      </div>
+                      
+                    
+                      
+                      <button type="submit" class="btn btn-primary">Submit</button>
                       
                       <div id="message" class="mt-3">
                         <% if (typeof message !== 'undefined' && message !==

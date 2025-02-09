@@ -98,7 +98,7 @@ const bedStatuses = [
     room: '103',
     roomType: 's',
     bedNumber: '01',
-    status: 'occupied',
+    status: 'Available',
   },
   {
     bedId: '3-1-103s-02',
@@ -107,7 +107,7 @@ const bedStatuses = [
     room: '103',
     roomType: 's',
     bedNumber: '02',
-    status: 'occupied',
+    status: 'Available',
   },
   {
     bedId: '3-1-103b-03',
@@ -116,7 +116,7 @@ const bedStatuses = [
     room: '103',
     roomType: 'b',
     bedNumber: '03',
-    status: 'occupied',
+    status: 'Available',
   },
   {
     bedId: '3-1-103b-04',
@@ -125,7 +125,7 @@ const bedStatuses = [
     room: '103',
     roomType: 'b',
     bedNumber: '04',
-    status: 'occupied',
+    status: 'Available',
   },
   {
     bedId: '3-1-103b-05',
@@ -134,7 +134,7 @@ const bedStatuses = [
     room: '103',
     roomType: 'b',
     bedNumber: '05',
-    status: 'occupied',
+    status: 'Available',
   },
   {
     bedId: '3-1-104s-01',
@@ -143,7 +143,7 @@ const bedStatuses = [
     room: '104',
     roomType: 's',
     bedNumber: '01',
-    status: 'occupied',
+    status: 'Available',
   },
   {
     bedId: '3-1-104s-02',
@@ -152,7 +152,7 @@ const bedStatuses = [
     room: '104',
     roomType: 's',
     bedNumber: '02',
-    status: 'occupied',
+    status: 'Available',
   },
   {
     bedId: '3-1-104b-03',
@@ -161,7 +161,7 @@ const bedStatuses = [
     room: '104',
     roomType: 'b',
     bedNumber: '03',
-    status: 'occupied',
+    status: 'Available',
   },
   {
     bedId: '3-1-104b-04',
@@ -170,7 +170,7 @@ const bedStatuses = [
     room: '104',
     roomType: 'b',
     bedNumber: '04',
-    status: 'occupied',
+    status: 'Available',
   },
   {
     bedId: '3-1-104b-05',
@@ -179,7 +179,7 @@ const bedStatuses = [
     room: '104',
     roomType: 'b',
     bedNumber: '05',
-    status: 'occupied',
+    status: 'Available',
   },
   {
     bedId: '3-1-105s-01',
@@ -188,7 +188,7 @@ const bedStatuses = [
     room: '105',
     roomType: 's',
     bedNumber: '01',
-    status: 'occupied',
+    status: 'Available',
   },
   {
     bedId: '3-1-105s-02',
@@ -197,7 +197,7 @@ const bedStatuses = [
     room: '105',
     roomType: 's',
     bedNumber: '02',
-    status: 'occupied',
+    status: 'Available',
   },
   {
     bedId: '3-1-105b-03',
@@ -206,7 +206,7 @@ const bedStatuses = [
     room: '105',
     roomType: 'b',
     bedNumber: '03',
-    status: 'occupied',
+    status: 'Available',
   },
   {
     bedId: '3-1-105b-04',
@@ -215,7 +215,7 @@ const bedStatuses = [
     room: '105',
     roomType: 'b',
     bedNumber: '04',
-    status: 'occupied',
+    status: 'Available',
   },
   {
     bedId: '3-1-105b-05',
@@ -224,7 +224,7 @@ const bedStatuses = [
     room: '103',
     roomType: 'b',
     bedNumber: '05',
-    status: 'occupied',
+    status: 'Available',
   },
   {
     bedId: '3-1-106s-01',
@@ -233,7 +233,7 @@ const bedStatuses = [
     room: '106',
     roomType: 's',
     bedNumber: '01',
-    status: 'occupied',
+    status: 'Available',
   },
   {
     bedId: '3-1-106s-02',
@@ -242,7 +242,7 @@ const bedStatuses = [
     room: '106',
     roomType: 's',
     bedNumber: '02',
-    status: 'occupied',
+    status: 'Available',
   },
   {
     bedId: '3-1-106b-03',
@@ -251,7 +251,7 @@ const bedStatuses = [
     room: '106',
     roomType: 'b',
     bedNumber: '03',
-    status: 'occupied',
+    status: 'Available',
   },
   {
     bedId: '3-1-106b-04',
@@ -260,7 +260,7 @@ const bedStatuses = [
     room: '106',
     roomType: 'b',
     bedNumber: '04',
-    status: 'occupied',
+    status: 'Available',
   },
   {
     bedId: '3-1-106b-05',
@@ -269,7 +269,7 @@ const bedStatuses = [
     room: '103',
     roomType: 'b',
     bedNumber: '05',
-    status: 'occupied',
+    status: 'Available',
   },
 ];
 

@@ -75,58 +75,37 @@ const renderNewElderlyResidentForm = async (req, res) => {
     const response = await getRequest(apiUrl);
 
     if (response.success) {
-      const { employeeIds, userIds } = response.data;
+      const { unResidentedElderlyIds } = response.data;
       res.render('elderly/elderlyResident/elderlyResidentCreate.ejs', {
         activePage: 'elderly-management',
         navItems: req.navItems, // 将导航项传递到视图
-        employeeIds, // 传递可用的 bedId 到视图
-        userIds, // 传递存在的 elderlyId 到视图
+        unResidentedElderlyIds,
       });
     } else {
       throw new Error('Failed to retrieve data from API');
     }
   } catch (err) {
-    console.error('Error in renderNewElderlyRecordForm:', err);
+    console.error('Error in renderNewElderlyResidentForm:', err);
     handleError(err, req, res);
   }
 };
 
 //(2)提交新的老人入住退住数据数据
 const createElderlyResident = async (req, res) => {
-  const {
-    elderlyId,
-    elderlyName,
-    elderlyPhone,
-    dateOfBirth,
-    gender,
-    address,
-    medicalHistory,
-    allergies,
-    emergencyContactName,
-    emergencyContactPhone,
-    userId,
-    employeeId,
-  } = req.body;
+  const { residentId, elderlyId, checkInTime, checkOutTime, status } = req.body;
   try {
     const data = {
+      residentId,
       elderlyId,
-      elderlyName,
-      elderlyPhone,
-      dateOfBirth,
-      gender,
-      address,
-      medicalHistory,
-      allergies,
-      emergencyContactName,
-      emergencyContactPhone,
-      userId,
-      employeeId,
+      checkInTime,
+      checkOutTime,
+      status,
     };
 
     const apiUrl = `${process.env.API_URL}/api/elderly/resident/create`;
     const response = await postRequest(apiUrl, data);
-    const elderlyRecord = response.data;
-    console.log(elderlyRecord);
+    const elderlyResident = response.data;
+    console.log(elderlyResident);
     if (response.success) {
       console.log(response);
       res.redirect('/elderly/resident/');
@@ -146,15 +125,14 @@ const getElderlyResidentById = async (req, res) => {
     const apiUrl = `${process.env.API_URL}/api/elderly/resident/${_id}/update`;
     console.log(apiUrl);
     const response = await getRequest(apiUrl); // 使用组装的URL进行API调用
-    const { elderlyRecord, userIds, employeeIds } = response.data;
+    const { elderlyIds,elderlyResident } = response.data;
     if (response.success) {
       console.log(response);
       res.render('elderly/elderlyResident/elderlyResidentUpdate.ejs', {
         activePage: 'elderly-management',
         navItems: req.navItems,
-        elderlyRecord,
-        userIds, //userIds包括userId、role
-        employeeIds, //包括employeeId、employeeName
+        elderlyIds,
+        elderlyResident,
       });
     }
   } catch (err) {
@@ -164,41 +142,21 @@ const getElderlyResidentById = async (req, res) => {
 
 //(2) 提交更新后的老人入住退住数据数据
 const updateElderlyResident = async (req, res) => {
-  const {
-    elderlyId,
-    elderlyName,
-    elderlyPhone,
-    dateOfBirth,
-    gender,
-    address,
-    medicalHistory,
-    allergies,
-    emergencyContactName,
-    emergencyContactPhone,
-    userId,
-    employeeId,
-  } = req.body;
+  const { residentId, elderlyId, checkInTime, checkOutTime, status } = req.body;
   const { _id } = req.params;
   try {
     const data = {
+      residentId,
       elderlyId,
-      elderlyName,
-      elderlyPhone,
-      dateOfBirth,
-      gender,
-      address,
-      medicalHistory,
-      allergies,
-      emergencyContactName,
-      emergencyContactPhone,
-      userId,
-      employeeId,
+      checkInTime,
+      checkOutTime,
+      status,
     };
 
     // 从请求参数中获取 _id
     const apiUrl = `${process.env.API_URL}/api/elderly/resident/${_id}`;
     const response = await putRequest(apiUrl, data);
-    //const elderlyRecord  = response.data;
+    //const elderlyResident  = response.data;
     if (response.success) {
       console.log(response);
       res.redirect('/elderly/resident/');
@@ -231,5 +189,4 @@ module.exports = {
   getElderlyResidentById,
   updateElderlyResident,
   deleteElderlyResident,
-
 };

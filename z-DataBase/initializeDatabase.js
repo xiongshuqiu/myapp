@@ -8,6 +8,7 @@ const {
   Employee,
   EmployeeShiftSchedule,
   ElderlyResident,
+  ElderlyLeave
 } = require('./models/allModels');
 const users = require('./data/usersData');
 const elderlies = require('./data/elderliesData');
@@ -16,6 +17,7 @@ const bedAssignments = require('./data/bedAssignmentsData');
 const employees = require('./data/employeesData');
 const generateWeeklyShifts = require('./data/employeeShiftSchedulesData'); // 导入数据生成函数
 const elderlyResidents = require('./data/elderlyResidentData'); 
+const elderlyLeaves = require('./data/elderlyLeaveData'); 
 // 初始化数据库
 const initializeDatabase = async () => {
   try {
@@ -27,6 +29,7 @@ const initializeDatabase = async () => {
     await EmployeeShiftSchedule.deleteMany({});
     await EmployeeShiftSchedule.deleteMany({});
     await ElderlyResident.deleteMany({});
+    await ElderlyLeave.deleteMany({});
 
     await User.insertMany(users);
     await Elderly.insertMany(elderlies);
@@ -34,6 +37,7 @@ const initializeDatabase = async () => {
     await BedAssignment.insertMany(bedAssignments);
     await Employee.insertMany(employees);
     await ElderlyResident.insertMany(elderlyResidents);
+    await ElderlyLeave.insertMany(elderlyLeaves);
 
     const startDate = new Date();
     const numWeeks = 1; // 可根据需要调整周数

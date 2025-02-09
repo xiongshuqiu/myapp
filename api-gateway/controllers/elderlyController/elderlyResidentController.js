@@ -63,34 +63,20 @@ const renderNewElderlyResidentForm = async (req, res) => {
 // (2) 提交新的老人入住和退住数据数据
 const createElderlyResident = async (req, res) => {
   const {
+    residentId,
     elderlyId,
-    elderlyName,
-    elderlyPhone,
-    dateOfBirth,
-    gender,
-    address,
-    medicalHistory,
-    allergies,
-    emergencyContactName,
-    emergencyContactPhone,
-    userId,
-    employeeId,
+    checkInTime,
+    checkOutTime,
+    status,
   } = req.body; // 从请求体中获取所有用户信息
 
   try {
     const data = {
+      residentId,
       elderlyId,
-      elderlyName,
-      elderlyPhone,
-      dateOfBirth,
-      gender,
-      address,
-      medicalHistory,
-      allergies,
-      emergencyContactName,
-      emergencyContactPhone,
-      userId,
-      employeeId,
+      checkInTime,
+      checkOutTime,
+      status,
     };
     const url = `${process.env.ELDERLY_SERVICE_URL}/elderly/resident/create`;
     const response = await postRequest(url, data); // 发送 POST 请求以创建新用户
@@ -120,33 +106,19 @@ const getElderlyResidentById = async (req, res) => {
 // (2) 提交更新后的老人入住和退住数据数据
 const updateElderlyResident = async (req, res) => {
   const {
+    residentId,
     elderlyId,
-    elderlyName,
-    elderlyPhone,
-    dateOfBirth,
-    gender,
-    address,
-    medicalHistory,
-    allergies,
-    emergencyContactName,
-    emergencyContactPhone,
-    userId,
-    employeeId,
+    checkInTime,
+    checkOutTime,
+    status,
   } = req.body;
   try {
     const data = {
+      residentId,
       elderlyId,
-      elderlyName,
-      elderlyPhone,
-      dateOfBirth,
-      gender,
-      address,
-      medicalHistory,
-      allergies,
-      emergencyContactName,
-      emergencyContactPhone,
-      userId,
-      employeeId,
+      checkInTime,
+      checkOutTime,
+      status,
     };
     const { _id } = req.params; // 从参数中获取 _Id
     const url = `${process.env.ELDERLY_SERVICE_URL}/elderly/resident/${_id}`;

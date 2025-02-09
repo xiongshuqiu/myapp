@@ -19,7 +19,7 @@ function getNavItems(role) {
       id: 'user-management',
       name: 'User Management',
       href: '/users',
-      roles: ['admin', 'medical'],
+      roles: ['admin'],
       icon: 'fa-user fa-fw',
       subMenu: [],
     },
@@ -89,7 +89,7 @@ function getNavItems(role) {
       id: 'bed-management',
       name: 'Bed Management',
       href: '#',
-      roles: ['admin', 'medical', 'family'],
+      roles: ['admin'],
       icon: 'fa-bed fa-fw',
       subMenu: [
         {
@@ -100,7 +100,7 @@ function getNavItems(role) {
         {
           name: 'Bed Assignment',
           href: '/beds/assignment/',
-          roles: ['admin', 'medical', 'family'],
+          roles: ['admin'],
         },
       ],
     },

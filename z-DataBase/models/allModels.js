@@ -97,20 +97,16 @@ const ElderlyResident = mongoose.model(
 
 // ElderlyLeave Schema
 const elderlyLeaveSchema = new mongoose.Schema({
-  leaveId: { type: String, required: true, unique: true }, // 申请编号 L001
-  elderlyId: { type: String, ref: 'Elderly', required: true }, // 老人引用 E001
-  type: { type: String, required: true, enum: ['Leave', 'CancelLeave'] }, // 申请类型: Leave 或 CancelLeave
-  startDate: { type: Date, required: true }, // 请假开始日期
-  endDate: { type: Date, required: true }, // 请假结束日期或销假日期
-  reason: { type: String, required: true }, // 原因
-  status: {
-    type: String,
-    required: true,
-    enum: ['Pending', 'Approved', 'Rejected'],
-  }, // 状态：Pending（待处理）, Approved（批准）, Rejected（拒绝）
-  appliedDate: { type: Date, default: Date.now }, // 申请日期
+  leaveId:{ type: String, required: true },
+  elderlyId: {type: String, required: true, ref: 'Elder' },
+  reason: { type: String, required: true },
+  startDate: { type: Date, required: true },
+  endDate: { type: Date, required: true },
+  status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
+  type: { type: String, enum: ['leave', 'return'], required: true },  // 新增字段，用于区分请假和销假
+  additionalNotes: { type: String, default: '' },  // 存储附加说明
+  applicationDate: { type: Date, default: Date.now }
 });
-
 const ElderlyLeave = mongoose.model('ElderlyLeave', elderlyLeaveSchema);
 
 module.exports = {

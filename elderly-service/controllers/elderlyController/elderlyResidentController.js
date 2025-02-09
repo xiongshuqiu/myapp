@@ -36,7 +36,7 @@ const getAllElderlyResidents = async (req, res) => {
     if (role === 'family') {
       query = await User.aggregate([
         {
-          $match: { _id: new mongoose.Types.ObjectId(_id) },// 使用 new 关键字实例化 ObjectId
+          $match: { _id: new mongoose.Types.ObjectId(_id) }, // 使用 new 关键字实例化 ObjectId
         },
         {
           $lookup: {
@@ -112,12 +112,17 @@ const getAllElderlyResidents = async (req, res) => {
         $lookup: {
           // 从 'bedAssignments' 集合中查找与 'elderlyId' 关联的数据
           from: 'bedassignments',
-          localField: 'elderlyDetails.elderlyId',
+          localField: 'elderlyId',
           foreignField: 'elderlyId',
           as: 'bedassignmentDetails',
         },
       },
-      { $unwind: '$bedassignmentDetails' }, // 展开 bedAssignmentDetails 数组
+      {
+        $unwind: {
+          path: '$bedassignmentDetails',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
       {
         $project: {
           // 投影所需的字段
@@ -144,80 +149,78 @@ const getAllElderlyResidents = async (req, res) => {
   }
 };
 
-// 2. 创建新的老人档案
-// (1) 显示新增老人档案表单(查找available的bedId、未分配床位的elderlyId)
+// 2. 创建新的老人入住退住
+// (1) 显示新增老人入住退住表单(查找available的bedId、未分配床位的elderlyId)
 const renderNewElderlyResidentForm = async (req, res) => {
   try {
-    // 顺序查找 userId
-    const userIds = await User.find({ role: 'family' }).select('userId role');
-
     // 顺序查找 employeeId
-    const employeeIds = await Employee.find().select('employeeId employeeName');
-    console.log('User IDs:', userIds);
-    console.log(' Employee IDs:', employeeIds);
+    // 聚合管道查找未分配床位的 elderlyId
+    const unResidentedElderlyIds = await Elderly.aggregate([
+      {
+        $lookup: {
+          from: 'elderlyresidents',
+          localField: 'elderlyId',
+          foreignField: 'elderlyId',
+          as: 'elderlyresidentDetails',
+        },
+      },
+      {
+        $match: {
+          'elderlyresidentDetails.elderlyId': { $exists: false },
+        },
+      },
+      {
+        $project: {
+          elderlyId: 1,
+          elderlyName: 1, // 您可以根据需要选择其他字段
+        },
+      },
+    ]);
 
     return res.status(200).json({
       success: true,
-      message: 'UserIds and employeeIds retrieved successfully',
-      data: { employeeIds, userIds },
+      message: 'UnResidentedElderlyIds retrieved successfully',
+      data: { unResidentedElderlyIds },
     });
   } catch (err) {
-    console.error('Error retrieving userIds and employeeIds:', err.message); // 调试信息
+    console.error('Error retrieving UnResidentedElderlyIds:', err.message); // 调试信息
     res.status(500).json({ success: false, message: err.message });
   }
 };
-// (2) 提交新的老人档案数据
+// (2) 提交新的老人入住退住数据
 const createElderlyResident = async (req, res) => {
-  const {
-    elderlyId,
-    elderlyName,
-    elderlyPhone,
-    dateOfBirth,
-    gender,
-    address,
-    medicalHistory,
-    allergies,
-    emergencyContactName,
-    emergencyContactPhone,
-    userId,
-    employeeId,
-  } = req.body;
+  const { residentId, elderlyId, checkInTime, checkOutTime, status } = req.body;
   console.log(
     'Received request to create elderly resident with data:',
     req.body,
   ); // 调试信息
   try {
     // 检查是否存在相同床位编号的记录
-    const existingElderly = await Elderly.findOne({ elderlyId });
-    if (existingElderly) {
-      console.warn(`Elderly id already exists: ${elderlyId}`); // 调试信息
+    const existingElderlyResident = await ElderlyResident.findOne({
+      residentId,
+    });
+    if (existingElderlyResident) {
+      console.warn(`Resident id already exists: ${residentId}`); // 调试信息
       return res
         .status(400)
-        .json({ success: false, message: 'Elderly id already exists' });
+        .json({ success: false, message: 'Resident id already exists' });
     }
 
-    // 创建并保存新老人档案
-    const newElderly = new Elderly({
-      elderlyId: elderlyId, // 老人唯一编号 E001
-      elderlyName: elderlyName, // 老人姓名
-      elderlyPhone: elderlyPhone, // 老人电话
-      dateOfBirth: dateOfBirth, // 生日
-      gender: gender, // 性别
-      address: address, // 地址
-      medicalHistory: medicalHistory, // 医疗史
-      allergies: allergies, // 过敏史
-      emergencyContactName: emergencyContactName, // 紧急联系人姓名
-      emergencyContactPhone: emergencyContactPhone, // 紧急联系人电话
-      userId: userId, // 家属登录 Id 唯一编号 F001
-      employeeId: employeeId, // 关联负责的医生S002
+    // 创建并保存新老人入住退住数据
+    const newElderlyResident = new ElderlyResident({
+      residentId: residentId,
+      elderlyId: elderlyId,
+      checkInTime: checkInTime,
+      checkOutTime: checkOutTime,
+      status: status,
     });
 
-    await newElderly.save();
-    console.log(' Elderly resident created successfully:', newElderly); // 调试信息
+    await newElderlyResident.save();
+    console.log(' Elderly resident created successfully:', newElderlyResident); // 调试信息
     return res.status(201).json({
       success: true,
       message: 'Elderly resident created successfully',
-      data: newElderly,
+      data: newElderlyResident,
     });
   } catch (error) {
     console.error('Error creating elderly resident:', error.message); // 调试信息
@@ -229,31 +232,26 @@ const createElderlyResident = async (req, res) => {
   }
 };
 
-// 3. 更新特定老人档案
-// (1) 查找特定老人档案
+// 3. 更新特定老人入住退住数据
+// (1) 查找特定老人入住退住数据
 const getElderlyResidentById = async (req, res) => {
   const { _id } = req.params;
   console.log(`Received request to get elderly resident by ID: ${_id}`); // 调试信息
   try {
-    // 根据ID查找老人档案
-    const elderlyRecord = await Elderly.findById(_id);
-    if (elderlyRecord) {
-      console.log('Elderly resident retrieved successfully:', elderlyRecord); // 调试信息
+    // 根据ID查找老人入住退住数据
+    const elderlyResident = await ElderlyResident.findById(_id);
+    if (elderlyResident) {
+      console.log('Elderly resident retrieved successfully:', elderlyResident); // 调试信息
 
-      // 查找所有的 userId
-      const userIds = await User.find().select('userId role');
-      // 查找所有老人档案
-      const employeeIds = await Employee.find().select(
-        'employeeId employeeName',
-      );
+      // 查找所有老人的elderlyId
+      const elderlyIds = await Elderly.find().select('elderlyId elderlyName');
+      console.log(elderlyIds);
       return res.status(200).json({
         success: true,
-        message:
-          'Elderly resident, userIds and employeeIds retrieved successfully',
+        message: ' elderlyIds retrieved successfully',
         data: {
-          elderlyRecord,
-          userIds, //包括bedId、status
-          employeeIds, //包括elderlyId、elderlyName
+          elderlyResident,
+          elderlyIds, //包括elderlyId、elderlyName
         },
       });
     } else {
@@ -267,23 +265,10 @@ const getElderlyResidentById = async (req, res) => {
     return res.status(500).json({ success: false, message: err.message });
   }
 };
-// (2) 提交更新后的老人档案数据
+// (2) 提交更新后的老人入住退住数据
 const updateElderlyResident = async (req, res) => {
   const { _id } = req.params; // 从 URL 参数中获取 assignmentId
-  const {
-    elderlyId,
-    elderlyName,
-    elderlyPhone,
-    dateOfBirth,
-    gender,
-    address,
-    medicalHistory,
-    allergies,
-    emergencyContactName,
-    emergencyContactPhone,
-    userId,
-    employeeId,
-  } = req.body;
+  const { residentId, elderlyId, checkInTime, checkOutTime, status } = req.body;
 
   console.log(
     'Received request to update elderly resident with data:',
@@ -291,36 +276,28 @@ const updateElderlyResident = async (req, res) => {
   ); // 调试信息
 
   try {
-    // 查找现有老人档案记录
-    const existingElderly = await Elderly.findOne({ _id });
-    if (!existingElderly) {
+    // 查找现有老人入住退住记录
+    const existingElderlyResident = await ElderlyResident.findOne({ _id });
+    if (!existingElderlyResident) {
       console.warn(`Elderly _id not found: ${_id}`); // 调试信息
       return res
         .status(404)
-        .json({ success: false, message: 'Elderly _id  not found' });
+        .json({ success: false, message: 'existingElderlyResident _id  not found' });
     }
 
-    // 更新老人档案记录
+    // 更新老人入住退住记录
+    existingElderlyResident.residentId = residentId,
+      existingElderlyResident.elderlyId = elderlyId,
+      existingElderlyResident.checkInTime = checkInTime,
+      existingElderlyResident.checkOutTime = checkOutTime,
+      existingElderlyResident.status = status,
+      await existingElderlyResident.save();
 
-    (existingElderly.elderlyId = elderlyId), // 老人唯一编号 E001
-      (existingElderly.elderlyName = elderlyName), // 老人姓名
-      (existingElderly.elderlyPhone = elderlyPhone), // 老人电话
-      (existingElderly.dateOfBirth = dateOfBirth), // 生日
-      (existingElderly.gender = gender), // 性别
-      (existingElderly.address = address), // 地址
-      (existingElderly.medicalHistory = medicalHistory), // 医疗史
-      (existingElderly.allergies = allergies), // 过敏史
-      (existingElderly.emergencyContactName = emergencyContactName), // 紧急联系人姓名
-      (existingElderly.emergencyContactPhone = emergencyContactPhone), // 紧急联系人电话
-      (existingElderly.userId = userId), // 家属登录 Id 唯一编号 F001
-      (existingElderly.employeeId = employeeId), // 关联负责的医生S002
-      await existingElderly.save();
-
-    console.log('Elderly resident updated successfully:', existingElderly); // 调试信息
+    console.log('Elderly resident updated successfully:', existingElderlyResident); // 调试信息
     return res.status(200).json({
       success: true,
       message: 'Elderly resident updated successfully',
-      data: existingElderly,
+      data: existingElderlyResident,
     });
   } catch (error) {
     console.error('Error updating elderly resident:', error.message); // 调试信息
@@ -332,12 +309,12 @@ const updateElderlyResident = async (req, res) => {
   }
 };
 
-// 4. 删除特定老人档案
+// 4. 删除特定老人入住退住
 const deleteElderlyResident = async (req, res) => {
   const { _id } = req.params;
 
   try {
-    await Elderly.findByIdAndDelete(_id); // 根据ID删除老人档案
+    await ElderlyResident.findByIdAndDelete(_id); // 根据ID删除老人入住退住
     console.log('Bed status deleted successfully:', _id); // 调试信息
     return res
       .status(200)
