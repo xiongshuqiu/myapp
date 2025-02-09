@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 // User Schema
 const userSchema = new mongoose.Schema({
   userId: { type: String, required: true }, // 用户唯一编号 管理员U001，医护U002（员工）、家属F001
@@ -97,15 +96,18 @@ const ElderlyResident = mongoose.model(
 
 // ElderlyLeave Schema
 const elderlyLeaveSchema = new mongoose.Schema({
-  leaveId:{ type: String, required: true },
-  elderlyId: {type: String, required: true, ref: 'Elder' },
+  elderlyId: { type: String, required: true, ref: 'Elder' },
   reason: { type: String, required: true },
   startDate: { type: Date, required: true },
   endDate: { type: Date, required: true },
-  status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
-  type: { type: String, enum: ['leave', 'return'], required: true },  // 新增字段，用于区分请假和销假
-  additionalNotes: { type: String, default: '' },  // 存储附加说明
-  applicationDate: { type: Date, default: Date.now }
+  status: {
+    type: String,
+    enum: ['pending', 'approved', 'rejected'],
+    default: 'pending',
+  },
+  type: { type: String, enum: ['leave', 'return'], required: true }, // 新增字段，用于区分请假和销假
+  additionalNotes: { type: String, default: '' }, // 存储附加说明
+  applicationDate: { type: Date, default: Date.now },
 });
 const ElderlyLeave = mongoose.model('ElderlyLeave', elderlyLeaveSchema);
 

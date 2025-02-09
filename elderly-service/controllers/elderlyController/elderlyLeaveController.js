@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const BedAssignment = require('../../models/bedAssignmentModel');
 const BedStatus = require('../../models/bedStatusModel');
 const ElderlyLeave = require('../../models/elderlyLeaveModel');
@@ -109,17 +110,19 @@ const getAllElderlyLeaveRequests = async (req, res) => {
       {
         $project: {
           // 投影所需的字段
-          leaveId: 1,
           elderlyId: 1,
           elderlyName: '$elderlyDetails.elderlyName', // 获取 elderlies 集合中的 elderlyName
           reason: 1,
-          startDate: { $dateToString: { format: "%Y-%m-%d", date: "$startDate" } }, // 格式化 startDate
-          endDate: { $dateToString: { format: "%Y-%m-%d", date: "$endDate" } },
+          startDate: {
+            $dateToString: { format: '%Y-%m-%d', date: '$startDate' },
+          }, // 格式化 startDate
+          endDate: { $dateToString: { format: '%Y-%m-%d', date: '$endDate' } },
           status: 1,
           type: 1,
           additionalNotes: 1,
-          applicationDate: { $dateToString: { format: "%Y-%m-%d", date: "$applicationDate" } },
-          
+          applicationDate: {
+            $dateToString: { format: '%Y-%m-%d', date: '$applicationDate' },
+          },
         },
       },
     ]);
@@ -140,96 +143,58 @@ const getAllElderlyLeaveRequests = async (req, res) => {
 const renderNewElderlyLeaveRequestForm = async (req, res) => {
   try {
     // 顺序查找可用的 bedId
-    const availableBedIds = await BedStatus.find({
-      status: 'available',
-    }).select('bedId');
+    const elderlyIds = await Elderly.find({}).select('elderlyId elderlyName');
 
-    // 聚合管道查找未分配床位的 elderlyId
-    const unassignedElderlyIds = await Elderly.aggregate([
-      {
-        $lookup: {
-          from: 'elderlyLeaves',
-          localField: 'elderlyId',
-          foreignField: 'elderlyId',
-          as: 'bedAssignment',
-        },
-      },
-      {
-        $match: {
-          'bedAssignment.elderlyId': { $exists: false },
-        },
-      },
-      {
-        $project: {
-          elderlyId: 1,
-          elderlyName: 1, // 您可以根据需要选择其他字段
-        },
-      },
-    ]);
-
-    console.log('Available Bed IDs:', availableBedIds);
-    console.log('Unassigned Elderly IDs:', unassignedElderlyIds);
+    console.log('Elderly IDs:', elderlyIds);
 
     return res.status(200).json({
       success: true,
-      message: 'bedId and unassigned elderlyId retrieved successfully',
-      data: { availableBedIds, unassignedElderlyIds },
+      message: 'ElderlyIds retrieved successfully',
+      data: { elderlyIds },
     });
   } catch (err) {
-    console.error(
-      'Error retrieving bedId and unassigned elderlyId:',
-      err.message,
-    ); // 调试信息
+    console.error('Error retrieving  elderlyIds:', err.message); // 调试信息
     res.status(500).json({ success: false, message: err.message });
   }
 };
 // (2) 提交新的床位分配数据
 const createElderlyLeaveRequest = async (req, res) => {
   const {
-    availableBedId,
-    unassignedElderlyId,
-    assignmentId,
-    assignedDate,
-    releaseDate,
+    elderlyId,
+    reason,
+    startDate,
+    endDate,
+    status,
+    type,
+    additionalNotes,
+    applicationDate,
   } = req.body;
-  console.log('Received request to create bed status with data:', req.body); // 调试信息
+  console.log(
+    'Received request to create  elderly leave request with data:',
+    req.body,
+  ); // 调试信息
   try {
-    // 检查是否存在相同床位编号的记录
-    const existingBedAssignment = await BedAssignment.findOne({ assignmentId });
-    if (existingBedAssignment) {
-      console.warn(`Bed assignmentId already exists: ${assignmentId}`); // 调试信息
-      return res
-        .status(400)
-        .json({ success: false, message: 'Bed assignmentId already exists' });
-    }
-
     // 创建并保存新床位分配
-    const newBedAssignment = new BedAssignment({
-      bedId: availableBedId,
-      elderlyId: unassignedElderlyId,
-      assignmentId,
-      assignedDate,
-      releaseDate,
+    const newElderlyLeave = new ElderlyLeave({
+      elderlyId: elderlyId,
+      reason: reason,
+      startDate: startDate,
+      endDate: endDate,
+      status: status,
+      type: type,
+      additionalNotes: additionalNotes,
+      applicationDate: applicationDate,
     });
-    await newBedAssignment.save();
+    await newElderlyLeave.save();
 
-    // 更新床位状态为 occupied
-    await BedStatus.updateOne(
-      { bedId: availableBedId }, // 查找条件
-      { status: 'occupied' }, // 更新内容
-    );
-
-    console.log(
-      'Bed assignment created and bed status updated successfully:',
-      newBedAssignment,
-    ); // 调试信息
+    console.log('Elderly leave created  successfully:', newElderlyLeave); // 调试信息
     return res.status(201).json({
       success: true,
-      message: 'Bed assignment created and bed status updated successfully',
-      data: newBedAssignment,
+      message: 'Elderly leave created successfully',
+      data: newElderlyLeave,
     });
   } catch (error) {
-    console.error('Error creating bed assignment:', error.message); // 调试信息
+    console.error('Error creating elderly leave:', error.message); // 调试信息
     return res.status(500).json({
       success: false,
       message: 'An error occurred',

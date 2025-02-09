@@ -76,12 +76,11 @@ const renderNewElderlyLeaveRequestForm = async (req, res) => {
     const response = await getRequest(apiUrl);
 
     if (response.success) {
-      const { availableBedIds, unassignedElderlyIds } = response.data;
+      const { elderlyIds } = response.data;
       res.render('elderly/elderlyLeave/elderlyLeaveCreate.ejs', {
         activePage: 'elderly-management',
         navItems: req.navItems, // 将导航项传递到视图
-        availableBedIds, // 传递可用的 bedId 到视图
-        unassignedElderlyIds, // 传递存在的 elderlyId 到视图
+        elderlyIds,
       });
     } else {
       throw new Error('Failed to retrieve data from API');
@@ -95,25 +94,31 @@ const renderNewElderlyLeaveRequestForm = async (req, res) => {
 //(2)提交新的老人请假请求数据
 const createElderlyLeaveRequest = async (req, res) => {
   const {
-    availableBedId,
-    unassignedElderlyId,
-    assignmentId,
-    assignedDate,
-    releaseDate,
+    elderlyId,
+    reason,
+    startDate,
+    endDate,
+    status,
+    type,
+    additionalNotes,
+    applicationDate,
   } = req.body;
   try {
     const data = {
-      availableBedId,
-      unassignedElderlyId,
-      assignmentId,
-      assignedDate,
-      releaseDate,
+      elderlyId,
+      reason,
+      startDate,
+      endDate,
+      status,
+      type,
+      additionalNotes,
+      applicationDate,
     };
 
     const apiUrl = `${process.env.API_URL}/api/elderly/leave/create`;
     const response = await postRequest(apiUrl, data);
-    const bedAssignment = response.data;
-    console.log(bedAssignment);
+    const elderlyLeave = response.data;
+    console.log(elderlyLeave);
     if (response.success) {
       console.log(response);
       res.redirect('/elderly/leave/');

@@ -39,7 +39,7 @@ const getAllElderlyLeaveRequests = async (req, res) => {
     const response = await getRequest(url); // 发送 GET 请求以获取用户信息
     res.json(response); // 将响应数据返回给前端:包括数据和message
     if (response.success) {
-      console.log(response)
+      console.log(response);
     }
   } catch (err) {
     handleError(err, res);
@@ -54,7 +54,7 @@ const renderNewElderlyLeaveRequestForm = async (req, res) => {
     const response = await getRequest(url); // 发送 GET 请求以获取用户信息
     res.json(response); // 将响应数据返回给前端:包括数据和message
     if (response.success) {
-      console.log(response)
+      console.log(response);
     }
   } catch (err) {
     handleError(err, res);
@@ -63,26 +63,32 @@ const renderNewElderlyLeaveRequestForm = async (req, res) => {
 // (2) 提交老人请假请求数据
 const createElderlyLeaveRequest = async (req, res) => {
   const {
-    availableBedId,
-    unassignedElderlyId,
-    assignmentId,
-    assignedDate,
-    releaseDate,
+    elderlyId,
+    reason,
+    startDate,
+    endDate,
+    status,
+    type,
+    additionalNotes,
+    applicationDate,
   } = req.body; // 从请求体中获取所有用户信息
 
   try {
     const data = {
-      availableBedId,
-      unassignedElderlyId,
-      assignmentId,
-      assignedDate,
-      releaseDate,
+      elderlyId,
+      reason,
+      startDate,
+      endDate,
+      status,
+      type,
+      additionalNotes,
+      applicationDate,
     };
     const url = `${process.env.ELDERLY_SERVICE_URL}/elderly/leave/create`;
     const response = await postRequest(url, data); // 发送 POST 请求以创建新用户
     res.status(201).json(response); // 将响应数据返回给前端
     if (response.success) {
-      console.log(response)
+      console.log(response);
     }
   } catch (err) {
     handleError(err, res);
@@ -97,7 +103,7 @@ const getElderlyLeaveRequestById = async (req, res) => {
     const response = await getRequest(url); // 发送 GET 请求以获取用户信息
     res.json(response); // 将响应数据返回给前端:包括数据和message
     if (response.success) {
-      console.log(response)
+      console.log(response);
     }
   } catch (err) {
     handleError(err, res);
@@ -105,15 +111,16 @@ const getElderlyLeaveRequestById = async (req, res) => {
 };
 // (2) 提交更新后的老人请假请求数据
 const updateElderlyLeaveRequest = async (req, res) => {
-  const { bedId, elderlyId, assignmentId, assignedDate,releaseDate  } = req.body;
+  const { bedId, elderlyId, assignmentId, assignedDate, releaseDate } =
+    req.body;
   try {
-    const data = { bedId, elderlyId, assignmentId, assignedDate,releaseDate  };
+    const data = { bedId, elderlyId, assignmentId, assignedDate, releaseDate };
     const { _id } = req.params; // 从参数中获取 _Id
     const url = `${process.env.ELDERLY_SERVICE_URL}/elderly/leave/${_id}`;
     const response = await putRequest(url, data); // 发送 PUT 请求以更新用户信息
     res.json(response); // 将响应数据返回给前端
     if (response.success) {
-      console.log(response)
+      console.log(response);
     }
   } catch (err) {
     handleError(err, res);
@@ -127,7 +134,7 @@ const deleteElderlyLeaveRequest = async (req, res) => {
     const response = await deleteRequest(url); // 发送 DELETE 请求以删除用户
     res.json(response); // 将响应数据返回给前端
     if (response.success) {
-      console.log(response)
+      console.log(response);
     }
   } catch (err) {
     handleError(err, res);
@@ -140,5 +147,5 @@ module.exports = {
   createElderlyLeaveRequest,
   getElderlyLeaveRequestById,
   updateElderlyLeaveRequest,
-  deleteElderlyLeaveRequest
+  deleteElderlyLeaveRequest,
 };

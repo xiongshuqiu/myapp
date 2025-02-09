@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 // ElderlyLeave Schema
 const elderlyLeaveSchema = new mongoose.Schema({
-  leaveId: { type: String, required: true },
-  elderId: { type: String, required: true, ref: 'Elder' },
+  elderlyId: { type: String, required: true, ref: 'Elder' },
   reason: { type: String, required: true },
   startDate: { type: Date, required: true },
   endDate: { type: Date, required: true },
