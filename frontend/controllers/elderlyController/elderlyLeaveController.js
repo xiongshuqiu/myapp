@@ -138,14 +138,13 @@ const getElderlyLeaveRequestById = async (req, res) => {
     const apiUrl = `${process.env.API_URL}/api/elderly/leave/${_id}/update`;
     console.log(apiUrl);
     const response = await getRequest(apiUrl); // 使用组装的URL进行API调用
-    const { bedAssignment, bedIds, elderlyIds } = response.data;
+    const { elderlyLeave, elderlyIds } = response.data;
     if (response.success) {
       console.log(response);
       res.render('elderly/elderlyLeave/elderlyLeaveUpdate.ejs', {
         activePage: 'elderly-management',
         navItems: req.navItems,
-        bedAssignment,
-        bedIds, //beIds包括：bedId、status
+        elderlyLeave,
         elderlyIds, //包括elderlyId、elderlyName
       });
     }
@@ -156,16 +155,32 @@ const getElderlyLeaveRequestById = async (req, res) => {
 
 //(2) 提交更新后的老人请假请求数据
 const updateElderlyLeaveRequest = async (req, res) => {
-  const { bedId, elderlyId, assignmentId, assignedDate, releaseDate } =
-    req.body;
+  const {
+    elderlyId,
+    reason,
+    startDate,
+    endDate,
+    status,
+    type,
+    additionalNotes,
+    applicationDate,
+  } = req.body;
   const { _id } = req.params;
   try {
-    const data = { bedId, elderlyId, assignmentId, assignedDate, releaseDate };
+    const data = {
+      elderlyId,
+      reason,
+      startDate,
+      endDate,
+      status,
+      type,
+      additionalNotes,
+      applicationDate,
+    };
 
     // 从请求参数中获取 _id
     const apiUrl = `${process.env.API_URL}/api/elderly/leave/${_id}`;
     const response = await putRequest(apiUrl, data);
-    // const bedAssignment = response.data;
     if (response.success) {
       console.log(response);
       res.redirect('/elderly/leave/');

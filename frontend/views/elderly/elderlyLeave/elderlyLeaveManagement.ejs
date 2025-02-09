@@ -64,14 +64,14 @@
                     >
                       <thead>
                         <tr>
-                          <th>elderlyId</th>
+                          <th class="hide-column">elderlyId</th>
                           <th>elderlyName</th>
-                          <th>reason</th>
+                          <th>leavereason</th>
                           <th>startDate</th>
                           <th>endDate</th>
                           <th>status</th>
                           <th>type</th>
-                          <th class="hide-column">additionalNotes</th>
+                          <th >approvalNotes</th>
                           <th>applicationDate</th>
                           <th>action</th>
                         </tr>
@@ -79,14 +79,14 @@
                       <tbody>
                         <% elderlyLeaves.forEach(function(elderlyLeave) { %>
                         <tr class="odd gradeX" style="white-space: nowrap">
-                          <td><%= elderlyLeave.elderlyId %></td>
+                          <td class="hide-column"><%= elderlyLeave.elderlyId %></td>
                           <td><%= elderlyLeave.elderlyName %></td>
                           <td><%= elderlyLeave.reason %></td>
                           <td><%= elderlyLeave.startDate %></td>
                           <td><%= elderlyLeave.endDate %></td>
                           <td><%= elderlyLeave.status %></td>
                           <td><%= elderlyLeave.type %></td>
-                          <td class="hide-column"><%= elderlyLeave.additionalNotes %></td>
+                          <td ><%= elderlyLeave.additionalNotes %></td>
                           <td><%= elderlyLeave.applicationDate %></td>
                           <td>
                             <% linkItems.forEach(function(item) { %> <% if
@@ -94,7 +94,7 @@
                             { %>
                             <a
                               id="<%= item.id %>"
-                              href="/elderly/elderlyLeave/<%=  elderlyLeave._id %>/update"
+                              href="/elderly/leave/<%=  elderlyLeave._id %>/update"
                               class="editlink"
                               style="color: blue; display: inline"
                               >Review

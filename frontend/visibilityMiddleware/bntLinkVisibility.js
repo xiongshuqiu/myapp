@@ -141,7 +141,7 @@ function bntLinkVisibility(req, res, next) {
         },
         {
           id: 'delete-elderlyLeave-link',
-          roles: ['admin'],
+          roles: [],
         },
     ];
     return linkItems.map((item) => ({
