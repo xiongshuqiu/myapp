@@ -1,8 +1,6 @@
-const BedAssignment = require('../../models/bedAssignmentModel');
-const BedStatus = require('../../models/bedStatusModel');
-const ElderlyLeave = require('../../models/elderlyLeaveModel');
+const mongoose = require('mongoose');
+const getNextId = require('./genericController.js');
 const Elderly = require('../../models/elderlyModel');
-const ElderlyResident = require('../../models/elderlyResidentModel');
 const Employee = require('../../models/employeeModel');
 const User = require('../../models/userModel');
 
@@ -19,132 +17,139 @@ const getAllElderlyRecords = async (req, res) => {
     });
   }
   try {
-    // 首先根据 _id 查找用户的 userId
-    if (role === 'medical' || role === 'family') {
-      const user = await User.findById({ _id });
-      if (!user) throw new Error('User not found');
+    // 查找用户，确认用户存在
+    const user = await User.findById(_id);
+    console.log('Found user:', user); // 调试信息
 
-      const userId = user.userId; // 获取用户的 userId
-
-      // 使用聚合管道进行后续查询
-      //查找思路：（1）根据userId筛选Elderly中的老人
-      //（2）根据userId在User中查找userName形成新的字段userDetails
-      //（3）根据employeeId在Employeer中查找employeerName、contactNumber形成新的字段employeeDetails
-      const elderlyRecords = await Elderly.aggregate([
-        {
-          $match: { userId: userId }, // 根据 userId 查找家庭成员
-        },
-        {
-          $lookup: {
-            from: 'users', // 从 bedassignments 集合中查找与家庭成员关联的老人档案
-            localField: 'userId', // 当前集合中的字段
-            foreignField: 'userId', // 关联集合中的字段
-            as: 'userDetails', // 结果保存字段
-          },
-        },
-        {
-          $unwind: '$userDetails', // 展开数组字段
-        },
-        {
-          $lookup: {
-            from: 'employees', // 从 bedstatuses 集合中查找与老人档案关联的床位信息
-            localField: 'employeeId', // 当前集合中的字段
-            foreignField: 'employeeId', // 关联集合中的字段
-            as: 'employeeDetails', // 结果保存字段
-          },
-        },
-        {
-          $unwind: '$employeeDetails', // 展开数组字段
-        },
-        {
-          $project: {
-            elderlyId: 1, // 保留 elderlyId 字段
-            elderlyName: 1, // 保留 elderlyName 字段
-            elderlyPhone: 1, // 保留 elderlyPhone 字段
-            dateOfBirth: 1, // 保留 dateOfBirth 字段
-            age: {
-              $subtract: [
-                { $year: new Date() }, // 当前年份
-                { $year: '$dateOfBirth' }, // 出生年份
-              ],
-            },
-            gender: 1, // 保留 gender 字段
-            address: 1, // 保留 address 字段
-            medicalHistory: 1, // 保留 medicalHistory 字段
-            allergies: 1, // 保留 allergies 字段
-            emergencyContactName: 1, // 保留 emergencyContactName 字段
-            emergencyContactPhone: 1, // 保留 emergencyContactPhone 字段
-            userId: '$userDetails.userId', // 保留 userDetails 中的 userId 字段
-            userName: '$userDetails.userName', // 保留 userDetails 中的 userName 字段
-            employeeId: '$employeeDetails.employeeId', // 保留 employeeDetails 中的 employeeId 字段
-            employeeName: '$employeeDetails.name', // 保留 employeeDetails 中的 name 字段
-            employeeContactNumber: '$employeeDetails.contactNumber', // 保留 employeeDetails 中的 contactNumber 字段
-          },
-        },
-      ]);
-      res.status(200).json({
-        success: true,
-        message: 'Elderly records retrieved successfully',
-        data: elderlyRecords,
-      });
-      console.log(elderlyRecords);
-    } else if (role === 'admin') {
-      const elderlyRecords = await Elderly.aggregate([
-        {
-          $lookup: {
-            from: 'users', // 从 bedassignments 集合中查找与家庭成员关联的老人档案
-            localField: 'userId', // 当前集合中的字段
-            foreignField: 'userId', // 关联集合中的字段
-            as: 'userDetails', // 结果保存字段
-          },
-        },
-        {
-          $unwind: '$userDetails', // 展开数组字段
-        },
-        {
-          $lookup: {
-            from: 'employees', // 从 bedstatuses 集合中查找与老人档案关联的床位信息
-            localField: 'employeeId', // 当前集合中的字段
-            foreignField: 'employeeId', // 关联集合中的字段
-            as: 'employeeDetails', // 结果保存字段
-          },
-        },
-        {
-          $unwind: '$employeeDetails', // 展开数组字段
-        },
-        {
-          $project: {
-            elderlyId: 1, // 保留 elderlyId 字段
-            elderlyName: 1, // 保留 elderlyName 字段
-            elderlyPhone: 1, // 保留 elderlyPhone 字段
-            dateOfBirth: 1, // 保留 dateOfBirth 字段
-            age: {
-              $subtract: [
-                { $year: new Date() }, // 当前年份
-                { $year: '$dateOfBirth' }, // 出生年份
-              ],
-            },
-            gender: 1, // 保留 gender 字段
-            address: 1, // 保留 address 字段
-            medicalHistory: 1, // 保留 medicalHistory 字段
-            allergies: 1, // 保留 allergies 字段
-            emergencyContactName: 1, // 保留 emergencyContactName 字段
-            emergencyContactPhone: 1, // 保留 emergencyContactPhone 字段
-            userId: '$userDetails.userId', // 保留 userDetails 中的 userId 字段
-            userName: '$userDetails.userName', // 保留 userDetails 中的 userName 字段
-            employeeId: '$employeeDetails.employeeId', // 保留 employeeDetails 中的 employeeId 字段
-            employeeName: '$employeeDetails.employeeName', // 保留 employeeDetails 中的 name 字段
-            employeeContactNumber: '$employeeDetails.contactNumber', // 保留 employeeDetails 中的 contactNumber 字段
-          },
-        },
-      ]);
-      console.log(elderlyRecords);
-      res.status(200).json({
-        success: true,
-        message: 'Elderly records retrieved successfully',
-        data: elderlyRecords,
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found', // 错误信息改为英文
       });
     }
+
+    let query = {};
+    if (role === 'family') {
+      query = await User.aggregate([
+        {
+          $match: { _id: new mongoose.Types.ObjectId(_id) }, // 使用 new 关键字实例化 ObjectId
+        },
+        {
+          $lookup: {
+            from: 'elderlies',
+            localField: 'userId',
+            foreignField: 'userId',
+            as: 'elderlyDetails',
+          },
+        },
+        { $unwind: '$elderlyDetails' },
+        {
+          $project: {
+            elderlyId: '$elderlyDetails.elderlyId',
+          },
+        },
+      ]);
+      query = { elderlyId: { $in: query.map((item) => item.elderlyId) } };
+    } else if (role === 'medical') {
+      query = await User.aggregate([
+        {
+          $match: { _id: new mongoose.Types.ObjectId(_id) }, // 使用 new 关键字实例化 ObjectId
+        },
+        {
+          $lookup: {
+            from: 'employees',
+            localField: 'userId',
+            foreignField: 'userId',
+            as: 'employeeDetails',
+          },
+        },
+        { $unwind: '$employeeDetails' },
+        {
+          $lookup: {
+            from: 'elderlies',
+            localField: 'employeeDetails.employeeId',
+            foreignField: 'employeeId',
+            as: 'elderlyDetails',
+          },
+        },
+        { $unwind: '$elderlyDetails' },
+        {
+          $project: {
+            elderlyId: '$elderlyDetails.elderlyId',
+          },
+        },
+      ]);
+      query = { elderlyId: { $in: query.map((item) => item.elderlyId) } };
+    } else if (role === 'admin') {
+      query = {}; // 管理员可以查看所有数据
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid role', // 错误信息改为英文
+      });
+    }
+    // 使用聚合管道进行后续查询
+    const elderlyRecords = await Elderly.aggregate([
+      {
+        $match: query,
+      },
+      {
+        $lookup: {
+          from: 'users', // 从 bedstatuses 集合中查找与老人档案关联的床位信息
+          localField: 'userId', // 当前集合中的字段
+          foreignField: 'userId', // 关联集合中的字段
+          as: 'userDetails', // 结果保存字段
+        },
+      },
+      {
+        $unwind: '$userDetails', // 展开数组字段
+      },
+      {
+        $lookup: {
+          from: 'employees', // 从 bedstatuses 集合中查找与老人档案关联的床位信息
+          localField: 'employeeId', // 当前集合中的字段
+          foreignField: 'employeeId', // 关联集合中的字段
+          as: 'employeeDetails', // 结果保存字段
+        },
+      },
+      {
+        $unwind: {
+          path: '$employeeDetails',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $project: {
+          elderlyId: 1, // 保留 elderlyId 字段
+          elderlyName: 1, // 保留 elderlyName 字段
+          elderlyPhone: 1, // 保留 elderlyPhone 字段
+          dateOfBirth: 1, // 保留 dateOfBirth 字段
+          age: {
+            $subtract: [
+              { $year: new Date() }, // 当前年份
+              { $year: '$dateOfBirth' }, // 出生年份
+            ],
+          },
+          gender: 1, // 保留 gender 字段
+          address: 1, // 保留 address 字段
+          medicalHistory: 1, // 保留 medicalHistory 字段
+          allergies: 1, // 保留 allergies 字段
+          emergencyContactName: 1, // 保留 emergencyContactName 字段
+          emergencyContactPhone: 1, // 保留 emergencyContactPhone 字段
+          userId: '$userDetails.userId', // 保留 userDetails 中的 userId 字段
+          userName: '$userDetails.userName', // 保留 userDetails 中的 userName 字段
+          employeeId: '$employeeDetails.employeeId', // 保留 employeeDetails 中的 employeeId 字段
+          employeeName: '$employeeDetails.employeeName', // 保留 employeeDetails 中的 name 字段
+          employeeContactNumber: '$employeeDetails.contactNumber', // 保留 employeeDetails 中的 contactNumber 字段
+        },
+      },
+    ]);
+    res.status(200).json({
+      success: true,
+      message: 'Elderly records retrieved successfully',
+      data: elderlyRecords,
+    });
+    console.log(elderlyRecords);
   } catch (err) {
     console.error('Error retrieving elderly records:', err.message); // 调试信息
     res.status(500).json({ success: false, message: err.message });
@@ -175,8 +180,8 @@ const renderNewElderlyRecordForm = async (req, res) => {
 };
 // (2) 提交新的老人档案数据
 const createElderlyRecord = async (req, res) => {
+  const elderlyId = await getNextId('Elderly', 'E', 'elderlyId');
   const {
-    elderlyId,
     elderlyName,
     elderlyPhone,
     dateOfBirth,
@@ -201,19 +206,20 @@ const createElderlyRecord = async (req, res) => {
     }
 
     // 创建并保存新老人档案
+
     const newElderly = new Elderly({
-      elderlyId: elderlyId, // 老人唯一编号 E001
-      elderlyName: elderlyName, // 老人姓名
-      elderlyPhone: elderlyPhone, // 老人电话
-      dateOfBirth: dateOfBirth, // 生日
-      gender: gender, // 性别
-      address: address, // 地址
-      medicalHistory: medicalHistory, // 医疗史
-      allergies: allergies, // 过敏史
-      emergencyContactName: emergencyContactName, // 紧急联系人姓名
-      emergencyContactPhone: emergencyContactPhone, // 紧急联系人电话
-      userId: userId, // 家属登录 Id 唯一编号 F001
-      employeeId: employeeId, // 关联负责的医生S002
+      elderlyId,
+      elderlyName,
+      elderlyPhone,
+      dateOfBirth,
+      gender,
+      address,
+      medicalHistory,
+      allergies,
+      emergencyContactName,
+      emergencyContactPhone,
+      userId,
+      employeeId,
     });
 
     await newElderly.save();
@@ -247,7 +253,9 @@ const getElderlyRecordById = async (req, res) => {
       // 查找所有的 userId
       const userIds = await User.find().select('userId role');
       // 查找所有老人档案
-      const employeeIds = await Employee.find().select('employeeId employeeName');
+      const employeeIds = await Employee.find().select(
+        'employeeId employeeName',
+      );
       return res.status(200).json({
         success: true,
         message:
@@ -273,7 +281,6 @@ const getElderlyRecordById = async (req, res) => {
 const updateElderlyRecord = async (req, res) => {
   const { _id } = req.params; // 从 URL 参数中获取 assignmentId
   const {
-    elderlyId,
     elderlyName,
     elderlyPhone,
     dateOfBirth,
@@ -300,21 +307,23 @@ const updateElderlyRecord = async (req, res) => {
     }
 
     // 更新老人档案记录
-   
-    existingElderly.elderlyId = elderlyId, // 老人唯一编号 E001
-    existingElderly.elderlyName=elderlyName, // 老人姓名
-    existingElderly.elderlyPhone=elderlyPhone, // 老人电话
-    existingElderly.dateOfBirth=dateOfBirth, // 生日
-    existingElderly.gender=gender, // 性别
-    existingElderly.address=address, // 地址
-    existingElderly.medicalHistory=medicalHistory, // 医疗史
-    existingElderly.allergies=allergies, // 过敏史
-    existingElderly.emergencyContactName=emergencyContactName, // 紧急联系人姓名
-    existingElderly.emergencyContactPhone=emergencyContactPhone, // 紧急联系人电话
-    existingElderly.userId=userId, // 家属登录 Id 唯一编号 F001
-    existingElderly.employeeId=employeeId, // 关联负责的医生S002
-   await existingElderly.save();
-   
+    //Object.assign() 方法将新的字段值合并到现有对象中，从而避免了逐一赋值的冗长代码。
+    Object.assign(existingElderly, {
+      elderlyName, // 老人姓名
+      elderlyPhone, // 老人电话
+      dateOfBirth, // 生日
+      gender, // 性别
+      address, // 地址
+      medicalHistory, // 医疗史
+      allergies, // 过敏史
+      emergencyContactName, // 紧急联系人姓名
+      emergencyContactPhone, // 紧急联系人电话
+      userId, // 家属登录 Id 唯一编号 F001
+      employeeId, // 关联负责的医生 S002
+    });
+
+    await existingElderly.save();
+
     console.log('Elderly record updated successfully:', existingElderly); // 调试信息
     return res.status(200).json({
       success: true,

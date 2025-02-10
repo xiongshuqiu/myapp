@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const getNextId = require('./genericController.js');
 const BedAssignment = require('../../models/bedAssignmentModel');
 const BedStatus = require('../../models/bedStatusModel');
 const ElderlyLeave = require('../../models/elderlyLeaveModel');
@@ -7,7 +8,7 @@ const ElderlyResident = require('../../models/elderlyResidentModel');
 const Employee = require('../../models/employeeModel');
 const User = require('../../models/userModel');
 
-// Function to get all elderly residents' check-in and check-out data
+// 获取老人所有的入住退住记录
 const getAllElderlyResidents = async (req, res) => {
   console.log('Received request to get all elderly residents'); // 调试信息
   const { _id, role } = req.query;
@@ -130,8 +131,12 @@ const getAllElderlyResidents = async (req, res) => {
           elderlyId: 1,
           elderlyName: '$elderlyDetails.elderlyName', // 获取 elderlies 集合中的 elderlyName
           bedId: '$bedassignmentDetails.bedId', // 获取 bedAssignments 集合中的 bedId
-          checkInTime: 1,
-          checkOutTime: 1,
+          checkInTime: {
+            $dateToString: { format: '%Y-%m-%d', date: '$checkInTime' },
+          },
+          checkOutTime: {
+            $dateToString: { format: '%Y-%m-%d', date: '$checkOutTime' },
+          },
           status: 1,
         },
       },
@@ -189,7 +194,8 @@ const renderNewElderlyResidentForm = async (req, res) => {
 };
 // (2) 提交新的老人入住退住数据
 const createElderlyResident = async (req, res) => {
-  const { residentId, elderlyId, checkInTime, checkOutTime, status } = req.body;
+  const residentId = await getNextId('ElderlyResident', 'R', 'residentId');
+  const { elderlyId, checkInTime, checkOutTime, status } = req.body;
   console.log(
     'Received request to create elderly resident with data:',
     req.body,
@@ -208,11 +214,11 @@ const createElderlyResident = async (req, res) => {
 
     // 创建并保存新老人入住退住数据
     const newElderlyResident = new ElderlyResident({
-      residentId: residentId,
-      elderlyId: elderlyId,
-      checkInTime: checkInTime,
-      checkOutTime: checkOutTime,
-      status: status,
+      residentId,
+      elderlyId,
+      checkInTime,
+      checkOutTime,
+      status,
     });
 
     await newElderlyResident.save();
@@ -280,20 +286,26 @@ const updateElderlyResident = async (req, res) => {
     const existingElderlyResident = await ElderlyResident.findOne({ _id });
     if (!existingElderlyResident) {
       console.warn(`Elderly _id not found: ${_id}`); // 调试信息
-      return res
-        .status(404)
-        .json({ success: false, message: 'existingElderlyResident _id  not found' });
+      return res.status(404).json({
+        success: false,
+        message: 'existingElderlyResident _id  not found',
+      });
     }
 
     // 更新老人入住退住记录
-    existingElderlyResident.residentId = residentId,
-      existingElderlyResident.elderlyId = elderlyId,
-      existingElderlyResident.checkInTime = checkInTime,
-      existingElderlyResident.checkOutTime = checkOutTime,
-      existingElderlyResident.status = status,
-      await existingElderlyResident.save();
+    Object.assign(existingElderlyResident, {
+      elderlyId, // 老人唯一编号
+      checkInTime, // 入住时间
+      checkOutTime, // 退住时间
+      status, // 状态
+    });
 
-    console.log('Elderly resident updated successfully:', existingElderlyResident); // 调试信息
+    await existingElderlyResident.save();
+
+    console.log(
+      'Elderly resident updated successfully:',
+      existingElderlyResident,
+    ); // 调试信息
     return res.status(200).json({
       success: true,
       message: 'Elderly resident updated successfully',

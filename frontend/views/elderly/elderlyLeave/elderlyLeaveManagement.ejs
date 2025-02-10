@@ -64,6 +64,7 @@
                     >
                       <thead>
                         <tr>
+                          <th>leaveId</th>
                           <th class="hide-column">elderlyId</th>
                           <th>elderlyName</th>
                           <th>leavereason</th>
@@ -79,6 +80,7 @@
                       <tbody>
                         <% elderlyLeaves.forEach(function(elderlyLeave) { %>
                         <tr class="odd gradeX" style="white-space: nowrap">
+                          <td><%= elderlyLeave.leaveId %></td>
                           <td class="hide-column"><%= elderlyLeave.elderlyId %></td>
                           <td><%= elderlyLeave.elderlyName %></td>
                           <td><%= elderlyLeave.reason %></td>
@@ -192,12 +194,12 @@
         if (confirm('Are you sure you want to delete this elderlyLeave?')) {
           try {
             const response = await fetch(
-              `/employees/elderlyLeave/${_id}/delete`,
+              `/elderly/leave/${_id}/delete`,
               {
                 method: 'DELETE',
               },
             );
-            window.location.href = '/employees/elderlyLeave/';
+            window.location.href = '/elderly/leave/';
             // const result = await response.json();
             // alert(result.message); // 显示反馈给用户
             location.reload(); // 刷新页面以更新用户表

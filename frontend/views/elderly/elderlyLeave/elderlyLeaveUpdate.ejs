@@ -50,11 +50,9 @@
                 <div class="panel-body">
                   <div class="row">
                     <div class="col-lg-6">
-                      <form
-                        action="/elderly/leave/<%= elderlyLeave._id %>?_method=PUT"
-                        method="post"
-                        role="form"
-                      >
+                      <form <% elderlyLeaves.forEach(function(elderlyLeave) { %>
+                        action="/elderly/leave/<%= elderlyLeave._id
+                        %>?_method=PUT" method="post" role="form" >
                         <div class="form-group">
                           <label for="applicationDetails"
                             >Application Details</label
@@ -63,8 +61,8 @@
                             <li class="list-group-item">
                               <strong>Elderly ID(Name):</strong>
                               <span>
-                                ID: <%= elderlyIds.elderlyId %> (Name:<%=
-                                elderlyIds.elderlyName %>)</span
+                                ID: <%= elderlyLeave.elderlyId %> (Name:<%=
+                                elderlyLeave.elderlyName %>)</span
                               >
                               <input
                                 type="hidden"
@@ -127,6 +125,7 @@
                             </li>
                           </ul>
                         </div>
+                        <% }); %>
 
                         <div class="form-group">
                           <label for="approvalOpinion"
@@ -195,16 +194,14 @@
     <!-- JS Scripts-->
     <!-- jQuery Js -->
     <script>
-      document
-        .getElementById('status')
-        .addEventListener('change', function () {
-          var rejectedReasonDiv = document.getElementById('additionalNotes');
-          if (this.value === 'rejected'|| this.value === 'approved') {
-            rejectedReasonDiv.style.display = 'block';
-          } else {
-            rejectedReasonDiv.style.display = 'none';
-          }
-        });
+      document.getElementById('status').addEventListener('change', function () {
+        var rejectedReasonDiv = document.getElementById('additionalNotes');
+        if (this.value === 'rejected' || this.value === 'approved') {
+          rejectedReasonDiv.style.display = 'block';
+        } else {
+          rejectedReasonDiv.style.display = 'none';
+        }
+      });
     </script>
 
     <script src="/assets/js/jquery-1.10.2.js"></script>

@@ -94,7 +94,6 @@ const renderNewElderlyRecordForm = async (req, res) => {
 //(2)提交新的老人档案数据
 const createElderlyRecord = async (req, res) => {
   const {
-    elderlyId,
     elderlyName,
     elderlyPhone,
     dateOfBirth,
@@ -109,7 +108,6 @@ const createElderlyRecord = async (req, res) => {
   } = req.body;
   try {
     const data = {
-      elderlyId,
       elderlyName,
       elderlyPhone,
       dateOfBirth,
@@ -165,7 +163,6 @@ const getElderlyRecordById = async (req, res) => {
 //(2) 提交更新后的老人档案数据
 const updateElderlyRecord = async (req, res) => {
   const {
-    elderlyId,
     elderlyName,
     elderlyPhone,
     dateOfBirth,
@@ -181,7 +178,6 @@ const updateElderlyRecord = async (req, res) => {
   const { _id } = req.params;
   try {
     const data = {
-      elderlyId,
       elderlyName,
       elderlyPhone,
       dateOfBirth,

@@ -96,6 +96,7 @@ const ElderlyResident = mongoose.model(
 
 // ElderlyLeave Schema
 const elderlyLeaveSchema = new mongoose.Schema({
+  leaveId: { type: String, required: true },//LR001
   elderlyId: { type: String, required: true, ref: 'Elder' },
   reason: { type: String, required: true },
   startDate: { type: Date, required: true },

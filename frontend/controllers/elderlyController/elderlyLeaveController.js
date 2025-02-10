@@ -138,14 +138,14 @@ const getElderlyLeaveRequestById = async (req, res) => {
     const apiUrl = `${process.env.API_URL}/api/elderly/leave/${_id}/update`;
     console.log(apiUrl);
     const response = await getRequest(apiUrl); // 使用组装的URL进行API调用
-    const { elderlyLeave, elderlyIds } = response.data;
+    const elderlyLeaves = response.data;
+    console.log(elderlyLeaves);
     if (response.success) {
       console.log(response);
       res.render('elderly/elderlyLeave/elderlyLeaveUpdate.ejs', {
         activePage: 'elderly-management',
         navItems: req.navItems,
-        elderlyLeave,
-        elderlyIds, //包括elderlyId、elderlyName
+        elderlyLeaves,
       });
     }
   } catch (err) {
@@ -195,11 +195,11 @@ const deleteElderlyLeaveRequest = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取_id
     console.log(_id);
-    const apiUrl = `${process.env.API_URL}/api/elderly/record/${_id}/delete`;
+    const apiUrl = `${process.env.API_URL}/api/elderly/leave/${_id}/delete`;
     const response = await deleteRequest(apiUrl);
     if (response.success) {
       console.log(response);
-      res.redirect('/elderly/record/');
+      res.redirect('/elderly/leave/');
     }
   } catch (err) {
     handleError(err, req, res);

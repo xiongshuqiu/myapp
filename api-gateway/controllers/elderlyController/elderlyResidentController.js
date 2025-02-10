@@ -63,7 +63,6 @@ const renderNewElderlyResidentForm = async (req, res) => {
 // (2) 提交新的老人入住和退住数据数据
 const createElderlyResident = async (req, res) => {
   const {
-    residentId,
     elderlyId,
     checkInTime,
     checkOutTime,
@@ -72,7 +71,6 @@ const createElderlyResident = async (req, res) => {
 
   try {
     const data = {
-      residentId,
       elderlyId,
       checkInTime,
       checkOutTime,
@@ -106,7 +104,6 @@ const getElderlyResidentById = async (req, res) => {
 // (2) 提交更新后的老人入住和退住数据数据
 const updateElderlyResident = async (req, res) => {
   const {
-    residentId,
     elderlyId,
     checkInTime,
     checkOutTime,
@@ -114,7 +111,6 @@ const updateElderlyResident = async (req, res) => {
   } = req.body;
   try {
     const data = {
-      residentId,
       elderlyId,
       checkInTime,
       checkOutTime,

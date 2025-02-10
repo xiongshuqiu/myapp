@@ -1,5 +1,6 @@
 const elderlyLeaves = [
   {
+    leaveId: 'LR001',
     elderlyId: 'E001',
     reason: 'Family visit',
     startDate: new Date('2025-02-01'),
@@ -9,6 +10,7 @@ const elderlyLeaves = [
     additionalNotes: '',
     applicationDate: new Date('2025-02-01'),
   },
+
 ];
 
 module.exports = elderlyLeaves;

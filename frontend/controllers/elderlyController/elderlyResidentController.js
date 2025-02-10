@@ -95,7 +95,6 @@ const createElderlyResident = async (req, res) => {
   const { residentId, elderlyId, checkInTime, checkOutTime, status } = req.body;
   try {
     const data = {
-      residentId,
       elderlyId,
       checkInTime,
       checkOutTime,
@@ -146,7 +145,6 @@ const updateElderlyResident = async (req, res) => {
   const { _id } = req.params;
   try {
     const data = {
-      residentId,
       elderlyId,
       checkInTime,
       checkOutTime,

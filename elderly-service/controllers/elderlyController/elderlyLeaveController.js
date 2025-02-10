@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const getNextId = require('./genericController.js');
 const BedAssignment = require('../../models/bedAssignmentModel');
 const BedStatus = require('../../models/bedStatusModel');
 const ElderlyLeave = require('../../models/elderlyLeaveModel');
@@ -6,6 +7,7 @@ const Elderly = require('../../models/elderlyModel');
 const ElderlyResident = require('../../models/elderlyResidentModel');
 const Employee = require('../../models/employeeModel');
 const User = require('../../models/userModel');
+
 // 1. 获取所有老人请假请求
 const getAllElderlyLeaveRequests = async (req, res) => {
   console.log('Received request to get all elderly leaves'); // 调试信息
@@ -110,6 +112,7 @@ const getAllElderlyLeaveRequests = async (req, res) => {
       {
         $project: {
           // 投影所需的字段
+          leaveId: 1,
           elderlyId: 1,
           elderlyName: '$elderlyDetails.elderlyName', // 获取 elderlies 集合中的 elderlyName
           reason: 1,
@@ -159,6 +162,8 @@ const renderNewElderlyLeaveRequestForm = async (req, res) => {
 };
 // (2) 提交老人请假请求数据
 const createElderlyLeaveRequest = async (req, res) => {
+  // 生成新的 leaveId
+  const leaveId = await getNextId('ElderlyLeave', 'LR', 'leaveId');
   const {
     elderlyId,
     reason,
@@ -174,16 +179,17 @@ const createElderlyLeaveRequest = async (req, res) => {
     req.body,
   ); // 调试信息
   try {
-    // 创建并保存新床位分配
+    // 创建并保存请假申请
     const newElderlyLeave = new ElderlyLeave({
-      elderlyId: elderlyId,
-      reason: reason,
-      startDate: startDate,
-      endDate: endDate,
-      status: status,
-      type: type,
-      additionalNotes: additionalNotes,
-      applicationDate: applicationDate,
+      leaveId,
+      elderlyId,
+      reason,
+      startDate,
+      endDate,
+      status,
+      type,
+      additionalNotes,
+      applicationDate,
     });
     await newElderlyLeave.save();
 
@@ -207,29 +213,56 @@ const createElderlyLeaveRequest = async (req, res) => {
 // (1) 查找特定老人请假请求并进行批复
 const getElderlyLeaveRequestById = async (req, res) => {
   const { _id } = req.params;
-  console.log(`Received request to get bed assignment by ID: ${_id}`); // 调试信息
+  console.log(`Received request to get elderly leave by ID: ${_id}`); // 调试信息
   try {
-    // 根据ID请假请求
-    const elderlyLeave = await ElderlyLeave.findById(_id);
-    if (elderlyLeave) {
-      console.log('Elderly leave retrieved successfully:', elderlyLeave); // 调试信息
-
-      // 查找所有老人信息
-      const elderlyIds = await Elderly.find().select('elderlyId elderlyName');
+      // 使用聚合管道进行后续查询
+      const elderlyLeaves = await ElderlyLeave.aggregate([
+        {
+          $match: { _id: new mongoose.Types.ObjectId(_id) }, // 使用 new 关键字实例化 ObjectId
+        },
+        {
+          $lookup: {
+            // 从 'elderlies' 集合中查找与 'elderlyId' 关联的数据
+            from: 'elderlies',
+            localField: 'elderlyId', // 当前集合中的字段
+            foreignField: 'elderlyId',
+            as: 'elderlyDetails',
+          },
+        },
+        {
+          $unwind: {
+            path: '$elderlyDetails',
+            preserveNullAndEmptyArrays: true,
+          },
+        }, // 展开 elderlyDetails 数组
+        {
+          $project: {
+            // 投影所需的字段
+            elderlyId: 1,
+            elderlyName: '$elderlyDetails.elderlyName', // 获取 elderlies 集合中的 elderlyName
+            reason: 1,
+            startDate: {
+              $dateToString: { format: '%Y-%m-%d', date: '$startDate' },
+            }, // 格式化 startDate
+            endDate: {
+              $dateToString: { format: '%Y-%m-%d', date: '$endDate' },
+            },
+            status: 1,
+            type: 1,
+            additionalNotes: 1,
+            applicationDate: {
+              $dateToString: { format: '%Y-%m-%d', date: '$applicationDate' },
+            },
+          },
+        },
+      ]);
+      console.log(elderlyLeaves);
       return res.status(200).json({
         success: true,
         message: 'ElderlyLeave and elderlyIds retrieved successfully',
-        data: {
-          elderlyLeave,
-          elderlyIds, //包括elderlyId、elderlyName
-        },
+        data: elderlyLeaves,
       });
-    } else {
-      console.warn(`Elderly leave not found with ID: ${_id}`); // 调试信息
-      return res
-        .status(404)
-        .json({ success: false, message: 'Elderly leave not found' });
-    }
+     
   } catch (err) {
     console.error('Error retrieving elderly leave:', err.message); // 调试信息
     return res.status(500).json({ success: false, message: err.message });
@@ -252,7 +285,7 @@ const updateElderlyLeaveRequest = async (req, res) => {
   console.log('Received request to update elderly leavewith data:', req.body); // 调试信息
 
   try {
-    // 查找现有床位分配记录
+    // 查找现有的请假记录
     const existingElderlyLeave = await ElderlyLeave.findOne({ _id });
     if (!existingElderlyLeave) {
       console.warn(`Elderly leave not found: ${_id}`); // 调试信息
@@ -261,15 +294,18 @@ const updateElderlyLeaveRequest = async (req, res) => {
         .json({ success: false, message: 'Elderly leave not found' });
     }
 
-    // 更新床位分配记录
-    existingElderlyLeave.elderlyId = elderlyId;
-    existingElderlyLeave.reason = reason;
-    existingElderlyLeave.startDate = startDate;
-    existingElderlyLeave.endDate = endDate;
-    existingElderlyLeave.status = status;
-    existingElderlyLeave.type = type;
-    existingElderlyLeave.additionalNotes = additionalNotes;
-    existingElderlyLeave.applicationDate = applicationDate;
+    // 更新请假记录
+    Object.assign(existingElderlyLeave, {
+      elderlyId,
+      reason,
+      startDate,
+      endDate,
+      status,
+      type,
+      additionalNotes,
+      applicationDate,
+    });
+
     await existingElderlyLeave.save();
 
     console.log('Elderly leave updated successfully:', existingElderlyLeave); // 调试信息
@@ -293,11 +329,11 @@ const deleteElderlyLeaveRequest = async (req, res) => {
   const { _id } = req.params;
 
   try {
-    await BedAssignment.findByIdAndDelete(_id); // 根据ID删除床位分配
-    console.log('Bed status deleted successfully:', _id); // 调试信息
+    await ElderlyLeave.findByIdAndDelete(_id); // 根据ID删除床位分配
+    console.log('Elderly leave deleted successfully:', _id); // 调试信息
     return res
       .status(200)
-      .json({ success: true, message: 'Bed status deleted successfully' });
+      .json({ success: true, message: 'Elderly leave deleted successfully' });
   } catch (error) {
     console.error('Error deleting bed status:', error.message); // 调试信息
     return res.status(400).json({
