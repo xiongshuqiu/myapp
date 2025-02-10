@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Update BedAssignment Information</title>
+    <!-- 1.框架样式：Bootstrap Styles-->
+    <link href="/assets/css/bootstrap.css" rel="stylesheet" />
+    <!-- 2.图标样式：FontAwesome Styles-->
+    <link href="/assets/css/font-awesome.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <!--3.普通样式：Custom Styles-->
+    <link href="/assets/css/custom-styles.css" rel="stylesheet" />
+    <!-- 4.字体样式：Google Fonts-->
+    <link
+      href="http://fonts.useso.com/css?family=Open+Sans"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+
+  <body>
+    <div id="wrapper">
+     <!-- 顶部导航条 -->
+     <%- include('../../block/top-navbar.ejs') %>
+     <!-- 左侧导航条 -->
+     <%- include('../../block/navbar-side.ejs') %>
+
+      <div id="page-wrapper">
+        <div class="header">
+          <h1 class="page-header">
+            Update ElderlyResident Information <small>Modify the ElderlyResident's details.</small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Forms</a></li>
+            <li class="active">Update ElderlyResident</li>
+          </ol>
+        </div>
+
+        <div id="page-inner">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="panel panel-default">
+                <div class="panel-heading">ElderlyResident Information</div>
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <form
+                        action="/elderly/resident/<%= elderlyResident._id  %>?_method=PUT"
+                        method="post"
+                        role="form"
+                      >  
+
+                      <div class="form-group">
+                        <label for="elderlyId">Elderly ID(Name) <span style="color: red">*</span></label>
+                        <select class="form-control" id="elderlyId" name="elderlyId" required>
+                          <% if (elderlyIds && elderlyIds.length > 0) { %>
+                            <% elderlyIds.forEach(function(elderly) { %>
+                              <option value="<%= elderly.elderlyId %>" <%= elderlyResident.elderlyId === elderly.elderlyId ? 'selected' : '' %>>
+                                ElderlyId: <%= elderly.elderlyId %> (<%= elderly.elderlyName %>)
+                              </option>
+                            <% }); %>
+                          <% } else { %>
+                            <option value="">No existing ElderlyId</option>
+                          <% } %>
+                        </select>
+                      </div>
+                      
+                      <div class="form-group">
+                        <label for="checkInTime">Check In Time <span style="color: red">*</span></label>
+                        <div class="input-wrapper">
+                          <input
+                            type="date"
+                            class="form-control date-input"
+                            id="checkInTime"
+                            name="checkInTime"
+                            value="<%= elderlyResident.checkInTime ? new Date(elderlyResident.checkInTime).toISOString().split('T')[0] : '' %>"
+                             />
+                          </div>
+                        </div>
+                     
+                      <div class="form-group">
+                        <label for="checkOutTime">Check Out Time </label>
+                        <div class="input-wrapper">
+                          <input
+                            type="date"
+                            class="form-control date-input"
+                            id="checkOutTime"
+                            name="checkOutTime"
+                            value="<%= elderlyResident.checkOutTime ? new Date(elderlyResident.checkOutTime).toISOString().split('T')[0] : '' %>" 
+                            />
+                        </div>
+                      </div>
+                    
+                      <div class="form-group">
+                        <label for="status"> Status <span style="color: red">*</span></label>
+                        <select class="form-control" id="status" name="status" required>
+            
+                              <option value="Active" <%= elderlyResident.status === 'Active' ? 'selected' : '' %>>
+                                Active
+                              </option>
+                              <option value="Inactive" <%= elderlyResident.status === 'Inactive' ? 'selected' : '' %>>
+                                Inactive
+                              </option>
+                        </select>
+                      </div>
+                                     
+                       
+                        
+                        <button type="submit" class="btn btn-primary">
+                          Save Changes
+                        </button>
+                        <button
+                          type="reset"
+                          class="btn btn-secondary"
+                          onclick="window.location.href='/elderly/resident/';"
+                        >
+                          Return
+                        </button>
+                      </form>
+                      <div id="message">
+                        <% if (typeof message !== 'undefined' && message !==
+                        null) { %>
+                        <div class="alert alert-success"><%= message %></div>
+                        <% } %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /.panel-body -->
+              </div>
+              <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+          </div>
+        </div>
+        <!-- /. PAGE INNER  -->
+      </div>
+      <!-- /. PAGE WRAPPER  -->
+    </div>
+    <!-- /. WRAPPER  -->
+    <!-- JS Scripts-->
+    <!-- jQuery Js -->
+    <script src="/assets/js/jquery-1.10.2.js"></script>
+    <!-- Bootstrap Js -->
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <!-- Metis Menu Js -->
+    <script src="/assets/js/jquery.metisMenu.js"></script>
+    <!-- Custom Js -->
+    <script src="/assets/js/custom-scripts.js"></script>
+  </body>
+</html>

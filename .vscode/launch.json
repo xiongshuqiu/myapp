@@ -56,6 +56,15 @@
             "console": "integratedTerminal"
         },
         {
+            "name": "health-service",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run", "dev"],
+            "cwd": "${workspaceFolder}/health-service",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "api-gateway",
             "type": "node",
             "request": "launch",
@@ -87,7 +96,16 @@
     "compounds": [
         {
             "name": "启动所有服务",
-            "configurations": ["auth-service","account-service","user-service","bed-service","employee-service","elderly-service","api-gateway", "frontend"]
+            "configurations": [
+                "auth-service",
+                "account-service",
+                "user-service",
+                "bed-service",
+                "employee-service",
+                "elderly-service",
+                "health-service",
+                "api-gateway", 
+                "frontend"]
         },
         
     ]
