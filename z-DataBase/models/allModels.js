@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-// User Schema
+//1-1 用户模型
 const userSchema = new mongoose.Schema({
   userId: { type: String, required: true }, // 用户唯一编号 管理员U001，医护U002（员工）、家属F001
   status: { type: String, required: true }, //status:Occupied/Available
@@ -11,8 +11,7 @@ const userSchema = new mongoose.Schema({
 });
 const User = mongoose.model('User', userSchema);
 
-// Elderly Schema
-
+// 2-1老人信息模型
 const elderlySchema = new mongoose.Schema({
   elderlyId: { type: String, required: true, unique: true }, // 老人唯一编号 E001
   elderlyName: { type: String, required: true }, // 老人姓名
@@ -30,28 +29,38 @@ const elderlySchema = new mongoose.Schema({
 
 const Elderly = mongoose.model('Elderly', elderlySchema);
 
-// Bed Assignment Schema
-const bedAssignmentSchema = new mongoose.Schema({
-  assignmentId: { type: String, required: true, unique: true }, // 分配编号 A001
-  bedId: { type: String, ref: 'BedStatus', required: true }, // 床位引用 3-1-101s-01
+// 2-2老人入住退住模型
+const elderlyResidentSchema = new mongoose.Schema({
+  residentId: { type: String, required: true, unique: true }, // 老人唯一编号 R001
   elderlyId: { type: String, ref: 'Elderly', required: true }, // 老人引用 E001
-  assignedDate: { type: Date, default: Date.now }, // 分配日期
-  releaseDate: { type: Date }, // 释放日期
+  checkInTime: { type: Date, required: true }, // 入住时间
+  checkOutTime: { type: Date }, // 退住时间
+  status: { type: String, required: true }, // 状态: Active/Inactive
 });
-const BedAssignment = mongoose.model('BedAssignment', bedAssignmentSchema);
 
-// BedStatus Schema
-const bedStatusSchema = new mongoose.Schema({
-  bedId: { type: String, required: true, unique: true }, // 床位编号 3-1-101s-01
-  building: { type: Number, required: true }, // 楼栋号 3
-  floor: { type: Number, required: true }, // 楼层1
-  room: { type: String, required: true }, // 房间号101
-  roomType: { type: String, enum: ['s', 'b'], default: 's' }, // 房型s或b
-  bedNumber: { type: String, required: true }, // 床位编号01/02/03/04/05
-  status: { type: String, required: true }, // occupied/available/reserved/maintenance
+const ElderlyResident = mongoose.model(
+  'ElderlyResident',
+  elderlyResidentSchema,
+);
+
+// 2-3老人请假模型
+const elderlyLeaveSchema = new mongoose.Schema({
+  leaveId: { type: String, required: true }, //LR001
+  elderlyId: { type: String, required: true, ref: 'Elder' },
+  reason: { type: String, required: true },
+  startDate: { type: Date, required: true },
+  endDate: { type: Date, required: true },
+  status: {
+    type: String,
+    enum: ['pending', 'approved', 'rejected'],
+    default: 'pending',
+  },
+  type: { type: String, enum: ['leave', 'return'], required: true }, // 新增字段，用于区分请假和销假
+  additionalNotes: { type: String, default: '' }, // 存储附加说明
+  applicationDate: { type: Date, default: Date.now },
 });
-const BedStatus = mongoose.model('BedStatus', bedStatusSchema);
-// Employee Schema
+const ElderlyLeave = mongoose.model('ElderlyLeave', elderlyLeaveSchema);
+//3-1 员工信息模型
 const employeeSchema = new mongoose.Schema({
   employeeId: { type: String, required: true, unique: true }, // 员工唯一编号S001
   employeeName: { type: String, required: true }, // 员工姓名
@@ -62,8 +71,7 @@ const employeeSchema = new mongoose.Schema({
   status: { type: String, required: true }, //status:Active/Inactive
 });
 const Employee = mongoose.model('Employee', employeeSchema);
-
-// EmployeeShiftSchedule Schema
+//3-2员工值班模型
 const employeeShiftScheduleSchema = new mongoose.Schema({
   shiftScheduleId: { type: String, required: true, unique: true }, // 值班编号
   employeeId: { type: String, ref: 'Employee', required: true }, // 员工编号，字符串类型
@@ -80,45 +88,114 @@ const EmployeeShiftSchedule = mongoose.model(
   'EmployeeShiftSchedule',
   employeeShiftScheduleSchema,
 );
-// ElderlyResident Schema
-const elderlyResidentSchema = new mongoose.Schema({
-  residentId: { type: String, required: true, unique: true }, // 老人唯一编号 R001
-  elderlyId: { type: String, ref: 'Elderly', required: true }, // 老人引用 E001
-  checkInTime: { type: Date, required: true }, // 入住时间
-  checkOutTime: { type: Date }, // 退住时间
-  status: { type: String, required: true }, // 状态: Active/Inactive
+
+//4-1 床位状态模型
+const bedStatusSchema = new mongoose.Schema({
+  bedId: { type: String, required: true, unique: true }, // 床位编号 3-1-101s-01
+  building: { type: Number, required: true }, // 楼栋号 3
+  floor: { type: Number, required: true }, // 楼层1
+  room: { type: String, required: true }, // 房间号101
+  roomType: { type: String, enum: ['s', 'b'], default: 's' }, // 房型s或b
+  bedNumber: { type: String, required: true }, // 床位编号01/02/03/04/05
+  status: { type: String, required: true }, // occupied/available/reserved/maintenance
 });
+const BedStatus = mongoose.model('BedStatus', bedStatusSchema);
+//4-2床位分配模型
+const bedAssignmentSchema = new mongoose.Schema({
+  assignmentId: { type: String, required: true, unique: true }, // 分配编号 A001
+  bedId: { type: String, ref: 'BedStatus', required: true }, // 床位引用 3-1-101s-01
+  elderlyId: { type: String, ref: 'Elderly', required: true }, // 老人引用 E001
+  assignedDate: { type: Date, default: Date.now }, // 分配日期
+  releaseDate: { type: Date }, // 释放日期
+});
+const BedAssignment = mongoose.model('BedAssignment', bedAssignmentSchema);
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const ElderlyResident = mongoose.model(
-  'ElderlyResident',
-  elderlyResidentSchema,
-);
+// 5-1健康档案模型
+const HealthRecordSchema = new Schema({
+  healthRecordId: { type: String, required: true }, // 健康记录 ID，必须填写HR1
+  elderlyId: { type: String, ref: 'Elderly', required: true }, // 老人引用，必须填写
+  medicalHistory: [{ type: String, trim: true }], // 患者病史，可选字段，存储多个病史条目，示例：["高血压", "糖尿病", "心脏病"]
+  allergies: [{ type: String, trim: true }], // 患者过敏史，可选字段，存储多个过敏条目，示例：["花生", "青霉素", "尘螨"]
+  medications: [{ type: String, trim: true }], // 患者正在服用的药物，可选字段，存储多个药物条目，示例：["阿司匹林", "二甲双胍", "依那普利"]
+  createdAt: { type: Date, default: Date.now }, // 记录创建时间，默认值为当前日期和时间
+});
+const HealthRecord = mongoose.model('HealthRecord', HealthRecordSchema);
 
-// ElderlyLeave Schema
-const elderlyLeaveSchema = new mongoose.Schema({
-  leaveId: { type: String, required: true },//LR001
-  elderlyId: { type: String, required: true, ref: 'Elder' },
-  reason: { type: String, required: true },
-  startDate: { type: Date, required: true },
-  endDate: { type: Date, required: true },
+// 5-2护理等级模型
+const CareLevelSchema = new Schema({
+  careLevelId: { type: String, required: true }, // 护理等级记录 ID，必须填写CL1
+  level: { type: String, required: true }, // 护理等级，必须填写
+  description: { type: String }, // 护理等级的描述，可选字段
+  createdAt: { type: Date, default: Date.now }, // 记录创建时间，默认值为当前日期和时间
+});
+const CareLevel = mongoose.model('CareLevel', CareLevelSchema);
+
+// 5-3护理项目模型
+const CareProjectSchema = new Schema({
+  careProjectId: { type: String, required: true }, // 护理项目记录 ID，必须填写CP1
+  projectName: { type: String, required: true }, // 项目名称，必须填写
+  description: { type: String }, // 项目描述，可选字段
+  careLevelId: { type: Schema.Types.ObjectId, ref: 'CareLevel', required: true }, // 关联 CareLevel
+  createdAt: { type: Date, default: Date.now }, // 记录创建时间，默认值为当前日期和时间
+});
+const CareProject = mongoose.model('CareProject', CareProjectSchema);
+
+// 5-4护理计划模型
+const CarePlanSchema = new Schema({
+  carePlanId: { type: String, required: true }, // 护理计划记录 ID，必须填写P1
+  planName: { type: String, required: true }, // 计划名称，必须填写
+  description: { type: String }, // 计划描述，可选字段
+  startDate: { type: Date, required: true }, // 开始日期，必须填写
+  endDate: { type: Date }, // 结束日期，可选字段
+  careProjectId: { type: String, ref: 'CareProject', required: true }, // 关联 CareProject
+  createdAt: { type: Date, default: Date.now }, // 记录创建时间，默认值为当前日期和时间
+});
+const CarePlan = mongoose.model('CarePlan', CarePlanSchema);
+
+//5-5护理任务模型
+const CareTaskSchema = new Schema({
+  careTaskId: { type: String, required: true }, // 护理任务 ID，必须填写CT1
+  taskName: { type: String, required: true },
+  description: { type: String },
+  dueDate: { type: Date, required: true },
+  carePlanId: { type: String, ref: 'CarePlan', required: true }, // 关联 CarePlan
   status: {
     type: String,
-    enum: ['pending', 'approved', 'rejected'],
-    default: 'pending',
+    enum: ['Pending', 'In Progress', 'Completed'],
+    default: 'Pending',
   },
-  type: { type: String, enum: ['leave', 'return'], required: true }, // 新增字段，用于区分请假和销假
-  additionalNotes: { type: String, default: '' }, // 存储附加说明
-  applicationDate: { type: Date, default: Date.now },
+  createdAt: { type: Date, default: Date.now },
 });
-const ElderlyLeave = mongoose.model('ElderlyLeave', elderlyLeaveSchema);
+
+const CareTask = mongoose.model('CareLevel', CareTaskSchema);
+
+//5-6健康体检模型
+const HealthCheckupSchema = new Schema({
+  checkupId: { type: String, required: true }, //健康体检ID，必须填写C1
+  checkupName: { type: String, required: true },
+  description: { type: String },
+  checkupDate: { type: Date, required: true },
+  careTask: { type: Schema.Types.ObjectId, ref: 'CareTask', required: true }, // 关联 CareTask
+  createdAt: { type: Date, default: Date.now },
+});
+
+const HealthCheckup = mongoose.model('HealthCheckup', HealthCheckupSchema);
 
 module.exports = {
   User,
   Elderly,
-  BedAssignment,
-  BedStatus,
-  Employee,
-  EmployeeShiftSchedule,
   ElderlyResident,
   ElderlyLeave,
+  Employee,
+  EmployeeShiftSchedule,
+  BedStatus,
+  BedAssignment,
+  HealthRecord,
+  CareLevel,
+  CareProject,
+  CarePlan,
+  CareTask,
+  HealthCheckup,
 };

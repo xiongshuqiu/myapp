@@ -7,7 +7,7 @@ const handleError = (
   err,
   req, //注意一定要增加这个值（每个handleError都要）
   res,
-  targetPage = 'elderly/elderlyResident/elderlyResidentCreate',
+  targetPage = 'elderly/elderlyRecord/elderlyRecordCreate',
   msg = 'Server error',
 ) => {
   console.error('Error:', err.response ? err.response.data : err.message); // 输出详细调试信息
@@ -42,21 +42,21 @@ const deleteRequest = async (url) => {
   return response.data;
 };
 
-// 1.获取所有老人入住退住数据
-const getAllElderlyResidents = async (req, res) => {
+// 1.获取所有老人档案
+const getAllElderlyRecords = async (req, res) => {
   const _id = req.user._id;
   const role = req.user.role;
   console.log('User data:', { _id, role }); // 调试信息
-  const apiUrl = `${process.env.API_URL}/api/elderly/resident/?_id=${_id}&role=${role}`;
+  const apiUrl = `${process.env.API_URL}/api/elderly/record/?_id=${_id}&role=${role}`;
   console.log('API URL:', apiUrl); // 调试信息
 
   try {
     const response = await getRequest(apiUrl);
-    const elderlyResidents = response.data;
+    const elderlyRecords = response.data;
     if (response.success) {
-      res.render('elderly/elderlyResident/elderlyResidentManagement', {
+      res.render('elderly/elderlyRecord/elderlyRecordManagement', {
         activePage: 'elderly-management',
-        elderlyResidents,
+        elderlyRecords,
         navItems: req.navItems, // 将导航项传递到视图
         buttonItems: req.buttonItems,
         linkItems: req.linkItems,
@@ -66,72 +66,93 @@ const getAllElderlyResidents = async (req, res) => {
     handleError(err, req, res);
   }
 };
-// 2.创建新的老人入住退住数据
-//(1)显示新增老人入住退住数据表单
-const renderNewElderlyResidentForm = async (req, res) => {
-  const apiUrl = `${process.env.API_URL}/api/elderly/resident/new`;
+// 2.创建新的老人档案
+//(1)显示新增老人档案表单
+const renderNewElderlyRecordForm = async (req, res) => {
+  const apiUrl = `${process.env.API_URL}/api/elderly/record/new`;
   console.log('API URL:', apiUrl); // 调试信息
   try {
     const response = await getRequest(apiUrl);
 
     if (response.success) {
-      const { unResidentedElderlyIds } = response.data;
-      res.render('elderly/elderlyResident/elderlyResidentCreate.ejs', {
+      const { employeeIds, userIds } = response.data;
+      res.render('elderly/elderlyRecord/elderlyRecordCreate.ejs', {
         activePage: 'elderly-management',
         navItems: req.navItems, // 将导航项传递到视图
-        unResidentedElderlyIds,
+        employeeIds, // 传递可用的 bedId 到视图
+        userIds, // 传递存在的 elderlyId 到视图
       });
     } else {
       throw new Error('Failed to retrieve data from API');
     }
   } catch (err) {
-    console.error('Error in renderNewElderlyResidentForm:', err);
+    console.error('Error in renderNewElderlyRecordForm:', err);
     handleError(err, req, res);
   }
 };
 
-//(2)提交新的老人入住退住数据数据
-const createElderlyResident = async (req, res) => {
-  const { residentId, elderlyId, checkInTime, checkOutTime, status } = req.body;
+//(2)提交新的老人档案数据
+const createElderlyRecord = async (req, res) => {
+  const {
+    elderlyName,
+    elderlyPhone,
+    dateOfBirth,
+    gender,
+    address,
+    medicalHistory,
+    allergies,
+    emergencyContactName,
+    emergencyContactPhone,
+    userId,
+    employeeId,
+  } = req.body;
   try {
     const data = {
-      elderlyId,
-      checkInTime,
-      checkOutTime,
-      status,
+      elderlyName,
+      elderlyPhone,
+      dateOfBirth,
+      gender,
+      address,
+      medicalHistory,
+      allergies,
+      emergencyContactName,
+      emergencyContactPhone,
+      userId,
+      employeeId,
     };
 
-    const apiUrl = `${process.env.API_URL}/api/elderly/resident/create`;
+    const apiUrl = `${process.env.API_URL}/api/elderly/record/create`;
     const response = await postRequest(apiUrl, data);
-    const elderlyResident = response.data;
-    console.log(elderlyResident);
+    const elderlyRecord = response.data;
+    console.log(elderlyRecord);
     if (response.success) {
       console.log(response);
-      res.redirect('/elderly/resident/');
+      res.redirect('/elderly/record/');
     }
   } catch (err) {
-    const targetPage = 'elderly/elderlyResident/elderlyResidentCreate'; //用户需要输入新值
+    const targetPage = 'elderly/elderlyRecord/elderlyRecordCreate'; //用户需要输入新值
     handleError(err, req, res, targetPage);
   }
 };
 
-// 3.更新特定老人入住退住数据
-// (1)查找特定老人入住退住数据并显示编辑表单
-const getElderlyResidentById = async (req, res) => {
+// 3.更新特定老人档案
+// (1)查找特定老人档案并显示编辑表单
+const getElderlyRecordById = async (req, res) => {
   const { _id } = req.params; // 从参数中获取 _id
   console.log(`Fetching bedAssignment with ID: ${_id}`); // 调试信息
   try {
-    const apiUrl = `${process.env.API_URL}/api/elderly/resident/${_id}/update`;
+    const apiUrl = `${process.env.API_URL}/api/elderly/record/${_id}/update`;
     console.log(apiUrl);
     const response = await getRequest(apiUrl); // 使用组装的URL进行API调用
-    const { elderlyIds,elderlyResident } = response.data;
+    const { elderlyRecord, userIds, employeeIds } = response.data;
     if (response.success) {
       console.log(response);
-      res.render('elderly/elderlyResident/elderlyResidentUpdate.ejs', {
+      res.render('elderly/elderlyRecord/elderlyRecordUpdate.ejs', {
         activePage: 'elderly-management',
         navItems: req.navItems,
-        elderlyIds,
-        elderlyResident,
+        elderlyRecord,
+        userIds, //userIds包括userId、role
+        employeeIds, //包括employeeId、employeeName
       });
     }
   } catch (err) {
@@ -139,52 +160,71 @@ const getElderlyResidentById = async (req, res) => {
   }
 };
 
-//(2) 提交更新后的老人入住退住数据数据
-const updateElderlyResident = async (req, res) => {
-  const { residentId, elderlyId, checkInTime, checkOutTime, status } = req.body;
+//(2) 提交更新后的老人档案数据
+const updateElderlyRecord = async (req, res) => {
+  const {
+    elderlyName,
+    elderlyPhone,
+    dateOfBirth,
+    gender,
+    address,
+    medicalHistory,
+    allergies,
+    emergencyContactName,
+    emergencyContactPhone,
+    userId,
+    employeeId,
+  } = req.body;
   const { _id } = req.params;
   try {
     const data = {
-      elderlyId,
-      checkInTime,
-      checkOutTime,
-      status,
+      elderlyName,
+      elderlyPhone,
+      dateOfBirth,
+      gender,
+      address,
+      medicalHistory,
+      allergies,
+      emergencyContactName,
+      emergencyContactPhone,
+      userId,
+      employeeId,
     };
 
     // 从请求参数中获取 _id
-    const apiUrl = `${process.env.API_URL}/api/elderly/resident/${_id}`;
+    const apiUrl = `${process.env.API_URL}/api/elderly/record/${_id}`;
     const response = await putRequest(apiUrl, data);
-    //const elderlyResident  = response.data;
+    //const elderlyRecord  = response.data;
     if (response.success) {
       console.log(response);
-      res.redirect('/elderly/resident/');
+      res.redirect('/elderly/record/');
     }
   } catch (err) {
-    const targetPage = 'elderly/elderlyResident/elderlyResidentUpdate'; //用户需要输入新值
+    const targetPage = 'elderly/elderlyRecord/elderlyRecordUpdate'; //用户需要输入新值
     handleError(err, req, res, targetPage);
   }
 };
 
-// 4. 删除特定老人入住退住数据
-const deleteElderlyResident = async (req, res) => {
+// 4. 删除特定老人档案
+const deleteElderlyRecord = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取_id
     console.log(_id);
-    const apiUrl = `${process.env.API_URL}/api/elderly/resident/${_id}/delete`;
+    const apiUrl = `${process.env.API_URL}/api/elderly/record/${_id}/delete`;
     const response = await deleteRequest(apiUrl);
     if (response.success) {
       console.log(response);
-      res.redirect('/elderly/resident/');
+      res.redirect('/elderly/record/');
     }
   } catch (err) {
     handleError(err, req, res);
   }
 };
 module.exports = {
-  getAllElderlyResidents,
-  renderNewElderlyResidentForm,
-  createElderlyResident,
-  getElderlyResidentById,
-  updateElderlyResident,
-  deleteElderlyResident,
+  getAllElderlyRecords,
+  renderNewElderlyRecordForm,
+  createElderlyRecord,
+  getElderlyRecordById,
+  updateElderlyRecord,
+  deleteElderlyRecord,
 };

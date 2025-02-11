@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Update BedAssignment Information</title>
+    <!-- 1.框架样式：Bootstrap Styles-->
+    <link href="/assets/css/bootstrap.css" rel="stylesheet" />
+    <!-- 2.图标样式：FontAwesome Styles-->
+    <link href="/assets/css/font-awesome.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <!--3.普通样式：Custom Styles-->
+    <link href="/assets/css/custom-styles.css" rel="stylesheet" />
+    <!-- 4.字体样式：Google Fonts-->
+    <link
+      href="http://fonts.useso.com/css?family=Open+Sans"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+
+  <body>
+    <div id="wrapper">
+      <!-- 顶部导航条 -->
+      <%- include('../../block/top-navbar.ejs') %>
+      <!-- 左侧导航条 -->
+      <%- include('../../block/navbar-side.ejs') %>
+
+      <div id="page-wrapper">
+        <div class="header">
+          <h1 class="page-header">
+            Leave Approval Information
+            <small>Leave Approval details.</small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Forms</a></li>
+            <li class="active">Leave Approval</li>
+          </ol>
+        </div>
+
+        <div id="page-inner">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="panel panel-default">
+                <div class="panel-heading">Leave Approval Information</div>
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <form <% elderlyLeaves.forEach(function(elderlyLeave) { %>
+                        action="/elderly/leave/<%= elderlyLeave._id
+                        %>?_method=PUT" method="post" role="form" >
+                        <div class="form-group">
+                          <label for="applicationDetails"
+                            >Application Details</label
+                          >
+                          <ul class="list-group" id="applicationDetails">
+                            <li class="list-group-item">
+                              <strong>Elderly ID(Name):</strong>
+                              <span>
+                                ID: <%= elderlyLeave.elderlyId %> (Name:<%=
+                                elderlyLeave.elderlyName %>)</span
+                              >
+                              <input
+                                type="hidden"
+                                id="elderlyId"
+                                name="elderlyId"
+                                value="<%= elderlyLeave.elderlyId %>"
+                              />
+                            </li>
+
+                            <li class="list-group-item">
+                              <strong>Reason:</strong>
+                              <span><%= elderlyLeave.reason %></span>
+                              <input
+                                type="hidden"
+                                id="reason"
+                                name="reason"
+                                value="<%= elderlyLeave.reason %>"
+                              />
+                            </li>
+                            <li class="list-group-item">
+                              <strong>Start Date:</strong>
+                              <span><%= elderlyLeave.startDate %></span>
+                              <input
+                                type="hidden"
+                                id="startDate"
+                                name="startDate"
+                                value="<%= elderlyLeave.startDate %>"
+                              />
+                            </li>
+                            <li class="list-group-item">
+                              <strong>End Date:</strong>
+                              <span><%= elderlyLeave.endDate %></span>
+                              <input
+                                type="hidden"
+                                id="endDate"
+                                name="endDate"
+                                value="<%= elderlyLeave.endDate %>"
+                              />
+                            </li>
+                            <li class="list-group-item">
+                              <strong>Type:</strong>
+                              <span><%= elderlyLeave.type %></span>
+                              <input
+                                type="hidden"
+                                id="type"
+                                name="type"
+                                value="<%= elderlyLeave.type %>"
+                              />
+                            </li>
+
+                            <li class="list-group-item">
+                              <strong>Application Date:</strong>
+                              <span><%= elderlyLeave.applicationDate %></span>
+                              <input
+                                type="hidden"
+                                id="applicationDate"
+                                name="applicationDate"
+                                value="<%= elderlyLeave.applicationDate %>"
+                              />
+                            </li>
+                          </ul>
+                        </div>
+                        <% }); %>
+
+                        <div class="form-group">
+                          <label for="approvalOpinion"
+                            >Approval Opinion<span style="color: red"
+                              >*</span
+                            ></label
+                          >
+                          <select
+                            class="form-control"
+                            id="status"
+                            name="status"
+                            required
+                          >
+                            <option value="approved">approved</option>
+                            <option value="rejected">rejected</option>
+                          </select>
+                        </div>
+
+                        <div
+                          class="form-group"
+                          id="additionalNotes"
+                          style="display: none"
+                        >
+                          <label for="additionalNotes">Approval Notes</label>
+                          <textarea
+                            class="form-control"
+                            rows="2"
+                            id="additionalNotes"
+                            name="additionalNotes"
+                          ></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                          Submit
+                        </button>
+                        <button
+                          type="reset"
+                          class="btn btn-secondary"
+                          onclick="window.location.href='/employees/shiftSchedule/';"
+                        >
+                          Return
+                        </button>
+                      </form>
+                      <div id="message">
+                        <% if (typeof message !== 'undefined' && message !==
+                        null) { %>
+                        <div class="alert alert-success"><%= message %></div>
+                        <% } %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /.panel-body -->
+              </div>
+              <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+          </div>
+        </div>
+
+        <!-- /. PAGE INNER  -->
+      </div>
+      <!-- /. PAGE WRAPPER  -->
+    </div>
+    <!-- /. WRAPPER  -->
+    <!-- JS Scripts-->
+    <!-- jQuery Js -->
+    <script>
+      document.getElementById('status').addEventListener('change', function () {
+        var rejectedReasonDiv = document.getElementById('additionalNotes');
+        if (this.value === 'rejected' || this.value === 'approved') {
+          rejectedReasonDiv.style.display = 'block';
+        } else {
+          rejectedReasonDiv.style.display = 'none';
+        }
+      });
+    </script>
+
+    <script src="/assets/js/jquery-1.10.2.js"></script>
+    <!-- Bootstrap Js -->
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <!-- Metis Menu Js -->
+    <script src="/assets/js/jquery.metisMenu.js"></script>
+    <!-- Custom Js -->
+    <script src="/assets/js/custom-scripts.js"></script>
+  </body>
+</html>

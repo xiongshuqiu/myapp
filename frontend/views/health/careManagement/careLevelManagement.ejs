@@ -45,7 +45,7 @@
             <!-- 首页链接 -->
             <li><a href="#">Elderly Management</a></li>
             <!-- 用户管理页面链接 -->
-            <li class="active">ElderlyRecord Data</li>
+            <li class="active">ElderlyLeaveRequest Data</li>
             <!-- 当前页：用户数据 -->
           </ol>
         </div>
@@ -54,9 +54,8 @@
         <div id="page-inner">
           <div class="row">
             <div class="col-md-12">
-              <!-- Advanced Tables -->
               <div class="panel panel-default">
-                <div class="panel-heading">ElderlyRecord Tables</div>
+                <div class="panel-heading">ElderlyLeaveRequest Tables</div>
                 <div class="panel-body">
                   <div class="table-responsive">
                     <table
@@ -65,65 +64,52 @@
                     >
                       <thead>
                         <tr>
-                          <th>elderlyId</th>
+                          <th>leaveId</th>
+                          <th class="hide-column">elderlyId</th>
                           <th>elderlyName</th>
-                          <th>elderlyPhone</th>
-                          <th>dateOfBirth</th>
-                          <th>age</th>
-                          <th>gender</th>
-                          <th>address</th>
-                          <th>medicalHistory</th>
-                          <th>allergies</th>
-                          <th>emergencyContactName</th>
-                          <th>emergencyContactPhone</th>
-                          <th>userId</th>
-                          <th>userName</th>
-                          <th>employeeId</th>
-                          <th>employeeName</th>
-                          <th>employeeContactNumber</th>
-                          <th>actions</th>
+                          <th>leavereason</th>
+                          <th>startDate</th>
+                          <th>endDate</th>
+                          <th>status</th>
+                          <th>type</th>
+                          <th >approvalNotes</th>
+                          <th>applicationDate</th>
+                          <th>action</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <% elderlyRecords.forEach(function(elderlyRecord) { %>
+                        <% elderlyLeaves.forEach(function(elderlyLeave) { %>
                         <tr class="odd gradeX" style="white-space: nowrap">
-                          <td><%= elderlyRecord.elderlyId %></td>
-                          <td><%= elderlyRecord.elderlyName %></td>
-                          <td><%= elderlyRecord.elderlyPhone %></td>
-                          <td><%= elderlyRecord.dateOfBirth %></td>
-                          <td><%= elderlyRecord.age %></td>
-                          <td><%= elderlyRecord.gender %></td>
-                          <td><%= elderlyRecord.address %></td>
-                          <td><%= elderlyRecord.medicalHistory %></td>
-                          <td><%= elderlyRecord.allergies %></td>
-                          <td><%= elderlyRecord.emergencyContactName %></td>
-                          <td><%= elderlyRecord.emergencyContactPhone %></td>
-                          <td><%= elderlyRecord.userId %></td>
-                          <td><%= elderlyRecord.userName %></td>
-                          <td><%= elderlyRecord.employeeId %></td>
-                          <td><%= elderlyRecord.employeeName %></td>
-                          <td><%= elderlyRecord.employeeContactNumber %></td>
-                       
+                          <td><%= elderlyLeave.leaveId %></td>
+                          <td class="hide-column"><%= elderlyLeave.elderlyId %></td>
+                          <td><%= elderlyLeave.elderlyName %></td>
+                          <td><%= elderlyLeave.reason %></td>
+                          <td><%= elderlyLeave.startDate %></td>
+                          <td><%= elderlyLeave.endDate %></td>
+                          <td><%= elderlyLeave.status %></td>
+                          <td><%= elderlyLeave.type %></td>
+                          <td ><%= elderlyLeave.additionalNotes %></td>
+                          <td><%= elderlyLeave.applicationDate %></td>
                           <td>
                             <% linkItems.forEach(function(item) { %> <% if
-                            (item.id ==='edit-elderlyRecord-link'&&item.visible) {
-                            %>
+                            (item.id ==='edit-elderlyLeave-link'&&item.visible)
+                            { %>
                             <a
                               id="<%= item.id %>"
-                              href="/elderly/record/<%= elderlyRecord._id %>/update"
+                              href="/elderly/leave/<%=  elderlyLeave._id %>/update"
                               class="editlink"
                               style="color: blue; display: inline"
-                              >Edit
+                              >Review
                             </a>
                             <% } %> <% }); %> <%
                             linkItems.forEach(function(item) { %> <% if (item.id
-                            ==='delete-elderlyRecord-link'&&item.visible) { %>
+                            ==='delete-elderlyLeave-link'&&item.visible) { %>
                             <a
                               id="<%= item.id %>"
                               href="javascript:void(0)"
                               class="deleteLink"
                               style="color: red; padding: 5px; display: inline"
-                              onclick="confirmDeletion('<%= elderlyRecord._id %>')"
+                              onclick="confirmDeletion('<%= elderlyLeave._id %>')"
                               >Delete</a
                             >
                             <% } %> <% }); %>
@@ -163,26 +149,23 @@
     <!-- DATA TABLE SCRIPTS -->
     <script src="/assets/js/dataTables/jquery.dataTables.js"></script>
     <script src="/assets/js/dataTables/dataTables.bootstrap.js"></script>
-    
+
     <!-- /. PAGE INNER  -->
 
     <script>
       $(document).ready(function () {
-
         //console.log($('#dataTables-example'));
-
-
         var table = $('#dataTables-example').DataTable();
       });
     </script>
 
     <!-- 在过滤器区域添加 "Add User" 按钮 -->
-    <% buttonItems.forEach(function(item) { %> <% if (item.id === 'add-elderlyRecord-btn'
-    && item.visible) { %>
+    <% buttonItems.forEach(function(item) { %> <% if (item.id ===
+    'add-elderlyLeave-btn' && item.visible) { %>
     <script>
       $(document).ready(function () {
         $('#dataTables-example_filter').append(
-          '<button id="<%= item.id %>" class="btn btn-primary add-elderlyRecord-btn" data-href="<%= item.href %>"><%= item.name %></button>',
+          '<button id="<%= item.id %>" class="btn btn-primary add-elderlyLeave-btn" data-href="<%= item.href %>"><%= item.name %></button>',
         );
 
         // 处理 "Add User" 按钮点击事件
@@ -193,39 +176,42 @@
       });
     </script>
     <% } %> <% }); %>
-      <script>
-    //处理动态生成的编辑链接点击事件
-    $(document).on('click', '.editlink', function (event) {  //.edit-link是类
-      event.preventDefault(); // 阻止默认行为
-      var href = $(this).attr('href'); // 获取链接的 href 属性
-      window.location.href = href; // 重定向到相应的链接
-    });
- 
-</script>
 
-    
+    <script>
+      //处理动态生成的编辑链接点击事件
+      $(document).on('click', '.editlink', function (event) {
+        //.edit-link是类
+        event.preventDefault(); // 阻止默认行为
+        var href = $(this).attr('href'); // 获取链接的 href 属性
+        window.location.href = href; // 重定向到相应的链接
+      });
+    </script>
+
     <script>
       //3.添加删除对话框
-      // 在实际运行时，confirmDeletion 函数接收到的 _id 参数就是 user._id 的值。
+      // 在实际运行时，confirmDeletion 函数接收到的 _id 参数就是 bedAssignment._id 的值。
       async function confirmDeletion(_id) {
-        if (confirm('Are you sure you want to delete this elderly record?')) {
+        if (confirm('Are you sure you want to delete this elderlyLeave?')) {
           try {
-            const response = await fetch(`/elderly/record/${_id}/delete`, {
-              method: 'DELETE',
-            });
-            window.location.href = '/elderly/record/';
+            const response = await fetch(
+              `/elderly/leave/${_id}/delete`,
+              {
+                method: 'DELETE',
+              },
+            );
+            window.location.href = '/elderly/leave/';
             // const result = await response.json();
             // alert(result.message); // 显示反馈给用户
             location.reload(); // 刷新页面以更新用户表
           } catch (error) {
-            alert('An error occurred while deleting the user.');
+            alert('An error occurred while deleting the elderlyLeave.');
             console.error('Error:', error);
           }
         }
       }
     </script>
     <!-- Custom Js -->
-     <!-- 这一行要放在最后 -->
+    <!-- 这一行要放在最后 -->
     <script src="/assets/js/custom-scripts.js"></script>
   </body>
 </html>
