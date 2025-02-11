@@ -1,4 +1,4 @@
-const users = [
+const users =[
   {
     userId: 'U001',
     status: 'Occupied',

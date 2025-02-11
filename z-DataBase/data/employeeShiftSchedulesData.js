@@ -29,7 +29,7 @@ async function generateWeeklyShifts(startDate, numWeeks) {
         } else if (shiftType === 'Morning') {
           start.setHours(11, 0, 0, 0);
         } else if (shiftType === 'Evening') {
-          start.setHours(17, 0, 0, 0);
+          start.setHours(19, 0, 0, 0);
         }
 
         const end = new Date(start);

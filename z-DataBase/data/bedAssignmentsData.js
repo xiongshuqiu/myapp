@@ -1,4 +1,4 @@
-const bedAssignments = [
+const bedassignments = [
   {
     assignmentId: 'A001',
     bedId: '3-1-101s-01', 
@@ -72,4 +72,4 @@ const bedAssignments = [
  
 ];
 
-module.exports = bedAssignments;
+module.exports = bedassignments;

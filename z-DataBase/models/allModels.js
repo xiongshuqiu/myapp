@@ -31,7 +31,7 @@ const Elderly = mongoose.model('Elderly', elderlySchema);
 
 // 2-2老人入住退住模型
 const elderlyResidentSchema = new mongoose.Schema({
-  residentId: { type: String, required: true, unique: true }, // 老人唯一编号 R001
+  residentId: { type: String, required: true, unique: true }, // 住宿编号 R001
   elderlyId: { type: String, ref: 'Elderly', required: true }, // 老人引用 E001
   checkInTime: { type: Date, required: true }, // 入住时间
   checkOutTime: { type: Date }, // 退住时间
@@ -109,7 +109,6 @@ const bedAssignmentSchema = new mongoose.Schema({
   releaseDate: { type: Date }, // 释放日期
 });
 const BedAssignment = mongoose.model('BedAssignment', bedAssignmentSchema);
-const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 // 5-1健康档案模型
@@ -137,14 +136,18 @@ const CareProjectSchema = new Schema({
   careProjectId: { type: String, required: true }, // 护理项目记录 ID，必须填写CP1
   projectName: { type: String, required: true }, // 项目名称，必须填写
   description: { type: String }, // 项目描述，可选字段
-  careLevelId: { type: Schema.Types.ObjectId, ref: 'CareLevel', required: true }, // 关联 CareLevel
+  careLevelId: {
+    type: String,
+    ref: 'CareLevel',
+    required: true,
+  }, // 关联 CareLevel
   createdAt: { type: Date, default: Date.now }, // 记录创建时间，默认值为当前日期和时间
 });
 const CareProject = mongoose.model('CareProject', CareProjectSchema);
 
 // 5-4护理计划模型
 const CarePlanSchema = new Schema({
-  carePlanId: { type: String, required: true }, // 护理计划记录 ID，必须填写P1
+  carePlanId: { type: String, required: true }, // 护理计划记录 ID，必须填写PL1
   planName: { type: String, required: true }, // 计划名称，必须填写
   description: { type: String }, // 计划描述，可选字段
   startDate: { type: Date, required: true }, // 开始日期，必须填写
@@ -154,33 +157,38 @@ const CarePlanSchema = new Schema({
 });
 const CarePlan = mongoose.model('CarePlan', CarePlanSchema);
 
-//5-5护理任务模型
+// 5-5 护理任务模型
 const CareTaskSchema = new Schema({
-  careTaskId: { type: String, required: true }, // 护理任务 ID，必须填写CT1
-  taskName: { type: String, required: true },
-  description: { type: String },
-  dueDate: { type: Date, required: true },
-  carePlanId: { type: String, ref: 'CarePlan', required: true }, // 关联 CarePlan
+  careTaskId: { type: String, required: true }, // 护理任务 ID，必须填写（例如 CT1）
+  taskName: { type: String, required: true }, // 任务名称，必须填写
+  description: { type: String }, // 任务描述，可选
+  dueDate: { type: Date, required: true }, // 截止日期，必须填写
+  carePlanId: { type: String, ref: 'CarePlan', required: true }, // 关联的护理计划 ID，必须填写
   status: {
     type: String,
-    enum: ['Pending', 'In Progress', 'Completed'],
-    default: 'Pending',
+    enum: ['Pending', 'In Progress', 'Completed'], // 任务状态，可以是"Pending"（待处理）,"In Progress"（进行中）或"Completed"（已完成）
+    default: 'Pending', // 默认状态为"Pending"
   },
-  createdAt: { type: Date, default: Date.now },
+  elderlyId: { type: String, ref: 'Elderly', required: true }, //老人唯一编号 E001
+  employeeId: { type: String, ref: 'Employee', required: true }, //  员工唯一编号S001
+  createdAt: { type: Date, default: Date.now }, // 创建时间，默认为当前时间
 });
 
-const CareTask = mongoose.model('CareLevel', CareTaskSchema);
+const CareTask = mongoose.model('CareTask', CareTaskSchema);
 
-//5-6健康体检模型
+// 5-6 健康体检模型
 const HealthCheckupSchema = new Schema({
-  checkupId: { type: String, required: true }, //健康体检ID，必须填写C1
-  checkupName: { type: String, required: true },
-  description: { type: String },
-  checkupDate: { type: Date, required: true },
-  careTask: { type: Schema.Types.ObjectId, ref: 'CareTask', required: true }, // 关联 CareTask
-  createdAt: { type: Date, default: Date.now },
+  checkupId: { type: String, required: true }, // 健康体检 ID，必须填写（例如 HC1）
+  checkupName: { type: String, required: true }, // 健康体检名称，必须填写
+  description: { type: String }, // 健康体检描述，可选
+  checkupDate: { type: Date, required: true }, // 健康体检日期，必须填写
+  createdAt: { type: Date, default: Date.now }, // 创建时间，默认为当前时间
+  elderlyId: { type: String, ref: 'Elderly', required: true }, //老人唯一编号 E001
+  employeeId: { type: String, ref: 'Employee', required: true }, // 员工编号，字符串类型 员工唯一编号S001
+  careLevelId: { type: String, required: true }, // 护理任务 ID，必须填写（例如 CL1）
 });
 
+// 创建并导出健康体检模型
 const HealthCheckup = mongoose.model('HealthCheckup', HealthCheckupSchema);
 
 module.exports = {

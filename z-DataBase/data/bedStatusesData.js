@@ -1,6 +1,6 @@
 // bedStatusesData.js
 
-const bedStatuses = [
+const bedstatuses = [
   {
     bedId: '3-1-101s-01',
     building: 3,
@@ -273,7 +273,7 @@ const bedStatuses = [
   },
 ];
 
-module.exports = bedStatuses;
+module.exports = bedstatuses;
 
 
   

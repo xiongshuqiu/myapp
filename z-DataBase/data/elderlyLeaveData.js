@@ -1,4 +1,4 @@
-const elderlyLeaves = [
+const elderlyleaves = [
   {
     leaveId: 'LR001',
     elderlyId: 'E001',
@@ -13,4 +13,4 @@ const elderlyLeaves = [
 
 ];
 
-module.exports = elderlyLeaves;
+module.exports = elderlyleaves;

@@ -1,4 +1,4 @@
-const elderlyResidents = [
+const elderlyresidents = [
   {
     residentId: 'R001',
     elderlyId: 'E001',
@@ -71,4 +71,4 @@ const elderlyResidents = [
   },
 ];
 
-module.exports = elderlyResidents;
+module.exports = elderlyresidents;

@@ -1,0 +1,58 @@
+const careplans = [
+  {
+    carePlanId: 'PL1',
+    planName: 'Basic Daily Care',
+    description: 'Provides basic daily assistance and monitoring.',
+    startDate: '2025-02-01T08:00:00Z',
+    endDate: '2025-05-01T08:00:00Z',
+    careProjectId: 'CP1',
+    createdAt: '2025-02-11T18:46:00Z',
+  },
+  {
+    carePlanId: 'PL2',
+    planName: 'Dietary and Monitoring',
+    description: 'Includes daily dietary guidance and regular health monitoring.',
+    startDate: '2025-02-01T08:00:00Z',
+    endDate: '2025-06-01T08:00:00Z',
+    careProjectId: 'CP2',
+    createdAt: '2025-02-11T19:00:00Z',
+  },
+  {
+    carePlanId: 'PL3',
+    planName: 'Medication and Monitoring',
+    description: 'Includes daily medication management and regular health monitoring.',
+    startDate: '2025-02-01T08:00:00Z',
+    endDate: '2025-06-01T08:00:00Z',
+    careProjectId: 'CP3',
+    createdAt: '2025-02-11T18:46:00Z',
+  },
+  {
+    carePlanId: 'PL4',
+    planName: 'Physical Therapy Plan',
+    description: 'Includes physical therapy and rehabilitation services.',
+    startDate: '2025-02-01T08:00:00Z',
+    endDate: '2025-07-01T08:00:00Z',
+    careProjectId: 'CP4',
+    createdAt: '2025-02-11T19:00:00Z',
+  },
+  {
+    carePlanId: 'PL5',
+    planName: 'Comprehensive Care',
+    description: 'Provides 24/7 care and support for patients with high needs.',
+    startDate: '2025-02-01T08:00:00Z',
+    endDate: '2025-12-01T08:00:00Z',
+    careProjectId: 'CP5',
+    createdAt: '2025-02-11T18:46:00Z',
+  },
+  {
+    carePlanId: 'PL6',
+    planName: 'Mental Health Support Plan',
+    description: 'Includes counseling and support for mental health issues.',
+    startDate: '2025-02-01T08:00:00Z',
+    endDate: '2025-08-01T08:00:00Z',
+    careProjectId: 'CP6',
+    createdAt: '2025-02-11T19:00:00Z',
+  },
+];
+
+module.exports = careplans;

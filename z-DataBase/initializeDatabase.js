@@ -8,16 +8,29 @@ const {
   Employee,
   EmployeeShiftSchedule,
   ElderlyResident,
-  ElderlyLeave
+  ElderlyLeave,
+  HealthRecord,
+  CareLevel,
+  CareProject,
+  CarePlan,
+  CareTask,
+  HealthCheckup,
 } = require('./models/allModels');
 const users = require('./data/usersData');
 const elderlies = require('./data/elderliesData');
-const bedStatuses = require('./data/bedStatusesData');
-const bedAssignments = require('./data/bedAssignmentsData');
+const bedstatuses = require('./data/bedStatusesData');
+const bedassignments = require('./data/bedAssignmentsData');
 const employees = require('./data/employeesData');
 const generateWeeklyShifts = require('./data/employeeShiftSchedulesData'); // 导入数据生成函数
-const elderlyResidents = require('./data/elderlyResidentData'); 
-const elderlyLeaves = require('./data/elderlyLeaveData'); 
+const elderlyresidents = require('./data/elderlyResidentData'); 
+const elderlyleaves = require('./data/elderlyLeaveData'); 
+const healthrecords = require('./data/healthRecordData'); 
+const carelevels = require('./data/careLevelData'); 
+const careprojects = require('./data/careProjectData'); 
+const careplans = require('./data/carePlanData'); 
+const caretasks = require('./data/careTaskData'); 
+const healthcheckups = require('./data/healthCheckupData'); 
+
 // 初始化数据库
 const initializeDatabase = async () => {
   try {
@@ -30,14 +43,28 @@ const initializeDatabase = async () => {
     await EmployeeShiftSchedule.deleteMany({});
     await ElderlyResident.deleteMany({});
     await ElderlyLeave.deleteMany({});
+    await HealthRecord.deleteMany({});
+    await CareLevel.deleteMany({});
+    await CareProject.deleteMany({});
+    await CarePlan.deleteMany({});
+    await CareTask.deleteMany({});
+    await HealthCheckup.deleteMany({});
+
 
     await User.insertMany(users);
     await Elderly.insertMany(elderlies);
-    await BedStatus.insertMany(bedStatuses);
-    await BedAssignment.insertMany(bedAssignments);
+    await BedStatus.insertMany(bedstatuses);
+    await BedAssignment.insertMany(bedassignments);
     await Employee.insertMany(employees);
-    await ElderlyResident.insertMany(elderlyResidents);
-    await ElderlyLeave.insertMany(elderlyLeaves);
+    await ElderlyResident.insertMany(elderlyresidents);
+    await ElderlyLeave.insertMany(elderlyleaves);
+    await HealthRecord.insertMany(healthrecords);
+    await CareLevel.insertMany(carelevels);
+    await CareProject.insertMany(careprojects);
+    await CarePlan.insertMany(careplans);
+    await CareTask.insertMany(caretasks);
+    await HealthCheckup.insertMany(healthcheckups);
+
 
     const startDate = new Date();
     const numWeeks = 1; // 可根据需要调整周数
