@@ -31,11 +31,11 @@ const deleteRequest = async (url) => {
   const response = await axios.delete(url);
   return response.data;
 };
-// 1. 获取所有老人档案
-const getAllElderlyRecords = async (req, res) => {
+// 1. 获取所有请假请求
+const getAllElderlyLeaveRequests = async (req, res) => {
   const { _id, role } = req.query; // 从查询参数中获取传递的数据
   try {
-    const url = `${process.env.ELDERLY_SERVICE_URL}/elderly/record/?_id=${_id}&role=${role}`;
+    const url = `${process.env.ELDERLY_SERVICE_URL}/elderly/leave/?_id=${_id}&role=${role}`;
     const response = await getRequest(url); // 发送 GET 请求以获取用户信息
     res.json(response); // 将响应数据返回给前端:包括数据和message
     if (response.success) {
@@ -46,11 +46,11 @@ const getAllElderlyRecords = async (req, res) => {
   }
 };
 
-// 2. 创建新的老人档案
-// (1) 显示新增老人档案表单(查找可用的bedId、elderlyId)
-const renderNewElderlyRecordForm = async (req, res) => {
+// 2. 创建新的请假请求
+// (1) 显示老人申请请假表单(查找elderlyId)
+const renderNewElderlyLeaveRequestForm = async (req, res) => {
   try {
-    const url = `${process.env.ELDERLY_SERVICE_URL}/elderly/record/new`;
+    const url = `${process.env.ELDERLY_SERVICE_URL}/elderly/leave/new`;
     const response = await getRequest(url); // 发送 GET 请求以获取用户信息
     res.json(response); // 将响应数据返回给前端:包括数据和message
     if (response.success) {
@@ -60,37 +60,31 @@ const renderNewElderlyRecordForm = async (req, res) => {
     handleError(err, res);
   }
 };
-// (2) 提交新的老人档案数据
-const createElderlyRecord = async (req, res) => {
+// (2) 提交老人请假请求数据
+const createElderlyLeaveRequest = async (req, res) => {
   const {
-    elderlyName,
-    elderlyPhone,
-    dateOfBirth,
-    gender,
-    address,
-    medicalHistory,
-    allergies,
-    emergencyContactName,
-    emergencyContactPhone,
-    userId,
-    employeeId,
+    elderlyId,
+    reason,
+    startDate,
+    endDate,
+    status,
+    type,
+    additionalNotes,
+    applicationDate,
   } = req.body; // 从请求体中获取所有用户信息
 
   try {
     const data = {
-      elderlyName,
-      elderlyPhone,
-      dateOfBirth,
-      gender,
-      address,
-      medicalHistory,
-      allergies,
-      emergencyContactName,
-      emergencyContactPhone,
-      userId,
-      employeeId,
+      elderlyId,
+      reason,
+      startDate,
+      endDate,
+      status,
+      type,
+      additionalNotes,
+      applicationDate,
     };
-    const url = `${process.env.ELDERLY_SERVICE_URL}/elderly/record/create`;
+    const url = `${process.env.ELDERLY_SERVICE_URL}/elderly/leave/create`;
     const response = await postRequest(url, data); // 发送 POST 请求以创建新用户
     res.status(201).json(response); // 将响应数据返回给前端
     if (response.success) {
@@ -100,12 +94,12 @@ const createElderlyRecord = async (req, res) => {
     handleError(err, res);
   }
 };
-// 3. 更新特定老人档案
-// (1) 查找特定老人档案并显示编辑表单
-const getElderlyRecordById = async (req, res) => {
+// 3. 管理员批复老人请假请求
+// (1) 查找特定老人请假请求并进行批复
+const getElderlyLeaveRequestById = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取 _id
-    const url = `${process.env.ELDERLY_SERVICE_URL}/elderly/record/${_id}/update`;
+    const url = `${process.env.ELDERLY_SERVICE_URL}/elderly/leave/${_id}/update`;
     const response = await getRequest(url); // 发送 GET 请求以获取用户信息
     res.json(response); // 将响应数据返回给前端:包括数据和message
     if (response.success) {
@@ -115,37 +109,31 @@ const getElderlyRecordById = async (req, res) => {
     handleError(err, res);
   }
 };
-// (2) 提交更新后的老人档案数据
-const updateElderlyRecord = async (req, res) => {
+// (2) 提交更新后的老人请假请求数据
+const updateElderlyLeaveRequest = async (req, res) => {
   const {
-    elderlyName,
-    elderlyPhone,
-    dateOfBirth,
-    gender,
-    address,
-    medicalHistory,
-    allergies,
-    emergencyContactName,
-    emergencyContactPhone,
-    userId,
-    employeeId,
+    elderlyId,
+    reason,
+    startDate,
+    endDate,
+    status,
+    type,
+    additionalNotes,
+    applicationDate,
   } = req.body;
   try {
     const data = {
-      elderlyName,
-      elderlyPhone,
-      dateOfBirth,
-      gender,
-      address,
-      medicalHistory,
-      allergies,
-      emergencyContactName,
-      emergencyContactPhone,
-      userId,
-      employeeId,
+      elderlyId,
+      reason,
+      startDate,
+      endDate,
+      status,
+      type,
+      additionalNotes,
+      applicationDate,
     };
     const { _id } = req.params; // 从参数中获取 _Id
-    const url = `${process.env.ELDERLY_SERVICE_URL}/elderly/record/${_id}`;
+    const url = `${process.env.ELDERLY_SERVICE_URL}/elderly/leave/${_id}`;
     const response = await putRequest(url, data); // 发送 PUT 请求以更新用户信息
     res.json(response); // 将响应数据返回给前端
     if (response.success) {
@@ -155,12 +143,11 @@ const updateElderlyRecord = async (req, res) => {
     handleError(err, res);
   }
 };
-
-// 4. 删除特定老人档案
-const deleteElderlyRecord = async (req, res) => {
+//4.老人删除请假请求
+const deleteElderlyLeaveRequest = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取 userId
-    const url = `${process.env.ELDERLY_SERVICE_URL}/elderly/record/${_id}/delete`;
+    const url = `${process.env.ELDERLY_SERVICE_URL}/elderly/leave/${_id}/delete`;
     const response = await deleteRequest(url); // 发送 DELETE 请求以删除用户
     res.json(response); // 将响应数据返回给前端
     if (response.success) {
@@ -172,10 +159,10 @@ const deleteElderlyRecord = async (req, res) => {
 };
 
 module.exports = {
-  getAllElderlyRecords,
-  renderNewElderlyRecordForm,
-  createElderlyRecord,
-  getElderlyRecordById,
-  updateElderlyRecord,
-  deleteElderlyRecord,
+  getAllElderlyLeaveRequests,
+  renderNewElderlyLeaveRequestForm,
+  createElderlyLeaveRequest,
+  getElderlyLeaveRequestById,
+  updateElderlyLeaveRequest,
+  deleteElderlyLeaveRequest,
 };

@@ -1,11 +1,11 @@
 // #frontend routes
 const express = require('express');
 const router = express.Router();
-const elderlyRecordRoutes = require('./elderlyRecordRoutes.js');
-const elderlyLeaveRoutes = require('./elderlyLeaveRoutes.js');
-const elderlyResidentRoutes = require('./elderlyResidentRoutes.js');
+const healthRecordRoutes = require('./healthRecordRoutes.js');
+const careManagementRoutes = require('./careManagementRoutes.js');
+const healthCheckupRoutes = require('./healthCheckupRoutes.js');
 
-router.use('/record', elderlyRecordRoutes);
-router.use('/resident', elderlyResidentRoutes);
-router.use('/leave', elderlyLeaveRoutes);
+router.use('/record', healthRecordRoutes);
+router.use('/care', careManagementRoutes);
+router.use('/checkup', healthCheckupRoutes);
 module.exports = router;
