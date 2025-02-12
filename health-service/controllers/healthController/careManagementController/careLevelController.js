@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
-const getNextId = require('./genericController.js');
-const Elderly = require('../../models/elderlyModel.js');
-const Employee = require('../../models/employeeModel.js');
-const User = require('../../models/userModel.js');
+const getNextId = require('../genericController.js');
+const Elderly = require('../../../models/elderlyModel.js');
+const Employee = require('../../../models/employeeModel.js');
+const User = require('../../../models/userModel.js');
 
 // 1.获取所有老人档案
-const getAllElderlyRecords = async (req, res) => {
+const getAllCareLevels = async (req, res) => {
   console.log('Received request to get all elderly records'); // 调试信息
   const { _id, role } = req.query;
   console.log('Query parameters:', _id, role); // 调试信息
@@ -158,7 +158,7 @@ const getAllElderlyRecords = async (req, res) => {
 
 // 2. 创建新的老人档案
 // (1) 显示新增老人档案表单(查找available的bedId、未分配床位的elderlyId)
-const renderNewElderlyRecordForm = async (req, res) => {
+const renderNewCareLevelForm = async (req, res) => {
   try {
     // 顺序查找 userId
     const userIds = await User.find({ role: 'family' }).select('userId role');
@@ -179,7 +179,7 @@ const renderNewElderlyRecordForm = async (req, res) => {
   }
 };
 // (2) 提交新的老人档案数据
-const createElderlyRecord = async (req, res) => {
+const createCareLevel = async (req, res) => {
   const elderlyId = await getNextId('Elderly', 'E', 'elderlyId');
   const {
     elderlyName,
@@ -241,7 +241,7 @@ const createElderlyRecord = async (req, res) => {
 
 // 3. 更新特定老人档案
 // (1) 查找特定老人档案
-const getElderlyRecordById = async (req, res) => {
+const getCareLevelById = async (req, res) => {
   const { _id } = req.params;
   console.log(`Received request to get elderly record by ID: ${_id}`); // 调试信息
   try {
@@ -278,7 +278,7 @@ const getElderlyRecordById = async (req, res) => {
   }
 };
 // (2) 提交更新后的老人档案数据
-const updateElderlyRecord = async (req, res) => {
+const updateCareLevel = async (req, res) => {
   const { _id } = req.params; // 从 URL 参数中获取 assignmentId
   const {
     elderlyName,
@@ -341,7 +341,7 @@ const updateElderlyRecord = async (req, res) => {
 };
 
 // 4. 删除特定老人档案
-const deleteElderlyRecord = async (req, res) => {
+const deleteCareLevel = async (req, res) => {
   const { _id } = req.params;
 
   try {
@@ -362,10 +362,10 @@ const deleteElderlyRecord = async (req, res) => {
 
 // 6. 导出模块
 module.exports = {
-  getAllElderlyRecords,
-  renderNewElderlyRecordForm,
-  createElderlyRecord,
-  getElderlyRecordById,
-  updateElderlyRecord,
-  deleteElderlyRecord,
+  getAllCareLevels,
+  renderNewCareLevelForm,
+  createCareLevel,
+  getCareLevelById,
+  updateCareLevel,
+  deleteCareLevel,
 };

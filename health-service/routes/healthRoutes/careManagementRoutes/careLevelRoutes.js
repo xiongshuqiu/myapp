@@ -11,7 +11,6 @@ const {
 } = require('../../../controllers/healthController/careManagementController/careLevelController');
 // 1. 获取所有护理等级
 router.get('/', getAllCareLevels);
-
 // 2. 创建新的护理等级
 // (1) 显示新增护理等级表单(查找可用的bedId、elderlyId)
 router.get('/new', renderNewCareLevelForm);

@@ -7,7 +7,7 @@ const {
   createCarePlan,
   getCarePlanById,
   updateCarePlan,
-  deleteCarePlan
+  deleteCarePlan,
 } = require('../../../controllers/healthController/careManagementController/carePlanController');
 // 1. 获取所有护理计划
 router.get('/', getAllCarePlans);

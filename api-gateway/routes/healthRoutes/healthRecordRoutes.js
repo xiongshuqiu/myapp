@@ -10,7 +10,7 @@ const {
   deleteHealthRecord
 } = require('../../controllers/healthController/healthRecordController.js');
 // 1. 获取所有老人健康档案
-router.get('/', bntLinkVisibility, getAllHealthRecords);
+router.get('/', getAllHealthRecords);
 
 // 2. 创建新的老人健康档案
 // (1) 显示老人申请请假表单

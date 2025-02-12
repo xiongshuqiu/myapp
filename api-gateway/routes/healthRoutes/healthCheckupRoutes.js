@@ -1,10 +1,6 @@
 // #frontend routes
 const express = require('express');
 const router = express.Router();
-const { authorizeRole } = require('../../../middleware/authMiddleware');
-const {
-  bntLinkVisibility,
-} = require('../../visibilityMiddleware/bntLinkVisibility');
 const {
   getAllHealthCheckups,
   renderNewHealthCheckupForm,
@@ -14,7 +10,7 @@ const {
   deleteHealthCheckup,
 } = require('../../controllers/healthController/healthCheckupController');
 // 1. 获取所有健康体检
-router.get('/',bntLinkVisibility,getAllHealthCheckups);
+router.get('/',getAllHealthCheckups);
 
 // 2. 创建新的健康体检
 // (1) 显示新增老人入住退住表单

@@ -32,10 +32,10 @@ const deleteRequest = async (url) => {
   return response.data;
 };
 // 1. 获取所有老人入住和退住数据
-const getAllElderlyResidents = async (req, res) => {
+const getAllCareTasks = async (req, res) => {
   const { _id, role } = req.query; // 从查询参数中获取传递的数据
   try {
-    const url = `${process.env.ELDERLY_SERVICE_URL}/elderly/resident/?_id=${_id}&role=${role}`;
+    const url = `${process.env.HEALTH_SERVICE_URL}/health/care/task/?_id=${_id}&role=${role}`;
     const response = await getRequest(url); // 发送 GET 请求以获取用户信息
     res.json(response); // 将响应数据返回给前端:包括数据和message
     if (response.success) {
@@ -48,9 +48,9 @@ const getAllElderlyResidents = async (req, res) => {
 
 // 2. 创建新的老人入住和退住数据
 // (1) 显示新增老人入住和退住数据表单(查找可用的bedId、elderlyId)
-const renderNewElderlyResidentForm = async (req, res) => {
+const renderNewCareTaskForm = async (req, res) => {
   try {
-    const url = `${process.env.ELDERLY_SERVICE_URL}/elderly/resident/new`;
+    const url = `${process.env.HEALTH_SERVICE_URL}/health/care/task/new`;
     const response = await getRequest(url); // 发送 GET 请求以获取用户信息
     res.json(response); // 将响应数据返回给前端:包括数据和message
     if (response.success) {
@@ -61,7 +61,7 @@ const renderNewElderlyResidentForm = async (req, res) => {
   }
 };
 // (2) 提交新的老人入住和退住数据数据
-const createElderlyResident = async (req, res) => {
+const createCareTask = async (req, res) => {
   const {
     elderlyId,
     checkInTime,
@@ -76,7 +76,7 @@ const createElderlyResident = async (req, res) => {
       checkOutTime,
       status,
     };
-    const url = `${process.env.ELDERLY_SERVICE_URL}/elderly/resident/create`;
+    const url = `${process.env.HEALTH_SERVICE_URL}/health/care/task/create`;
     const response = await postRequest(url, data); // 发送 POST 请求以创建新用户
     res.status(201).json(response); // 将响应数据返回给前端
     if (response.success) {
@@ -88,10 +88,10 @@ const createElderlyResident = async (req, res) => {
 };
 // 3. 更新特定老人入住和退住数据
 // (1) 查找特定老人入住和退住数据并显示编辑表单
-const getElderlyResidentById = async (req, res) => {
+const getCareTaskById = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取 _id
-    const url = `${process.env.ELDERLY_SERVICE_URL}/elderly/resident/${_id}/update`;
+    const url = `${process.env.HEALTH_SERVICE_URL}/health/care/task/${_id}/update`;
     const response = await getRequest(url); // 发送 GET 请求以获取用户信息
     res.json(response); // 将响应数据返回给前端:包括数据和message
     if (response.success) {
@@ -102,7 +102,7 @@ const getElderlyResidentById = async (req, res) => {
   }
 };
 // (2) 提交更新后的老人入住和退住数据数据
-const updateElderlyResident = async (req, res) => {
+const updateCareTask = async (req, res) => {
   const {
     elderlyId,
     checkInTime,
@@ -117,7 +117,7 @@ const updateElderlyResident = async (req, res) => {
       status,
     };
     const { _id } = req.params; // 从参数中获取 _Id
-    const url = `${process.env.ELDERLY_SERVICE_URL}/elderly/resident/${_id}`;
+    const url = `${process.env.HEALTH_SERVICE_URL}/health/care/task/${_id}`;
     const response = await putRequest(url, data); // 发送 PUT 请求以更新用户信息
     res.json(response); // 将响应数据返回给前端
     if (response.success) {
@@ -129,10 +129,10 @@ const updateElderlyResident = async (req, res) => {
 };
 
 // 4. 删除特定老人入住和退住数据
-const deleteElderlyResident = async (req, res) => {
+const deleteCareTask = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取 userId
-    const url = `${process.env.ELDERLY_SERVICE_URL}/elderly/resident/${_id}/delete`;
+    const url = `${process.env.HEALTH_SERVICE_URL}/health/care/task/${_id}/delete`;
     const response = await deleteRequest(url); // 发送 DELETE 请求以删除用户
     res.json(response); // 将响应数据返回给前端
     if (response.success) {
@@ -144,10 +144,10 @@ const deleteElderlyResident = async (req, res) => {
 };
 
 module.exports = {
-  getAllElderlyResidents,
-  renderNewElderlyResidentForm,
-  createElderlyResident,
-  getElderlyResidentById,
-  updateElderlyResident,
-  deleteElderlyResident,
+  getAllCareTasks,
+  renderNewCareTaskForm,
+  createCareTask,
+  getCareTaskById,
+  updateCareTask,
+  deleteCareTask,
 };

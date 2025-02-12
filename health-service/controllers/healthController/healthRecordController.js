@@ -1,15 +1,17 @@
 const mongoose = require('mongoose');
 const getNextId = require('./genericController.js');
-const BedAssignment = require('../../models/bedAssignmentModel.js');
-const BedStatus = require('../../models/bedStatusModel.js');
-const ElderlyLeave = require('../../models/elderlyLeaveModel.js');
+const CareLevel = require('../../models/careLevelModel.js');
+const CarePlan = require('../../models/carePlanModel.js');
+const CareProject = require('../../models/careProjectModel.js');
+const CareTask = require('../../models/careTaskModel.js');
 const Elderly = require('../../models/elderlyModel.js');
-const ElderlyResident = require('../../models/elderlyResidentModel.js');
 const Employee = require('../../models/employeeModel.js');
+const HealthCheckup = require('../../models/healthCheckupModel.js');
+const HealthRecord = require('../../models/healthRecordModel.js');
 const User = require('../../models/userModel.js');
 
 // 1. 获取所有老人请假请求
-const getAllElderlyLeaveRequests = async (req, res) => {
+const getAllHealthRecords = async (req, res) => {
   console.log('Received request to get all elderly leaves'); // 调试信息
   const { _id, role } = req.query;
   console.log('Query parameters:', _id, role); // 调试信息
@@ -143,7 +145,7 @@ const getAllElderlyLeaveRequests = async (req, res) => {
 
 // 2. 创建新的老人请假请求
 // (1) 显示老人申请请假表单(查找elderlyId)
-const renderNewElderlyLeaveRequestForm = async (req, res) => {
+const renderNewHealthRecordForm = async (req, res) => {
   try {
     // 顺序查找elderlyIds
     const elderlyIds = await Elderly.find({}).select('elderlyId elderlyName');
@@ -161,7 +163,7 @@ const renderNewElderlyLeaveRequestForm = async (req, res) => {
   }
 };
 // (2) 提交老人请假请求数据
-const createElderlyLeaveRequest = async (req, res) => {
+const createHealthRecord = async (req, res) => {
   // 生成新的 leaveId
   const leaveId = await getNextId('ElderlyLeave', 'LR', 'leaveId');
   const {
@@ -211,7 +213,7 @@ const createElderlyLeaveRequest = async (req, res) => {
 
 // 3. 管理员批复老人请假请求
 // (1) 查找特定老人请假请求并进行批复
-const getElderlyLeaveRequestById = async (req, res) => {
+const getHealthRecordById = async (req, res) => {
   const { _id } = req.params;
   console.log(`Received request to get elderly leave by ID: ${_id}`); // 调试信息
   try {
@@ -269,7 +271,7 @@ const getElderlyLeaveRequestById = async (req, res) => {
   }
 };
 // (2) 提交更新后的老人请假请求数据
-const updateElderlyLeaveRequest = async (req, res) => {
+const updateHealthRecord = async (req, res) => {
   const { _id } = req.params;
   const {
     elderlyId,
@@ -325,7 +327,7 @@ const updateElderlyLeaveRequest = async (req, res) => {
 };
 
 // 4. 删除特定床位分配
-const deleteElderlyLeaveRequest = async (req, res) => {
+const deleteHealthRecord = async (req, res) => {
   const { _id } = req.params;
 
   try {
@@ -346,10 +348,10 @@ const deleteElderlyLeaveRequest = async (req, res) => {
 
 // 6. 导出模块
 module.exports = {
-  getAllElderlyLeaveRequests,
-  renderNewElderlyLeaveRequestForm,
-  createElderlyLeaveRequest,
-  getElderlyLeaveRequestById,
-  updateElderlyLeaveRequest,
-  deleteElderlyLeaveRequest,
+  getAllHealthRecords,
+  renderNewHealthRecordForm,
+  createHealthRecord,
+  getHealthRecordById,
+  updateHealthRecord,
+  deleteHealthRecord
 };

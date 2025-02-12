@@ -4,7 +4,7 @@ const cors = require('cors');
 const mongoose = require('mongoose'); // 引入Mongoose，用于连接MongoDB
 const dotenv = require('dotenv'); // 引入dotenv模块，用于加载环境变量
 
-const elderlyRoutes = require('./routes/elderlyRoutes/elderlyRoutes'); // 引入自定义的路由模块
+const healthRoutes = require('./routes/healthRoutes/healthRoutes'); // 引入自定义的路由模块
 // 2.加载环境变量
 dotenv.config(); // 加载 .env 文件中的环境变量
 
@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: true })); // 解析 URL 编码的请求�
 
 app.use(cors());
 // 5.设置路由
-app.use('/elderly', elderlyRoutes);
+app.use('/health', healthRoutes);
 
 // 6.连接数据库
 mongoose

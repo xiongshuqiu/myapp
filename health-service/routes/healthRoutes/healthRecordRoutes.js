@@ -1,28 +1,28 @@
-
+// #frontend routes
 const express = require('express');
 const router = express.Router();
 const {
-  getAllElderlyLeaveRequests,
-  renderNewElderlyLeaveRequestForm,
-  createElderlyLeaveRequest,
-  getElderlyLeaveRequestById,
-  updateElderlyLeaveRequest,
-  deleteElderlyLeaveRequest
-} = require('../../controllers/elderlyController/elderlyLeaveController');
-// 1. 获取所有老人请假请求
-router.get('/',getAllElderlyLeaveRequests);
+  getAllHealthRecords,
+  renderNewHealthRecordForm,
+  createHealthRecord,
+  getHealthRecordById,
+  updateHealthRecord,
+  deleteHealthRecord
+} = require('../../controllers/healthController/healthRecordController.js');
+// 1. 获取所有老人健康档案
+router.get('/', getAllHealthRecords);
 
-// 2. 创建新的老人请假请求
-// (1) 显示老人申请请假表单(查找elderlyId)
-router.get('/new', renderNewElderlyLeaveRequestForm);
-// (2) 提交老人请假请求数据
-router.post('/create', createElderlyLeaveRequest);
+// 2. 创建新的老人健康档案
+// (1) 显示老人申请请假表单
+router.get('/new', renderNewHealthRecordForm);
+// (2) 提交老人健康档案数据
+router.post('/create', createHealthRecord);
 
-// 3. 管理员批复老人请假请求
-// (1) 查找特定老人请假请求并进行批复
-router.get('/:_id/update', getElderlyLeaveRequestById);
-// (2) 提交更新后的老人请假请求数据
-router.put('/:_id', updateElderlyLeaveRequest);
-//4.老人删除请假请求
-router.delete('/:_id/delete', deleteElderlyLeaveRequest);
+// 3. 更新老人健康档案
+// (1) 查找特定老人健康档案数据
+router.get('/:_id/update', getHealthRecordById);
+// (2) 提交更新后的老人健康档案数据
+router.put('/:_id', updateHealthRecord);
+//4.删除老人健康档案
+router.delete('/:_id/delete', deleteHealthRecord);
 module.exports = router;

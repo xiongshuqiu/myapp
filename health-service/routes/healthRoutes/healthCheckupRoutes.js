@@ -1,30 +1,30 @@
-
+// #frontend routes
 const express = require('express');
 const router = express.Router();
 const {
-  getAllElderlyResidents,
-  renderNewElderlyResidentForm,
-  createElderlyResident,
-  getElderlyResidentById,
-  updateElderlyResident,
-  deleteElderlyResident,
-} = require('../../controllers/elderlyController/elderlyResidentController');
-// 1. 获取所有老人入住退住数据
-router.get('/',getAllElderlyResidents);
+  getAllHealthCheckups,
+  renderNewHealthCheckupForm,
+  createHealthCheckup,
+  getHealthCheckupById,
+  updateHealthCheckup,
+  deleteHealthCheckup,
+} = require('../../controllers/healthController/healthCheckupController');
+// 1. 获取所有健康体检
+router.get('/',getAllHealthCheckups);
 
-// 2. 创建新的老人入住退住数据
+// 2. 创建新的健康体检
 // (1) 显示新增老人入住退住表单
-router.get('/new', renderNewElderlyResidentForm);
-// (2) 提交新的老人入住退住数据
-router.post('/create', createElderlyResident);
+router.get('/new', renderNewHealthCheckupForm);
+// (2) 提交新的健康体检
+router.post('/create', createHealthCheckup);
 
-// 3. 更新特定老人入住退住数据
+// 3. 更新特定健康体检
 // (1) 查找特定老人入住退住并显示编辑表单
-router.get('/:_id/update', getElderlyResidentById);
-// (2) 提交更新后的老人入住退住数据
-router.put('/:_id', updateElderlyResident);
+router.get('/:_id/update', getHealthCheckupById);
+// (2) 提交更新后的健康体检
+router.put('/:_id', updateHealthCheckup);
 
-// 4. 删除特定老人入住退住数据
-router.delete('/:_id/delete', deleteElderlyResident);
+// 4. 删除特定健康体检
+router.delete('/:_id/delete', deleteHealthCheckup);
 
 module.exports = router;

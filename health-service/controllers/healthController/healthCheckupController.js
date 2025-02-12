@@ -9,7 +9,7 @@ const Employee = require('../../models/employeeModel.js');
 const User = require('../../models/userModel.js');
 
 // 获取老人所有的入住退住记录
-const getAllElderlyResidents = async (req, res) => {
+const getAllHealthCheckups = async (req, res) => {
   console.log('Received request to get all elderly residents'); // 调试信息
   const { _id, role } = req.query;
   console.log('Query parameters:', _id, role); // 调试信息
@@ -156,7 +156,7 @@ const getAllElderlyResidents = async (req, res) => {
 
 // 2. 创建新的老人入住退住
 // (1) 显示新增老人入住退住表单(查找available的bedId、未分配床位的elderlyId)
-const renderNewElderlyResidentForm = async (req, res) => {
+const renderNewHealthCheckupForm = async (req, res) => {
   try {
     // 顺序查找 employeeId
     // 聚合管道查找未分配床位的 elderlyId
@@ -193,7 +193,7 @@ const renderNewElderlyResidentForm = async (req, res) => {
   }
 };
 // (2) 提交新的老人入住退住数据
-const createElderlyResident = async (req, res) => {
+const createHealthCheckup = async (req, res) => {
   const residentId = await getNextId('ElderlyResident', 'R', 'residentId');
   const { elderlyId, checkInTime, checkOutTime, status } = req.body;
   console.log(
@@ -240,7 +240,7 @@ const createElderlyResident = async (req, res) => {
 
 // 3. 更新特定老人入住退住数据
 // (1) 查找特定老人入住退住数据
-const getElderlyResidentById = async (req, res) => {
+const getHealthCheckupById = async (req, res) => {
   const { _id } = req.params;
   console.log(`Received request to get elderly resident by ID: ${_id}`); // 调试信息
   try {
@@ -272,7 +272,7 @@ const getElderlyResidentById = async (req, res) => {
   }
 };
 // (2) 提交更新后的老人入住退住数据
-const updateElderlyResident = async (req, res) => {
+const updateHealthCheckup = async (req, res) => {
   const { _id } = req.params; // 从 URL 参数中获取 assignmentId
   const { residentId, elderlyId, checkInTime, checkOutTime, status } = req.body;
 
@@ -322,7 +322,7 @@ const updateElderlyResident = async (req, res) => {
 };
 
 // 4. 删除特定老人入住退住
-const deleteElderlyResident = async (req, res) => {
+const deleteHealthCheckup = async (req, res) => {
   const { _id } = req.params;
 
   try {
@@ -343,10 +343,10 @@ const deleteElderlyResident = async (req, res) => {
 
 // 6. 导出模块
 module.exports = {
-  getAllElderlyResidents,
-  renderNewElderlyResidentForm,
-  createElderlyResident,
-  getElderlyResidentById,
-  updateElderlyResident,
-  deleteElderlyResident,
+  getAllHealthCheckups,
+  renderNewHealthCheckupForm,
+  createHealthCheckup,
+  getHealthCheckupById,
+  updateHealthCheckup,
+  deleteHealthCheckup,
 };
