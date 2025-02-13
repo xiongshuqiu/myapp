@@ -43,7 +43,7 @@ const deleteRequest = async (url) => {
 };
 
 // 1.获取所有护理项目
-const getAllElderlyRecords = async (req, res) => {
+const getAllCareProjects = async (req, res) => {
   const _id = req.user._id;
   const role = req.user.role;
   console.log('User data:', { _id, role }); // 调试信息
@@ -68,7 +68,7 @@ const getAllElderlyRecords = async (req, res) => {
 };
 // 2.创建新的护理项目
 //(1)显示新增护理项目表单
-const renderNewElderlyRecordForm = async (req, res) => {
+const renderNewCareProjectForm = async (req, res) => {
   const apiUrl = `${process.env.API_URL}/api/health/care/project/new`;
   console.log('API URL:', apiUrl); // 调试信息
   try {
@@ -92,7 +92,7 @@ const renderNewElderlyRecordForm = async (req, res) => {
 };
 
 //(2)提交新的护理项目数据
-const createElderlyRecord = async (req, res) => {
+const createCareProject = async (req, res) => {
   const {
     elderlyName,
     elderlyPhone,
@@ -137,7 +137,7 @@ const createElderlyRecord = async (req, res) => {
 
 // 3.更新特定护理项目
 // (1)查找特定护理项目并显示编辑表单
-const getElderlyRecordById = async (req, res) => {
+const getCareProjectById = async (req, res) => {
   const { _id } = req.params; // 从参数中获取 _id
   console.log(`Fetching bedAssignment with ID: ${_id}`); // 调试信息
   try {
@@ -161,7 +161,7 @@ const getElderlyRecordById = async (req, res) => {
 };
 
 //(2) 提交更新后的护理项目数据
-const updateElderlyRecord = async (req, res) => {
+const updateCareProject = async (req, res) => {
   const {
     elderlyName,
     elderlyPhone,
@@ -206,7 +206,7 @@ const updateElderlyRecord = async (req, res) => {
 };
 
 // 4. 删除特定护理项目
-const deleteElderlyRecord = async (req, res) => {
+const deleteCareProject = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取_id
     console.log(_id);
@@ -221,10 +221,10 @@ const deleteElderlyRecord = async (req, res) => {
   }
 };
 module.exports = {
-  getAllElderlyRecords,
-  renderNewElderlyRecordForm,
-  createElderlyRecord,
-  getElderlyRecordById,
-  updateElderlyRecord,
-  deleteElderlyRecord,
+  getAllCareProjects,
+  renderNewCareProjectForm,
+  createCareProject,
+  getCareProjectById,
+  updateCareProject,
+  deleteCareProject
 };

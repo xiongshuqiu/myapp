@@ -10,6 +10,7 @@ const HealthCheckup = require('../../models/healthCheckupModel.js');
 const HealthRecord = require('../../models/healthRecordModel.js');
 const User = require('../../models/userModel.js');
 
+
 // 1. 获取所有老人请假请求
 const getAllHealthRecords = async (req, res) => {
   console.log('Received request to get all elderly leaves'); // 调试信息

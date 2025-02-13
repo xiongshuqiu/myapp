@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 
 // 5-5 护理任务模型
-const CareTaskSchema = new Schema({
+const CareTaskSchema =  new mongoose.Schema({
   careTaskId: { type: String, required: true }, // 护理任务 ID，必须填写（例如 CT1）
   taskName: { type: String, required: true }, // 任务名称，必须填写
   description: { type: String }, // 任务描述，可选

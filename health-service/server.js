@@ -4,6 +4,6 @@
  const PORT = process.env.PORT;
 // 启动Express服务器并监听指定端口
 app.listen(PORT, () => {
-    console.log(`elderly-service running on  port ${PORT}`);
+    console.log(`health-service running on  port ${PORT}`);
   });
    

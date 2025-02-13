@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 // 5-1健康档案模型
-const HealthRecordSchema = new Schema({
+const HealthRecordSchema =  new mongoose.Schema({
   healthRecordId: { type: String, required: true }, // 健康记录 ID，必须填写HR1
   elderlyId: { type: String, ref: 'Elderly', required: true }, // 老人引用，必须填写
   medicalHistory: [{ type: String, trim: true }], // 患者病史，可选字段，存储多个病史条目，示例：["高血压", "糖尿病", "心脏病"]

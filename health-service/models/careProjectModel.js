@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const CareProjectSchema = new Schema({
+const CareProjectSchema =  new mongoose.Schema({
   careProjectId: { type: String, required: true }, // 护理项目记录 ID，必须填写CP1
   projectName: { type: String, required: true }, // 项目名称，必须填写
   description: { type: String }, // 项目描述，可选字段

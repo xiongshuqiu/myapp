@@ -4,7 +4,7 @@ const router = express.Router();
 const { authorizeRole } = require('../../../../middleware/authMiddleware');
 const {
   bntLinkVisibility,
-} = require('../../visibilityMiddleware/bntLinkVisibility');
+} = require('../../../visibilityMiddleware/bntLinkVisibility');
 const {
   getAllCarePlans,
   renderNewCarePlanForm,

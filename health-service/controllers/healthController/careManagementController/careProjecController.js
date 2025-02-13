@@ -1,7 +1,13 @@
 const mongoose = require('mongoose');
 const getNextId = require('../genericController.js');
+const CareLevel = require('../../../models/careLevelModel.js');
+const CarePlan = require('../../../models/carePlanModel.js');
+const CareProject = require('../../../models/careProjectModel.js');
+const CareTask = require('../../../models/careTaskModel.js');
 const Elderly = require('../../../models/elderlyModel.js');
 const Employee = require('../../../models/employeeModel.js');
+const HealthCheckup = require('../../../models/healthCheckupModel.js');
+const HealthRecord = require('../../../models/healthRecordModel.js');
 const User = require('../../../models/userModel.js');
 
 // 1.获取所有老人档案

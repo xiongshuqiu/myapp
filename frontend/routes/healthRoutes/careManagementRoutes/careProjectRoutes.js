@@ -4,7 +4,7 @@ const router = express.Router();
 const { authorizeRole } = require('../../../../middleware/authMiddleware');
 const {
   bntLinkVisibility,
-} = require('../../visibilityMiddleware/bntLinkVisibility');
+} = require('../../../visibilityMiddleware/bntLinkVisibility');
 const {
   getAllCareProjects,
   renderNewCareProjectForm,
@@ -15,7 +15,6 @@ const {
 } = require('../../../controllers/healthController/careManagementController/careProjecController');
 // 1. 获取所有护理项目
 router.get('/', bntLinkVisibility, getAllCareProjects);
-
 // 2. 创建新的护理项目
 // (1) 显示新增护理项目表单(查找可用的bedId、elderlyId)
 router.get('/new', renderNewCareProjectForm);

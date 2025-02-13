@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 // 5-6 健康体检模型
-const HealthCheckupSchema = new Schema({
+const HealthCheckupSchema =  new mongoose.Schema({
   checkupId: { type: String, required: true }, // 健康体检 ID，必须填写（例如 HC1）
   checkupName: { type: String, required: true }, // 健康体检名称，必须填写
   description: { type: String }, // 健康体检描述，可选

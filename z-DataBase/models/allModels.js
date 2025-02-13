@@ -112,7 +112,7 @@ const BedAssignment = mongoose.model('BedAssignment', bedAssignmentSchema);
 const Schema = mongoose.Schema;
 
 // 5-1健康档案模型
-const HealthRecordSchema = new Schema({
+const HealthRecordSchema = new mongoose.Schema({
   healthRecordId: { type: String, required: true }, // 健康记录 ID，必须填写HR1
   elderlyId: { type: String, ref: 'Elderly', required: true }, // 老人引用，必须填写
   medicalHistory: [{ type: String, trim: true }], // 患者病史，可选字段，存储多个病史条目，示例：["高血压", "糖尿病", "心脏病"]
@@ -123,7 +123,7 @@ const HealthRecordSchema = new Schema({
 const HealthRecord = mongoose.model('HealthRecord', HealthRecordSchema);
 
 // 5-2护理等级模型
-const CareLevelSchema = new Schema({
+const CareLevelSchema = new mongoose.Schema({
   careLevelId: { type: String, required: true }, // 护理等级记录 ID，必须填写CL1
   level: { type: String, required: true }, // 护理等级，必须填写
   description: { type: String }, // 护理等级的描述，可选字段
@@ -132,7 +132,7 @@ const CareLevelSchema = new Schema({
 const CareLevel = mongoose.model('CareLevel', CareLevelSchema);
 
 // 5-3护理项目模型
-const CareProjectSchema = new Schema({
+const CareProjectSchema = new mongoose.Schema({
   careProjectId: { type: String, required: true }, // 护理项目记录 ID，必须填写CP1
   projectName: { type: String, required: true }, // 项目名称，必须填写
   description: { type: String }, // 项目描述，可选字段
@@ -146,7 +146,7 @@ const CareProjectSchema = new Schema({
 const CareProject = mongoose.model('CareProject', CareProjectSchema);
 
 // 5-4护理计划模型
-const CarePlanSchema = new Schema({
+const CarePlanSchema = new mongoose.Schema({
   carePlanId: { type: String, required: true }, // 护理计划记录 ID，必须填写PL1
   planName: { type: String, required: true }, // 计划名称，必须填写
   description: { type: String }, // 计划描述，可选字段
@@ -158,7 +158,7 @@ const CarePlanSchema = new Schema({
 const CarePlan = mongoose.model('CarePlan', CarePlanSchema);
 
 // 5-5 护理任务模型
-const CareTaskSchema = new Schema({
+const CareTaskSchema = new mongoose.Schema({
   careTaskId: { type: String, required: true }, // 护理任务 ID，必须填写（例如 CT1）
   taskName: { type: String, required: true }, // 任务名称，必须填写
   description: { type: String }, // 任务描述，可选
@@ -177,7 +177,7 @@ const CareTaskSchema = new Schema({
 const CareTask = mongoose.model('CareTask', CareTaskSchema);
 
 // 5-6 健康体检模型
-const HealthCheckupSchema = new Schema({
+const HealthCheckupSchema = new mongoose.Schema({
   checkupId: { type: String, required: true }, // 健康体检 ID，必须填写（例如 HC1）
   checkupName: { type: String, required: true }, // 健康体检名称，必须填写
   description: { type: String }, // 健康体检描述，可选
