@@ -10,10 +10,9 @@ const HealthCheckup = require('../../models/healthCheckupModel.js');
 const HealthRecord = require('../../models/healthRecordModel.js');
 const User = require('../../models/userModel.js');
 
-
-// 1. 获取所有老人请假请求
+// 1. 获取所有健康档案
 const getAllHealthRecords = async (req, res) => {
-  console.log('Received request to get all elderly leaves'); // 调试信息
+  console.log('Received request to get all health records'); // 调试信息
   const { _id, role } = req.query;
   console.log('Query parameters:', _id, role); // 调试信息
 
@@ -98,7 +97,7 @@ const getAllHealthRecords = async (req, res) => {
     }
 
     // 使用聚合管道进行后续查询
-    const elderlyLeaves = await ElderlyLeave.aggregate([
+    const healthRecords = await HealthRecord.aggregate([
       {
         $match: query,
       },
@@ -115,95 +114,103 @@ const getAllHealthRecords = async (req, res) => {
       {
         $project: {
           // 投影所需的字段
-          leaveId: 1,
+          healthRecordId: 1,
           elderlyId: 1,
           elderlyName: '$elderlyDetails.elderlyName', // 获取 elderlies 集合中的 elderlyName
-          reason: 1,
-          startDate: {
-            $dateToString: { format: '%Y-%m-%d', date: '$startDate' },
-          }, // 格式化 startDate
-          endDate: { $dateToString: { format: '%Y-%m-%d', date: '$endDate' } },
-          status: 1,
-          type: 1,
-          additionalNotes: 1,
-          applicationDate: {
-            $dateToString: { format: '%Y-%m-%d', date: '$applicationDate' },
+          medicalHistory: 1,
+          allergies: 1,
+          medications: 1,
+          createdAt: {
+            $dateToString: { format: '%Y-%m-%d', date: '$createdAt' },
           },
         },
       },
     ]);
     res.status(200).json({
       success: true,
-      message: 'elderly leaves retrieved successfully', // 成功信息改为英文
-      data: elderlyLeaves,
+      message: 'health records retrieved successfully', // 成功信息改为英文
+      data: healthRecords,
     });
-    console.log(elderlyLeaves); // 调试信息
+    console.log(healthRecords); // 调试信息
   } catch (err) {
-    console.error('Error retrieving elderly leaves:', err.message); // 错误信息改为英文
+    console.error('Error retrieving health records:', err.message); // 错误信息改为英文
     res.status(500).json({ success: false, message: err.message });
   }
 };
 
-// 2. 创建新的老人请假请求
+// 2. 创建新的健康档案
 // (1) 显示老人申请请假表单(查找elderlyId)
 const renderNewHealthRecordForm = async (req, res) => {
   try {
     // 顺序查找elderlyIds
-    const elderlyIds = await Elderly.find({}).select('elderlyId elderlyName');
-
-    console.log('Elderly IDs:', elderlyIds);
+    // 聚合管道查找没有记录健康的老人 elderlyId、elderlyName
+    const unrecordedElderlyIds = await Elderly.aggregate([
+      {
+        $lookup: {
+          from: 'healthrecords',
+          localField: 'elderlyId',
+          foreignField: 'elderlyId',
+          as: 'healthRecordDetails',
+        },
+      },
+      {
+        $match: {
+          'healthRecordDetails.elderlyId': { $exists: false },
+        },
+      },
+      {
+        $project: {
+          elderlyId: 1,
+          elderlyName: 1, // 您可以根据需要选择其他字段
+        },
+      },
+    ]);
 
     return res.status(200).json({
       success: true,
       message: 'ElderlyIds retrieved successfully',
-      data: { elderlyIds },
+      data: unrecordedElderlyIds,
     });
   } catch (err) {
     console.error('Error retrieving  elderlyIds:', err.message); // 调试信息
     res.status(500).json({ success: false, message: err.message });
   }
 };
-// (2) 提交老人请假请求数据
+// (2) 提交健康档案数据
 const createHealthRecord = async (req, res) => {
-  // 生成新的 leaveId
-  const leaveId = await getNextId('ElderlyLeave', 'LR', 'leaveId');
-  const {
-    elderlyId,
-    reason,
-    startDate,
-    endDate,
-    status,
-    type,
-    additionalNotes,
-    applicationDate,
-  } = req.body;
-  console.log(
-    'Received request to create  elderly leave request with data:',
-    req.body,
-  ); // 调试信息
   try {
-    // 创建并保存请假申请
-    const newElderlyLeave = new ElderlyLeave({
-      leaveId,
-      elderlyId,
-      reason,
-      startDate,
-      endDate,
-      status,
-      type,
-      additionalNotes,
-      applicationDate,
-    });
-    await newElderlyLeave.save();
+    // 生成新的 healthRecordId
+    const healthRecordId = await getNextId(
+      'HealthRecord',
+      'HR',
+      'healthRecordId',
+    );
+    const { elderlyId, medicalHistory, allergies, medications, createdAt } =
+      req.body;
+    console.log(
+      'Received request to create health record with data:',
+      req.body,
+    ); // 调试信息
 
-    console.log('Elderly leave created  successfully:', newElderlyLeave); // 调试信息
+    // 创建并保存健康档案
+    const newHealthRecord = new HealthRecord({
+      healthRecordId,
+      elderlyId,
+      medicalHistory,
+      allergies,
+      medications,
+      createdAt,
+    });
+    await newHealthRecord.save();
+
+    console.log('Health record created successfully:', newHealthRecord); // 调试信息
     return res.status(201).json({
       success: true,
-      message: 'Elderly leave created successfully',
-      data: newElderlyLeave,
+      message: 'Health record created successfully',
+      data: newHealthRecord,
     });
   } catch (error) {
-    console.error('Error creating elderly leave:', error.message); // 调试信息
+    console.error('Error creating health record:', error.message); // 调试信息
     return res.status(500).json({
       success: false,
       message: 'An error occurred',
@@ -212,66 +219,66 @@ const createHealthRecord = async (req, res) => {
   }
 };
 
-// 3. 管理员批复老人请假请求
-// (1) 查找特定老人请假请求并进行批复
+// 3. 管理员批复健康档案
+// (1) 查找特定健康档案并进行批复
 const getHealthRecordById = async (req, res) => {
   const { _id } = req.params;
   console.log(`Received request to get elderly leave by ID: ${_id}`); // 调试信息
   try {
-      // 使用聚合管道进行后续查询
-      const elderlyLeaves = await ElderlyLeave.aggregate([
-        {
-          $match: { _id: new mongoose.Types.ObjectId(_id) }, // 使用 new 关键字实例化 ObjectId
+    // 使用聚合管道进行后续查询
+    const elderlyLeaves = await ElderlyLeave.aggregate([
+      {
+        $match: { _id: new mongoose.Types.ObjectId(_id) }, // 使用 new 关键字实例化 ObjectId
+      },
+      {
+        $lookup: {
+          // 从 'elderlies' 集合中查找与 'elderlyId' 关联的数据
+          from: 'elderlies',
+          localField: 'elderlyId', // 当前集合中的字段
+          foreignField: 'elderlyId',
+          as: 'elderlyDetails',
         },
-        {
-          $lookup: {
-            // 从 'elderlies' 集合中查找与 'elderlyId' 关联的数据
-            from: 'elderlies',
-            localField: 'elderlyId', // 当前集合中的字段
-            foreignField: 'elderlyId',
-            as: 'elderlyDetails',
+      },
+      {
+        $unwind: {
+          path: '$elderlyDetails',
+          preserveNullAndEmptyArrays: true,
+        },
+      }, // 展开 elderlyDetails 数组
+      {
+        $project: {
+          // 投影所需的字段
+          elderlyId: 1,
+          elderlyName: '$elderlyDetails.elderlyName', // 获取 elderlies 集合中的 elderlyName
+          reason: 1,
+          startDate: {
+            $dateToString: { format: '%Y-%m-%d', date: '$startDate' },
+          }, // 格式化 startDate
+          endDate: {
+            $dateToString: { format: '%Y-%m-%d', date: '$endDate' },
+          },
+          status: 1,
+          type: 1,
+          additionalNotes: 1,
+          applicationDate: {
+            $dateToString: { format: '%Y-%m-%d', date: '$applicationDate' },
           },
         },
-        {
-          $unwind: {
-            path: '$elderlyDetails',
-            preserveNullAndEmptyArrays: true,
-          },
-        }, // 展开 elderlyDetails 数组
-        {
-          $project: {
-            // 投影所需的字段
-            elderlyId: 1,
-            elderlyName: '$elderlyDetails.elderlyName', // 获取 elderlies 集合中的 elderlyName
-            reason: 1,
-            startDate: {
-              $dateToString: { format: '%Y-%m-%d', date: '$startDate' },
-            }, // 格式化 startDate
-            endDate: {
-              $dateToString: { format: '%Y-%m-%d', date: '$endDate' },
-            },
-            status: 1,
-            type: 1,
-            additionalNotes: 1,
-            applicationDate: {
-              $dateToString: { format: '%Y-%m-%d', date: '$applicationDate' },
-            },
-          },
-        },
-      ]);
-      console.log(elderlyLeaves);
-      return res.status(200).json({
-        success: true,
-        message: 'ElderlyLeave and elderlyIds retrieved successfully',
-        data: elderlyLeaves,
-      });
-     
+      },
+      { $sort: { healthRecordId: 1 } }, // 按 healthRecordId 排序
+    ]);
+    console.log(elderlyLeaves);
+    return res.status(200).json({
+      success: true,
+      message: 'ElderlyLeave and elderlyIds retrieved successfully',
+      data: elderlyLeaves,
+    });
   } catch (err) {
     console.error('Error retrieving elderly leave:', err.message); // 调试信息
     return res.status(500).json({ success: false, message: err.message });
   }
 };
-// (2) 提交更新后的老人请假请求数据
+// (2) 提交更新后的健康档案数据
 const updateHealthRecord = async (req, res) => {
   const { _id } = req.params;
   const {
@@ -291,10 +298,10 @@ const updateHealthRecord = async (req, res) => {
     // 查找现有的请假记录
     const existingElderlyLeave = await ElderlyLeave.findOne({ _id });
     if (!existingElderlyLeave) {
-      console.warn(`Elderly leave not found: ${_id}`); // 调试信息
+      console.warn(`Health record not found: ${_id}`); // 调试信息
       return res
         .status(404)
-        .json({ success: false, message: 'Elderly leave not found' });
+        .json({ success: false, message: 'Health record not found' });
     }
 
     // 更新请假记录
@@ -311,10 +318,10 @@ const updateHealthRecord = async (req, res) => {
 
     await existingElderlyLeave.save();
 
-    console.log('Elderly leave updated successfully:', existingElderlyLeave); // 调试信息
+    console.log('Health record updated successfully:', existingElderlyLeave); // 调试信息
     return res.status(200).json({
       success: true,
-      message: 'Elderly leave updated successfully',
+      message: 'Health record updated successfully',
       data: existingElderlyLeave,
     });
   } catch (error) {
@@ -332,11 +339,11 @@ const deleteHealthRecord = async (req, res) => {
   const { _id } = req.params;
 
   try {
-    await ElderlyLeave.findByIdAndDelete(_id); // 根据ID删除床位分配
-    console.log('Elderly leave deleted successfully:', _id); // 调试信息
+    await HealthRecord.findByIdAndDelete(_id); // 根据ID删除床位分配
+    console.log('Health record deleted successfully:', _id); // 调试信息
     return res
       .status(200)
-      .json({ success: true, message: 'Elderly leave deleted successfully' });
+      .json({ success: true, message: 'Health record deleted successfully' });
   } catch (error) {
     console.error('Error deleting bed status:', error.message); // 调试信息
     return res.status(400).json({
@@ -354,5 +361,5 @@ module.exports = {
   createHealthRecord,
   getHealthRecordById,
   updateHealthRecord,
-  deleteHealthRecord
+  deleteHealthRecord,
 };

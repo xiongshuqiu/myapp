@@ -14,7 +14,7 @@ const getNextId = async (modelName, prefix, idField) => {
 
         // Generate the new ID
         seq += 1;
-        const newId = `${prefix}${String(seq).padStart(3, '0')}`;
+        const newId = `${prefix}${String(seq).padStart(5, '0')}`;
         return newId;
     } catch (err) {
         console.error('Error getting next ID:', err);

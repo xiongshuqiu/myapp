@@ -63,6 +63,13 @@ function bntLinkVisibility(req, res, next) {
         href: '/elderly/leave/new',
         roles: ['family'],
       },
+        //老人健康档案增加
+        {
+          id: 'add-healthRecord-btn',
+          name: 'AddHealthRecord',
+          href: '/health/record/new',
+          roles: ['admin'],
+        },
     ];
     return buttonItems.map((item) => ({
       ...item,
@@ -141,6 +148,15 @@ function bntLinkVisibility(req, res, next) {
         },
         {
           id: 'delete-elderlyLeave-link',
+          roles: ['admin'],
+      },
+         //编辑和删除健康档案
+         {
+          id: 'edit-healthRecord-link',
+          roles: ['admin'],
+        },
+        {
+          id: 'delete-healthRecord-link',
           roles: ['admin'],
         },
     ];

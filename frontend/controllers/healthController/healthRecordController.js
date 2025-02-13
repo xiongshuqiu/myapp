@@ -13,7 +13,7 @@ const handleError = (
   console.error('Error:', err.response ? err.response.data : err.message); // 输出详细调试信息
   if (!res.headersSent) {
     res.status(err.response?.status || 500).render(targetPage, {
-      activePage: 'elderly-management',
+      activePage: 'health-management',
       message: err.response?.data?.message || msg,
       navItems: req.navItems, // 将导航项传递到视图
     });
@@ -52,12 +52,12 @@ const getAllHealthRecords = async (req, res) => {
 
   try {
     const response = await getRequest(apiUrl);
-    const elderlyLeaves = response.data;
+    const healthRecords = response.data;
     if (response.success) {
       console.log(response);
       res.render('health/healthRecord/healthRecordManagement', {
-        activePage: 'elderly-management',
-        elderlyLeaves,
+        activePage: 'health-management',
+        healthRecords,
         navItems: req.navItems, // 将导航项传递到视图
         buttonItems: req.buttonItems,
         linkItems: req.linkItems,
@@ -76,11 +76,11 @@ const renderNewHealthRecordForm = async (req, res) => {
     const response = await getRequest(apiUrl);
 
     if (response.success) {
-      const { elderlyIds } = response.data;
+      const unrecordedElderlyIds = response.data;
       res.render('health/healthRecord/healthRecordCreate.ejs', {
-        activePage: 'elderly-management',
+        activePage: 'health-management',
         navItems: req.navItems, // 将导航项传递到视图
-        elderlyIds,
+        unrecordedElderlyIds,
       });
     } else {
       throw new Error('Failed to retrieve data from API');
@@ -93,26 +93,15 @@ const renderNewHealthRecordForm = async (req, res) => {
 
 //(2)提交新的老人健康档案数据
 const createHealthRecord = async (req, res) => {
-  const {
-    elderlyId,
-    reason,
-    startDate,
-    endDate,
-    status,
-    type,
-    additionalNotes,
-    applicationDate,
-  } = req.body;
+  const { elderlyId, medicalHistory, allergies, medications, createdAt } =
+    req.body;
   try {
     const data = {
       elderlyId,
-      reason,
-      startDate,
-      endDate,
-      status,
-      type,
-      additionalNotes,
-      applicationDate,
+      medicalHistory,
+      allergies,
+      medications,
+      createdAt,
     };
 
     const apiUrl = `${process.env.API_URL}/api/health/record/create`;
@@ -138,14 +127,14 @@ const getHealthRecordById = async (req, res) => {
     const apiUrl = `${process.env.API_URL}/api/health/record/${_id}/update`;
     console.log(apiUrl);
     const response = await getRequest(apiUrl); // 使用组装的URL进行API调用
-    const elderlyLeaves = response.data;
-    console.log(elderlyLeaves);
+    const healthRecords = response.data;
+    console.log(healthRecords);
     if (response.success) {
       console.log(response);
       res.render('health/healthRecord/healthRecordUpdate.ejs', {
-        activePage: 'elderly-management',
+        activePage: 'health-management',
         navItems: req.navItems,
-        elderlyLeaves,
+        healthRecords,
       });
     }
   } catch (err) {
@@ -212,5 +201,5 @@ module.exports = {
   createHealthRecord,
   getHealthRecordById,
   updateHealthRecord,
-  deleteHealthRecord
+  deleteHealthRecord,
 };

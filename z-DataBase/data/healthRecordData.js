@@ -1,6 +1,6 @@
 const healthrecords = [
   {
-    healthRecordId: 'HR1',
+    healthRecordId: 'HR00001',
     elderlyId: 'E001',
     medicalHistory: ['高血压', '糖尿病'],
     allergies: ['花生', '青霉素'],
@@ -8,7 +8,7 @@ const healthrecords = [
     createdAt: '2025-02-11T18:16:00Z',
   },
   {
-    healthRecordId: 'HR2',
+    healthRecordId: 'HR00002',
     elderlyId: 'E002',
     medicalHistory: ['心脏病', '哮喘'],
     allergies: ['尘螨'],
@@ -16,7 +16,7 @@ const healthrecords = [
     createdAt: '2025-02-11T18:16:00Z',
   },
   {
-    healthRecordId: 'HR3',
+    healthRecordId: 'HR00003',
     elderlyId: 'E003',
     medicalHistory: ['类风湿关节炎'],
     allergies: ['花粉'],
@@ -24,7 +24,7 @@ const healthrecords = [
     createdAt: '2025-02-11T18:16:00Z',
   },
   {
-    healthRecordId: 'HR4',
+    healthRecordId: 'HR00004',
     elderlyId: 'E004',
     medicalHistory: ['高血压'],
     allergies: ['草莓'],
@@ -32,7 +32,7 @@ const healthrecords = [
     createdAt: '2025-02-11T18:17:00Z',
   },
   {
-    healthRecordId: 'HR5',
+    healthRecordId: 'HR00005',
     elderlyId: 'E005',
     medicalHistory: ['糖尿病'],
     allergies: ['贝壳类'],
@@ -40,7 +40,7 @@ const healthrecords = [
     createdAt: '2025-02-11T18:17:00Z',
   },
   {
-    healthRecordId: 'HR6',
+    healthRecordId: 'HR00006',
     elderlyId: 'E006',
     medicalHistory: ['哮喘'],
     allergies: ['动物皮毛'],
@@ -48,7 +48,7 @@ const healthrecords = [
     createdAt: '2025-02-11T18:18:00Z',
   },
   {
-    healthRecordId: 'HR7',
+    healthRecordId: 'HR00007',
     elderlyId: 'E007',
     medicalHistory: ['阿尔茨海默病'],
     allergies: ['花生'],
@@ -56,7 +56,7 @@ const healthrecords = [
     createdAt: '2025-02-11T18:18:00Z',
   },
   {
-    healthRecordId: 'HR8',
+    healthRecordId: 'HR00008',
     elderlyId: 'E008',
     medicalHistory: ['高血压', '心脏病'],
     allergies: ['花粉'],
@@ -64,7 +64,7 @@ const healthrecords = [
     createdAt: '2025-02-11T18:19:00Z',
   },
   {
-    healthRecordId: 'HR9',
+    healthRecordId: 'HR00009',
     elderlyId: 'E009',
     medicalHistory: ['帕金森病'],
     allergies: ['无'],
@@ -72,7 +72,7 @@ const healthrecords = [
     createdAt: '2025-02-11T18:19:00Z',
   },
   {
-    healthRecordId: 'HR10',
+    healthRecordId: 'HR00010',
     elderlyId: 'E010',
     medicalHistory: ['高血脂'],
     allergies: ['尘螨'],

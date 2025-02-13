@@ -137,7 +137,7 @@ function getNavItems(role) {
       subMenu: [
         {
           name: 'Health Records',
-          href: '#',
+          href: '/health/record/',
           roles: ['admin', 'family', 'medical'],
         },
         {

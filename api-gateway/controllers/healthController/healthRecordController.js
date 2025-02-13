@@ -31,7 +31,7 @@ const deleteRequest = async (url) => {
   const response = await axios.delete(url);
   return response.data;
 };
-// 1. 获取所有老人入住和退住数据
+// 1. 获取所有健康档案
 const getAllHealthRecords = async (req, res) => {
   const { _id, role } = req.query; // 从查询参数中获取传递的数据
   try {
@@ -46,8 +46,8 @@ const getAllHealthRecords = async (req, res) => {
   }
 };
 
-// 2. 创建新的老人入住和退住数据
-// (1) 显示新增老人入住和退住数据表单(查找可用的bedId、elderlyId)
+// 2. 创建新的健康档案
+// (1) 显示新增健康档案表单(查找可用的bedId、elderlyId)
 const renderNewHealthRecordForm = async (req, res) => {
   try {
     const url = `${process.env.HEALTH_SERVICE_URL}/health/record/new`;
@@ -60,16 +60,18 @@ const renderNewHealthRecordForm = async (req, res) => {
     handleError(err, res);
   }
 };
-// (2) 提交新的老人入住和退住数据数据
+// (2) 提交新的健康档案数据
 const createHealthRecord = async (req, res) => {
-  const { elderlyId, checkInTime, checkOutTime, status } = req.body; // 从请求体中获取所有用户信息
+  const { elderlyId, medicalHistory, allergies, medications, createdAt } =
+    req.body; // 从请求体中获取所有用户信息
 
   try {
     const data = {
       elderlyId,
-      checkInTime,
-      checkOutTime,
-      status,
+      medicalHistory,
+      allergies,
+      medications,
+      createdAt,
     };
     const url = `${process.env.HEALTH_SERVICE_URL}/health/record/create`;
     const response = await postRequest(url, data); // 发送 POST 请求以创建新用户
@@ -81,8 +83,8 @@ const createHealthRecord = async (req, res) => {
     handleError(err, res);
   }
 };
-// 3. 更新特定老人入住和退住数据
-// (1) 查找特定老人入住和退住数据并显示编辑表单
+// 3. 更新特定健康档案
+// (1) 查找特定健康档案并显示编辑表单
 const getHealthRecordById = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取 _id
@@ -96,7 +98,7 @@ const getHealthRecordById = async (req, res) => {
     handleError(err, res);
   }
 };
-// (2) 提交更新后的老人入住和退住数据数据
+// (2) 提交更新后的健康档案数据
 const updateHealthRecord = async (req, res) => {
   const { elderlyId, checkInTime, checkOutTime, status } = req.body;
   try {
@@ -118,7 +120,7 @@ const updateHealthRecord = async (req, res) => {
   }
 };
 
-// 4. 删除特定老人入住和退住数据
+// 4. 删除特定健康档案
 const deleteHealthRecord = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取 userId
