@@ -24,20 +24,21 @@
 
   <body>
     <div id="wrapper">
-     <!-- 顶部导航条 -->
-     <%- include('../../block/top-navbar.ejs') %>
-     <!-- 左侧导航条 -->
-     <%- include('../../block/navbar-side.ejs') %>
+      <!-- 顶部导航条 -->
+      <%- include('../../block/top-navbar.ejs') %>
+      <!-- 左侧导航条 -->
+      <%- include('../../block/navbar-side.ejs') %>
 
       <div id="page-wrapper">
         <div class="header">
           <h1 class="page-header">
-            Update ElderlyResident Information <small>Modify the ElderlyResident's details.</small>
+            Update HealthCheckup Information
+            <small>Modify the HealthCheckup's details.</small>
           </h1>
           <ol class="breadcrumb">
             <li><a href="#">Home</a></li>
             <li><a href="#">Forms</a></li>
-            <li class="active">Update ElderlyResident</li>
+            <li class="active">Update HealthCheckup</li>
           </ol>
         </div>
 
@@ -45,83 +46,150 @@
           <div class="row">
             <div class="col-lg-12">
               <div class="panel panel-default">
-                <div class="panel-heading">ElderlyResident Information</div>
+                <div class="panel-heading">HealthCheckup Information</div>
                 <div class="panel-body">
                   <div class="row">
                     <div class="col-lg-6">
+                     <% healthCheckups.forEach(function(healthCheckup){ %>
                       <form
-                        action="/elderly/resident/<%= elderlyResident._id  %>?_method=PUT"
+                        action="/health/checkup/<%= healthCheckup._id  %>?_method=PUT"
                         method="post"
                         role="form"
-                      >  
-
-                      <div class="form-group">
-                        <label for="elderlyId">Elderly ID(Name) <span style="color: red">*</span></label>
-                        <select class="form-control" id="elderlyId" name="elderlyId" required>
-                          <% if (elderlyIds && elderlyIds.length > 0) { %>
-                            <% elderlyIds.forEach(function(elderly) { %>
-                              <option value="<%= elderly.elderlyId %>" <%= elderlyResident.elderlyId === elderly.elderlyId ? 'selected' : '' %>>
-                                ElderlyId: <%= elderly.elderlyId %> (<%= elderly.elderlyName %>)
-                              </option>
-                            <% }); %>
-                          <% } else { %>
-                            <option value="">No existing ElderlyId</option>
-                          <% } %>
-                        </select>
-                      </div>
-                      
-                      <div class="form-group">
-                        <label for="checkInTime">Check In Time <span style="color: red">*</span></label>
-                        <div class="input-wrapper">
+                      >
+                        <div class="form-group">
+                          <label for="elderlyId"
+                            >Elderly ID(Name)<span style="color: red">*</span>:
+                            <span>
+                              <%= healthCheckup.elderlyId %> (<%=
+                              healthCheckup.elderlyName %>)</span
+                            >
+                          </label>
                           <input
-                            type="date"
-                            class="form-control date-input"
-                            id="checkInTime"
-                            name="checkInTime"
-                            value="<%= elderlyResident.checkInTime ? new Date(elderlyResident.checkInTime).toISOString().split('T')[0] : '' %>"
-                             />
+                            class="hidden"
+                            id="elderlyId"
+                            name="elderlyId"
+                            required
+                            value="<%= healthCheckup.elderlyId %>"
+                          />
+                        </div>
+
+                        <div class="form-group">
+                          <label for="checkupName"
+                            >Checkup Name
+                            <span style="color: red">*</span></label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="checkupName"
+                            name="checkupName"
+                            required
+                            value="<%= healthCheckup.checkupName %>"
+                          />
+                        </div>
+
+                        <div class="form-group">
+                          <label for="description">Description</label>
+                          <textarea
+                            type="text"
+                            class="form-control"
+                            id="description"
+                            name="description"
+                            rows="4"
+                          >
+<%= healthCheckup.description %></textarea
+                          >
+                        </div>
+
+                        <div class="form-group">
+                          <label for="checkupDate"
+                            >Checkup Date
+                            <span style="color: red">*</span></label
+                          >
+                          <div class="input-wrapper">
+                            <input
+                              type="date"
+                              class="form-control date-input"
+                              id="checkupDate"
+                              name="checkupDate"
+                              value="<%= healthCheckup.checkupDate ? new Date(healthCheckup.checkupDate).toISOString().split('T')[0] : '' %>"
+                            />
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="createdAt">Created Time </label>
+                          <div class="input-wrapper">
+                            <input
+                              type="date"
+                              class="form-control date-input"
+                              id="createdAt"
+                              name="createdAt"
+                              value="<%= healthCheckup.createdAt ? new Date(healthCheckup.createdAt).toISOString().split('T')[0] : '' %>"
+                            />
                           </div>
                         </div>
                      
-                      <div class="form-group">
-                        <label for="checkOutTime">Check Out Time </label>
-                        <div class="input-wrapper">
-                          <input
-                            type="date"
-                            class="form-control date-input"
-                            id="checkOutTime"
-                            name="checkOutTime"
-                            value="<%= elderlyResident.checkOutTime ? new Date(elderlyResident.checkOutTime).toISOString().split('T')[0] : '' %>" 
-                            />
+
+                        <div class="form-group">
+                          <label for="employeeId">
+                            Employee ID (Name)
+                            <span style="color: red">*</span>
+                          </label>
+                          <select
+                            class="form-control"
+                            id="employeeId"
+                            name="employeeId"
+                            required
+                          >
+                            <% if (employeeIds && employeeIds.length > 0) { %> <!-- 检查是否有员工ID -->
+                              <% employeeIds.forEach(function(employee) { %> <!-- 遍历每个员工ID -->
+                                <option value="<%= employee.employeeId %>" <%= healthCheckup.employeeId === employee.employeeId ? 'selected' : '' %>>
+                                  ID: <%= employee.employeeId %> (<%= employee.employeeName %>)
+                                </option>
+                              <% }); %> <!-- 结束遍历 -->
+                            <% } else { %> <!-- 处理没有员工ID的情况 -->
+                              <option value="">No existing employeeId</option>
+                            <% } %> <!-- 结束检查 -->
+                          </select>
                         </div>
-                      </div>
-                    
-                      <div class="form-group">
-                        <label for="status"> Status <span style="color: red">*</span></label>
-                        <select class="form-control" id="status" name="status" required>
-            
-                              <option value="Active" <%= elderlyResident.status === 'Active' ? 'selected' : '' %>>
-                                Active
-                              </option>
-                              <option value="Inactive" <%= elderlyResident.status === 'Inactive' ? 'selected' : '' %>>
-                                Inactive
-                              </option>
-                        </select>
-                      </div>
-                                     
-                       
                         
+                        <div class="form-group">
+                          <label for="careLevelId">
+                            CareLevel ID (Level)
+                            <span style="color: red">*</span>
+                          </label>
+                          <select
+                            class="form-control"
+                            id="careLevelId"
+                            name="careLevelId"
+                            required
+                          >
+                            <% if (careLevelIds && careLevelIds.length > 0) { %> <!-- 检查是否有护理等级ID -->
+                              <% careLevelIds.forEach(function(careLevel) { %> <!-- 遍历每个护理等级ID -->
+                                <option value="<%= careLevel.careLevelId %>" <%= healthCheckup.careLevelId === careLevel.careLevelId ? 'selected' : '' %>>
+                                  ID: <%= careLevel.careLevelId %> (<%= careLevel.level %>)
+                                </option>
+                              <% }); %> <!-- 结束遍历 -->
+                            <% } else { %> <!-- 处理没有护理等级ID的情况 -->
+                              <option value="">No existing careLevelId</option>
+                            <% } %> <!-- 结束检查 -->
+                          </select>
+                        </div>
+                        
+
                         <button type="submit" class="btn btn-primary">
                           Save Changes
                         </button>
                         <button
                           type="reset"
                           class="btn btn-secondary"
-                          onclick="window.location.href='/elderly/resident/';"
+                          onclick="window.location.href='/health/checkup/';"
                         >
                           Return
                         </button>
                       </form>
+                      <% }); %> 
                       <div id="message">
                         <% if (typeof message !== 'undefined' && message !==
                         null) { %>

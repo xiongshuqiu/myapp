@@ -7,13 +7,13 @@ const handleError = (
   err,
   req, //注意一定要增加这个值（每个handleError都要）
   res,
-  targetPage = 'elderly/elderlyResident/elderlyResidentCreate',
+  targetPage = 'health/healthCheckup/healthCheckupCreate',
   msg = 'Server error',
 ) => {
   console.error('Error:', err.response ? err.response.data : err.message); // 输出详细调试信息
   if (!res.headersSent) {
     res.status(err.response?.status || 500).render(targetPage, {
-      activePage: 'elderly-management',
+      activePage: 'health-management',
       message: err.response?.data?.message || msg,
       navItems: req.navItems, // 将导航项传递到视图
     });
@@ -52,11 +52,11 @@ const getAllHealthCheckups = async (req, res) => {
 
   try {
     const response = await getRequest(apiUrl);
-    const elderlyResidents = response.data;
+    const healthCheckups = response.data;
     if (response.success) {
-      res.render('elderly/elderlyResident/elderlyResidentManagement', {
-        activePage: 'elderly-management',
-        elderlyResidents,
+      res.render('health/healthCheckup/healthCheckupManagement', {
+        activePage: 'health-management',
+        healthCheckups,
         navItems: req.navItems, // 将导航项传递到视图
         buttonItems: req.buttonItems,
         linkItems: req.linkItems,
@@ -75,11 +75,14 @@ const renderNewHealthCheckupForm = async (req, res) => {
     const response = await getRequest(apiUrl);
 
     if (response.success) {
-      const { unResidentedElderlyIds } = response.data;
-      res.render('elderly/elderlyResident/elderlyResidentCreate.ejs', {
-        activePage: 'elderly-management',
+      const { unCheckupedElderlyIds, employeeIds, careLevelIds } =
+        response.data;
+      res.render('health/healthCheckup/healthCheckupCreate.ejs', {
+        activePage: 'health-management',
         navItems: req.navItems, // 将导航项传递到视图
-        unResidentedElderlyIds,
+        unCheckupedElderlyIds,
+        employeeIds,
+        careLevelIds,
       });
     } else {
       throw new Error('Failed to retrieve data from API');
@@ -92,13 +95,24 @@ const renderNewHealthCheckupForm = async (req, res) => {
 
 //(2)提交新的健康体检数据
 const createHealthCheckup = async (req, res) => {
-  const { residentId, elderlyId, checkInTime, checkOutTime, status } = req.body;
+  const {
+    checkupName,
+    description,
+    checkupDate,
+    createdAt,
+    elderlyId,
+    employeeId,
+    careLevelId,
+  } = req.body;
   try {
     const data = {
+      checkupName,
+      description,
+      checkupDate,
+      createdAt,
       elderlyId,
-      checkInTime,
-      checkOutTime,
-      status,
+      employeeId,
+      careLevelId,
     };
 
     const apiUrl = `${process.env.API_URL}/api/health/checkup/create`;
@@ -110,7 +124,7 @@ const createHealthCheckup = async (req, res) => {
       res.redirect('/health/checkup/');
     }
   } catch (err) {
-    const targetPage = 'elderly/elderlyResident/elderlyResidentCreate'; //用户需要输入新值
+    const targetPage = 'health/healthCheckup/healthCheckupCreate'; //用户需要输入新值
     handleError(err, req, res, targetPage);
   }
 };
@@ -124,14 +138,15 @@ const getHealthCheckupById = async (req, res) => {
     const apiUrl = `${process.env.API_URL}/api/health/checkup/${_id}/update`;
     console.log(apiUrl);
     const response = await getRequest(apiUrl); // 使用组装的URL进行API调用
-    const { elderlyIds,elderlyResident } = response.data;
+    const { healthCheckups, employeeIds, careLevelIds } = response.data;
     if (response.success) {
       console.log(response);
-      res.render('elderly/elderlyResident/elderlyResidentUpdate.ejs', {
-        activePage: 'elderly-management',
+      res.render('health/healthCheckup/healthCheckupUpdate.ejs', {
+        activePage: 'health-management',
         navItems: req.navItems,
-        elderlyIds,
-        elderlyResident,
+        healthCheckups,
+        employeeIds,
+        careLevelIds,
       });
     }
   } catch (err) {
@@ -141,14 +156,25 @@ const getHealthCheckupById = async (req, res) => {
 
 //(2) 提交更新后的健康体检数据
 const updateHealthCheckup = async (req, res) => {
-  const { residentId, elderlyId, checkInTime, checkOutTime, status } = req.body;
+  const {
+    checkupName,
+    description,
+    checkupDate,
+    createdAt,
+    elderlyId,
+    employeeId,
+    careLevelId,
+  } = req.body;
   const { _id } = req.params;
   try {
     const data = {
+      checkupName,
+      description,
+      checkupDate,
+      createdAt,
       elderlyId,
-      checkInTime,
-      checkOutTime,
-      status,
+      employeeId,
+      careLevelId,
     };
 
     // 从请求参数中获取 _id
@@ -160,7 +186,7 @@ const updateHealthCheckup = async (req, res) => {
       res.redirect('/health/checkup/');
     }
   } catch (err) {
-    const targetPage = 'elderly/elderlyResident/elderlyResidentUpdate'; //用户需要输入新值
+    const targetPage = 'health/healthCheckup/healthCheckupUpdate'; //用户需要输入新值
     handleError(err, req, res, targetPage);
   }
 };

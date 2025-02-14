@@ -1,6 +1,6 @@
 const healthcheckups = [
         {
-          checkupId: 'HC1',
+          checkupId: 'HC00001',
           checkupName: 'Annual Health Checkup',
           description: 'Comprehensive annual health checkup for elderly.',
           checkupDate: '2025-02-01T08:00:00Z',
@@ -10,7 +10,7 @@ const healthcheckups = [
           careLevelId: 'CL1',
         },
         {
-          checkupId: 'HC2',
+          checkupId: 'HC00002',
           checkupName: 'Cardiac Health Checkup',
           description: 'Focused on heart health for elderly.',
           checkupDate: '2025-02-02T08:00:00Z',
@@ -20,7 +20,7 @@ const healthcheckups = [
           careLevelId: 'CL2',
         },
         {
-          checkupId: 'HC3',
+          checkupId: 'HC00003',
           checkupName: 'Rheumatology Checkup',
           description: 'Specialized checkup for rheumatoid arthritis.',
           checkupDate: '2025-02-03T08:00:00Z',
@@ -30,7 +30,7 @@ const healthcheckups = [
           careLevelId: 'CL3',
         },
         {
-          checkupId: 'HC4',
+          checkupId: 'HC00004',
           checkupName: 'Hypertension Checkup',
           description: 'Regular checkup for hypertension patients.',
           checkupDate: '2025-02-04T08:00:00Z',
@@ -40,7 +40,7 @@ const healthcheckups = [
           careLevelId: 'CL1',
         },
         {
-          checkupId: 'HC5',
+          checkupId: 'HC00005',
           checkupName: 'Diabetes Checkup',
           description: 'Monitoring and management of diabetes.',
           checkupDate: '2025-02-05T08:00:00Z',
@@ -50,7 +50,7 @@ const healthcheckups = [
           careLevelId: 'CL2',
         },
         {
-          checkupId: 'HC6',
+          checkupId: 'HC00006',
           checkupName: 'Asthma Checkup',
           description: 'Regular checkup for asthma patients.',
           checkupDate: '2025-02-06T08:00:00Z',
@@ -60,7 +60,7 @@ const healthcheckups = [
           careLevelId: 'CL3',
         },
         {
-          checkupId: 'HC7',
+          checkupId: 'HC00007',
           checkupName: 'Alzheimer Checkup',
           description: 'Specialized checkup for Alzheimer disease.',
           checkupDate: '2025-02-07T08:00:00Z',
@@ -70,7 +70,7 @@ const healthcheckups = [
           careLevelId: 'CL1',
         },
         {
-          checkupId: 'HC8',
+          checkupId: 'HC00008',
           checkupName: 'Cardiac and Hypertension Checkup',
           description: 'Combined checkup for heart health and hypertension.',
           checkupDate: '2025-02-08T08:00:00Z',
@@ -80,7 +80,7 @@ const healthcheckups = [
           careLevelId: 'CL2',
         },
         {
-          checkupId: 'HC9',
+          checkupId: 'HC00009',
           checkupName: 'Parkinson Checkup',
           description: 'Specialized checkup for Parkinson disease.',
           checkupDate: '2025-02-09T08:00:00Z',
@@ -90,7 +90,7 @@ const healthcheckups = [
           careLevelId: 'CL3',
         },
         {
-          checkupId: 'HC10',
+          checkupId: 'HC00010',
           checkupName: 'Lipid Checkup',
           description: 'Monitoring of lipid levels for elderly.',
           checkupDate: '2025-02-10T08:00:00Z',

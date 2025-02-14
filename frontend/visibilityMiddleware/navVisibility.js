@@ -147,7 +147,7 @@ function getNavItems(role) {
         },
         {
           name: 'Medical Checkup',
-          href: '#',
+          href: '/health/checkup/',
           roles: ['admin', 'family', 'medical'],
         },
       ],

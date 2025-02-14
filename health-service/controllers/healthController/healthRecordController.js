@@ -226,7 +226,7 @@ const getHealthRecordById = async (req, res) => {
   console.log(`Received request to get elderly leave by ID: ${_id}`); // 调试信息
   try {
     // 使用聚合管道进行后续查询
-    const elderlyLeaves = await ElderlyLeave.aggregate([
+    const healthRecords = await HealthRecord.aggregate([
       {
         $match: { _id: new mongoose.Types.ObjectId(_id) }, // 使用 new 关键字实例化 ObjectId
       },
@@ -250,28 +250,21 @@ const getHealthRecordById = async (req, res) => {
           // 投影所需的字段
           elderlyId: 1,
           elderlyName: '$elderlyDetails.elderlyName', // 获取 elderlies 集合中的 elderlyName
-          reason: 1,
-          startDate: {
-            $dateToString: { format: '%Y-%m-%d', date: '$startDate' },
-          }, // 格式化 startDate
-          endDate: {
-            $dateToString: { format: '%Y-%m-%d', date: '$endDate' },
-          },
-          status: 1,
-          type: 1,
-          additionalNotes: 1,
-          applicationDate: {
-            $dateToString: { format: '%Y-%m-%d', date: '$applicationDate' },
-          },
+          medicalHistory: 1,
+          allergies: 1,
+          medications: 1,
+          createdAt: {
+            $dateToString: { format: '%Y-%m-%d', date: '$createdAt' },
+          }, // 格式化 createdAt
         },
       },
-      { $sort: { healthRecordId: 1 } }, // 按 healthRecordId 排序
+      // { $sort: { healthRecordId: 1 } }, // 按 healthRecordId 排序
     ]);
-    console.log(elderlyLeaves);
+    console.log(healthRecords);
     return res.status(200).json({
       success: true,
-      message: 'ElderlyLeave and elderlyIds retrieved successfully',
-      data: elderlyLeaves,
+      message: 'HealthRecord and elderlyIds retrieved successfully',
+      data: healthRecords,
     });
   } catch (err) {
     console.error('Error retrieving elderly leave:', err.message); // 调试信息
@@ -281,23 +274,15 @@ const getHealthRecordById = async (req, res) => {
 // (2) 提交更新后的健康档案数据
 const updateHealthRecord = async (req, res) => {
   const { _id } = req.params;
-  const {
-    elderlyId,
-    reason,
-    startDate,
-    endDate,
-    status,
-    type,
-    additionalNotes,
-    applicationDate,
-  } = req.body;
+  const { elderlyId, medicalHistory, allergies, medications, createdAt } =
+    req.body;
 
   console.log('Received request to update elderly leavewith data:', req.body); // 调试信息
 
   try {
     // 查找现有的请假记录
-    const existingElderlyLeave = await ElderlyLeave.findOne({ _id });
-    if (!existingElderlyLeave) {
+    const existingHealthRecord = await HealthRecord.findOne({ _id });
+    if (!existingHealthRecord) {
       console.warn(`Health record not found: ${_id}`); // 调试信息
       return res
         .status(404)
@@ -305,24 +290,21 @@ const updateHealthRecord = async (req, res) => {
     }
 
     // 更新请假记录
-    Object.assign(existingElderlyLeave, {
+    Object.assign(existingHealthRecord, {
       elderlyId,
-      reason,
-      startDate,
-      endDate,
-      status,
-      type,
-      additionalNotes,
-      applicationDate,
+      medicalHistory,
+      allergies,
+      medications,
+      createdAt,
     });
 
-    await existingElderlyLeave.save();
+    await existingHealthRecord.save();
 
-    console.log('Health record updated successfully:', existingElderlyLeave); // 调试信息
+    console.log('Health record updated successfully:', existingHealthRecord); // 调试信息
     return res.status(200).json({
       success: true,
       message: 'Health record updated successfully',
-      data: existingElderlyLeave,
+      data: existingHealthRecord,
     });
   } catch (error) {
     console.error('Error updating bed assignment:', error.message); // 调试信息

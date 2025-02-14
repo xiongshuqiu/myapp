@@ -69,7 +69,14 @@ function bntLinkVisibility(req, res, next) {
           name: 'AddHealthRecord',
           href: '/health/record/new',
           roles: ['admin'],
-        },
+      },
+          //老人健康体检增加
+          {
+            id: 'add-healthCheckup-btn',
+            name: 'AddHealthCheckup',
+            href: '/health/checkup/new',
+            roles: ['admin'],
+          },
     ];
     return buttonItems.map((item) => ({
       ...item,
@@ -158,7 +165,16 @@ function bntLinkVisibility(req, res, next) {
         {
           id: 'delete-healthRecord-link',
           roles: ['admin'],
-        },
+      },
+           //编辑和删除健康体检
+           {
+            id: 'edit-healthCheckup-link',
+            roles: ['admin'],
+          },
+          {
+            id: 'delete-healthCheckup-link',
+            roles: ['admin'],
+          },
     ];
     return linkItems.map((item) => ({
       ...item,

@@ -100,13 +100,15 @@ const getHealthRecordById = async (req, res) => {
 };
 // (2) 提交更新后的健康档案数据
 const updateHealthRecord = async (req, res) => {
-  const { elderlyId, checkInTime, checkOutTime, status } = req.body;
+  const { elderlyId, medicalHistory, allergies, medications, createdAt } =
+    req.body;
   try {
     const data = {
       elderlyId,
-      checkInTime,
-      checkOutTime,
-      status,
+      medicalHistory,
+      allergies,
+      medications,
+      createdAt,
     };
     const { _id } = req.params; // 从参数中获取 _Id
     const url = `${process.env.HEALTH_SERVICE_URL}/health/record/${_id}`;

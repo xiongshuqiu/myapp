@@ -144,27 +144,16 @@ const getHealthRecordById = async (req, res) => {
 
 //(2) 提交更新后的老人健康档案数据
 const updateHealthRecord = async (req, res) => {
-  const {
-    elderlyId,
-    reason,
-    startDate,
-    endDate,
-    status,
-    type,
-    additionalNotes,
-    applicationDate,
-  } = req.body;
+  const { elderlyId, medicalHistory, allergies, medications, createdAt } =
+    req.body;
   const { _id } = req.params;
   try {
     const data = {
       elderlyId,
-      reason,
-      startDate,
-      endDate,
-      status,
-      type,
-      additionalNotes,
-      applicationDate,
+      medicalHistory,
+      allergies,
+      medications,
+      createdAt,
     };
 
     // 从请求参数中获取 _id
