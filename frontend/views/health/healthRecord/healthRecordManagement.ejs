@@ -65,7 +65,7 @@
                       <thead>
                         <tr>
                           <th>healthRecordId</th>
-                          <th >elderlyId</th>
+                          <th>elderlyId</th>
                           <th>elderlyName</th>
                           <th>medicalHistory</th>
                           <th>allergies</th>
@@ -78,7 +78,7 @@
                         <% healthRecords.forEach(function(healthRecord) { %>
                         <tr class="odd gradeX" style="white-space: nowrap">
                           <td><%= healthRecord.healthRecordId %></td>
-                          <td ><%= healthRecord.elderlyId %></td>
+                          <td><%= healthRecord.elderlyId %></td>
                           <td><%= healthRecord.elderlyName %></td>
                           <td><%= healthRecord.medicalHistory %></td>
                           <td><%= healthRecord.allergies %></td>
@@ -119,16 +119,6 @@
             </div>
           </div>
         </div>
-
-        <footer>
-          <p>
-            Copyright &copy; 2016.Company name All rights reserved.<a
-              target="_blank"
-              href="http://sc.chinaz.com/moban/"
-              >模板网站</a
-            >
-          </p>
-        </footer>
       </div>
     </div>
     <!-- /. PAGE WRAPPER  -->
@@ -187,12 +177,9 @@
       async function confirmDeletion(_id) {
         if (confirm('Are you sure you want to delete this healthRecord?')) {
           try {
-            const response = await fetch(
-              `/health/record/${_id}/delete`,
-              {
-                method: 'DELETE',
-              },
-            );
+            const response = await fetch(`/health/record/${_id}/delete`, {
+              method: 'DELETE',
+            });
             window.location.href = '/health/record/';
             // const result = await response.json();
             // alert(result.message); // 显示反馈给用户
@@ -203,35 +190,33 @@
           }
         }
       }
-    </script>  
-      <script>
-        async function fetchHealthRecords() {
-          try {
-            const response = await fetch('/health-records');
-            const result = await response.json();
-    
-            if (result.success) {
-              const healthRecords = result.data;
-              const list = document.getElementById('health-record-list');
-    
-              healthRecords.forEach(record => {
-                const listItem = document.createElement('li');
-                listItem.textContent = `${record.healthRecordId}: ${record.elderlyName} (${record.createdAt})`;
-                list.appendChild(listItem);
-              });
-            } else {
-              console.error('Failed to fetch health records:', result.message);
-            }
-          } catch (error) {
-            console.error('Error fetching health records:', error);
+    </script>
+    <script>
+      async function fetchHealthRecords() {
+        try {
+          const response = await fetch('/health-records');
+          const result = await response.json();
+
+          if (result.success) {
+            const healthRecords = result.data;
+            const list = document.getElementById('health-record-list');
+
+            healthRecords.forEach((record) => {
+              const listItem = document.createElement('li');
+              listItem.textContent = `${record.healthRecordId}: ${record.elderlyName} (${record.createdAt})`;
+              list.appendChild(listItem);
+            });
+          } else {
+            console.error('Failed to fetch health records:', result.message);
           }
+        } catch (error) {
+          console.error('Error fetching health records:', error);
         }
-    
-        fetchHealthRecords();
-      </script>
-    </body>
-    </html>
-    
+      }
+
+      fetchHealthRecords();
+    </script>
+
     <!-- Custom Js -->
     <!-- 这一行要放在最后 -->
     <script src="/assets/js/custom-scripts.js"></script>

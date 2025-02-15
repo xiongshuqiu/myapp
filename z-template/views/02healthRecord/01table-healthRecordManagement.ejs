@@ -37,15 +37,15 @@
       <div id="page-wrapper">
         <div class="header">
           <h1 class="page-header">
-            Bed Management <small> Bed Information</small>
+            Health Management <small> Health Information</small>
           </h1>
           <ol class="breadcrumb">
             <!-- 面包屑导航 -->
             <li><a href="#">Home</a></li>
             <!-- 首页链接 -->
-            <li><a href="#">Bed Management</a></li>
+            <li><a href="#">Health Management</a></li>
             <!-- 用户管理页面链接 -->
-            <li class="active">BedAssignment Data</li>
+            <li class="active">HealthRecord Data</li>
             <!-- 当前页：用户数据 -->
           </ol>
         </div>
@@ -54,13 +54,8 @@
         <div id="page-inner">
           <div class="row">
             <div class="col-md-12">
-              <!-- Advanced Tables -->
-              <!-- “panel” 是一个 Bootstrap 类，用于定义面板的容器，而 “panel-default” 则应用默认的样式。 -->
-              <!-- <div class="panel-heading">：面板的标题区域
-                <div class="panel-body">：面板的主体内容区域
-                <div class="panel-footer">：面板的页脚区域（如果需要） -->
               <div class="panel panel-default">
-                <div class="panel-heading">BedAssignment Tables</div>
+                <div class="panel-heading">HealthRecord Tables</div>
                 <div class="panel-body">
                   <div class="table-responsive">
                     <table
@@ -68,54 +63,51 @@
                       id="dataTables-example"
                     >
                       <thead>
+                        <!-- 关键：class="hide-column" 用于隐藏列-->
                         <tr>
-                          <th>assignmentId</th>
-                          <th>bedId</th>
-                          <th>elderlyName</th>
+                          <th class="hide-column">healthRecordId</th>
                           <th>elderlyId</th>
-                          <th>assignedDate</th>
-                          <th>releaseDate</th>
-                          <th>actions</th>
+                          <th>elderlyName</th>
+                          <th>medicalHistory</th>
+                          <th>allergies</th>
+                          <th>medications</th>
+                          <th>createdAt</th>
+                          <th>action</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <% bedAssignments.forEach(function(bedAssignment) { %>
+                        <!-- 关键：healthRecord.elderlyName采用了聚合管道查询，关联HealthRecord 、Elderly模型及project输出 -->
+                        <% healthRecords.forEach(function(healthRecord) { %>
                         <tr class="odd gradeX" style="white-space: nowrap">
-                          <td>
-                            <%= bedAssignment.bedassignmentDetails.assignmentId
-                            %>
+                          <td class="hide-column">
+                            <%= healthRecord.healthRecordId %>
                           </td>
-                          <td><%= bedAssignment.bedStatusDetails.bedId %></td>
-                          <td><%= bedAssignment.elderlyName %></td>
-                          <td><%= bedAssignment.elderlyId %></td>
-                          <td>
-                            <%= bedAssignment.bedassignmentDetails.assignedDate
-                            %>
-                          </td>
-                          <td>
-                            <%= bedAssignment.bedassignmentDetails.releaseDate
-                            %>
-                          </td>
+                          <td><%= healthRecord.elderlyId %></td>
+                          <td><%= healthRecord.elderlyName %></td>
+                          <td><%= healthRecord.medicalHistory %></td>
+                          <td><%= healthRecord.allergies %></td>
+                          <td><%= healthRecord.medications %></td>
+                          <td><%= healthRecord.createdAt %></td>
                           <td>
                             <% linkItems.forEach(function(item) { %> <% if
-                            (item.id ==='edit-bedAssignment-link'&&item.visible)
+                            (item.id ==='edit-healthRecord-link'&&item.visible)
                             { %>
                             <a
                               id="<%= item.id %>"
-                              href="/beds/assignment/<%=  bedAssignment.bedassignmentDetails._id %>/update"
+                              href="/health/record/<%=  healthRecord._id %>/update"
                               class="editlink"
                               style="color: blue; display: inline"
-                              >Edit
+                              >Review
                             </a>
                             <% } %> <% }); %> <%
                             linkItems.forEach(function(item) { %> <% if (item.id
-                            ==='delete-bedAssignment-link'&&item.visible) { %>
+                            ==='delete-healthRecord-link'&&item.visible) { %>
                             <a
                               id="<%= item.id %>"
                               href="javascript:void(0)"
                               class="deleteLink"
                               style="color: red; padding: 5px; display: inline"
-                              onclick="confirmDeletion('<%= bedAssignment.bedassignmentDetails._id %>')"
+                              onclick="confirmDeletion('<%= healthRecord._id %>')"
                               >Delete</a
                             >
                             <% } %> <% }); %>
@@ -131,16 +123,6 @@
             </div>
           </div>
         </div>
-
-        <footer>
-          <p>
-            Copyright &copy; 2016.Company name All rights reserved.<a
-              target="_blank"
-              href="http://sc.chinaz.com/moban/"
-              >模板网站</a
-            >
-          </p>
-        </footer>
       </div>
     </div>
     <!-- /. PAGE WRAPPER  -->
@@ -167,11 +149,11 @@
 
     <!-- 在过滤器区域添加 "Add User" 按钮 -->
     <% buttonItems.forEach(function(item) { %> <% if (item.id ===
-    'add-bedAssignment-btn' && item.visible) { %>
+    'add-healthRecord-btn' && item.visible) { %>
     <script>
       $(document).ready(function () {
         $('#dataTables-example_filter').append(
-          '<button id="<%= item.id %>" class="btn btn-primary add-bedAssignment-btn" data-href="<%= item.href %>"><%= item.name %></button>',
+          '<button id="<%= item.id %>" class="btn btn-primary add-healthRecord-btn" data-href="<%= item.href %>"><%= item.name %></button>',
         );
 
         // 处理 "Add User" 按钮点击事件
@@ -182,6 +164,7 @@
       });
     </script>
     <% } %> <% }); %>
+
     <script>
       //处理动态生成的编辑链接点击事件
       $(document).on('click', '.editlink', function (event) {
@@ -196,22 +179,48 @@
       //3.添加删除对话框
       // 在实际运行时，confirmDeletion 函数接收到的 _id 参数就是 bedAssignment._id 的值。
       async function confirmDeletion(_id) {
-        if (confirm('Are you sure you want to delete this bedAssignment?')) {
+        if (confirm('Are you sure you want to delete this healthRecord?')) {
           try {
-            const response = await fetch(`/beds/assignment/${_id}/delete`, {
+            const response = await fetch(`/health/record/${_id}/delete`, {
               method: 'DELETE',
             });
-            window.location.href = '/beds/bedAssignment/';
+            window.location.href = '/health/record/';
             // const result = await response.json();
             // alert(result.message); // 显示反馈给用户
             location.reload(); // 刷新页面以更新用户表
           } catch (error) {
-            alert('An error occurred while deleting the user.');
+            alert('An error occurred while deleting the healthRecord.');
             console.error('Error:', error);
           }
         }
       }
     </script>
+    <script>
+      async function fetchHealthRecords() {
+        try {
+          const response = await fetch('/health-records');
+          const result = await response.json();
+
+          if (result.success) {
+            const healthRecords = result.data;
+            const list = document.getElementById('health-record-list');
+
+            healthRecords.forEach((record) => {
+              const listItem = document.createElement('li');
+              listItem.textContent = `${record.healthRecordId}: ${record.elderlyName} (${record.createdAt})`;
+              list.appendChild(listItem);
+            });
+          } else {
+            console.error('Failed to fetch health records:', result.message);
+          }
+        } catch (error) {
+          console.error('Error fetching health records:', error);
+        }
+      }
+
+      fetchHealthRecords();
+    </script>
+
     <!-- Custom Js -->
     <!-- 这一行要放在最后 -->
     <script src="/assets/js/custom-scripts.js"></script>

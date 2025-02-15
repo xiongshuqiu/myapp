@@ -40,7 +40,7 @@ function bntLinkVisibility(req, res, next) {
         id: 'add-employeeShiftSchedule-btn',
         name: 'AddShiftSchedule',
         href: '/employees/shiftSchedule/new',
-        roles: ['admin', 'medical'],
+        roles: ['admin',],
       },
       //老人档案增加
       {
@@ -68,7 +68,7 @@ function bntLinkVisibility(req, res, next) {
         id: 'add-healthRecord-btn',
         name: 'AddHealthRecord',
         href: '/health/record/new',
-        roles: ['admin'],
+        roles: ['medical'],
       },
       //老人护理任务增加
       {
@@ -82,7 +82,7 @@ function bntLinkVisibility(req, res, next) {
         id: 'add-healthCheckup-btn',
         name: 'AddHealthCheckup',
         href: '/health/checkup/new',
-        roles: ['admin'],
+        roles: ['medical'],
       },
     ];
     return buttonItems.map((item) => ({
@@ -167,11 +167,11 @@ function bntLinkVisibility(req, res, next) {
       //编辑和删除健康档案
       {
         id: 'edit-healthRecord-link',
-        roles: ['admin'],
+        roles: ['medical'],
       },
       {
         id: 'delete-healthRecord-link',
-        roles: ['admin'],
+        roles: ['medical'],
       },
       //编辑和删除护理任务
       {
@@ -186,11 +186,11 @@ function bntLinkVisibility(req, res, next) {
       //编辑和删除健康体检
       {
         id: 'edit-healthCheckup-link',
-        roles: ['admin'],
+        roles: ['medical'],
       },
       {
         id: 'delete-healthCheckup-link',
-        roles: ['admin'],
+        roles: ['medical'],
       },
     ];
     return linkItems.map((item) => ({

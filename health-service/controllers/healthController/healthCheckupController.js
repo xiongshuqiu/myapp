@@ -57,37 +57,7 @@ const getAllHealthCheckups = async (req, res) => {
         },
       ]);
       query = { elderlyId: { $in: query.map((item) => item.elderlyId) } };
-    } else if (role === 'medical') {
-      query = await User.aggregate([
-        {
-          $match: { _id: new mongoose.Types.ObjectId(_id) }, // 使用 new 关键字实例化 ObjectId
-        },
-        {
-          $lookup: {
-            from: 'employees',
-            localField: 'userId',
-            foreignField: 'userId',
-            as: 'employeeDetails',
-          },
-        },
-        { $unwind: '$employeeDetails' },
-        {
-          $lookup: {
-            from: 'elderlies',
-            localField: 'employeeDetails.employeeId',
-            foreignField: 'employeeId',
-            as: 'elderlyDetails',
-          },
-        },
-        { $unwind: '$elderlyDetails' },
-        {
-          $project: {
-            elderlyId: '$elderlyDetails.elderlyId',
-          },
-        },
-      ]);
-      query = { elderlyId: { $in: query.map((item) => item.elderlyId) } };
-    } else if (role === 'admin') {
+    } else if (role === 'admin' || role === 'medical') {
       query = {}; // 管理员可以查看所有数据
     } else {
       return res.status(400).json({
@@ -304,15 +274,12 @@ const getHealthCheckupById = async (req, res) => {
           }, // 格式化 createdAt
         },
       },
-      
     ]);
 
     console.log(healthCheckups);
 
     // 查找所有员工的employeeIds
-    const employeeIds = await Employee.find().select(
-      'employeeId employeeName',
-    );
+    const employeeIds = await Employee.find().select('employeeId employeeName');
     console.log(employeeIds);
     // 查找所有员工的employeeIds
     const careLevelIds = await CareLevel.find().select('careLevelId level');
@@ -327,13 +294,11 @@ const getHealthCheckupById = async (req, res) => {
         careLevelIds,
       },
     });
-
   } catch (err) {
     console.error('Error retrieving elderly resident:', err.message); // 调试信息
     return res.status(500).json({ success: false, message: err.message });
   }
-}
-
+};
 
 // (2) 提交更新后的健康体检数据
 const updateHealthCheckup = async (req, res) => {

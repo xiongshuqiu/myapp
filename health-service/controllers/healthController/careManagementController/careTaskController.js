@@ -56,35 +56,6 @@ const getAllCareTasks = async (req, res) => {
         },
       ]);
       query = { elderlyId: { $in: query.map((item) => item.elderlyId) } };
-      query = await User.aggregate([
-        {
-          $match: { _id: new mongoose.Types.ObjectId(_id) }, // 使用 new 关键字实例化 ObjectId
-        },
-        {
-          $lookup: {
-            from: 'employees',
-            localField: 'userId',
-            foreignField: 'userId',
-            as: 'employeeDetails',
-          },
-        },
-        { $unwind: '$employeeDetails' },
-        {
-          $lookup: {
-            from: 'elderlies',
-            localField: 'employeeDetails.employeeId',
-            foreignField: 'employeeId',
-            as: 'elderlyDetails',
-          },
-        },
-        { $unwind: '$elderlyDetails' },
-        {
-          $project: {
-            elderlyId: '$elderlyDetails.elderlyId',
-          },
-        },
-      ]);
-      query = { elderlyId: { $in: query.map((item) => item.elderlyId) } };
     } else if (role === 'admin' || role === 'medical') {
       query = {}; // 管理员可以查看所有数据
     } else {

@@ -54,6 +54,8 @@
                         method="post"
                         role="form"
                       >
+                        <!-- 选择类型：单一或多集合数据选择型 -->
+                        <!-- 关键(label+select+option)：（1）关联Elderly、HealthRecord（筛选）模型进行管道查询刷选没有健康记录的老人信息、（2）单一集合用find查询 -->
                         <div class="form-group">
                           <label for="elderlyId">
                             Unrecorded Elderly Id(Name)<span style="color: red"
@@ -79,6 +81,25 @@
                           </select>
                         </div>
 
+                        <!-- 选择类型：无集合数据普通选择型 -->
+                        <!-- 关键(label+select+option)：无需查询 -->
+                        <div class="form-group">
+                          <label for="status"
+                            >Status<span style="color: red">*</span></label
+                          >
+                          <select
+                            class="form-control"
+                            id="status"
+                            name="status"
+                            required
+                          >
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                          </select>
+                        </div>
+
+                        <!-- 多行文本输入类型-->
+                        <!-- 关键：label+textarea -->
                         <div class="form-group">
                           <label for="medicalHistory"
                             >Medical History<span style="color: red"
@@ -95,34 +116,8 @@
                           ></textarea>
                         </div>
 
-                        <div class="form-group">
-                          <label for="allergies"
-                            >Allergies<span style="color: red">*</span></label
-                          >
-                          <textarea
-                            type="text"
-                            class="form-control"
-                            id="allergies"
-                            name="allergies"
-                            placeholder="Enter allergies"
-                            rows="2"
-                          ></textarea>
-                        </div>
-
-                        <div class="form-group">
-                          <label for="medications"
-                            >Medications<span style="color: red">*</span></label
-                          >
-                          <textarea
-                            type="text"
-                            class="form-control"
-                            id="medications"
-                            name="medications"
-                            placeholder="Enter medications"
-                            rows="2"
-                          ></textarea>
-                        </div>
-
+                        <!-- 日期单行文本输入类型:无正则表达式-->
+                        <!-- 关键：label+input -->
                         <div class="form-group">
                           <label for="createdAt"> Created Time </label>
                           <div class="input-wrapper">
@@ -135,6 +130,48 @@
                               required
                             />
                           </div>
+                        </div>
+
+                        <!-- ID单行文本输入类型:有正则表达式+提示-->
+                        <!-- 关键：label+input -->
+                        <div class="form-group">
+                          <label for="userId">
+                            User ID <span style="color: red">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="userId"
+                            name="userId"
+                            placeholder="Enter User ID"
+                            required
+                            pattern=""
+                            title=""
+                          />
+                          <small class="form-text text-muted">
+                            Format: S followed by three digits for admin/medical (e.g., S001) or F followed by three digits for family (e.g., F001)
+                          </small>
+                        </div>
+
+                        <!-- 邮件单行文本输入类型:有正则表达式+提示-->
+                        <!-- 关键：label+input -->
+                        <div class="form-group">
+                          <label for="email"
+                            >Email <span style="color: red">*</span></label
+                          >
+                          <input
+                            type="email"
+                            class="form-control"
+                            id="email"
+                            name="email"
+                            placeholder="Enter Email (e.g., xiongwang@126.com)"
+                            required
+                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                            title="Email format should be similar to xiongwang@126.com"
+                          />
+                          <small class="form-text text-muted"
+                            >Format: xiongwang@126.com</small
+                          >
                         </div>
 
                         <button type="submit" class="btn btn-primary">
