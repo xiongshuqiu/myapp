@@ -63,20 +63,27 @@ function bntLinkVisibility(req, res, next) {
         href: '/elderly/leave/new',
         roles: ['family'],
       },
-        //老人健康档案增加
-        {
-          id: 'add-healthRecord-btn',
-          name: 'AddHealthRecord',
-          href: '/health/record/new',
-          roles: ['admin'],
+      //老人健康档案增加
+      {
+        id: 'add-healthRecord-btn',
+        name: 'AddHealthRecord',
+        href: '/health/record/new',
+        roles: ['admin'],
       },
-          //老人健康体检增加
-          {
-            id: 'add-healthCheckup-btn',
-            name: 'AddHealthCheckup',
-            href: '/health/checkup/new',
-            roles: ['admin'],
-          },
+      //老人护理任务增加
+      {
+        id: 'add-careTask-btn',
+        name: 'AddCareTask',
+        href: '/health/care/task/new',
+        roles: ['medical'],
+      },
+      //老人健康体检增加
+      {
+        id: 'add-healthCheckup-btn',
+        name: 'AddHealthCheckup',
+        href: '/health/checkup/new',
+        roles: ['admin'],
+      },
     ];
     return buttonItems.map((item) => ({
       ...item,
@@ -130,16 +137,16 @@ function bntLinkVisibility(req, res, next) {
         id: 'delete-employeeShiftSchedule-link',
         roles: ['admin'],
       },
-        //编辑和删除老人档案
-        {
-          id: 'edit-elderlyRecord-link',
-          roles: ['admin'],
-        },
-        {
-          id: 'delete-elderlyRecord-link',
-          roles: ['admin'],
+      //编辑和删除老人档案
+      {
+        id: 'edit-elderlyRecord-link',
+        roles: ['admin'],
       },
-          //编辑和删除老人入住退住
+      {
+        id: 'delete-elderlyRecord-link',
+        roles: ['admin'],
+      },
+      //编辑和删除老人入住退住
       {
         id: 'edit-elderlyResident-link',
         roles: ['admin'],
@@ -148,33 +155,43 @@ function bntLinkVisibility(req, res, next) {
         id: 'delete-elderlyResident-link',
         roles: ['admin'],
       },
-        //编辑和删除老人请假
-        {
-          id: 'edit-elderlyLeave-link',
-          roles: ['admin'],
-        },
-        {
-          id: 'delete-elderlyLeave-link',
-          roles: ['admin'],
+      //编辑和删除老人请假
+      {
+        id: 'edit-elderlyLeave-link',
+        roles: ['admin'],
       },
-         //编辑和删除健康档案
-         {
-          id: 'edit-healthRecord-link',
-          roles: ['admin'],
-        },
-        {
-          id: 'delete-healthRecord-link',
-          roles: ['admin'],
+      {
+        id: 'delete-elderlyLeave-link',
+        roles: ['admin'],
       },
-           //编辑和删除健康体检
-           {
-            id: 'edit-healthCheckup-link',
-            roles: ['admin'],
-          },
-          {
-            id: 'delete-healthCheckup-link',
-            roles: ['admin'],
-          },
+      //编辑和删除健康档案
+      {
+        id: 'edit-healthRecord-link',
+        roles: ['admin'],
+      },
+      {
+        id: 'delete-healthRecord-link',
+        roles: ['admin'],
+      },
+      //编辑和删除护理任务
+      {
+        id: 'edit-careTask-link',
+        roles: ['medical'],
+      },
+      {
+        id: 'delete-careTask-link',
+        roles: ['medical'],
+      },
+
+      //编辑和删除健康体检
+      {
+        id: 'edit-healthCheckup-link',
+        roles: ['admin'],
+      },
+      {
+        id: 'delete-healthCheckup-link',
+        roles: ['admin'],
+      },
     ];
     return linkItems.map((item) => ({
       ...item,

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Update BedAssignment Information</title>
+    <title>Update Care Task Information</title>
     <!-- 1.框架样式：Bootstrap Styles-->
     <link href="/assets/css/bootstrap.css" rel="stylesheet" />
     <!-- 2.图标样式：FontAwesome Styles-->
@@ -32,13 +32,13 @@
       <div id="page-wrapper">
         <div class="header">
           <h1 class="page-header">
-            Leave Approval Information
-            <small>Leave Approval details.</small>
+            Care Task Information
+            <small>Care Task details.</small>
           </h1>
           <ol class="breadcrumb">
             <li><a href="#">Home</a></li>
             <li><a href="#">Forms</a></li>
-            <li class="active">Leave Approval</li>
+            <li class="active">Care Task</li>
           </ol>
         </div>
 
@@ -46,129 +46,157 @@
           <div class="row">
             <div class="col-lg-12">
               <div class="panel panel-default">
-                <div class="panel-heading">Leave Approval Information</div>
+                <div class="panel-heading">Care Task Information</div>
                 <div class="panel-body">
                   <div class="row">
                     <div class="col-lg-6">
-                      <form <% elderlyLeaves.forEach(function(elderlyLeave) { %>
-                        action="/elderly/leave/<%= elderlyLeave._id
-                        %>?_method=PUT" method="post" role="form" >
+                      <% careTasks.forEach(function(careTask) { %>
+                      <form
+                        action="/health/care/task/<%= careTask._id
+                        %>?_method=PUT"
+                        method="post"
+                        role="form"
+                      >
                         <div class="form-group">
-                          <label for="applicationDetails"
-                            >Application Details</label
-                          >
-                          <ul class="list-group" id="applicationDetails">
-                            <li class="list-group-item">
-                              <strong>Elderly ID(Name):</strong>
-                              <span>
-                                ID: <%= elderlyLeave.elderlyId %> (Name:<%=
-                                elderlyLeave.elderlyName %>)</span
-                              >
-                              <input
-                                type="hidden"
-                                id="elderlyId"
-                                name="elderlyId"
-                                value="<%= elderlyLeave.elderlyId %>"
-                              />
-                            </li>
-
-                            <li class="list-group-item">
-                              <strong>Reason:</strong>
-                              <span><%= elderlyLeave.reason %></span>
-                              <input
-                                type="hidden"
-                                id="reason"
-                                name="reason"
-                                value="<%= elderlyLeave.reason %>"
-                              />
-                            </li>
-                            <li class="list-group-item">
-                              <strong>Start Date:</strong>
-                              <span><%= elderlyLeave.startDate %></span>
-                              <input
-                                type="hidden"
-                                id="startDate"
-                                name="startDate"
-                                value="<%= elderlyLeave.startDate %>"
-                              />
-                            </li>
-                            <li class="list-group-item">
-                              <strong>End Date:</strong>
-                              <span><%= elderlyLeave.endDate %></span>
-                              <input
-                                type="hidden"
-                                id="endDate"
-                                name="endDate"
-                                value="<%= elderlyLeave.endDate %>"
-                              />
-                            </li>
-                            <li class="list-group-item">
-                              <strong>Type:</strong>
-                              <span><%= elderlyLeave.type %></span>
-                              <input
-                                type="hidden"
-                                id="type"
-                                name="type"
-                                value="<%= elderlyLeave.type %>"
-                              />
-                            </li>
-
-                            <li class="list-group-item">
-                              <strong>Application Date:</strong>
-                              <span><%= elderlyLeave.applicationDate %></span>
-                              <input
-                                type="hidden"
-                                id="applicationDate"
-                                name="applicationDate"
-                                value="<%= elderlyLeave.applicationDate %>"
-                              />
-                            </li>
-                          </ul>
+                          <label for="elderlyId">
+                            Elderly Information<span style="color: red">*</span>
+                           : <%= careTask.elderlyId %> (<%=
+                              careTask.elderlyName %>)
+                          </label>
+                          <input
+                            type="hidden"
+                            class="form-control"
+                            id="elderlyId"
+                            name="elderlyId"
+                            value="<%= careTask.elderlyId %>"
+                            required
+                          />
                         </div>
-                        <% }); %>
 
                         <div class="form-group">
-                          <label for="approvalOpinion"
-                            >Approval Opinion<span style="color: red"
-                              >*</span
-                            ></label
+                          <label for="taskName" >Task Name <span style="color: red">*</span></label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="taskName"
+                            name="taskName"
+                            value="<%= careTask.taskName %>"
+                          />
+                        </div>
+
+                        <div class="form-group">
+                          <label for="description">Description</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="description"
+                            name="description"
+                            value="<%= careTask.description %>"
+                          />
+                        </div>
+
+                        <div class="form-group">
+                          <label for="dueDate"
+                            >Due Date<span style="color: red">*</span></label
                           >
+                          <div class="input-wrapper">
+                            <input
+                              type="date"
+                              class="form-control date-input"
+                              id="dueDate"
+                              name="dueDate"
+                              value="<%= careTask.dueDate ? new Date(careTask.dueDate).toISOString().split('T')[0] : '' %>"
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="carePlanId">
+                            Care Plan ID (Name)
+                            <span style="color: red">*</span>
+                          </label>
+                          <select
+                            class="form-control"
+                            id="carePlanId"
+                            name="carePlanId"
+                            required
+                          >
+                            <% if (carePlanIds && carePlanIds.length > 0) { %> <!-- 检查是否有员工ID -->
+                              <% carePlanIds.forEach(function(carePlan) { %> <!-- 遍历每个员工ID -->
+                                <option value="<%= carePlan.carePlanId %>" <%= careTask.carePlanId === carePlan.carePlanId ? 'selected' : '' %>>
+                                  ID: <%= carePlan.carePlanId %> (<%= carePlan.planName %>)
+                                </option>
+                              <% }); %> <!-- 结束遍历 -->
+                            <% } else { %> <!-- 处理没有员工ID的情况 -->
+                              <option value="">No existing carePlanId</option>
+                            <% } %> <!-- 结束检查 -->
+                          </select>
+                        </div>
+
+
+                        <div class="form-group" style="display: none">
+                          <label for="status">Status</label>
                           <select
                             class="form-control"
                             id="status"
                             name="status"
                             required
                           >
-                            <option value="approved">approved</option>
-                            <option value="rejected">rejected</option>
+                          <option value="Pending" <%= careTask.status === "Pending"  ? 'selected' : '' %>>
+                            Pending
+                          </option>
+                          <option value="In Progress" <%= careTask.status === "In Progress"  ? 'selected' : '' %>>
+                            In Progress
+                          </option>
+                          <option value="Completed" <%= careTask.status === "Completed"  ? 'selected' : '' %>>
+                            Completed
+                          </option>
                           </select>
                         </div>
 
-                        <div
-                          class="form-group"
-                          id="additionalNotes"
-                          style="display: none"
-                        >
-                          <label for="additionalNotes">Approval Notes</label>
-                          <textarea
+                        <div class="form-group">
+                          <label for="employeeId">
+                            Employee Information<span style="color: red">*</span>
+                          </label>
+                          <select
                             class="form-control"
-                            rows="2"
-                            id="additionalNotes"
-                            name="additionalNotes"
-                          ></textarea>
+                            id="employeeId"
+                            name="employeeId"
+                            required
+                          >
+                            <% if (employeeIds && employeeIds.length > 0) { %>
+                            <% employeeIds.forEach(function(employee) { %>
+                            <option value="<%= employee.employeeId %>">
+                              ID:<%= employee.employeeId %> (<%=
+                              employee.employeeName %>)
+                            </option>
+                            <% }) %> <% } else { %>
+                            <option value="">No existing employeeId</option>
+                            <% } %>
+                          </select>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="createdAt"> Created Time </label>
+                          <div class="input-wrapper">
+                            <input
+                              type="date"
+                              class="form-control date-input"
+                              id="createdAt"
+                              name="createdAt"
+                              value="<%= careTask.createdAt ? new Date(careTask.createdAt).toISOString().split('T')[0] : '' %>"
+                              required
+                            />
+                          </div>
                         </div>
 
                         <button type="submit" class="btn btn-primary">
                           Submit
                         </button>
-                        <button
-                          type="reset"
-                          class="btn btn-secondary"
-                          onclick="window.location.href='/employees/shiftSchedule/';"
-                        >
-                          Return
-                        </button>
                       </form>
+                      <% }) %>
+
                       <div id="message">
                         <% if (typeof message !== 'undefined' && message !==
                         null) { %>
@@ -190,6 +218,7 @@
       </div>
       <!-- /. PAGE WRAPPER  -->
     </div>
+ 
     <!-- /. WRAPPER  -->
     <!-- JS Scripts-->
     <!-- jQuery Js -->

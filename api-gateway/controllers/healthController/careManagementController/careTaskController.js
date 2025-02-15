@@ -31,7 +31,7 @@ const deleteRequest = async (url) => {
   const response = await axios.delete(url);
   return response.data;
 };
-// 1. 获取所有老人入住和退住数据
+// 1. 获取所有护理任务
 const getAllCareTasks = async (req, res) => {
   const { _id, role } = req.query; // 从查询参数中获取传递的数据
   try {
@@ -46,8 +46,8 @@ const getAllCareTasks = async (req, res) => {
   }
 };
 
-// 2. 创建新的老人入住和退住数据
-// (1) 显示新增老人入住和退住数据表单(查找可用的bedId、elderlyId)
+// 2. 创建新的护理任务
+// (1) 显示新增护理任务表单(查找可用的bedId、elderlyId)
 const renderNewCareTaskForm = async (req, res) => {
   try {
     const url = `${process.env.HEALTH_SERVICE_URL}/health/care/task/new`;
@@ -60,21 +60,29 @@ const renderNewCareTaskForm = async (req, res) => {
     handleError(err, res);
   }
 };
-// (2) 提交新的老人入住和退住数据数据
+// (2) 提交新的护理任务数据
 const createCareTask = async (req, res) => {
   const {
-    elderlyId,
-    checkInTime,
-    checkOutTime,
+    description,
+    taskName,
+    dueDate,
+    carePlanId,
     status,
+    elderlyId,
+    employeeId,
+    createdAt,
   } = req.body; // 从请求体中获取所有用户信息
 
   try {
     const data = {
-      elderlyId,
-      checkInTime,
-      checkOutTime,
+      description,
+      taskName,
+      dueDate,
+      carePlanId,
       status,
+      elderlyId,
+      employeeId,
+      createdAt,
     };
     const url = `${process.env.HEALTH_SERVICE_URL}/health/care/task/create`;
     const response = await postRequest(url, data); // 发送 POST 请求以创建新用户
@@ -86,8 +94,8 @@ const createCareTask = async (req, res) => {
     handleError(err, res);
   }
 };
-// 3. 更新特定老人入住和退住数据
-// (1) 查找特定老人入住和退住数据并显示编辑表单
+// 3. 更新特定护理任务
+// (1) 查找特定护理任务并显示编辑表单
 const getCareTaskById = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取 _id
@@ -101,20 +109,28 @@ const getCareTaskById = async (req, res) => {
     handleError(err, res);
   }
 };
-// (2) 提交更新后的老人入住和退住数据数据
+// (2) 提交更新后的护理任务数据
 const updateCareTask = async (req, res) => {
   const {
-    elderlyId,
-    checkInTime,
-    checkOutTime,
+    description,
+    taskName,
+    dueDate,
+    carePlanId,
     status,
+    elderlyId,
+    employeeId,
+    createdAt,
   } = req.body;
   try {
     const data = {
-      elderlyId,
-      checkInTime,
-      checkOutTime,
+      description,
+      taskName,
+      dueDate,
+      carePlanId,
       status,
+      elderlyId,
+      employeeId,
+      createdAt,
     };
     const { _id } = req.params; // 从参数中获取 _Id
     const url = `${process.env.HEALTH_SERVICE_URL}/health/care/task/${_id}`;
@@ -128,7 +144,7 @@ const updateCareTask = async (req, res) => {
   }
 };
 
-// 4. 删除特定老人入住和退住数据
+// 4. 删除特定护理任务
 const deleteCareTask = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取 userId

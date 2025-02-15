@@ -207,4 +207,3 @@ module.exports = {
   CareTask,
   HealthCheckup,
 };
-

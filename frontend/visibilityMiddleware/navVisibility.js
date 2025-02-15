@@ -142,7 +142,7 @@ function getNavItems(role) {
         },
         {
           name: 'Care Management',
-          href: '#',
+          href: '/health/care/task/',
           roles: ['admin', 'family', 'medical'],
         },
         {

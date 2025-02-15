@@ -13,7 +13,7 @@ const handleError = (
   console.error('Error:', err.response ? err.response.data : err.message); // 输出详细调试信息
   if (!res.headersSent) {
     res.status(err.response?.status || 500).render(targetPage, {
-      activePage: 'elderly-management',
+      activePage: 'health-management',
       message: err.response?.data?.message || msg,
       navItems: req.navItems, // 将导航项传递到视图
     });
@@ -52,11 +52,11 @@ const getAllCareTasks = async (req, res) => {
 
   try {
     const response = await getRequest(apiUrl);
-    const elderlyRecords = response.data;
+    const careTasks = response.data;
     if (response.success) {
       res.render('health/careManagement/careTaskManagement', {
-        activePage: 'elderly-management',
-        elderlyRecords,
+        activePage: 'health-management',
+        careTasks,
         navItems: req.navItems, // 将导航项传递到视图
         buttonItems: req.buttonItems,
         linkItems: req.linkItems,
@@ -75,12 +75,13 @@ const renderNewCareTaskForm = async (req, res) => {
     const response = await getRequest(apiUrl);
 
     if (response.success) {
-      const { employeeIds, userIds } = response.data;
+      const { elderlyIds, employeeIds, carePlanIds } = response.data;
       res.render('health/careManagement/careTaskCreate.ejs', {
-        activePage: 'elderly-management',
+        activePage: 'health-management',
         navItems: req.navItems, // 将导航项传递到视图
-        employeeIds, // 传递可用的 bedId 到视图
-        userIds, // 传递存在的 elderlyId 到视图
+        elderlyIds,
+        employeeIds,
+        carePlanIds,
       });
     } else {
       throw new Error('Failed to retrieve data from API');
@@ -94,37 +95,31 @@ const renderNewCareTaskForm = async (req, res) => {
 //(2)提交新的护理任务数据
 const createCareTask = async (req, res) => {
   const {
-    elderlyName,
-    elderlyPhone,
-    dateOfBirth,
-    gender,
-    address,
-    medicalHistory,
-    allergies,
-    emergencyContactName,
-    emergencyContactPhone,
-    userId,
+    description,
+    taskName,
+    dueDate,
+    carePlanId,
+    status,
+    elderlyId,
     employeeId,
+    createdAt,
   } = req.body;
   try {
     const data = {
-      elderlyName,
-      elderlyPhone,
-      dateOfBirth,
-      gender,
-      address,
-      medicalHistory,
-      allergies,
-      emergencyContactName,
-      emergencyContactPhone,
-      userId,
+      description,
+      taskName,
+      dueDate,
+      carePlanId,
+      status,
+      elderlyId,
       employeeId,
+      createdAt,
     };
-
+    console.log(data);
     const apiUrl = `${process.env.API_URL}/api/health/care/task/create`;
     const response = await postRequest(apiUrl, data);
-    const elderlyRecord = response.data;
-    console.log(elderlyRecord);
+    // const newCareTask = response.data;
+    // console.log(newCareTask);
     if (response.success) {
       console.log(response);
       res.redirect('/health/care/task/');
@@ -139,20 +134,20 @@ const createCareTask = async (req, res) => {
 // (1)查找特定护理任务并显示编辑表单
 const getCareTaskById = async (req, res) => {
   const { _id } = req.params; // 从参数中获取 _id
-  console.log(`Fetching bedAssignment with ID: ${_id}`); // 调试信息
+  console.log(`Fetching careTask with ID: ${_id}`); // 调试信息
   try {
     const apiUrl = `${process.env.API_URL}/api/health/care/task/${_id}/update`;
     console.log(apiUrl);
     const response = await getRequest(apiUrl); // 使用组装的URL进行API调用
-    const { elderlyRecord, userIds, employeeIds } = response.data;
+    const { careTasks, employeeIds, carePlanIds } = response.data;
     if (response.success) {
       console.log(response);
       res.render('health/careManagement/careTaskUpdate.ejs', {
-        activePage: 'elderly-management',
+        activePage: 'health-management',
         navItems: req.navItems,
-        elderlyRecord,
-        userIds, //userIds包括userId、role
-        employeeIds, //包括employeeId、employeeName
+        careTasks,
+        employeeIds,
+        carePlanIds,
       });
     }
   } catch (err) {
@@ -163,32 +158,26 @@ const getCareTaskById = async (req, res) => {
 //(2) 提交更新后的护理任务数据
 const updateCareTask = async (req, res) => {
   const {
-    elderlyName,
-    elderlyPhone,
-    dateOfBirth,
-    gender,
-    address,
-    medicalHistory,
-    allergies,
-    emergencyContactName,
-    emergencyContactPhone,
-    userId,
+    description,
+    taskName,
+    dueDate,
+    carePlanId,
+    status,
+    elderlyId,
     employeeId,
+    createdAt,
   } = req.body;
   const { _id } = req.params;
   try {
     const data = {
-      elderlyName,
-      elderlyPhone,
-      dateOfBirth,
-      gender,
-      address,
-      medicalHistory,
-      allergies,
-      emergencyContactName,
-      emergencyContactPhone,
-      userId,
+      description,
+      taskName,
+      dueDate,
+      carePlanId,
+      status,
+      elderlyId,
       employeeId,
+      createdAt,
     };
 
     // 从请求参数中获取 _id
