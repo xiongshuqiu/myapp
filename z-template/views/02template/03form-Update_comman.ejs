@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Update BedAssignment Information</title>
+    <!-- 1.框架样式：Bootstrap Styles-->
+    <link href="/assets/css/bootstrap.css" rel="stylesheet" />
+    <!-- 2.图标样式：FontAwesome Styles-->
+    <link href="/assets/css/font-awesome.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <!--3.普通样式：Custom Styles-->
+    <link href="/assets/css/custom-styles.css" rel="stylesheet" />
+    <!-- 4.字体样式：Google Fonts-->
+    <link
+      href="http://fonts.useso.com/css?family=Open+Sans"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+
+  <body>
+    <div id="wrapper">
+      <!-- 顶部导航条 -->
+      <%- include('../../block/top-navbar.ejs') %>
+      <!-- 左侧导航条 -->
+      <%- include('../../block/navbar-side.ejs') %>
+
+      <div id="page-wrapper">
+        <div class="header">
+          <h1 class="page-header">
+            Health Record Information
+            <small>Health Record details.</small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Forms</a></li>
+            <li class="active">Health Record</li>
+          </ol>
+        </div>
+
+        <div id="page-inner">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="panel panel-default">
+                <div class="panel-heading">Health Record Information</div>
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <!-- <% healthRecords.forEach(function(healthRecord) { %> -->
+                      <form
+                        action="/health/record/<%= healthRecord._id %>?_method=PUT"
+                        method="post"
+                        role="form"
+                      >
+                        <!-- 类型1：单一或多集合动态数据选择型 -->
+                        <!-- 关键(label+select+option)：（1）关联多个集合（2）单一集合用find查询 -->
+                        <div class="form-group">
+                          <label for="unassignedElderlyId"> Elderly ID(Name) <span style="color: red">*</span></label>
+                          <select class="form-control" id="elderlyId" name="elderlyId" required>
+                            <% if (elderlyIds && elderlyIds.length > 0) { %>
+                              <% elderlyIds.forEach(function(elderly) { %>
+                                <option value="<%= elderly.elderlyId %>" <%= bedAssignment.elderlyId === elderly.elderlyId ? 'selected' : '' %>>
+                                  ID: <%= elderly.elderlyId %> (<%= elderly.elderlyName %>)
+                                </option>
+                              <% }); %>
+                            <% } else { %>
+                              <option value="">No existing elderlyId</option>
+                            <% } %>
+                          </select>
+                        </div>
+                        
+                        <!-- 类型1：普通选择型（固定数据） -->
+                        <!-- 关键(label+select+option)：（1）关联多个集合（2）单一集合用find查询 -->
+                        <div class="form-group">
+                          <label for="gender"
+                            >Gender <span style="color: red">*</span></label
+                          >
+                          <select
+                            class="form-control"
+                            id="gender"
+                            name="gender"
+                            required
+                          >
+                            <option value="Male" <%= elderlyRecord.gender==='Male'?'selected':'' %>>Male</option>
+                            <option value="Female"<%= elderlyRecord.gender==='Female'?'selected':'' %>>Female</option>
+                            <option value="Other"<%= elderlyRecord.gender==='Other'?'selected':'' %>>Other</option>
+                          </select>
+                        </div>
+
+                        <!-- 类型2：多行普通文本输入编辑-->
+                        <!-- 关键：label+textarea -->
+                        <div class="form-group">
+                          <label for="medicalHistory">Medical History</label>
+                          <textarea
+                            type="text"
+                            class="form-control"
+                            id="medicalHistory"
+                            name="medicalHistory"
+                            rows="4"
+                          >
+                         <%= healthRecord.medicalHistory %></textarea
+                          >
+                        </div>
+
+
+                         <!-- 类型2：单行普通文本输入编辑（不带正则表达式）-->
+                        <!-- 关键：label+input -->
+                        <!-- type:["passWord"、"number"、"text"] -->
+                        <div class="form-group">
+                          <label for="elderlyName"
+                            >Elderly Name
+                            <span style="color: red">*</span></label
+                          >
+                          <input
+                            type="text"    
+                            class="form-control"
+                            id="elderlyName"
+                            name="elderlyName"
+                            value="<%= elderlyRecord.elderlyName %>"
+                            required
+                          />
+                        </div>
+
+                       <!-- 类型2：单行普通文本输入编辑（带正则表达式）-->
+                        <!-- 关键：label+input -->
+                        <!-- type:["passWord"、"number"、"text"] -->
+                        <div class="form-group">
+                          <label for="room">Room <span style="color: red">*</span></label>
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="room"
+                            name="room"
+                            value="<%= bedStatus.room %>"
+                            required
+                            pattern="^\d{3}$"
+                            title="Room format should be Room Number (e.g., 101)"
+                          />
+                          <small class="form-text text-muted">
+                            Format: Room Number (e.g., 101)
+                          </small>
+                        </div>
+
+                        <!-- 类型2：单行日期文本输入编辑-->
+                        <!-- 关键：label+input -->
+                        <div class="form-group">
+                          <label for="createdAt"> Created Time </label>
+                          <div class="input-wrapper">
+                            <input
+                              type="date"
+                              class="form-control date-input"
+                              id="createdAt"
+                              name="createdAt"
+                              value="<%= healthRecord.createdAt ? new Date(healthRecord.createdAt).toISOString().split('T')[0] : '' %>"
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        <!-- 类型2：单行邮件文本输入编辑（带正则表达式）-->
+                        <!-- 关键：label+input -->
+                        <div class="form-group">
+                          <label for="email"
+                            >Email <span style="color: red">*</span></label
+                          >
+                          <input
+                            type="email"
+                            class="form-control"
+                            id="email"
+                            name="email"
+                            value="<%= user.email %>"
+                            required
+                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                            title="Email format should be similar to xiongwang@126.com"
+                          />
+                        </div>
+
+                        <!-- 类型3：单行固定文本-->
+                        <!-- 关键：label+input -->
+                        <div class="form-group">
+                          <label for="elderlyId">
+                            Elderly Id(Name):
+                            <span>
+                              <%= healthRecord.elderlyId %> (<%=
+                              healthRecord.elderlyName %>)</span
+                            >
+                          </label>
+                          <input
+                            type="hidden"
+                            class="form-control"
+                            id="elderlyId"
+                            name="elderlyId"
+                            value="<%= healthRecord.elderlyId %>"
+                            required
+                          />
+                        </div>
+
+                        <!-- 类型3：列表固定文本-->
+                        <!-- 关键：label+input -->
+                        <div class="form-group">
+                          <label for="applicationDetails"
+                            >Application Details</label
+                          >
+                          <ul class="list-group" id="applicationDetails">
+                            <li class="list-group-item">
+                              <strong>Elderly ID(Name):</strong>
+                              <span>
+                                ID: <%= elderlyLeave.elderlyId %> (Name:<%=
+                                elderlyLeave.elderlyName %>)</span
+                              >
+                              <input
+                                type="hidden"
+                                id="elderlyId"
+                                name="elderlyId"
+                                value="<%= elderlyLeave.elderlyId %>"
+                              />
+                            </li>
+
+                            <li class="list-group-item">
+                              <strong>Reason:</strong>
+                              <span><%= elderlyLeave.reason %></span>
+                              <input
+                                type="hidden"
+                                id="reason"
+                                name="reason"
+                                value="<%= elderlyLeave.reason %>"
+                              />
+                            </li>
+                          </ul>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                          Submit
+                        </button>
+                        <button
+                          type="reset"
+                          class="btn btn-secondary"
+                          onclick="window.location.href='/health/record/';"
+                        >
+                          Return
+                        </button>
+                      </form>
+                      <!-- <% }); %> -->
+
+                      <div id="message">
+                        <% if (typeof message !== 'undefined' && message !==
+                        null) { %>
+                        <div class="alert alert-success"><%= message %></div>
+                        <% } %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /.panel-body -->
+              </div>
+              <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+          </div>
+        </div>
+
+        <!-- /. PAGE INNER  -->
+      </div>
+      <!-- /. PAGE WRAPPER  -->
+    </div>
+    <!-- /. WRAPPER  -->
+    <!-- JS Scripts-->
+    <!-- jQuery Js -->
+
+    <script src="/assets/js/jquery-1.10.2.js"></script>
+    <!-- Bootstrap Js -->
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <!-- Metis Menu Js -->
+    <script src="/assets/js/jquery.metisMenu.js"></script>
+    <!-- Custom Js -->
+    <script src="/assets/js/custom-scripts.js"></script>
+  </body>
+</html>

@@ -54,8 +54,8 @@
                         method="post"
                         role="form"
                       >
-                        <!-- 选择类型：单一或多集合数据选择型 -->
-                        <!-- 关键(label+select+option)：（1）关联Elderly、HealthRecord（筛选）模型进行管道查询刷选没有健康记录的老人信息、（2）单一集合用find查询 -->
+                        <!-- 类型1：单一或多集合数据选择型 -->
+                        <!-- 关键(label+select+option)：（1）关联多个集合（2）单一集合用find查询 -->
                         <div class="form-group">
                           <label for="elderlyId">
                             Unrecorded Elderly Id(Name)<span style="color: red"
@@ -81,7 +81,7 @@
                           </select>
                         </div>
 
-                        <!-- 选择类型：无集合数据普通选择型 -->
+                        <!-- 类型1：无集合数据普通选择型 -->
                         <!-- 关键(label+select+option)：无需查询 -->
                         <div class="form-group">
                           <label for="status"
@@ -98,7 +98,7 @@
                           </select>
                         </div>
 
-                        <!-- 多行文本输入类型-->
+                        <!-- 类型2：多行普通文本输入-->
                         <!-- 关键：label+textarea -->
                         <div class="form-group">
                           <label for="medicalHistory"
@@ -116,7 +116,47 @@
                           ></textarea>
                         </div>
 
-                        <!-- 日期单行文本输入类型:无正则表达式-->
+                        <!--  类型：单行普通文本输入（带正则表达式）-->
+                        <!-- 关键：label+input -->
+                        <!-- type:["passWord"、"number"、"text"] -->
+                        <div class="form-group">
+                          <label for="room"
+                            >Room <span style="color: red">*</span></label
+                          >
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="room"
+                            name="room"
+                            placeholder="Enter Room Number (e.g., 101)"
+                            required
+                            pattern="^\d{3}$"
+                            title="Room format should be Room Number (e.g., 101)"
+                          />
+                          <small class="form-text text-muted">
+                            Format: Room Number (e.g., 101)
+                          </small>
+                        </div>
+
+                        <!-- 类型：单行普通文本输入（不带正则表达式）-->
+                        <!-- 关键：label+input -->
+                        <!-- type:["passWord"、"number"、"text"] -->
+                        <div class="form-group">
+                          <label for="elderlyName"
+                            >Elderly Name
+                            <span style="color: red">*</span></label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="elderlyName"
+                            name="elderlyName"
+                            placeholder="Enter Elderly Name  %>"
+                            required
+                          />
+                        </div>
+
+                        <!-- 类型：单行日期文本输入-->
                         <!-- 关键：label+input -->
                         <div class="form-group">
                           <label for="createdAt"> Created Time </label>
@@ -132,28 +172,7 @@
                           </div>
                         </div>
 
-                        <!-- ID单行文本输入类型:有正则表达式+提示-->
-                        <!-- 关键：label+input -->
-                        <div class="form-group">
-                          <label for="userId">
-                            User ID <span style="color: red">*</span>
-                          </label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="userId"
-                            name="userId"
-                            placeholder="Enter User ID"
-                            required
-                            pattern=""
-                            title=""
-                          />
-                          <small class="form-text text-muted">
-                            Format: S followed by three digits for admin/medical (e.g., S001) or F followed by three digits for family (e.g., F001)
-                          </small>
-                        </div>
-
-                        <!-- 邮件单行文本输入类型:有正则表达式+提示-->
+                        <!--  类型：单行邮件文本输入-->
                         <!-- 关键：label+input -->
                         <div class="form-group">
                           <label for="email"
