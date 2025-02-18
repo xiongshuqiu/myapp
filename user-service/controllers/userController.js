@@ -1,6 +1,5 @@
 const User = require('../models/userModel');
-
-// 1. 查找所有用户信息
+//const User = require('../../shared-models/models/userModel');
 const getUsers = async (req, res) => {
   console.log('Received request to get all users'); // 调试信息
   try {
