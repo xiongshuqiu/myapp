@@ -73,12 +73,11 @@ const renderCreateUserForm = async (req, res) => {
 };
 //(2)提交新用户信息
 const createUser = async (req, res) => {
-  const {role,userId, status, userName, passWord, phoneNumber, email } =
+  const {role,status, userName, passWord, phoneNumber, email } =
     req.body;
   try {
     const data = {
       role,
-      userId,
       status,
       userName,
       passWord,
@@ -123,12 +122,11 @@ const getUserById = async (req, res) => {
 
 //(2) 提交已编辑的用户信息
 const updateUser = async (req, res) => {
-  const { userId, status, userName, passWord, phoneNumber, email, role } =
+  const {  status, userName, passWord, phoneNumber, email, role } =
     req.body;
   const { _id } = req.params;
   try {
     const data = {
-      userId,
       status,
       userName,
       passWord,

@@ -39,17 +39,15 @@ const getUsers = async (req, res) => {
     const response = await getRequest(url); // 发送 GET 请求以获取用户信息
     res.json(response); // 将响应数据返回给前端:包括数据和message
   } catch (err) {
-    handleError(err, res)
+    handleError(err, res);
   }
 };
 // 2. 创建用户 (C)
 const createUser = async (req, res) => {
-  const { userId, status, userName, passWord, phoneNumber, email, role } =
-    req.body; // 从请求体中获取所有用户信息
+  const { status, userName, passWord, phoneNumber, email, role } = req.body; // 从请求体中获取所有用户信息
 
   try {
     const data = {
-      userId,
       status,
       userName,
       passWord,
@@ -58,10 +56,10 @@ const createUser = async (req, res) => {
       role,
     };
     const url = `${process.env.USER_SERVICE_URL}/users/create`;
-    const response = await postRequest(url,data) // 发送 POST 请求以创建新用户
+    const response = await postRequest(url, data); // 发送 POST 请求以创建新用户
     res.status(201).json(response); // 将响应数据返回给前端
   } catch (err) {
-    handleError(err, res)
+    handleError(err, res);
   }
 };
 // 3. 更新用户信息 (U)
@@ -75,16 +73,14 @@ const getUserById = async (req, res) => {
     console.log(user);
     res.json(response); // 将响应数据返回给前端:包括数据和message
   } catch (err) {
-    handleError(err, res)
+    handleError(err, res);
   }
 };
 //(2)更新用户信息
 const updateUser = async (req, res) => {
-  const { userId, status, userName, passWord, phoneNumber, email, role } =
-  req.body; 
+  const { status, userName, passWord, phoneNumber, email, role } = req.body;
   try {
     const data = {
-      userId,
       status,
       userName,
       passWord,
@@ -94,10 +90,10 @@ const updateUser = async (req, res) => {
     };
     const { _id } = req.params; // 从参数中获取 _Id
     const url = `${process.env.USER_SERVICE_URL}/users/${_id}`;
-    const response = await putRequest(url,data); // 发送 PUT 请求以更新用户信息
+    const response = await putRequest(url, data); // 发送 PUT 请求以更新用户信息
     res.json(response); // 将响应数据返回给前端
   } catch (err) {
-    handleError(err, res)
+    handleError(err, res);
   }
 };
 
@@ -109,14 +105,14 @@ const deleteUser = async (req, res) => {
     const response = await deleteRequest(url); // 发送 DELETE 请求以删除用户
     res.json(response); // 将响应数据返回给前端
   } catch (err) {
-    handleError(err, res)
+    handleError(err, res);
   }
 };
 
-  module.exports = {
-    getUsers,
-    createUser,
-    getUserById,
-    updateUser,
-    deleteUser,
-  }
+module.exports = {
+  getUsers,
+  createUser,
+  getUserById,
+  updateUser,
+  deleteUser,
+};

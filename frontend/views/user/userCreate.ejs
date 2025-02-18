@@ -59,7 +59,7 @@
                               <option value="medical">medical</option>
                               <option value="family">family</option>
                           </select>
-                      </div>
+                      <!-- </div>
                         <div class="form-group">
                           <label for="userId">
                             User ID <span style="color: red">*</span>
@@ -77,17 +77,18 @@
                           <small class="form-text text-muted">
                             Format: U followed by three digits for admin/medical (e.g., U001) or F followed by three digits for family (e.g., F001)
                           </small>
-                        </div>
+                        </div> -->
 
                         <div class="form-group">
-                          <label for="status"
-                            >Status <span style="color: red">*</span></label
-                          >
+                          <label for="status">
+                            Status <span style="color: red">*</span>
+                          </label>
                           <select class="form-control" id="status" name="status">
                             <option value="Occupied">Occupied</option>
-                            <option value="Available">Available</option>
-                        </select>
-                       </div>
+                            <option value="Available" selected>Available</option>
+                          </select>
+                        </div>
+                        
 
                         <div class="form-group">
                           <label for="userName"
