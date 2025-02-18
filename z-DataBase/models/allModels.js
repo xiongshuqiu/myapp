@@ -19,8 +19,7 @@ const elderlySchema = new mongoose.Schema({
   dateOfBirth: { type: Date, required: true }, // 生日
   gender: { type: String, required: true, enum: ['Male', 'Female', 'Other'] }, // 性别
   address: { type: String, required: true }, // 地址
-  medicalHistory: { type: String }, // 医疗史
-  allergies: { type: String }, // 过敏史
+  photo: { type: String, required: true }, // 老人照片
   emergencyContactName: { type: String, required: true }, // 紧急联系人姓名
   emergencyContactPhone: { type: String, required: true }, // 紧急联系人电话
   userId: { type: String, ref: 'User' }, // 家属登录 Id 唯一编号 F001

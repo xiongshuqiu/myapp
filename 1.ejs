@@ -1,109 +1,35 @@
-<div id="wrapper">
-  <!-- 顶部导航条 -->
-  <%- include('../../block/top-navbar.ejs') %>
-  <!-- 左侧导航条 -->
-  <%- include('../../block/navbar-side.ejs') %>
+const elderlies = [
+  {
+    elderlyId: 'E001',
+    elderlyName: 'Elderly 1',
+    elderlyPhone: '5551234567',
+    dateOfBirth: new Date('1940-01-01'),
+    gender: 'Male',
+    address: '123 Elderly St, City, Country',
+    photo: 'https://github.com/xiongshuqiu/images/blob/992044c5319d96f67ff22493f2570dd24f9211c6/elderly/man01.jpg?raw=true',
+    emergencyContactName: 'Family Member 1',
+    emergencyContactPhone: '5551111111',
+    userId: 'F001',
+    employeeId: 'S002',
+  },
+  // 更多记录...
+];
 
-  <div id="page-wrapper">
-    <div class="header">
-      <h1 class="page-header">
-        更新老年住户信息 <small>修改老年住户的详细信息。</small>
-      </h1>
-      <ol class="breadcrumb">
-        <li><a href="#">主页</a></li>
-        <li><a href="#">表单</a></li>
-        <li class="active">更新老年住户</li>
-      </ol>
-    </div>
+const fixPhotoUrl = (url) => {
+  try {
+    return Buffer.from(url, 'base64').toString('utf-8');
+  } catch (error) {
+    return url;
+  }
+};
 
-    <div id="page-inner">
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="panel panel-default">
-            <div class="panel-heading">老年住户信息</div>
-            <div class="panel-body">
-              <div class="row">
-                <div class="col-lg-6">
-                  <% if (elderlyIds && elderlyIds.length > 0) { %>
-                    <% elderlyIds.forEach(function(elderly) { %>
-                    <form
-                      action="/elderly/resident/<%= elderlyResident._id %>?_method=PUT"
-                      method="post"
-                      role="form"
-                    >
-                      <div class="form-group">
-                        <label for="elderlyId">老年 ID (姓名) <span style="color: red">*</span></label>
-                        <select class="form-control" id="elderlyId" name="elderlyId" required>
-                          <option value="<%= elderly.elderlyId %>" <%= elderlyResident.elderlyId === elderly.elderlyId ? 'selected' : '' %>>
-                            老年 ID: <%= elderly.elderlyId %> (<%= elderly.elderlyName %>)
-                          </option>
-                        </select>
-                      </div>
+const fixElderliesPhotoUrls = (elderlies) => {
+  return elderlies.map(elderly => {
+    return {
+      ...elderly,
+      photo: fixPhotoUrl(elderly.photo),
+    };
+  });
+};
 
-                      <div class="form-group">
-                        <label for="checkInTime">入住时间 <span style="color: red">*</span></label>
-                        <div class="input-wrapper">
-                          <input
-                            type="date"
-                            class="form-control date-input"
-                            id="checkInTime"
-                            name="checkInTime"
-                            value="<%= elderlyResident.checkInTime ? new Date(elderlyResident.checkInTime).toISOString().split('T')[0] : '' %>"
-                          />
-                        </div>
-                      </div>
-
-                      <div class="form-group">
-                        <label for="checkOutTime">退房时间 </label>
-                        <div class="input-wrapper">
-                          <input
-                            type="date"
-                            class="form-control date-input"
-                            id="checkOutTime"
-                            name="checkOutTime"
-                            value="<%= elderlyResident.checkOutTime ? new Date(elderlyResident.checkOutTime).toISOString().split('T')[0] : '' %>"
-                          />
-                        </div>
-                      </div>
-
-                      <div class="form-group">
-                        <label for="status">状态 <span style="color: red">*</span></label>
-                        <select class="form-control" id="status" name="status" required>
-                          <option value="Active" <%= elderlyResident.status === 'Active' ? 'selected' : '' %>>活跃</option>
-                          <option value="Inactive" <%= elderlyResident.status === 'Inactive' ? 'selected' : '' %>>不活跃</option>
-                        </select>
-                      </div>
-
-                      <button type="submit" class="btn btn-primary">保存更改</button>
-                      <button
-                        type="reset"
-                        class="btn btn-secondary"
-                        onclick="window.location.href='/elderly/resident/';"
-                      >
-                        返回
-                      </button>
-                    </form>
-                    <% }); %>
-                  <% } else { %>
-                    <option value="">无现有老年 ID</option>
-                  <% } %>
-
-                  <div id="message">
-                    <% if (typeof message !== 'undefined' && message !== null) { %>
-                      <div class="alert alert-success"><%= message %></div>
-                    <% } %>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- /.panel-body -->
-          </div>
-          <!-- /.panel -->
-        </div>
-        <!-- /.col-lg-12 -->
-      </div>
-    </div>
-    <!-- /.PAGE INNER -->
-  </div>
-  <!-- /.PAGE WRAPPER -->
-</div>
+const fixedElderlies = fixElderliesPhotoUrls(elderlies);

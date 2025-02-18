@@ -67,20 +67,19 @@
                         <tr>
                           <th>elderlyId</th>
                           <th>elderlyName</th>
+                          <th>photo</th>
                           <th>elderlyPhone</th>
-                          <th>dateOfBirth</th>
+                          <th class="hide-column">dateOfBirth</th>
                           <th>age</th>
-                          <th>gender</th>
-                          <th>address</th>
-                          <th>medicalHistory</th>
-                          <th>allergies</th>
-                          <th>emergencyContactName</th>
-                          <th>emergencyContactPhone</th>
+                          <th class="hide-column">gender</th>
+                          <th class="hide-column">address</th>
+                          <th>familyContact</th>
+                          <th class="hide-column">emergencyContactPhone</th>
                           <th>userId</th>
-                          <th>userName</th>
-                          <th>employeeId</th>
+                          <th class="hide-column">userName</th>
+                          <th class="hide-column">employeeId</th>
                           <th>employeeName</th>
-                          <th>employeeContactNumber</th>
+                          <th class="hide-column">employeeContactNumber</th>
                           <th>actions</th>
                         </tr>
                       </thead>
@@ -89,25 +88,50 @@
                         <tr class="odd gradeX" style="white-space: nowrap">
                           <td><%= elderlyRecord.elderlyId %></td>
                           <td><%= elderlyRecord.elderlyName %></td>
+                          <td>
+                            <img
+                              src="<%= elderlyRecord.photo %>"
+                              alt="Elderly Photo"
+                              style="
+                                width: 100px;
+                                height: 100px;
+                                object-fit: cover;
+                              "
+                            />
+                          </td>
                           <td><%= elderlyRecord.elderlyPhone %></td>
-                          <td><%= elderlyRecord.dateOfBirth %></td>
+                          <td class="hide-column">
+                            <%= elderlyRecord.dateOfBirth %>
+                          </td>
                           <td><%= elderlyRecord.age %></td>
-                          <td><%= elderlyRecord.gender %></td>
-                          <td><%= elderlyRecord.address %></td>
-                          <td><%= elderlyRecord.medicalHistory %></td>
-                          <td><%= elderlyRecord.allergies %></td>
+                          <td class="hide-column">
+                            <%= elderlyRecord.gender %>
+                          </td>
+                          <td class="hide-column">
+                            <%= elderlyRecord.address %>
+                          </td>
+
                           <td><%= elderlyRecord.emergencyContactName %></td>
-                          <td><%= elderlyRecord.emergencyContactPhone %></td>
+                          <td class="hide-column">
+                            <%= elderlyRecord.emergencyContactPhone %>
+                          </td>
                           <td><%= elderlyRecord.userId %></td>
-                          <td><%= elderlyRecord.userName %></td>
-                          <td><%= elderlyRecord.employeeId %></td>
+                          <td class="hide-column">
+                            <%= elderlyRecord.userName %>
+                          </td>
+                          <td class="hide-column">
+                            <%= elderlyRecord.employeeId %>
+                          </td>
                           <td><%= elderlyRecord.employeeName %></td>
-                          <td><%= elderlyRecord.employeeContactNumber %></td>
-                       
+                          <td class="hide-column">
+                            <%= elderlyRecord.employeeContactNumber %>
+                          </td>
+
                           <td>
                             <% linkItems.forEach(function(item) { %> <% if
-                            (item.id ==='edit-elderlyRecord-link'&&item.visible) {
-                            %>
+                            (item.id ==='edit-elderlyRecord-link'&&item.visible)
+                            { %>
+                              
                             <a
                               id="<%= item.id %>"
                               href="/elderly/record/<%= elderlyRecord._id %>/update"
@@ -163,22 +187,20 @@
     <!-- DATA TABLE SCRIPTS -->
     <script src="/assets/js/dataTables/jquery.dataTables.js"></script>
     <script src="/assets/js/dataTables/dataTables.bootstrap.js"></script>
-    
+
     <!-- /. PAGE INNER  -->
 
     <script>
       $(document).ready(function () {
-
         //console.log($('#dataTables-example'));
-
 
         var table = $('#dataTables-example').DataTable();
       });
     </script>
 
     <!-- 在过滤器区域添加 "Add User" 按钮 -->
-    <% buttonItems.forEach(function(item) { %> <% if (item.id === 'add-elderlyRecord-btn'
-    && item.visible) { %>
+    <% buttonItems.forEach(function(item) { %> <% if (item.id ===
+    'add-elderlyRecord-btn' && item.visible) { %>
     <script>
       $(document).ready(function () {
         $('#dataTables-example_filter').append(
@@ -193,17 +215,16 @@
       });
     </script>
     <% } %> <% }); %>
-      <script>
-    //处理动态生成的编辑链接点击事件
-    $(document).on('click', '.editlink', function (event) {  //.edit-link是类
-      event.preventDefault(); // 阻止默认行为
-      var href = $(this).attr('href'); // 获取链接的 href 属性
-      window.location.href = href; // 重定向到相应的链接
-    });
- 
-</script>
+    <script>
+      //处理动态生成的编辑链接点击事件
+      $(document).on('click', '.editlink', function (event) {
+        //.edit-link是类
+        event.preventDefault(); // 阻止默认行为
+        var href = $(this).attr('href'); // 获取链接的 href 属性
+        window.location.href = href; // 重定向到相应的链接
+      });
+    </script>
 
-    
     <script>
       //3.添加删除对话框
       // 在实际运行时，confirmDeletion 函数接收到的 _id 参数就是 user._id 的值。
@@ -225,7 +246,7 @@
       }
     </script>
     <!-- Custom Js -->
-     <!-- 这一行要放在最后 -->
+    <!-- 这一行要放在最后 -->
     <script src="/assets/js/custom-scripts.js"></script>
   </body>
 </html>

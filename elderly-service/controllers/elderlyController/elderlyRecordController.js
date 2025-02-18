@@ -132,8 +132,7 @@ const getAllElderlyRecords = async (req, res) => {
           },
           gender: 1, // 保留 gender 字段
           address: 1, // 保留 address 字段
-          medicalHistory: 1, // 保留 medicalHistory 字段
-          allergies: 1, // 保留 allergies 字段
+          photo: 1, // 保留 photo 字段
           emergencyContactName: 1, // 保留 emergencyContactName 字段
           emergencyContactPhone: 1, // 保留 emergencyContactPhone 字段
           userId: '$userDetails.userId', // 保留 userDetails 中的 userId 字段

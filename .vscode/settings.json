@@ -18,8 +18,8 @@
         "auth-service": true,
         "account-service": true,
         "user-service": true,
-        "employee-service": true,
-        "bed-service": true
+        "bed-service": true,
+        "employee-service": true
     },
     "hide-files.files": [
         "financial-service",
@@ -30,7 +30,7 @@
         "auth-service",
         "account-service",
         "user-service",
-        "employee-service",
-        "bed-service"
+        "bed-service",
+        "employee-service"
     ]
 }
