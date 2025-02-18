@@ -88,8 +88,8 @@ const renderNewEmployeeRecordForm = async (req, res) => {
 //(2)提交新的员工档案数据
 const createEmployeeRecord = async (req, res) => {
   const {
-    employeeId,
     employeeName,
+    photo,
     position,
     contactNumber,
     email,
@@ -98,8 +98,8 @@ const createEmployeeRecord = async (req, res) => {
   } = req.body;
   try {
     const data = {
-      employeeId,
       employeeName,
+      photo,
       position,
       contactNumber,
       email,
@@ -145,11 +145,11 @@ const getEmployeeRecordById = async (req, res) => {
 
 //(2) 提交更新后的员工档案数据
 const updateEmployeeRecord = async (req, res) => {
-  const { employeeId, employeeName, position, contactNumber, email, userId,status } =
+  const { employeeName, photo,position, contactNumber, email, userId,status } =
     req.body;
   const { _id } = req.params;
   try {
-    const data = { employeeId, employeeName, position, contactNumber, email, userId,status};
+    const data = { employeeName,photo, position, contactNumber, email, userId,status};
 
     // 从请求参数中获取 _id
     const apiUrl = `${process.env.API_URL}/api/employees/record/${_id}`;

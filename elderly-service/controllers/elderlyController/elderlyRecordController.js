@@ -182,16 +182,15 @@ const createElderlyRecord = async (req, res) => {
   const elderlyId = await getNextId('Elderly', 'E', 'elderlyId');
   const {
     elderlyName,
-    elderlyPhone,
-    dateOfBirth,
-    gender,
-    address,
-    medicalHistory,
-    allergies,
-    emergencyContactName,
-    emergencyContactPhone,
-    userId,
-    employeeId,
+      elderlyPhone,
+      photo,
+      dateOfBirth,
+      gender,
+      address,
+      emergencyContactName,
+      emergencyContactPhone,
+      userId,
+      employeeId,
   } = req.body;
   console.log('Received request to create elderly record with data:', req.body); // 调试信息
   try {
@@ -210,11 +209,10 @@ const createElderlyRecord = async (req, res) => {
       elderlyId,
       elderlyName,
       elderlyPhone,
+      photo,
       dateOfBirth,
       gender,
       address,
-      medicalHistory,
-      allergies,
       emergencyContactName,
       emergencyContactPhone,
       userId,
@@ -282,11 +280,10 @@ const updateElderlyRecord = async (req, res) => {
   const {
     elderlyName,
     elderlyPhone,
+    photo,
     dateOfBirth,
     gender,
     address,
-    medicalHistory,
-    allergies,
     emergencyContactName,
     emergencyContactPhone,
     userId,
@@ -308,17 +305,16 @@ const updateElderlyRecord = async (req, res) => {
     // 更新老人档案记录
     //Object.assign() 方法将新的字段值合并到现有对象中，从而避免了逐一赋值的冗长代码。
     Object.assign(existingElderly, {
-      elderlyName, // 老人姓名
-      elderlyPhone, // 老人电话
-      dateOfBirth, // 生日
-      gender, // 性别
-      address, // 地址
-      medicalHistory, // 医疗史
-      allergies, // 过敏史
-      emergencyContactName, // 紧急联系人姓名
-      emergencyContactPhone, // 紧急联系人电话
-      userId, // 家属登录 Id 唯一编号 F001
-      employeeId, // 关联负责的医生 S002
+      elderlyName,
+      elderlyPhone,
+      photo,
+      dateOfBirth,
+      gender,
+      address,
+      emergencyContactName,
+      emergencyContactPhone,
+      userId,
+      employeeId,
     });
 
     await existingElderly.save();

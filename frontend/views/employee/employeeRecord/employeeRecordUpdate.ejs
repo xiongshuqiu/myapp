@@ -56,23 +56,6 @@
                       >
 
                       <div class="form-group">
-                        <label for="employeeId">Employee ID <span style="color: red">*</span></label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="employeeId"
-                          name="employeeId"
-                          value="<%= employeeRecord.employeeId %>"
-                          required
-                          pattern="^S\d{3}$"
-                          title="Employee ID format should be S followed by three digits (e.g., S001)"
-                        />
-                        <small class="form-text text-muted">
-                          Format: Employee ID (e.g., S001)
-                        </small>
-                      </div>
-
-                      <div class="form-group">
                         <label for="employeeName">Employee Name <span style="color: red">*</span></label>
                         <input
                           type="text"
@@ -80,6 +63,18 @@
                           id="employeeName"
                           name="employeeName"
                           value="<%= employeeRecord.employeeName %>"
+                          required
+                        />
+                      </div>
+
+                      <div class="form-group">
+                        <label for="photo">Photo <span style="color: red">*</span></label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="photo"
+                          name="photo"
+                          value="<%= employeeRecord.photo %>"
                           required
                         />
                       </div>

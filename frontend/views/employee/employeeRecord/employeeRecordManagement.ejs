@@ -67,6 +67,7 @@
                         <tr>
                           <th>employeeId</th>
                           <th>employeeName</th>
+                          <th>photo</th>
                           <th>position</th>
                           <th>contactNumber</th>
                           <th>email</th>
@@ -80,15 +81,29 @@
                         <tr class="odd gradeX" style="white-space: nowrap">
                           <td><%= employeeRecord.employeeId %></td>
                           <td><%= employeeRecord.employeeName %></td>
+                          <td>
+                            <img
+                              src="<%= employeeRecord.photo %>"
+                              alt="Elderly Photo"
+                              style="
+                                width: 100px;
+                                height: 100px;
+                                object-fit: cover;
+                              "
+                            />
+                          </td>
                           <td><%= employeeRecord.position %></td>
                           <td><%= employeeRecord.contactNumber %></td>
-                          <td><%= employeeRecord.email %></td>
+                          <td class="email-limited">
+                            <%= employeeRecord.email %>
+                          </td>
+
                           <td><%= employeeRecord.userId %></td>
                           <td><%= employeeRecord.status %></td>
                           <td>
                             <% linkItems.forEach(function(item) { %> <% if
-                            (item.id ==='edit-employeeRecord-link'&&item.visible) {
-                            %>
+                            (item.id
+                            ==='edit-employeeRecord-link'&&item.visible) { %>
                             <a
                               id="<%= item.id %>"
                               href="/employees/record/<%= employeeRecord._id %>/update"
@@ -144,22 +159,20 @@
     <!-- DATA TABLE SCRIPTS -->
     <script src="/assets/js/dataTables/jquery.dataTables.js"></script>
     <script src="/assets/js/dataTables/dataTables.bootstrap.js"></script>
-    
+
     <!-- /. PAGE INNER  -->
 
     <script>
       $(document).ready(function () {
-
         //console.log($('#dataTables-example'));
-
 
         var table = $('#dataTables-example').DataTable();
       });
     </script>
 
     <!-- 在过滤器区域添加 "Add User" 按钮 -->
-    <% buttonItems.forEach(function(item) { %> <% if (item.id === 'add-employeeRecord-btn'
-    && item.visible) { %>
+    <% buttonItems.forEach(function(item) { %> <% if (item.id ===
+    'add-employeeRecord-btn' && item.visible) { %>
     <script>
       $(document).ready(function () {
         $('#dataTables-example_filter').append(
@@ -174,17 +187,16 @@
       });
     </script>
     <% } %> <% }); %>
-      <script>
-    //处理动态生成的编辑链接点击事件
-    $(document).on('click', '.editlink', function (event) {  //.edit-link是类
-      event.preventDefault(); // 阻止默认行为
-      var href = $(this).attr('href'); // 获取链接的 href 属性
-      window.location.href = href; // 重定向到相应的链接
-    });
- 
-</script>
+    <script>
+      //处理动态生成的编辑链接点击事件
+      $(document).on('click', '.editlink', function (event) {
+        //.edit-link是类
+        event.preventDefault(); // 阻止默认行为
+        var href = $(this).attr('href'); // 获取链接的 href 属性
+        window.location.href = href; // 重定向到相应的链接
+      });
+    </script>
 
-    
     <script>
       //3.添加删除对话框
       // 在实际运行时，confirmDeletion 函数接收到的 _id 参数就是 user._id 的值。
@@ -206,7 +218,7 @@
       }
     </script>
     <!-- Custom Js -->
-     <!-- 这一行要放在最后 -->
+    <!-- 这一行要放在最后 -->
     <script src="/assets/js/custom-scripts.js"></script>
   </body>
 </html>

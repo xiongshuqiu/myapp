@@ -10,27 +10,9 @@
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
         "catering-service": true,
-        "financial-service": true,
-        "visitor-service": true,
-        "node_modules": true,
-        "notification-service": true,
-        ".gitignore": true,
-        "auth-service": true,
-        "account-service": true,
-        "user-service": true,
-        "bed-service": true,
-        "employee-service": true
+        "z-template": true
     },
     "hide-files.files": [
-        "financial-service",
-        "visitor-service",
-        "node_modules",
-        "notification-service",
-        ".gitignore",
-        "auth-service",
-        "account-service",
-        "user-service",
-        "bed-service",
-        "employee-service"
+        "z-template"
     ]
 }

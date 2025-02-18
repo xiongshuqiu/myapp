@@ -2,6 +2,7 @@ const employees = [
   {
     employeeId: 'S001',
     employeeName: 'Dr. John Doe',
+    photo: 'https://github.com/xiongshuqiu/images/blob/main/employeePhotos/Admin.jpg?raw=true',
     position: 'Management',
     contactNumber: '1234567890',
     email: 'john.doe@example.com',
@@ -11,6 +12,7 @@ const employees = [
   {
     employeeId: 'S002',
     employeeName: 'Dr. Jane Smith',
+    photo: 'https://github.com/xiongshuqiu/images/blob/main/employeePhotos/D-man01.png?raw=true',
     position: 'Doctor',
     contactNumber: '0987654321',
     email: 'jane.smith@example.com',
@@ -20,6 +22,7 @@ const employees = [
   {
     employeeId: 'S003',
     employeeName: 'Dr. Emily Johnson',
+    photo: 'https://github.com/xiongshuqiu/images/blob/main/employeePhotos/D-man02.jpg?raw=true',
     position: 'Doctor',
     contactNumber: '1122334455',
     email: 'emily.johnson@example.com',
@@ -29,6 +32,7 @@ const employees = [
   {
     employeeId: 'S004',
     employeeName: 'Dr. Michael Brown',
+    photo: 'https://github.com/xiongshuqiu/images/blob/main/employeePhotos/D-man03.jpg?raw=true',
     position: 'Doctor',
     contactNumber: '2233445566',
     email: 'michael.brown@example.com',
@@ -38,6 +42,7 @@ const employees = [
   {
     employeeId: 'S005',
     employeeName: 'Dr. Sarah Davis',
+    photo: 'https://github.com/xiongshuqiu/images/blob/main/employeePhotos/D-woman02.jpg?raw=true',
     position: 'Doctor',
     contactNumber: '3344556677',
     email: 'sarah.davis@example.com',
@@ -47,6 +52,7 @@ const employees = [
   {
     employeeId: 'S006',
     employeeName: 'Dr. James Wilson',
+    photo: 'https://github.com/xiongshuqiu/images/blob/main/employeePhotos/D-woman03.jpg?raw=true',
     position: 'Doctor',
     contactNumber: '4455667788',
     email: 'james.wilson@example.com',
@@ -56,6 +62,7 @@ const employees = [
   {
     employeeId: 'S007',
     employeeName: 'Dr. Laura Martinez',
+    photo: 'https://github.com/xiongshuqiu/images/blob/main/employeePhotos/D-woman04.jpeg?raw=true',
     position: 'Doctor',
     contactNumber: '5566778899',
     email: 'laura.martinez@example.com',
@@ -65,6 +72,7 @@ const employees = [
   {
     employeeId: 'S008',
     employeeName: 'Dr. Robert Miller',
+    photo: 'https://github.com/xiongshuqiu/images/blob/main/employeePhotos/D-woman05.jpg?raw=true',
     position: 'Doctor',
     contactNumber: '6677889900',
     email: 'robert.miller@example.com',
@@ -74,6 +82,7 @@ const employees = [
   {
     employeeId: 'S009',
     employeeName: 'Dr. Linda Clark',
+    photo: 'https://github.com/xiongshuqiu/images/blob/main/employeePhotos/D-woman06.jpg?raw=true',
     position: 'Doctor',
     contactNumber: '7788990011',
     email: 'linda.clark@example.com',
@@ -83,6 +92,7 @@ const employees = [
   {
     employeeId: 'S010',
     employeeName: 'Dr. Thomas Anderson',
+    photo: 'https://github.com/xiongshuqiu/images/blob/main/employeePhotos/D-man04.jpg?raw=true',
     position: 'Doctor',
     contactNumber: '8899001122',
     email: 'thomas.anderson@example.com',
@@ -92,6 +102,7 @@ const employees = [
   {
     employeeId: 'S011',
     employeeName: 'Dr. Anna Taylor',
+    photo: 'https://github.com/xiongshuqiu/images/blob/main/employeePhotos/C-man02.jpg?raw=true',
     position: 'Other',
     contactNumber: '9900112233',
     email: 'anna.taylor@example.com',
@@ -101,6 +112,7 @@ const employees = [
   {
     employeeId: 'S012',
     employeeName: 'Dr. William Harris',
+    photo: 'https://github.com/xiongshuqiu/images/blob/main/employeePhotos/C-man01.jpg?raw=true',
     position: 'Finance',
     contactNumber: '1100223344',
     email: 'william.harris@example.com',
@@ -110,6 +122,7 @@ const employees = [
   {
     employeeId: 'S013',
     employeeName: 'Dr. Sophia Martinez',
+    photo: 'https://github.com/xiongshuqiu/images/blob/main/employeePhotos/C-woman01.jpg?raw=true',
     position: 'Catering',
     contactNumber: '2200334455',
     email: 'sophia.martinez@example.com',
@@ -119,6 +132,7 @@ const employees = [
   {
     employeeId: 'S014',
     employeeName: 'Dr. Daniel Lee',
+    photo: 'https://github.com/xiongshuqiu/images/blob/main/employeePhotos/C-woman02.jpg?raw=true',
     position: 'Other',
     contactNumber: '3322114455',
     email: 'daniel.lee@example.com',
@@ -128,6 +142,7 @@ const employees = [
   {
     employeeId: 'S015',
     employeeName: 'Dr. Olivia Martin',
+    photo: 'https://github.com/xiongshuqiu/images/blob/main/employeePhotos/C-woman03.jpg?raw=true',
     position: 'Other',
     contactNumber: '4433225566',
     email: 'olivia.martin@example.com',
@@ -137,6 +152,7 @@ const employees = [
   {
     employeeId: 'S016',
     employeeName: 'Dr. Benjamin Clark',
+    photo: 'https://github.com/xiongshuqiu/images/blob/main/employeePhotos/C-woman04.jpg?raw=true',
     position: 'Other',
     contactNumber: '5544336677',
     email: 'benjamin.clark@example.com',
@@ -146,6 +162,7 @@ const employees = [
   {
     employeeId: 'S017',
     employeeName: 'Dr. Isabella Rodriguez',
+    photo: 'https://github.com/xiongshuqiu/images/blob/main/employeePhotos/C-woman05.jpg?raw=true',
     position: 'Other',
     contactNumber: '6655447788',
     email: 'isabella.rodriguez@example.com',
@@ -155,6 +172,7 @@ const employees = [
   {
     employeeId: 'S018',
     employeeName: 'Dr. Matthew Garcia',
+    photo: 'https://github.com/xiongshuqiu/images/blob/main/employeePhotos/C-woman05.jpg?raw=true',
     position: 'Other',
     contactNumber: '7766558899',
     email: 'matthew.garcia@example.com',
@@ -164,6 +182,7 @@ const employees = [
   {
     employeeId: 'S019',
     employeeName: 'Dr. Ava Martinez',
+    photo: 'https://github.com/xiongshuqiu/images/blob/main/employeePhotos/C-woman05.jpg?raw=true',
     position: 'Other',
     contactNumber: '8877669900',
     email: 'ava.martinez@example.com',
@@ -173,6 +192,7 @@ const employees = [
   {
     employeeId: 'S020',
     employeeName: 'Dr. Mason Lopez',
+    photo: 'https://github.com/xiongshuqiu/images/blob/main/employeePhotos/C-woman03.jpg?raw=true',
     position: 'Other',
     contactNumber: '9988770011',
     email: 'mason.lopez@example.com',

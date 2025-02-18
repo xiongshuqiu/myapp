@@ -164,7 +164,13 @@ border-radius: 0;
 .hide-column {
     display: none;          /* 隐藏该列 */
 }
-  
+   /* 限制email显示长度的类 */
+.email-limited {
+    max-width: 100px; /* Adjust this value as needed */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
   
   
   

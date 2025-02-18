@@ -62,8 +62,8 @@ const renderNewEmployeeRecordForm = async (req, res) => {
 // (2) 提交新的员工档案数据
 const createEmployeeRecord = async (req, res) => {
   const {
-    employeeId,
     employeeName,
+    photo,
     position,
     contactNumber,
     email,
@@ -73,8 +73,8 @@ const createEmployeeRecord = async (req, res) => {
 
   try {
     const data = {
-      employeeId,
       employeeName,
+      photo,
       position,
       contactNumber,
       email,
@@ -108,10 +108,10 @@ const getEmployeeRecordById = async (req, res) => {
 };
 // (2) 提交更新后的员工档案数据
 const updateEmployeeRecord = async (req, res) => {
-  const { employeeId, employeeName, position, contactNumber, email, userId,status } =
+  const { employeeName,photo, position, contactNumber, email, userId,status } =
     req.body;
   try {
-    const data = { employeeId, employeeName, position, contactNumber, email, userId,status };
+    const data = { employeeName,photo, position, contactNumber, email, userId,status };
     const { _id } = req.params; // 从参数中获取 _Id
     const url = `${process.env.EMPLOYEE_SERVICE_URL}/employees/record/${_id}`;
     const response = await putRequest(url, data); // 发送 PUT 请求以更新用户信息

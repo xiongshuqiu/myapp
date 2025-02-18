@@ -63,6 +63,7 @@ const ElderlyLeave = mongoose.model('ElderlyLeave', elderlyLeaveSchema);
 const employeeSchema = new mongoose.Schema({
   employeeId: { type: String, required: true, unique: true }, // 员工唯一编号S001
   employeeName: { type: String, required: true }, // 员工姓名
+  photo: { type: String, required: true }, // 员工照片
   position: { type: String, required: true }, // 员工职位:Management\Doctor\Catering\Finance\Other
   contactNumber: { type: String, required: true }, // 联系电话
   email: { type: String, required: true, unique: true }, // 电子邮件

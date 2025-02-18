@@ -1,3 +1,4 @@
+const getNextId = require('./genericController.js');
 const User = require('../models/userModel');
 const Employee = require('../models/employeeModel');
 // 1. 获取所有员工档案
@@ -61,8 +62,8 @@ const renderNewEmployeeRecordForm = async (req, res) => {
 // (2) 提交新的员工档案数据
 const createEmployeeRecord = async (req, res) => {
   const {
-    employeeId,
     employeeName,
+    photo,
     position,
     contactNumber,
     email,
@@ -74,6 +75,8 @@ const createEmployeeRecord = async (req, res) => {
     req.body,
   ); // 调试信息
   try {
+    // 生成新的 healthRecordId
+    const employeeId = await getNextId('Employee', 'S', 'employeeId');
     // 检查是否存在相同员工编号的记录
     const existingEmployeeRecord = await Employee.findOne({ employeeId });
     if (existingEmployeeRecord) {
@@ -87,6 +90,7 @@ const createEmployeeRecord = async (req, res) => {
     const newEmployee = new Employee({
       employeeId,
       employeeName,
+      photo,
       position,
       contactNumber,
       email,
@@ -145,8 +149,8 @@ const getEmployeeRecordById = async (req, res) => {
 const updateEmployeeRecord = async (req, res) => {
   const { _id } = req.params;
   const {
-    employeeId,
     employeeName,
+    photo,
     position,
     contactNumber,
     email,
@@ -182,13 +186,15 @@ const updateEmployeeRecord = async (req, res) => {
     }
 
     // 更新员工档案
-    existingEmployee.employeeId = employeeId;
-    existingEmployee.employeeName = employeeName;
-    existingEmployee.position = position;
-    existingEmployee.contactNumber = contactNumber;
-    existingEmployee.email = email;
-    existingEmployee.userId = userId;
-    existingEmployee.status = status;
+    Object.assign(existingEmployee, {
+      employeeName,
+      photo,
+      position,
+      contactNumber,
+      email,
+      userId,
+      status,
+    });
 
     await existingEmployee.save();
 
@@ -215,12 +221,10 @@ const deleteEmployeeRecord = async (req, res) => {
   try {
     const employeeRecord = await Employee.findByIdAndDelete(_id);
     if (bedStatus) {
-      return res
-        .status(200)
-        .json({
-          success: true,
-          message: 'Employee record  deleted successfully',
-        });
+      return res.status(200).json({
+        success: true,
+        message: 'Employee record  deleted successfully',
+      });
     } else {
       return res
         .status(404)
