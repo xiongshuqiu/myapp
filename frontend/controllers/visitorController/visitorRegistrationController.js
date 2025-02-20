@@ -43,7 +43,7 @@ const deleteRequest = async (url) => {
 };
 
 // 1.获取所有床位状态
-const getNotifications = async (req, res) => {
+const getAllVisitorRegistrations = async (req, res) => {
   const apiUrl = `${process.env.API_URL}/api/beds/status/`;
   console.log(apiUrl);
   try {
@@ -66,14 +66,14 @@ const getNotifications = async (req, res) => {
 };
 // 2.创建新的床位状态
 //(1)显示新增床位状态表单
-const renderNewNotificationForm = async (req, res) => {
+const renderNewVisitorRegistrationForm = async (req, res) => {
   res.render('bed/bedStatus/bedStatusCreate.ejs', {
     activePage: 'bed-management',
     navItems: req.navItems, // 将导航项传递到视图
   });
 };
 //(2)提交新的床位状态数据
-const createNotification = async (req, res) => {
+const createVisitorRegistration = async (req, res) => {
   const { bedId, building, floor, room, roomType, bedNumber, status } = req.body;
   try {
     const data = { bedId, building, floor, room, roomType, bedNumber, status };
@@ -93,7 +93,7 @@ const createNotification = async (req, res) => {
 
 // 3.更新特定床位状态
 // (1)查找特定床位状态并显示编辑表单
-const getNotificationById = async (req, res) => {
+const getVisitorRegistrationById = async (req, res) => {
   const { _id } = req.params; // 从参数中获取 _id
   console.log(`Fetching bedStatus with ID: ${_id}`); // 调试信息
   try {
@@ -114,7 +114,7 @@ const getNotificationById = async (req, res) => {
 };
 
 //(2) 提交更新后的床位状态数据
-const updateNotification = async (req, res) => {
+const updateVisitorRegistration = async (req, res) => {
   const { bedId, building, floor, room, roomType, bedNumber, status } = req.body;
   const { _id } = req.params;
   try {
@@ -135,7 +135,7 @@ const updateNotification = async (req, res) => {
 };
 
 // 4. 删除特定床位状态
-const deleteNotification = async (req, res) => {
+const deleteVisitorRegistration = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取_id
     console.log(_id);
@@ -149,12 +149,10 @@ const deleteNotification = async (req, res) => {
   }
 };
 module.exports = {
-  getNotifications,
-  renderNewNotificationForm,
-  createNotification,
-  getNotificationById,
-  updateNotification,
-  deleteNotification,
+  getAllVisitorRegistrations,
+  renderNewVisitorRegistrationForm,
+  createVisitorRegistration,
+  getVisitorRegistrationById,
+  updateVisitorRegistration,
+  deleteVisitorRegistration,
 };
-
-     

@@ -10,6 +10,10 @@ const bedRoutes = require('./routes/bedRoutes/bedRoutes');
 const employeeRoutes = require('./routes/employeeRoutes/employeeRoutes');
 const elderlyRoutes = require('./routes/elderlyRoutes/elderlyRoutes');
 const healthRoutes = require('./routes/healthRoutes/healthRoutes');
+const cateringRoutes = require('./routes/cateringRoutes/cateringRoutes');
+const financialRoutes = require('./routes/financialRoutes/financialRoutes');
+const vistorRoutes = require('./routes/visitorRoutes/vistorRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
 // 2.加载环境变量
 dotenv.config(); // 加载根目录中的.env文件中的环境变量
 // 3.创建Express应用实例
@@ -34,6 +38,10 @@ app.use('/api/beds', bedRoutes);
 app.use('/api/employees', employeeRoutes);
 app.use('/api/elderly', elderlyRoutes);
 app.use('/api/health', healthRoutes);
+app.use('/catering', cateringRoutes);
+app.use('/financial', financialRoutes);
+app.use('/vistors', vistorRoutes);
+app.use('/notifications', notificationRoutes);
 // 6.调试环境变量
 console.log('Loaded PORT:', process.env.PORT); // 输出环境变量值以调试
 

@@ -17,7 +17,10 @@ const bedRoutes = require('./routes/bedRoutes/bedRoutes');
 const employeeRoutes = require('./routes/employeeRoutes/employeeRoutes');
 const elderlyRoutes = require('./routes/elderlyRoutes/elderlyRoutes');
 const healthRoutes = require('./routes/healthRoutes/healthRoutes');
-
+const cateringRoutes = require('./routes/cateringRoutes/cateringRoutes');
+const financialRoutes = require('./routes/financialRoutes/financialRoutes');
+const vistorRoutes = require('./routes/visitorRoutes/vistorRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
 // 2. 加载环境变量
 dotenv.config(); // 加载 .env 文件中的环境变量
 
@@ -68,6 +71,10 @@ app.use('/beds', bedRoutes);
 app.use('/employees', employeeRoutes);
 app.use('/elderly', elderlyRoutes);
 app.use('/health', healthRoutes);
+app.use('/catering', cateringRoutes);
+app.use('/financial', financialRoutes);
+app.use('/vistors', vistorRoutes);
+app.use('/notifications', notificationRoutes);
 // 10. 启动服务器并监听指定端口
 const PORT = process.env.PORT; // 设置服务器端口
 app.listen(PORT, () => {

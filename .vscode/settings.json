@@ -9,10 +9,25 @@
         "**/CVS": true,
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
-        "catering-service": true,
-        "z-template": true
+        "z-template": true,
+        "account-service": true,
+        "auth-service": true,
+        "bed-service": true,
+        "employee-service": true,
+        "middleware": true,
+        "z-DataBase": true,
+        "user-service": true,
+        "elderly-service": true
     },
     "hide-files.files": [
-        "z-template"
+        "z-template",
+        "account-service",
+        "auth-service",
+        "bed-service",
+        "employee-service",
+        "middleware",
+        "z-DataBase",
+        "user-service",
+        "elderly-service"
     ]
 }
