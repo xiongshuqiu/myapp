@@ -9,7 +9,7 @@ const {
   getVisitorRegistrationById,
   updateVisitorRegistration,
   deleteVisitorRegistration
-} = require('../../controllers/visitorController/visitorRegistrationController');
+} = require('../controllers/visitorRegistrationController');
 
 // 1. 获取所有员工档案
 router.get('/',getAllVisitorRegistrations);

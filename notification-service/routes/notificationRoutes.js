@@ -1,8 +1,8 @@
- // #frontend routes
+
 const express = require('express');
 const router = express.Router();
 const {
-  getNotifications,
+  getAllNotifications,
   renderCreateNotificationForm,
   createNotification,
   getNotificationById,
@@ -11,7 +11,7 @@ const {
 } = require('../controllers/notificationController');
 
 // 1.查找所有通知
-router.get('/',bntLinkVisibility, getNotifications);
+router.get('/',getAllNotifications);
 
 // 2.新增通知
 router.get('/new', renderCreateNotificationForm,); // 显示新增通知表单

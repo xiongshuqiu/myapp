@@ -1,2 +1,0 @@
-frontend\controllers\financialController\SalaryQueryController.js
-frontend\controllers\financialController\TransactionRecordController.js

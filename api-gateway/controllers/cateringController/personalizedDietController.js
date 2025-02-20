@@ -32,7 +32,7 @@ const deleteRequest = async (url) => {
   return response.data;
 };
 // 1. 获取所有老人入住和退住数据
-const getAllElderlyResidents = async (req, res) => {
+const getAllPersonalizedDiets = async (req, res) => {
   const { _id, role } = req.query; // 从查询参数中获取传递的数据
   try {
     const url = `${process.env.ELDERLY_SERVICE_URL}/elderly/resident/?_id=${_id}&role=${role}`;
@@ -48,7 +48,7 @@ const getAllElderlyResidents = async (req, res) => {
 
 // 2. 创建新的老人入住和退住数据
 // (1) 显示新增老人入住和退住数据表单(查找可用的bedId、elderlyId)
-const renderNewElderlyResidentForm = async (req, res) => {
+const renderNewPersonalizedDietForm = async (req, res) => {
   try {
     const url = `${process.env.ELDERLY_SERVICE_URL}/elderly/resident/new`;
     const response = await getRequest(url); // 发送 GET 请求以获取用户信息
@@ -61,7 +61,7 @@ const renderNewElderlyResidentForm = async (req, res) => {
   }
 };
 // (2) 提交新的老人入住和退住数据数据
-const createElderlyResident = async (req, res) => {
+const createPersonalizedDiet = async (req, res) => {
   const {
     elderlyId,
     checkInTime,
@@ -88,7 +88,7 @@ const createElderlyResident = async (req, res) => {
 };
 // 3. 更新特定老人入住和退住数据
 // (1) 查找特定老人入住和退住数据并显示编辑表单
-const getElderlyResidentById = async (req, res) => {
+const getPersonalizedDietById = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取 _id
     const url = `${process.env.ELDERLY_SERVICE_URL}/elderly/resident/${_id}/update`;
@@ -102,7 +102,7 @@ const getElderlyResidentById = async (req, res) => {
   }
 };
 // (2) 提交更新后的老人入住和退住数据数据
-const updateElderlyResident = async (req, res) => {
+const updatePersonalizedDiet = async (req, res) => {
   const {
     elderlyId,
     checkInTime,
@@ -129,7 +129,7 @@ const updateElderlyResident = async (req, res) => {
 };
 
 // 4. 删除特定老人入住和退住数据
-const deleteElderlyResident = async (req, res) => {
+const deletePersonalizedDiet = async (req, res) => {
   try {
     const { _id } = req.params; // 从参数中获取 userId
     const url = `${process.env.ELDERLY_SERVICE_URL}/elderly/resident/${_id}/delete`;
@@ -144,10 +144,10 @@ const deleteElderlyResident = async (req, res) => {
 };
 
 module.exports = {
-  getAllElderlyResidents,
-  renderNewElderlyResidentForm,
-  createElderlyResident,
-  getElderlyResidentById,
-  updateElderlyResident,
-  deleteElderlyResident,
+  getAllPersonalizedDiets,
+  renderNewPersonalizedDietForm,
+  createPersonalizedDiet,
+  getPersonalizedDietById,
+  updatePersonalizedDiet,
+  deletePersonalizedDiet,
 };

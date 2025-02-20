@@ -9,7 +9,7 @@ const {
   getMealSchedulingById,
   updateMealScheduling,
   deleteMealScheduling
-} = require('../../controllers/cateringController/mealSchedulingController.js');
+} = require('../controllers/mealSchedulingController.js');
 // 1. 获取所有膳食安排
 router.get('/',getAllMealSchedulings);
 

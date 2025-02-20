@@ -9,7 +9,7 @@ const {
   getAppointmentSchedulingById,
   updateAppointmentScheduling,
   deleteAppointmentScheduling
-} = require('../../controllers/visitorController/appointmentSchedulingController');
+} = require('../controllers/appointmentSchedulingController');
 
 // 1. 获取所有预约登记
 router.get('/',getAllAppointmentSchedulings);

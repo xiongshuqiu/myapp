@@ -11,7 +11,7 @@ const {
   deletePersonalizedDiet,
 } = require('../../controllers/cateringController/PersonalizedDietController');
 // 1. 获取所有个性化饮食
-router.get('/',bntLinkVisibility,getAllPersonalizedDiets);
+router.get('/',getAllPersonalizedDiets);
 
 // 2. 创建新的个性化饮食
 // (1) 显示新增个性化饮食表单

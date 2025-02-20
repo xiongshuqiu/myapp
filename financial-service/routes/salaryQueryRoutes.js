@@ -1,10 +1,7 @@
 // #frontend routes
 const express = require('express');
 const router = express.Router();
-const { authorizeRole } = require('../../../middleware/authMiddleware');
-const {
-  bntLinkVisibility,
-} = require('../../visibilityMiddleware/bntLinkVisibility');
+
 const {
   getAllSalaryQueries,
   renderNewSalaryQueryForm,
@@ -12,10 +9,10 @@ const {
   getSalaryQueryById,
   updateSalaryQuery,
   deleteSalaryQuery
-} = require('../../controllers/financialController/SalaryQueryController');
+} = require('../controllers/SalaryQueryController');
 
 // 1. 获取所有员工工资查询
-router.get('/',bntLinkVisibility,getAllSalaryQueries);
+router.get('/',getAllSalaryQueries);
 
 // 2. 创建新的员工工资查询
 // (1) 显示新增员工工资查询表单

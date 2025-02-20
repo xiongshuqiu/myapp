@@ -1,10 +1,7 @@
 // #frontend routes
 const express = require('express');
 const router = express.Router();
-const { authorizeRole } = require('../../../middleware/authMiddleware');
-const {
-  bntLinkVisibility,
-} = require('../../visibilityMiddleware/bntLinkVisibility');
+
 const {
   getAllTransactionRecords,
   renderNewTransactionRecordForm,
@@ -15,7 +12,7 @@ const {
 } = require('../../controllers/financialController/TransactionRecordController');
 
 // 1. 获取所有老人缴费退费记录
-router.get('/',bntLinkVisibility,getAllTransactionRecords);
+router.get('/',getAllTransactionRecords);
 
 // 2. 创建新的老人缴费退费记录
 // (1) 显示新增老人缴费退费记录表单

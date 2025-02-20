@@ -38,10 +38,10 @@ app.use('/api/beds', bedRoutes);
 app.use('/api/employees', employeeRoutes);
 app.use('/api/elderly', elderlyRoutes);
 app.use('/api/health', healthRoutes);
-app.use('/catering', cateringRoutes);
-app.use('/financial', financialRoutes);
-app.use('/vistors', vistorRoutes);
-app.use('/notifications', notificationRoutes);
+app.use('/api/catering', cateringRoutes);
+app.use('/api/financial', financialRoutes);
+app.use('/api/vistors', vistorRoutes);
+app.use('/api/notifications', notificationRoutes);
 // 6.调试环境变量
 console.log('Loaded PORT:', process.env.PORT); // 输出环境变量值以调试
 
