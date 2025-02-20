@@ -8,7 +8,7 @@ const {
   getCareLevelById,
   updateCareLevel,
   deleteCareLevel
-} = require('../../../controllers/healthController/careManagementController/careLevelController');
+} = require('../../controllers/careManagementController/careLevelController');
 // 1. 获取所有护理等级
 router.get('/', getAllCareLevels);
 // 2. 创建新的护理等级

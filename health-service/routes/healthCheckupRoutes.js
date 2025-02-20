@@ -8,7 +8,7 @@ const {
   getHealthCheckupById,
   updateHealthCheckup,
   deleteHealthCheckup,
-} = require('../../controllers/healthController/healthCheckupController');
+} = require('../controllers/healthCheckupController');
 // 1. 获取所有健康体检
 router.get('/',getAllHealthCheckups);
 

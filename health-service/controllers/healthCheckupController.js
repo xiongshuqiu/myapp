@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
 const getNextId = require('./genericController.js');
-const CareLevel = require('../../models/careLevelModel.js');
-const CarePlan = require('../../models/carePlanModel.js');
-const CareProject = require('../../models/careProjectModel.js');
-const CareTask = require('../../models/careTaskModel.js');
-const Elderly = require('../../models/elderlyModel.js');
-const Employee = require('../../models/employeeModel.js');
-const HealthCheckup = require('../../models/healthCheckupModel.js');
-const HealthRecord = require('../../models/healthRecordModel.js');
-const User = require('../../models/userModel.js');
+const CareLevel = require('../models/careLevelModel.js');
+const CarePlan = require('../models/carePlanModel.js');
+const CareProject = require('../models/careProjectModel.js');
+const CareTask = require('../models/careTaskModel.js');
+const Elderly = require('../models/elderlyModel.js');
+const Employee = require('../models/employeeModel.js');
+const HealthCheckup = require('../models/healthCheckupModel.js');
+const HealthRecord = require('../models/healthRecordModel.js');
+const User = require('../models/userModel.js');
 
 // 获取老人所有的健康体检
 const getAllHealthCheckups = async (req, res) => {
@@ -281,7 +281,7 @@ const getHealthCheckupById = async (req, res) => {
     // 查找所有员工的employeeIds
     const employeeIds = await Employee.find().select('employeeId employeeName');
     console.log(employeeIds);
-    // 查找所有员工的employeeIds
+    // 查找所有员工的careLevelIds
     const careLevelIds = await CareLevel.find().select('careLevelId level');
     console.log(careLevelIds);
 

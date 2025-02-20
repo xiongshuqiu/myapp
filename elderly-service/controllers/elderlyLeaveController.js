@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 const getNextId = require('./genericController.js');
-const BedAssignment = require('../../models/bedAssignmentModel');
-const BedStatus = require('../../models/bedStatusModel');
-const ElderlyLeave = require('../../models/elderlyLeaveModel');
-const Elderly = require('../../models/elderlyModel');
-const ElderlyResident = require('../../models/elderlyResidentModel');
-const Employee = require('../../models/employeeModel');
-const User = require('../../models/userModel');
+const BedAssignment = require('../models/bedAssignmentModel.js');
+const BedStatus = require('../models/bedStatusModel.js');
+const ElderlyLeave = require('../models/elderlyLeaveModel.js');
+const Elderly = require('../models/elderlyModel.js');
+const ElderlyResident = require('../models/elderlyResidentModel.js');
+const Employee = require('../models/employeeModel.js');
+const User = require('../models/userModel.js');
 
 // 1. 获取所有老人请假请求
 const getAllElderlyLeaveRequests = async (req, res) => {

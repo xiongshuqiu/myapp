@@ -8,26 +8,7 @@
         "**/.hg": true,
         "**/CVS": true,
         "**/.DS_Store": true,
-        "**/Thumbs.db": true,
-        "z-template": true,
-        "account-service": true,
-        "auth-service": true,
-        "bed-service": true,
-        "employee-service": true,
-        "middleware": true,
-        "z-DataBase": true,
-        "user-service": true,
-        "elderly-service": true
+        "**/Thumbs.db": true
     },
-    "hide-files.files": [
-        "z-template",
-        "account-service",
-        "auth-service",
-        "bed-service",
-        "employee-service",
-        "middleware",
-        "z-DataBase",
-        "user-service",
-        "elderly-service"
-    ]
+    "hide-files.files": []
 }

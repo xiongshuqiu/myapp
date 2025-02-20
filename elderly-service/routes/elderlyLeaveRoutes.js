@@ -8,7 +8,7 @@ const {
   getElderlyLeaveRequestById,
   updateElderlyLeaveRequest,
   deleteElderlyLeaveRequest
-} = require('../../controllers/elderlyController/elderlyLeaveController');
+} = require('../controllers/elderlyLeaveController');
 // 1. 获取所有老人请假请求
 router.get('/',getAllElderlyLeaveRequests);
 

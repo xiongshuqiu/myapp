@@ -8,7 +8,7 @@ const {
   getCareTaskById,
   updateCareTask,
   deleteCareTask,
-} = require('../../../controllers/healthController/careManagementController/careTaskController');
+} = require('../../controllers/careManagementController/careTaskController');
 // 1. 获取所有护理任务
 router.get('/',getAllCareTasks);
 

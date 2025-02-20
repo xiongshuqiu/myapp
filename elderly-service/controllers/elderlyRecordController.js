@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const getNextId = require('./genericController.js');
-const Elderly = require('../../models/elderlyModel');
-const Employee = require('../../models/employeeModel');
-const User = require('../../models/userModel');
+const Elderly = require('../models/elderlyModel.js');
+const Employee = require('../models/employeeModel.js');
+const User = require('../models/userModel.js');
 
 // 1.获取所有老人档案
 const getAllElderlyRecords = async (req, res) => {

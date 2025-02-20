@@ -8,7 +8,7 @@ const {
   getCareProjectById,
   updateCareProject,
   deleteCareProject
-} = require('../../../controllers/healthController/careManagementController/careProjecController');
+} = require('../../controllers/careManagementController/careProjectController');
 // 1. 获取所有护理项目
 router.get('/',getAllCareProjects);
 

@@ -8,7 +8,7 @@ const {
   getHealthRecordById,
   updateHealthRecord,
   deleteHealthRecord
-} = require('../../controllers/healthController/healthRecordController.js');
+} = require('../controllers/healthRecordController.js');
 // 1. 获取所有老人健康档案
 router.get('/', getAllHealthRecords);
 

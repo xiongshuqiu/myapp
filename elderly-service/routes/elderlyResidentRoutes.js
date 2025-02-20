@@ -8,7 +8,7 @@ const {
   getElderlyResidentById,
   updateElderlyResident,
   deleteElderlyResident,
-} = require('../../controllers/elderlyController/elderlyResidentController');
+} = require('../controllers/elderlyResidentController');
 // 1. 获取所有老人入住退住数据
 router.get('/',getAllElderlyResidents);
 
