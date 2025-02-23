@@ -125,18 +125,22 @@
                           />
                         </div>
 
+                      
+
                         <div class="form-group">
                           <label for="role"
                             >Role <span style="color: red">*</span></label
                           >
-                          <input
-                            type="text"
+                          <select
                             class="form-control"
                             id="role"
                             name="role"
-                            value="<%= user.role %>"
                             required
-                          />
+                          >
+                            <option value="admin" <%= user.role==='admin'?'selected':'' %>>admin</option>
+                            <option value="family"<%= user.role==='family'?'selected':'' %>>family</option>
+                            <option value="medical"<%= user.role==='medical'?'selected':'' %>>medical</option>
+                          </select>
                         </div>
 
                         <button type="submit" class="btn btn-primary">

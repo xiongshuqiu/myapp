@@ -37,7 +37,7 @@
       <div id="page-wrapper">
         <div class="header">
           <h1 class="page-header">
-            Health Management <small> Health Information</small>
+            Health Management <small> Health Record Information</small>
           </h1>
           <ol class="breadcrumb">
             <!-- 面包屑导航 -->
@@ -45,7 +45,7 @@
             <!-- 首页链接 -->
             <li><a href="#">Health Management</a></li>
             <!-- 用户管理页面链接 -->
-            <li class="active">HealthRecord Data</li>
+            <li class="active">Health Record Data</li>
             <!-- 当前页：用户数据 -->
           </ol>
         </div>
@@ -55,7 +55,7 @@
           <div class="row">
             <div class="col-md-12">
               <div class="panel panel-default">
-                <div class="panel-heading">HealthRecord Tables</div>
+                <div class="panel-heading">Health Record Tables</div>
                 <div class="panel-body">
                   <div class="table-responsive">
                     <table
@@ -64,23 +64,29 @@
                     >
                       <thead>
                         <tr>
-                          <th>healthRecordId</th>
+                          <th class="hide-column">healthRecordId</th>
                           <th>elderlyId</th>
                           <th>elderlyName</th>
                           <th>medicalHistory</th>
                           <th>allergies</th>
                           <th>medications</th>
-                          <th>createdAt</th>
+                          <th >createdAt</th>
                           <th>action</th>
                         </tr>
                       </thead>
                       <tbody>
                         <% healthRecords.forEach(function(healthRecord) { %>
                         <tr class="odd gradeX" style="white-space: nowrap">
-                          <td><%= healthRecord.healthRecordId %></td>
+                          <td class="hide-column">
+                            <%= healthRecord.healthRecordId %>
+                          </td>
                           <td><%= healthRecord.elderlyId %></td>
                           <td><%= healthRecord.elderlyName %></td>
-                          <td><%= healthRecord.medicalHistory %></td>
+                          <td>
+                            <%= healthRecord.medicalHistory.length > 6 ?
+                            healthRecord.medicalHistory.substring(0, 6) + '...'
+                            : healthRecord.medicalHistory %>
+                          </td>
                           <td><%= healthRecord.allergies %></td>
                           <td><%= healthRecord.medications %></td>
                           <td><%= healthRecord.createdAt %></td>

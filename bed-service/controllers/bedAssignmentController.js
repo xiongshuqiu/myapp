@@ -1,3 +1,4 @@
+const getNextId = require('./genericController.js');
 const User = require('../models/userModel');
 const Elderly = require('../models/elderlyModel');
 const BedAssignment = require('../models/bedAssignmentModel');
@@ -101,7 +102,7 @@ const renderNewBedAssignmentForm = async (req, res) => {
   try {
     // 顺序查找可用的 bedId
     const availableBedIds = await BedStatus.find({
-      status: 'available',
+      status: 'Available',
     }).select('bedId');
 
     // 聚合管道查找未分配床位的 elderlyId
@@ -145,10 +146,10 @@ const renderNewBedAssignmentForm = async (req, res) => {
 };
 // (2) 提交新的床位分配数据
 const createBedAssignment = async (req, res) => {
+  const assignmentId = await getNextId('BedAssignment', 'A', 'assignmentId');
   const {
     availableBedId,
     unassignedElderlyId,
-    assignmentId,
     assignedDate,
     releaseDate,
   } = req.body;
@@ -237,7 +238,7 @@ const getBedAssignmentById = async (req, res) => {
 // (2) 提交更新后的床位分配数据
 const updateBedAssignment = async (req, res) => {
   const { _id } = req.params; // 从 URL 参数中获取 assignmentId
-  const { bedId, elderlyId, assignmentId, assignedDate,releaseDate } =
+  const { bedId, elderlyId, assignedDate,releaseDate } =
     req.body;
 
   console.log('Received request to update bed assignment with data:', req.body); // 调试信息
@@ -270,7 +271,6 @@ const updateBedAssignment = async (req, res) => {
     // 更新床位分配记录
     existingBedAssignment.bedId = bedId;
     existingBedAssignment.elderlyId = elderlyId;
-    existingBedAssignment.assignmentId = assignmentId;
     existingBedAssignment.assignedDate = assignedDate;
     existingBedAssignment.releaseDate = releaseDate;
     await existingBedAssignment.save();

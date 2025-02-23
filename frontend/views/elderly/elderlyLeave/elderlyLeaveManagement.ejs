@@ -37,7 +37,7 @@
       <div id="page-wrapper">
         <div class="header">
           <h1 class="page-header">
-            Elderly Management <small> Elderly Information</small>
+            Elderly Management <small>  Information</small>
           </h1>
           <ol class="breadcrumb">
             <!-- 面包屑导航 -->
@@ -45,7 +45,7 @@
             <!-- 首页链接 -->
             <li><a href="#">Elderly Management</a></li>
             <!-- 用户管理页面链接 -->
-            <li class="active">ElderlyLeaveRequest Data</li>
+            <li class="active">Elderly Leave Request Data</li>
             <!-- 当前页：用户数据 -->
           </ol>
         </div>
@@ -55,7 +55,7 @@
           <div class="row">
             <div class="col-md-12">
               <div class="panel panel-default">
-                <div class="panel-heading">ElderlyLeaveRequest Tables</div>
+                <div class="panel-heading">Elderly Leave Request Tables</div>
                 <div class="panel-body">
                   <div class="table-responsive">
                     <table
@@ -64,7 +64,7 @@
                     >
                       <thead>
                         <tr>
-                          <th>leaveId</th>
+                          <th class="hide-column">leaveId</th>
                           <th class="hide-column">elderlyId</th>
                           <th>elderlyName</th>
                           <th>leavereason</th>
@@ -72,7 +72,7 @@
                           <th>endDate</th>
                           <th>status</th>
                           <th>type</th>
-                          <th >approvalNotes</th>
+                          <th>approvalNotes</th>
                           <th>applicationDate</th>
                           <th>action</th>
                         </tr>
@@ -80,39 +80,49 @@
                       <tbody>
                         <% elderlyLeaves.forEach(function(elderlyLeave) { %>
                         <tr class="odd gradeX" style="white-space: nowrap">
-                          <td><%= elderlyLeave.leaveId %></td>
+                          <td class="hide-column"><%= elderlyLeave.leaveId %></td>
                           <td class="hide-column"><%= elderlyLeave.elderlyId %></td>
                           <td><%= elderlyLeave.elderlyName %></td>
-                          <td><%= elderlyLeave.reason %></td>
+                          <td><%= elderlyLeave.reason.length > 10 ? elderlyLeave.reason.substring(0, 20) + '...' : elderlyLeave.reason %></td>
                           <td><%= elderlyLeave.startDate %></td>
                           <td><%= elderlyLeave.endDate %></td>
                           <td><%= elderlyLeave.status %></td>
                           <td><%= elderlyLeave.type %></td>
-                          <td ><%= elderlyLeave.additionalNotes %></td>
+                          <td><%= elderlyLeave.additionalNotes %></td>
                           <td><%= elderlyLeave.applicationDate %></td>
                           <td>
-                            <% linkItems.forEach(function(item) { %> <% if
-                            (item.id ==='edit-elderlyLeave-link'&&item.visible)
-                            { %>
-                            <a
-                              id="<%= item.id %>"
-                              href="/elderly/leave/<%=  elderlyLeave._id %>/update"
-                              class="editlink"
-                              style="color: blue; display: inline"
-                              >Review
-                            </a>
-                            <% } %> <% }); %> <%
-                            linkItems.forEach(function(item) { %> <% if (item.id
-                            ==='delete-elderlyLeave-link'&&item.visible) { %>
-                            <a
-                              id="<%= item.id %>"
-                              href="javascript:void(0)"
-                              class="deleteLink"
-                              style="color: red; padding: 5px; display: inline"
-                              onclick="confirmDeletion('<%= elderlyLeave._id %>')"
-                              >Delete</a
-                            >
-                            <% } %> <% }); %>
+                            <% linkItems.forEach(function(item) { %>
+                              <% if (item.id === 'edit-elderlyLeave-link' && item.visible) { %>
+                                <% if (elderlyLeave.status === 'approved' || elderlyLeave.status === 'rejected') { %>
+                                  <a
+                                    id="<%= item.id %>"
+                                    href="javascript:void(0)"
+                                    class="editlink"
+                                    style="color: gray; pointer-events: none; display: inline"
+                                  >Review
+                                  </a>
+                                <% } else { %>
+                                  <a
+                                    id="<%= item.id %>"
+                                    href="/elderly/leave/<%= elderlyLeave._id %>/update"
+                                    class="editlink"
+                                    style="color: blue; display: inline"
+                                  >Review
+                                  </a>
+                                <% } %>
+                              <% } %>
+                            <% }); %> 
+                            <% linkItems.forEach(function(item) { %>
+                              <% if (item.id === 'delete-elderlyLeave-link' && item.visible) { %>
+                                <a
+                                  id="<%= item.id %>"
+                                  href="javascript:void(0)"
+                                  class="deleteLink"
+                                  style="color: red; padding: 5px; display: inline"
+                                  onclick="confirmDeletion('<%= elderlyLeave._id %>')"
+                                >Delete</a>
+                              <% } %>
+                            <% }); %>
                           </td>
                         </tr>
                         <% }); %>
@@ -125,16 +135,7 @@
             </div>
           </div>
         </div>
-
-        <footer>
-          <p>
-            Copyright &copy; 2016.Company name All rights reserved.<a
-              target="_blank"
-              href="http://sc.chinaz.com/moban/"
-              >模板网站</a
-            >
-          </p>
-        </footer>
+        
       </div>
     </div>
     <!-- /. PAGE WRAPPER  -->

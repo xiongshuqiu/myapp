@@ -108,18 +108,18 @@ function getNavItems(role) {
       id: 'catering-management',
       name: 'Catering Management',
       href: '/catering-management',
-      roles: ['admin', 'family'],
+      roles: ['admin', 'medical','family'],
       icon: 'fa-utensils fa-fw',
       subMenu: [
         {
           name: 'Meal Scheduling',
           href: '#',
-          roles: ['admin', 'family'],
+          roles: ['admin',],
         },
         {
           name: 'Meal Planning',
           href: '#',
-          roles: ['admin', 'family'],
+          roles: ['admin','medical', 'family'],
         },
         {
           name: 'Personalized Diets',

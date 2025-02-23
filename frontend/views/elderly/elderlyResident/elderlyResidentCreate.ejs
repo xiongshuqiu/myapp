@@ -32,7 +32,7 @@
       <div id="page-wrapper">
         <div class="header">
           <h1 class="page-header">
-            Forms Page <small>Best form elements.</small>
+            Forms Page <small>Elderly Resident Form</small>
           </h1>
           <ol class="breadcrumb">
             <li><a href="#">Home</a></li>
@@ -45,7 +45,7 @@
           <div class="row">
             <div class="col-lg-12">
               <div class="panel panel-default">
-                <div class="panel-heading">Basic Form Elements</div>
+                <div class="panel-heading">New Elderly Resident Form</div>
                 <div class="panel-body">
                   <div class="row">
                     <div class="col-lg-6">
@@ -54,86 +54,101 @@
                         method="post"
                         role="form"
                       >
-                      
-                      <div class="form-group">
-                        <label for="elderlyId">
-                          UnResidented Elderly Id(Name)
-                          <span style="color: red">*</span></label
-                        >
-                        <select
-                          class="form-control"
-                          id="elderlyId"
-                          name="elderlyId"
-                          required
-                        >
-                          <% if (unResidentedElderlyIds &&
-                          unResidentedElderlyIds.length > 0) { %> <%
-                          unResidentedElderlyIds.forEach(function(unResidentedElderlyId)
-                          { %>
-                          <option
-                            value="<%= unResidentedElderlyId.elderlyId %>"
+                        <div class="form-group">
+                          <label for="elderlyId">
+                            UnResidented Elderly Id(Name)
+                            <span style="color: red">*</span>
+                          </label>
+                          <select
+                            class="form-control"
+                            id="elderlyId"
+                            name="elderlyId"
+                            required
                           >
-                            <!-- <%= unResidentedElderlyId.elderlyId %> -->
-                            ID:<%= unResidentedElderlyId.elderlyId %> (<%=
-                            unResidentedElderlyId.elderlyName %>)
-                          </option>
-                          <% }) %> <% } else { %>
-                          <option value="">No existing elderlyId</option>
+                            <% if (unResidentedElderlyIds &&
+                            unResidentedElderlyIds.length > 0) { %> <%
+                            unResidentedElderlyIds.forEach(function(unResidentedElderlyId)
+                            { %>
+                            <option
+                              value="<%= unResidentedElderlyId.elderlyId %>"
+                            >
+                              ID:<%= unResidentedElderlyId.elderlyId %> (<%=
+                              unResidentedElderlyId.elderlyName %>)
+                            </option>
+                            <% }) %> <% } else { %>
+                            <option value="">No existing elderlyId</option>
+                            <% } %>
+                          </select>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="checkInTime">
+                            Check In Time
+                            <span style="color: red">*</span>
+                          </label>
+                          <div class="input-wrapper">
+                            <input
+                              type="date"
+                              class="form-control date-input"
+                              id="checkInTime"
+                              name="checkInTime"
+                              value="<%= new Date().toISOString().split('T')[0] %>"
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="checkOutTime"> Check Out Time </label>
+                          <div class="input-wrapper">
+                            <input
+                              type="date"
+                              class="form-control date-input"
+                              id="checkOutTime"
+                              name="checkOutTime"
+                              value="<%= new Date().toISOString().split('T')[0] %>"
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="status"
+                            >Status<span style="color: red">*</span></label
+                          >
+                          <select
+                            class="form-control"
+                            id="status"
+                            name="status"
+                            required
+                          >
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                          </select>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="bedAssignment"
+                            >Bed Assignment Link:</label
+                          >
+                          <a
+                            href="/beds/assignment/new"
+                            style="text-decoration: underline; color: red"
+                            >Assign Bed</a
+                          >
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                          Submit
+                        </button>
+
+                        <div id="message" class="mt-3">
+                          <% if (typeof message !== 'undefined' && message !==
+                          null) { %>
+                          <div class="alert alert-success"><%= message %></div>
                           <% } %>
-                        </select>
-                      </div>
-
-                      <div class="form-group">
-                        <label for="checkInTime"
-                          >Check In Time
-                          <span style="color: red">*</span>
-                        </label>
-                        <div class="input-wrapper">
-                          <input
-                            type="date"
-                            class="form-control date-input"
-                            id="checkInTime"
-                            name="checkInTime"
-                            value="<%= new Date().toISOString().split('T')[0] %>"
-                            required
-                          />
                         </div>
-                      </div>
-
-                      <div class="form-group">
-                        <label for="checkOutTime"
-                          >Check Out Time
-                        </label>
-                        <div class="input-wrapper">
-                          <input
-                            type="date"
-                            class="form-control date-input"
-                            id="checkOutTime"
-                            name="checkOutTime"
-                            value="<%= new Date().toISOString().split('T')[0] %>"
-                            required
-                          />
-                        </div>
-                      </div>
-                      
-                      <div class="form-group">
-                        <label for="status">Status<span style="color: red">*</span></label>
-                        <select class="form-control" id="status" name="status" required>
-                          <option value="Active">Active</option>
-                          <option value="Inactive">Inactive</option>
-                        </select>
-                      </div>
-                      
-                    
-                      
-                      <button type="submit" class="btn btn-primary">Submit</button>
-                      
-                      <div id="message" class="mt-3">
-                        <% if (typeof message !== 'undefined' && message !==
-                        null) { %>
-                        <div class="alert alert-success"><%= message %></div>
-                        <% } %>
-                      </div>
+                      </form>
                     </div>
                   </div>
                 </div>

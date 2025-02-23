@@ -68,7 +68,7 @@ function bntLinkVisibility(req, res, next) {
         id: 'add-healthRecord-btn',
         name: 'AddHealthRecord',
         href: '/health/record/new',
-        roles: ['medical'],
+        roles: ['admin'],
       },
       //老人护理任务增加
       {
@@ -167,11 +167,11 @@ function bntLinkVisibility(req, res, next) {
       //编辑和删除健康档案
       {
         id: 'edit-healthRecord-link',
-        roles: ['medical'],
+        roles: ['admin'],
       },
       {
         id: 'delete-healthRecord-link',
-        roles: ['medical'],
+        roles: ['admin'],
       },
       //编辑和删除护理任务
       {

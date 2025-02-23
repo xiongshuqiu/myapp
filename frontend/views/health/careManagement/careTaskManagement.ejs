@@ -37,15 +37,15 @@
       <div id="page-wrapper">
         <div class="header">
           <h1 class="page-header">
-            Elderly Management <small> Elderly Information</small>
+            Health Management <small> Care Task Information</small>
           </h1>
           <ol class="breadcrumb">
             <!-- 面包屑导航 -->
             <li><a href="#">Home</a></li>
             <!-- 首页链接 -->
-            <li><a href="#">Elderly Management</a></li>
+            <li><a href="#">Health Management</a></li>
             <!-- 用户管理页面链接 -->
-            <li class="active">ElderlyLeaveRequest Data</li>
+            <li class="active">Care Task Data</li>
             <!-- 当前页：用户数据 -->
           </ol>
         </div>
@@ -55,7 +55,7 @@
           <div class="row">
             <div class="col-md-12">
               <div class="panel panel-default">
-                <div class="panel-heading">ElderlyLeaveRequest Tables</div>
+                <div class="panel-heading">Care Task Tables</div>
                 <div class="panel-body">
                   <div class="table-responsive">
                     <table
@@ -69,13 +69,13 @@
                           <th class="hide-column">description</th>
                           <th>dueDate</th>
                           <th>carePlanId</th>
-                          <th>planName</th>
+                          <th class="hide-column">planName</th>
                           <th>status</th>
                           <th>elderlyId</th>
                           <th>elderlyName</th>
                           <th>employeeId</th>
                           <th>employeeName</th>
-                          <th>createdAt</th>
+                          <th class="hide-column">createdAt</th>
                           <th>action</th>
                         </tr>
                       </thead>
@@ -83,32 +83,46 @@
                         <% careTasks.forEach(function(careTask) { %>
                         <tr class="odd gradeX" style="white-space: nowrap">
                           <td><%= careTask.careTaskId %></td>
-                          <td><%= careTask.taskName %></td>
+                          <td>
+                            <%= careTask.taskName.length > 6 ?
+                            careTask.taskName.substring(0, 6) + '...' :
+                            careTask.taskName %>
+                          </td>
                           <td class="hide-column">
                             <%= careTask.description %>
                           </td>
                           <td><%= careTask.dueDate %></td>
                           <td><%= careTask.carePlanId %></td>
-                          <td><%= careTask.planName %></td>
+                          <td class="hide-column">
+                            <%= careTask.planName.length > 10 ?
+                            careTask.planName.substring(0, 10) + '...' :
+                            careTask.planName %>
+                          </td>
                           <td><%= careTask.status %></td>
                           <td><%= careTask.elderlyId %></td>
                           <td><%= careTask.elderlyName %></td>
                           <td><%= careTask.employeeId %></td>
-                          <td><%= careTask.employeeName %></td>
-                          <td><%= careTask.createdAt %></td>
+                        
+                          <td>
+                            <%= careTask.employeeName.length > 6 ?
+                            careTask.employeeName.substring(0, 6) + '...' :
+                            careTask.employeeName %>
+                          </td>
+                          <td class="hide-column"><%= careTask.createdAt %></td>
                           <td>
                             <% linkItems.forEach(function(item) { %> <% if
-                            (item.id ==='edit-careTask-link'&&item.visible) { %>
+                            (item.id === 'edit-careTask-link' && item.visible) {
+                            %>
                             <a
                               id="<%= item.id %>"
-                              href="/health/care/task/<%=  careTask._id %>/update"
+                              href="/health/care/task/<%= careTask._id %>/update"
                               class="editlink"
                               style="color: blue; display: inline"
-                              >Review
-                            </a>
+                              >Review</a
+                            >
                             <% } %> <% }); %> <%
                             linkItems.forEach(function(item) { %> <% if (item.id
-                            ==='delete-careTask-link'&&item.visible) { %>
+                            === 'delete-careTask-link' && item.visible) { %>
                             <a
                               id="<%= item.id %>"
                               href="javascript:void(0)"

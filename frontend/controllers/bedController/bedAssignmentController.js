@@ -99,7 +99,6 @@ const createBedAssignment = async (req, res) => {
   const {
     availableBedId,
     unassignedElderlyId,
-    assignmentId,
     assignedDate,
     releaseDate,
   } = req.body;
@@ -107,7 +106,6 @@ const createBedAssignment = async (req, res) => {
     const data = {
       availableBedId,
       unassignedElderlyId,
-      assignmentId,
       assignedDate,
       releaseDate,
     };
@@ -135,15 +133,15 @@ const getBedAssignmentById = async (req, res) => {
     const apiUrl = `${process.env.API_URL}/api/beds/assignment/${_id}/update`;
     console.log(apiUrl);
     const response = await getRequest(apiUrl); // 使用组装的URL进行API调用
-    const {bedAssignment, bedIds, elderlyIds} = response.data;
+    const { bedAssignment, bedIds, elderlyIds } = response.data;
     if (response.success) {
       console.log(response);
       res.render('bed/bedAssignment/bedAssignmentUpdate.ejs', {
-        activePage: 'bed-management',     
+        activePage: 'bed-management',
         navItems: req.navItems,
         bedAssignment,
         bedIds, //beIds包括：bedId、status
-        elderlyIds //包括elderlyId、elderlyName
+        elderlyIds, //包括elderlyId、elderlyName
       });
     }
   } catch (err) {
@@ -153,10 +151,11 @@ const getBedAssignmentById = async (req, res) => {
 
 //(2) 提交更新后的床位分配数据
 const updateBedAssignment = async (req, res) => {
-  const { bedId, elderlyId, assignmentId, assignedDate,releaseDate } = req.body;
+  const { bedId, elderlyId,  assignedDate, releaseDate } =
+    req.body;
   const { _id } = req.params;
   try {
-    const data = { bedId, elderlyId, assignmentId, assignedDate,releaseDate  };
+    const data = { bedId, elderlyId, assignedDate, releaseDate };
 
     // 从请求参数中获取 _id
     const apiUrl = `${process.env.API_URL}/api/beds/assignment/${_id}`;
