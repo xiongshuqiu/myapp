@@ -18,7 +18,7 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Copy code to remote server
+      - name: Copy code to remote 1server
         run: |
           scp -r . root@46.17.40.33:/xiongshuqiu/myapp
 
