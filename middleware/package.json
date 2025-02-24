@@ -1,8 +1,0 @@
-{
-  "name": "employee-service",
-  "version": "1.0.0",
-  "main": "server.js",
-  "dependencies": {
-    "jsonwebtoken": "^8.5.1"
-  }
-}

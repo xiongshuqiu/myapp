@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const { authorizeRole } = require('../../middleware/authMiddleware');
-const {bntLinkVisibility} =require('../visibilityMiddleware/bntLinkVisibility')
+const {bntLinkVisibility} =require('../middleware/bntLinkVisibility')
 const {
   getUsers,
   renderCreateUserForm,

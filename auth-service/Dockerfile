@@ -2,7 +2,7 @@
 FROM node:14
 
 # 创建应用程序目录
-WORKDIR /xiongshuqiu/myapp
+WORKDIR /xiongshuqiu/myapp/account-service
 
 # 复制 package.json 和 package-lock.json 文件到工作目录
 COPY package*.json ./

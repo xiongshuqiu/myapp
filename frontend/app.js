@@ -7,8 +7,8 @@ const path = require('path'); // 引入path模块，用于处理和转换文件�
 const cookieParser = require('cookie-parser'); // 引入cookie-parser模块，用于解析Cookie
 const methodOverride = require('method-override');
 
-const { authenticate, setUsername } = require('../middleware/authMiddleware'); // 导入中间件
-const { navVisibility } = require('./visibilityMiddleware/navVisibility'); //导航可见性判断控制器
+const { authenticate, setUsername } = require('./middleware/authMiddleware'); // 导入中间件
+const { navVisibility } = require('./middleware/navVisibility'); //导航可见性判断控制器
 const authRoutes = require('./routes/authRoutes'); // 引入自定义的路由模块
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const userRoutes = require('./routes/userRoutes');
