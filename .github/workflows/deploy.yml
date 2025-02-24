@@ -20,8 +20,8 @@ jobs:
 
       - name: Copy code to remote server
         run: |
-          scp -r . Vstu2025@46.17.40.33:/xiongshuqiu/myapp
+          scp -r . root@46.17.40.33:/xiongshuqiu/myapp
 
       - name: Deploy to remote server
         run: |
-          ssh Vstu2025@46.17.40.33 "cd /xiongshuqiu/myapp && docker-compose up -d --build"
+          ssh root@46.17.40.33 "cd /xiongshuqiu/myapp && docker-compose up -d --build"

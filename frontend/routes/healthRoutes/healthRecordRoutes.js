@@ -1,7 +1,7 @@
 // #frontend routes
 const express = require('express');
 const router = express.Router();
-const { authorizeRole } = require('../../../middleware/authMiddleware.js');
+const { authorizeRole } = require('../../middleware/authMiddleware.js');
 const {
   bntLinkVisibility,
 } = require('../../middleware/bntLinkVisibility.js');

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const accountController = require('../controllers/accountController.js');
-const { authorizeRole} = require('../../middleware/authMiddleware');
+const { authorizeRole} = require('../middleware/authMiddleware');
 
 //1.User Profile
 // (1)查找账户信息,跳转到账户信息查看页面
