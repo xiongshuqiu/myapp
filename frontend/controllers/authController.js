@@ -24,12 +24,19 @@ exports.postLogin = async (req, res) => {
     if (response.data.success) {
       const token = response.data.token;
       if (token) {
-      
-         res.cookie('jwt', token, {
-          httpOnly: true, 
-          secure: process.env.NODE_ENV === 'production', // 生产环境中使用 HTTPS
-          sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax', // 生产环境允许跨站点请求
+        //  res.cookie('jwt', token, {
+        //   httpOnly: true,
+        //   secure: process.env.NODE_ENV === 'production', // 生产环境中使用 HTTPS
+        //   sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax', // 生产环境允许跨站点请求
+        // });
+        res.cookie('jwt', token, {
+          httpOnly: true,
+          secure: false, // HTTP 环境下不使用 HTTPS
+          sameSite: 'Lax', // 同站点请求，防止 CSRF 攻击
         });
+
+        console.log('Cookie set successfully with token:', token);
+
         const userName = response.data.userName;
         // 5. 将用户名存储在会话中
         req.session.userName = userName;

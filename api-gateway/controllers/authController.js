@@ -25,17 +25,27 @@ exports.login = async (req, res) => {
       const token = response.data.token;
       if (token) {
         // 将 JWT 存入 cookie
+        // res.cookie('jwt', token, {
+        //   httpOnly: true, // 防止客户端脚本访问 cookie
+        //   sameSite: 'None', // 设置 sameSite 属性
+        //   secure: true, // 在 HTTPS 环境下传输 cookie
+        // });
         res.cookie('jwt', token, {
-          httpOnly: true, // 防止客户端脚本访问 cookie
-          sameSite: 'None', // 设置 sameSite 属性
-          secure: true, // 在 HTTPS 环境下传输 cookie
+          httpOnly: true,
+          secure: false, // HTTP 环境下不使用 HTTPS
+          sameSite: 'Lax', // 同站点请求，防止 CSRF 攻击
         });
+
+        console.log('Cookie set successfully with token:', token);
+
         // 向前端返回数据
         res.json(response.data);
       } else {
         console.error('API token failed:', response.data.message);
         // 处理 token 生成失败的情况
-        res.status(500).json({ success: false, message: 'Token generation failed' });
+        res
+          .status(500)
+          .json({ success: false, message: 'Token generation failed' });
       }
     } else {
       console.error('Login failed:', response.data.message);
