@@ -18,6 +18,11 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.A }}
 
+      - name: Add SSH known hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H 46.17.40.33 >> ~/.ssh/known_hosts
+
       - name: Copy code to remote server
         run: |
           scp -r . root@46.17.40.33:/xiongshuqiu/myapp
