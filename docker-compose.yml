@@ -45,12 +45,6 @@ services:
       - NODE_ENV=production
 
 
-  health-service:
-    build: ./health-service
-    ports:
-      - "8068:8068"
-    environment:
-      - NODE_ENV=production
 
 
   frontend:
