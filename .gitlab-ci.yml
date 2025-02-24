@@ -1,0 +1,72 @@
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  DOCKER_DRIVER: overlay2
+
+# 前端流水线
+frontend_build:
+  stage: build
+  script:
+    - cd frontend
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - frontend/build
+
+frontend_deploy:
+  stage: deploy
+  script:
+    - scp -r frontend/build/* user@server:/path/to/frontend
+    - ssh user@server 'sudo systemctl restart nginx'
+
+# Service A 流水线
+service_a_build:
+  stage: build
+  script:
+    - ssh user@remote-server 'cd /path/to/project/service-a && npm install && docker build -t myregistry.com/service-a .'
+
+service_a_test:
+  stage: test
+  script:
+    - ssh user@remote-server 'docker run myregistry.com/service-a npm test'
+
+service_a_deploy:
+  stage: deploy
+  script:
+    - ssh user@remote-server 'docker push myregistry.com/service-a && kubectl apply -f /path/to/project/service-a/k8s/service-a-deployment.yaml'
+
+# Service B 流水线
+service_b_build:
+  stage: build
+  script:
+    - ssh user@remote-server 'cd /path/to/project/service-b && npm install && docker build -t myregistry.com/service-b .'
+
+service_b_test:
+  stage: test
+  script:
+    - ssh user@remote-server 'docker run myregistry.com/service-b npm test'
+
+service_b_deploy:
+  stage: deploy
+  script:
+    - ssh user@remote-server 'docker push myregistry.com/service-b && kubectl apply -f /path/to/project/service-b/k8s/service-b-deployment.yaml'
+
+# 后端流水线
+backend_build:
+  stage: build
+  script:
+    - ssh user@remote-server 'cd /path/to/project/backend && npm install && docker build -t myregistry.com/backend .'
+
+backend_test:
+  stage: test
+  script:
+    - ssh user@remote-server 'docker run myregistry.com/backend npm test'
+
+backend_deploy:
+  stage: deploy
+  script:
+    - ssh user@remote-server 'docker push myregistry.com/backend && kubectl apply -f /path/to/project/backend/k8s/backend-deployment.yaml'
