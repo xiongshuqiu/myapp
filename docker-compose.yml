@@ -7,10 +7,73 @@ services:
     environment:
       - NODE_ENV=production
 
+  account-service:
+    build: ./account-service
+    ports:
+      - "8061:8061"
+    environment:
+      - NODE_ENV=production
+
   user-service:
     build: ./user-service
     ports:
       - "8062:8062"
+    environment:
+      - NODE_ENV=production
+
+  elderly-service:
+    build: ./elderly-service
+    ports:
+      - "8063:8063"
+    environment:
+      - NODE_ENV=production
+
+  visitor-service:
+    build: ./visitor-service
+    ports:
+      - "8064:8064"
+    environment:
+      - NODE_ENV=production
+
+  employee-service:
+    build: ./employee-service
+    ports:
+      - "8065:8065"
+    environment:
+      - NODE_ENV=production
+
+  bed-service:
+    build: ./bed-service
+    ports:
+      - "8066:8066"
+    environment:
+      - NODE_ENV=production
+
+  catering-service:
+    build: ./catering-service
+    ports:
+      - "8067:8067"
+    environment:
+      - NODE_ENV=production
+
+  health-service:
+    build: ./health-service
+    ports:
+      - "8068:8068"
+    environment:
+      - NODE_ENV=production
+
+  financial-service:
+    build: ./financial-service
+    ports:
+      - "8069:8069"
+    environment:
+      - NODE_ENV=production
+
+  notification-service:
+    build: ./notification-service
+    ports:
+      - "8070:8070"
     environment:
       - NODE_ENV=production
 
@@ -28,12 +91,12 @@ services:
     environment:
       - NODE_ENV=production
 
-  # nginx:
-  #   image: nginx
-  #   ports:
-  #     - "8077:8077"
-  #     - "443:443"
-  #   volumes:
-  #     - ./nginx.conf:/etc/nginx/nginx.conf
-  #     - /etc/letsencrypt/live/46.17.40.33/fullchain.pem:/etc/nginx/ssl/fullchain.pem
-  #     - /etc/letsencrypt/live/46.17.40.33/privkey.pem:/etc/nginx/ssl/privkey.pem
+  nginx:
+    image: nginx
+    ports:
+      - "8077:8077"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - /etc/letsencrypt/live/46.17.40.33/fullchain.pem:/etc/nginx/ssl/fullchain.pem
+      - /etc/letsencrypt/live/46.17.40.33/privkey.pem:/etc/nginx/ssl/privkey.pem
