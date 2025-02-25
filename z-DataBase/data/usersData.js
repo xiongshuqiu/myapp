@@ -226,7 +226,7 @@ const users = [
   },
   {
     userId: 'F006',
-    status: 'Available',
+    status: 'Occupied',
     userName: 'Jane Doe',
     passWord: '123456',
     phoneNumber: '0987654321',
@@ -235,7 +235,7 @@ const users = [
   },
   {
     userId: 'F007',
-    status: 'Available',
+    status: 'Occupied',
     userName: 'Jane Doe',
     passWord: '123456',
     phoneNumber: '0987654321',
@@ -244,7 +244,7 @@ const users = [
   },
   {
     userId: 'F008',
-    status: 'Available',
+    status: 'Occupied',
     userName: 'Jane Doe',
     passWord: '123456',
     phoneNumber: '0987654321',
@@ -253,7 +253,7 @@ const users = [
   },
   {
     userId: 'F009',
-    status: 'Available',
+    status: 'Occupied',
     userName: 'Jane Doe',
     passWord: '123456',
     phoneNumber: '0987654321',
@@ -271,7 +271,7 @@ const users = [
   },
   {
     userId: 'F011',
-    status: 'Available',
+    status: 'Occupied',
     userName: 'Jane Doe',
     passWord: '123456',
     phoneNumber: '0987654321',
@@ -280,6 +280,15 @@ const users = [
   },
   {
     userId: 'F012',
+    status: 'Occupied',
+    userName: 'Jane Doe',
+    passWord: '123456',
+    phoneNumber: '0987654321',
+    email: 'jane.doe@example.com',
+    role: 'family',
+  },
+  {
+    userId: 'F013',
     status: 'Available',
     userName: 'Jane Doe',
     passWord: '123456',
