@@ -7,12 +7,14 @@ services:
     environment:
       - NODE_ENV=production
 
+
   user-service:
     build: ./user-service
     ports:
       - "8062:8062"
     environment:
       - NODE_ENV=production
+
 
   frontend:
     build: ./frontend
@@ -27,13 +29,3 @@ services:
       - "8076:8076"
     environment:
       - NODE_ENV=production
-
-  nginx:
-    image: nginx
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-      - /etc/letsencrypt/live/46.17.40.33/fullchain.pem:/etc/nginx/ssl/fullchain.pem
-      - /etc/letsencrypt/live/46.17.40.33/privkey.pem:/etc/nginx/ssl/privkey.pem

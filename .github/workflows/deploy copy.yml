@@ -27,14 +27,6 @@ jobs:
         run: |
           scp -r . root@46.17.40.33:/xiongshuqiu/myapp
 
-      - name: Install Certbot on remote server
-        run: |
-          ssh root@46.17.40.33 "apt-get update && apt-get install -y certbot"
-
-      - name: Obtain SSL certificate using Certbot
-        run: |
-          ssh root@46.17.40.33 "certbot certonly --standalone -d 46.17.40.33 --non-interactive --agree-tos -m 258752593@qq.com"
-
       - name: Deploy to remote server
         run: |
           ssh root@46.17.40.33 "cd /xiongshuqiu/myapp && docker-compose up -d --build"
