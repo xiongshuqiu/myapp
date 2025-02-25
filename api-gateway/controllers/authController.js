@@ -24,12 +24,7 @@ exports.login = async (req, res) => {
     if (response.data.success) {
       const token = response.data.token;
       if (token) {
-        // 将 JWT 存入 cookie
-        // res.cookie('jwt', token, {
-        //   httpOnly: true, // 防止客户端脚本访问 cookie
-        //   sameSite: 'None', // 设置 sameSite 属性
-        //   secure: true, // 在 HTTPS 环境下传输 cookie
-        // });
+     
         res.cookie('jwt', token, {
           httpOnly: true,
           secure: false, // HTTP 环境下不使用 HTTPS

@@ -28,30 +28,13 @@ exports.postLogin = async (req, res) => {
         );
         console.log('Generated token:', token);
 
-        // // 将 JWT 存入 cookie
-        // res.cookie('jwt', token, {
-        //   httpOnly: true, // 防止客户端脚本访问 cookie
-        //   sameSite: 'None', // 设置 sameSite 属性
-        //   secure: true, // 在 HTTPS 环境下传输 cookie
-        // });
-        // res.cookie('jwt', token, {
-        //   httpOnly: true,
-        //   secure: false,
-        //   sameSite: 'Lax',
-        // });
-        // res.cookie('jwt', token, {
-        //   httpOnly: true, 
-        //   secure: process.env.NODE_ENV === 'production', // 生产环境中使用 HTTPS
-        //   sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax', // 生产环境允许跨站点请求
-        // });
         
-        // console.log('Cookie set successfully with token:', token);
         res.cookie('jwt', token, {
-          httpOnly: true, 
-          secure: false, // HTTP 环境下不使用 HTTPS
-          sameSite: 'Lax', // 同站点请求，防止 CSRF 攻击
-        });
         
+            httpOnly: true, 
+            secure: false, // 因为生产环境也是HTTP，所以这里设置为false
+            sameSite: 'Lax', // 设置为Lax
+          });
         console.log('Cookie set successfully with token:', token);
         
 

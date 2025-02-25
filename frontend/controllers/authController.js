@@ -24,11 +24,7 @@ exports.postLogin = async (req, res) => {
     if (response.data.success) {
       const token = response.data.token;
       if (token) {
-        //  res.cookie('jwt', token, {
-        //   httpOnly: true,
-        //   secure: process.env.NODE_ENV === 'production', // 生产环境中使用 HTTPS
-        //   sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax', // 生产环境允许跨站点请求
-        // });
+      
         res.cookie('jwt', token, {
           httpOnly: true,
           secure: false, // HTTP 环境下不使用 HTTPS

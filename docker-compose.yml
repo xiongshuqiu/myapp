@@ -7,12 +7,6 @@ services:
     environment:
       - NODE_ENV=production
 
-  account-service:
-    build: ./account-service
-    ports:
-      - "8061:8061"
-    environment:
-      - NODE_ENV=production
 
   user-service:
     build: ./user-service
@@ -20,31 +14,6 @@ services:
       - "8062:8062"
     environment:
       - NODE_ENV=production
-
-  elderly-service:
-    build: ./elderly-service
-    ports:
-      - "8063:8063"
-    environment:
-      - NODE_ENV=production
-
- 
-
-  employee-service:
-    build: ./employee-service
-    ports:
-      - "8065:8065"
-    environment:
-      - NODE_ENV=production
-
-  bed-service:
-    build: ./bed-service
-    ports:
-      - "8066:8066"
-    environment:
-      - NODE_ENV=production
-
-
 
 
   frontend:
