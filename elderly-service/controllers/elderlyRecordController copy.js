@@ -159,35 +159,12 @@ const getAllElderlyRecords = async (req, res) => {
 // (1) 显示新增老人档案表单(查找available的bedId、未分配床位的elderlyId，未分配的userId)
 const renderNewElderlyRecordForm = async (req, res) => {
   try {
-  
-    // 聚合管道查找未分配的 userId
-    const userIds = await User.aggregate([
-      {
-        $lookup: {
-          from: 'elderlies',
-          localField: 'userId',
-          foreignField: 'userId',
-          as: 'elderlydetails',
-        },
-      },
-      {
-        $match: {
-          'elderlydetails.userId': { $exists: false },
-          role: 'family', // 查找角色为 family 的用户
-        },
-      },
-      {
-        $project: {
-          userId: 1,
-          userName: 1, // 您可以根据需要选择其他字段
-          role: 1,
-        },
-      },
-    ]);
-    console.log('Unassigned User IDs:', userIds);
+    // 顺序查找 userId
+    const userIds = await User.find({ role: 'family' }).select('userId role');
+
     // 顺序查找 employeeId
     const employeeIds = await Employee.find().select('employeeId employeeName');
-
+    console.log('User IDs:', userIds);
     console.log(' Employee IDs:', employeeIds);
 
     return res.status(200).json({
@@ -205,15 +182,15 @@ const createElderlyRecord = async (req, res) => {
   const elderlyId = await getNextId('Elderly', 'E', 'elderlyId');
   const {
     elderlyName,
-    elderlyPhone,
-    photo,
-    dateOfBirth,
-    gender,
-    address,
-    emergencyContactName,
-    emergencyContactPhone,
-    userId,
-    employeeId,
+      elderlyPhone,
+      photo,
+      dateOfBirth,
+      gender,
+      address,
+      emergencyContactName,
+      emergencyContactPhone,
+      userId,
+      employeeId,
   } = req.body;
   console.log('Received request to create elderly record with data:', req.body); // 调试信息
   try {

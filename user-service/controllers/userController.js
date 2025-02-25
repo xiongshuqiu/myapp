@@ -19,7 +19,6 @@ const getUsers = async (req, res) => {
 // 2. 新增用户
 const createUser = async (req, res) => {
   // 生成新的 userId
-
   const { role, status, userName, passWord, phoneNumber, email } = req.body;
   console.log(role);
   let userId;
@@ -59,7 +58,6 @@ const createUser = async (req, res) => {
         .status(400)
         .json({ success: false, message: 'UserId already exists' });
     }
-
     existingUser = await User.findOne({ email });
     if (existingUser) {
       console.warn(`Email already exists: ${email}`); // 调试信息
@@ -80,7 +78,6 @@ const createUser = async (req, res) => {
     const user = new User(userData);
     const newUser = await user.save();
     console.log('User created successfully:', newUser); // 调试信息
-
     return res.status(201).json({
       success: true,
       message: 'User created successfully',
@@ -95,7 +92,6 @@ const createUser = async (req, res) => {
     });
   }
 };
-
 // 3. 获取特定用户信息
 const getUserById = async (req, res) => {
   const { _id } = req.params;
@@ -134,7 +130,6 @@ const updateUser = async (req, res) => {
         .status(404)
         .json({ success: false, message: 'User not found' });
     }
-
     // 更新用户信息
     user.status = status;
     user.userName = userName;
