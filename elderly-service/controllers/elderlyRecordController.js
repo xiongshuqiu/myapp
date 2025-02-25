@@ -217,7 +217,7 @@ const createElderlyRecord = async (req, res) => {
   } = req.body;
   console.log('Received request to create elderly record with data:', req.body); // 调试信息
   try {
-    // 检查是否存在相同床位编号的记录
+    // 检查是否存在相同老人档案编号的记录
     const existingElderly = await Elderly.findOne({ elderlyId });
     if (existingElderly) {
       console.warn(`Elderly id already exists: ${elderlyId}`); // 调试信息
@@ -225,7 +225,7 @@ const createElderlyRecord = async (req, res) => {
         .status(400)
         .json({ success: false, message: 'Elderly id already exists' });
     }
-
+    const status = await User.findOne({ userId });
     // 创建并保存新老人档案
 
     const newElderly = new Elderly({
@@ -241,8 +241,21 @@ const createElderlyRecord = async (req, res) => {
       userId,
       employeeId,
     });
-
     await newElderly.save();
+    // 更新用户状态为 "Occupied"
+    const updatedUser = await User.findOneAndUpdate(
+      { userId: userId },
+      { $set: { status: 'Occupied' } },
+      { new: true } // 返回更新后的文档
+    );
+
+    if (!updatedUser) {
+      console.warn(`User with userId: ${userId} not found.`);
+      return res
+        .status(404)
+        .json({ success: false, message: 'User not found to update status' });
+    }
+
     console.log(' Elderly record created successfully:', newElderly); // 调试信息
     return res.status(201).json({
       success: true,
