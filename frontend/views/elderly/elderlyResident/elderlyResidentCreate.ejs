@@ -99,15 +99,23 @@
                         </div>
 
                         <div class="form-group">
-                          <label for="checkOutTime"> Check Out Time </label>
+                          <label for="checkOutTime">Check Out Time</label>
                           <div class="input-wrapper">
+                            <select
+                              class="form-control"
+                              id="checkOutTimeSelect"
+                              name="checkOutTimeSelect"
+                              onchange="handleCheckOutTimeSelect(this)"
+                            >
+                              <option value="">None</option>
+                              <option value="custom">Custom Date</option>
+                            </select>
                             <input
                               type="date"
                               class="form-control date-input"
                               id="checkOutTime"
                               name="checkOutTime"
-                              value="<%= new Date().toISOString().split('T')[0] %>"
-                              required
+                              style="display: none"
                             />
                           </div>
                         </div>
@@ -128,9 +136,7 @@
                         </div>
 
                         <div class="form-group">
-                          <label for="bedAssignment"
-                            >Bed Assignment Link:</label
-                          >
+                          <label for="bedAssignment">Bed Assignment Link:</label>
                           <a
                             href="/beds/assignment/new"
                             style="text-decoration: underline; color: red"
@@ -143,8 +149,7 @@
                         </button>
 
                         <div id="message" class="mt-3">
-                          <% if (typeof message !== 'undefined' && message !==
-                          null) { %>
+                          <% if (typeof message !== 'undefined' && message !== null) { %>
                           <div class="alert alert-success"><%= message %></div>
                           <% } %>
                         </div>
@@ -176,5 +181,25 @@
     <script src="/assets/js/custom-scripts.js"></script>
     <!-- Morris Js -->
     <script src="/assets/js/morris.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const checkOutTimeSelect = document.getElementById('checkOutTimeSelect');
+        const checkOutTimeInput = document.getElementById('checkOutTime');
+        
+        checkOutTimeSelect.addEventListener('change', function () {
+          handleCheckOutTimeSelect(checkOutTimeSelect);
+        });
+      });
+
+      function handleCheckOutTimeSelect(selectElement) {
+        const checkOutTimeInput = document.getElementById('checkOutTime');
+        if (selectElement.value === 'custom') {
+          checkOutTimeInput.style.display = 'block';
+        } else {
+          checkOutTimeInput.style.display = 'none';
+          checkOutTimeInput.value = '';
+        }
+      }
+    </script>
   </body>
 </html>
