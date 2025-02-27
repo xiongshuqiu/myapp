@@ -35,7 +35,7 @@ const deleteRequest = async (url) => {
 const getAllElderlyRecords = async (req, res) => {
   const { _id, role } = req.query; // 从查询参数中获取传递的数据
   try {
-    const url = `${process.env.ELDERLY_SERVICE_URL}/?_id=${_id}&role=${role}&page=${page}&limit=${limit}`;
+    const url = `${process.env.ELDERLY_SERVICE_URL}/elderly/record/?_id=${_id}&role=${role}`;
     const response = await getRequest(url); // 发送 GET 请求以获取用户信息
     res.json(response); // 将响应数据返回给前端:包括数据和message
     if (response.success) {
