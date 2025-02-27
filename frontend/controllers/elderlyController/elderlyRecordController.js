@@ -46,11 +46,8 @@ const deleteRequest = async (url) => {
 const getAllElderlyRecords = async (req, res) => {
   const _id = req.user._id;
   const role = req.user.role;
-  const page = parseInt(req.query.page) || 1; // 获取当前页码，默认值为1
-  const limit = parseInt(req.query.limit) || 10; // 获取每页数据量，默认值为10
-  console.log('User data:', { _id, role, page, limit }); // 调试信息
-
-  const apiUrl = `${process.env.API_URL}/api/elderly/record/?_id=${_id}&role=${role}&page=${page}&limit=${limit}`;
+  console.log('User data:', { _id, role }); // 调试信息
+  const apiUrl = `${process.env.API_URL}/api/elderly/record/?_id=${_id}&role=${role}`;
   console.log('API URL:', apiUrl); // 调试信息
 
   try {
@@ -59,9 +56,7 @@ const getAllElderlyRecords = async (req, res) => {
     if (response.success) {
       res.render('elderly/elderlyRecord/elderlyRecordManagement', {
         activePage: 'elderly-management',
-        elderlyRecords: elderlyRecords.data, // 数据
-        currentPage: elderlyRecords.currentPage, // 当前页码
-        totalPages: elderlyRecords.totalPages, // 总页数
+        elderlyRecords,
         navItems: req.navItems, // 将导航项传递到视图
         buttonItems: req.buttonItems,
         linkItems: req.linkItems,
@@ -71,7 +66,6 @@ const getAllElderlyRecords = async (req, res) => {
     handleError(err, req, res);
   }
 };
-
 // 2.创建新的老人档案
 //(1)显示新增老人档案表单
 const renderNewElderlyRecordForm = async (req, res) => {
