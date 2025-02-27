@@ -4,10 +4,11 @@ const Elderly = require('../models/elderlyModel.js');
 const Employee = require('../models/employeeModel.js');
 const User = require('../models/userModel.js');
 
+// 1.获取所有老人档案
 const getAllElderlyRecords = async (req, res) => {
   console.log('Received request to get all elderly records'); // 调试信息
-  const { _id, role, page = 1, limit = 10 } = req.query;
-  console.log('Query parameters:', _id, role, page, limit); // 调试信息
+  const { _id, role } = req.query;
+  console.log('Query parameters:', _id, role); // 调试信息
 
   if (!_id || !role) {
     return res.status(400).json({
@@ -15,7 +16,6 @@ const getAllElderlyRecords = async (req, res) => {
       message: 'Missing required query parameters _id or role',
     });
   }
-
   try {
     // 查找用户，确认用户存在
     const user = await User.findById(_id);
@@ -88,29 +88,28 @@ const getAllElderlyRecords = async (req, res) => {
         message: 'Invalid role', // 错误信息改为英文
       });
     }
-
-    // 使用聚合管道进行后续查询，并分页
+    // 使用聚合管道进行后续查询
     const elderlyRecords = await Elderly.aggregate([
       {
         $match: query,
       },
       {
         $lookup: {
-          from: 'users',
-          localField: 'userId',
-          foreignField: 'userId',
-          as: 'userDetails',
+          from: 'users', // 从 bedstatuses 集合中查找与老人档案关联的床位信息
+          localField: 'userId', // 当前集合中的字段
+          foreignField: 'userId', // 关联集合中的字段
+          as: 'userDetails', // 结果保存字段
         },
       },
       {
-        $unwind: '$userDetails',
+        $unwind: '$userDetails', // 展开数组字段
       },
       {
         $lookup: {
-          from: 'employees',
-          localField: 'employeeId',
-          foreignField: 'employeeId',
-          as: 'employeeDetails',
+          from: 'employees', // 从 bedstatuses 集合中查找与老人档案关联的床位信息
+          localField: 'employeeId', // 当前集合中的字段
+          foreignField: 'employeeId', // 关联集合中的字段
+          as: 'employeeDetails', // 结果保存字段
         },
       },
       {
@@ -121,43 +120,33 @@ const getAllElderlyRecords = async (req, res) => {
       },
       {
         $project: {
-          elderlyId: 1,
-          elderlyName: 1,
-          elderlyPhone: 1,
-          dateOfBirth: 1,
+          elderlyId: 1, // 保留 elderlyId 字段
+          elderlyName: 1, // 保留 elderlyName 字段
+          elderlyPhone: 1, // 保留 elderlyPhone 字段
+          dateOfBirth: 1, // 保留 dateOfBirth 字段
           age: {
-            $subtract: [{ $year: new Date() }, { $year: '$dateOfBirth' }],
+            $subtract: [
+              { $year: new Date() }, // 当前年份
+              { $year: '$dateOfBirth' }, // 出生年份
+            ],
           },
-          gender: 1,
-          address: 1,
-          photo: 1,
-          emergencyContactName: 1,
-          emergencyContactPhone: 1,
-          userId: '$userDetails.userId',
-          userName: '$userDetails.userName',
-          employeeId: '$employeeDetails.employeeId',
-          employeeName: '$employeeDetails.employeeName',
-          employeeContactNumber: '$employeeDetails.contactNumber',
+          gender: 1, // 保留 gender 字段
+          address: 1, // 保留 address 字段
+          photo: 1, // 保留 photo 字段
+          emergencyContactName: 1, // 保留 emergencyContactName 字段
+          emergencyContactPhone: 1, // 保留 emergencyContactPhone 字段
+          userId: '$userDetails.userId', // 保留 userDetails 中的 userId 字段
+          userName: '$userDetails.userName', // 保留 userDetails 中的 userName 字段
+          employeeId: '$employeeDetails.employeeId', // 保留 employeeDetails 中的 employeeId 字段
+          employeeName: '$employeeDetails.employeeName', // 保留 employeeDetails 中的 name 字段
+          employeeContactNumber: '$employeeDetails.contactNumber', // 保留 employeeDetails 中的 contactNumber 字段
         },
       },
-      {
-        $skip: (page - 1) * limit, // 跳过前面的数据
-      },
-      {
-        $limit: parseInt(limit), // 每页限制查询的数据数
-      },
     ]);
-
-    // 获取总数以便分页
-    const totalRecords = await Elderly.countDocuments(query);
-
     res.status(200).json({
       success: true,
       message: 'Elderly records retrieved successfully',
       data: elderlyRecords,
-      totalRecords, // 总记录数
-      currentPage: parseInt(page), // 当前页
-      totalPages: Math.ceil(totalRecords / limit), // 总页数
     });
     console.log(elderlyRecords);
   } catch (err) {
@@ -170,6 +159,7 @@ const getAllElderlyRecords = async (req, res) => {
 // (1) 显示新增老人档案表单(查找available的bedId、未分配床位的elderlyId，未分配的userId)
 const renderNewElderlyRecordForm = async (req, res) => {
   try {
+  
     // 聚合管道查找未分配的 userId
     const userIds = await User.aggregate([
       {
@@ -256,7 +246,7 @@ const createElderlyRecord = async (req, res) => {
     const updatedUser = await User.findOneAndUpdate(
       { userId: userId },
       { $set: { status: 'Occupied' } },
-      { new: true }, // 返回更新后的文档
+      { new: true } // 返回更新后的文档
     );
 
     if (!updatedUser) {

@@ -327,12 +327,12 @@ const deleteElderlyResident = async (req, res) => {
 
   try {
     await ElderlyResident.findByIdAndDelete(_id); // 根据ID删除老人入住退住
-    console.log('Bed status deleted successfully:', _id); // 调试信息
+    console.log('Elderly resident deleted successfully:', _id); // 调试信息
     return res
       .status(200)
-      .json({ success: true, message: 'Bed status deleted successfully' });
+      .json({ success: true, message: 'Elderly resident deleted successfully' });
   } catch (error) {
-    console.error('Error deleting bed status:', error.message); // 调试信息
+    console.error('Error deleting Elderly resident:', error.message); // 调试信息
     return res.status(400).json({
       success: false,
       message: 'An error occurred',
