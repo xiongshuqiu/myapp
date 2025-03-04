@@ -1,43 +1,19 @@
-# Ignore app/node_modules folder
+# 忽略所有 node_modules 文件夹
 node_modules/
-# Ignore app/api-gateway/node_modules folder
 api-gateway/node_modules/
-
-# Ignore app/frontend/node_modules folder
 frontend/node_modules/
-
-# Ignore app/user-service/node_modules folder
 user-service/node_modules/
-
-# Ignore app/auth-service/node_modules folder
 auth-service/node_modules/
-
-# Ignore app/account-service/node_modules folder
 account-service/node_modules/
-
-# Ignore app/bed-service/node_modules folder
 bed-service/node_modules/
-
-# Ignore app/catering-service/node_modules folder
 catering-service/node_modules/
-
-# Ignore app/elderly-service/node_modules folder
 elderly-service/node_modules/
-
-# Ignore app/employee-service/node_modules folder
 employee-service/node_modules/
-
-# Ignore app/financial-service/node_modules folder
 financial-service/node_modules/
-
-# Ignore app/health-service/node_modules folder
 health-service/node_modules/
-
-# Ignore app/notification-service/node_modules folder
 notification-service/node_modules/
 
-# Ignore app/z-DataBase folder
+# 忽略 z-DataBase 和 z-template 文件夹
 z-DataBase/
-
-# Ignore app/z-template folder
 z-template/
+1/
