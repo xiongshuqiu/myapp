@@ -96,7 +96,7 @@ const authenticate = async (req, res, next) => {
 //   // 转发请求
 //   const options = {
 //     method: req.method,
-//     url: 'http://localhost:8062/users', // 替换为你的微服务URL
+//     url: 'http://46.17.40.33:8062/users', // 替换为你的微服务URL
 //     headers: {
 //       Authorization: `Bearer ${req.subToken}`, // 从自定义属性中获取子Token
 //       'Content-Type': 'application/json',
