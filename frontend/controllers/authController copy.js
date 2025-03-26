@@ -1,8 +1,5 @@
 // 1. 导入模块
 const axios = require('axios');
-const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
-dotenv.config();
 
 // 配置 axios 以允许跨域请求时携带 cookies
 axios.defaults.withCredentials = true;
@@ -27,6 +24,7 @@ exports.postLogin = async (req, res) => {
     if (response.data.success) {
       const token = response.data.token;
       if (token) {
+      
         res.cookie('jwt', token, {
           httpOnly: true,
           secure: false, // HTTP 环境下不使用 HTTPS
@@ -40,8 +38,9 @@ exports.postLogin = async (req, res) => {
         req.session.userName = userName;
         console.log('Username stored in session:', req.session.userName);
 
-        // 6. 重定向到首页
+        //6. 重定向到首页
         return res.redirect('/dashboard');
+       
       } else {
         console.log('token is mising in frontend');
       }
@@ -60,4 +59,3 @@ exports.postLogin = async (req, res) => {
       .json({ success: false, message: 'Error during login request' });
   }
 };
-

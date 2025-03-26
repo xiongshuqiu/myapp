@@ -8,7 +8,9 @@ const {
   updateUser,
   deleteUser,
 } = require('../controllers/userController');
-
+const {
+   forwardRequest,
+} = require('../middleware/authenticateMiddleware');
 // 1.查找所有用户信息
 router.get('/', getUsers);
 

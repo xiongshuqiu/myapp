@@ -1,5 +1,7 @@
-// 1. 导入模块
 const axios = require('axios');
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+dotenv.config();
 
 // 配置 axios 以允许跨域请求时携带 cookies
 axios.defaults.withCredentials = true;
@@ -54,5 +56,47 @@ exports.login = async (req, res) => {
       err.response ? err.response.data : err.message, // 获取错误信息
     );
     res.status(500).json({ success: false, message: 'Server error' }); // 返回服务器错误状态码和信息
+  }
+};
+
+
+
+// 验证用户身份的API函数
+exports.apiValidateToken = async (req, res, next) => { // Added "next" as a parameter
+  try {
+    const token = req.cookies.jwt;
+    console.log('Token from request:', token);
+
+    // Check if the token is provided
+    if (!token) {
+      console.log('Token not provided');
+      return res.status(401).json({ message: 'Token not provided' });
+    }
+
+    try {
+      // Decode and verify the token
+      const decodedToken = jwt.verify(token, process.env.JWT_SECRET || 'your_secret_key');
+      console.log('Decoded Token:', decodedToken);
+
+      // Store the decoded user information in the request object
+      req.user = decodedToken;
+
+      // Store _id in res.locals for use in EJS templates
+      res.locals._id = req.user._id;
+
+      // Proceed to the next middleware or route handler
+      return next();
+    } catch (error) {
+      console.error('Error verifying JWT:', error);
+
+      if (error.name === 'TokenExpiredError') {
+        return res.status(403).json({ message: 'Token expired' });
+      } else {
+        return res.status(403).json({ message: 'Invalid token' });
+      }
+    }
+  } catch (err) {
+    console.error('Unexpected error:', err);
+    return res.status(500).json({ message: 'Internal server error' });
   }
 };

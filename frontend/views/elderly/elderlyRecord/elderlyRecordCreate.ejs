@@ -53,7 +53,7 @@
                       <form action="/elderly/record/create" method="post" role="form">
                       
 
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                           <label for="elderlyName">Elderly Name  <span style="color: red">*</span></label>
                           <input
                             type="text"
@@ -63,7 +63,27 @@
                             placeholder="Enter Elderly Name "
                             required
                           />
+                        </div> -->
+
+                        <div class="form-group">
+                          <label for="elderlyName">Elderly Name <span style="color: red">*</span></label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="elderlyName"
+                            name="elderlyName"
+                            placeholder="Enter Elderly Name"
+                            required
+                            pattern="[\u4e00-\u9fa5a-zA-Z0-9]+"
+                            title="Name must be in Chinese characters, English letters, or a combination of English letters and numbers."
+                          />
+                          <small class="form-text text-muted">
+                            Please enter a name using Chinese characters, English letters, or a combination of English letters and numbers.
+                          </small>
                         </div>
+                        
+                        
+
                         <div class="form-group">
                           <label for="photo">Photo <span style="color: red">*</span></label>
                           <input
@@ -75,6 +95,7 @@
                           />
                         </div>
 
+                     
                         <div class="form-group">
                           <label for="elderlyPhone">Elderly Phone <span style="color: red">*</span></label>
                           <input
@@ -82,10 +103,16 @@
                             class="form-control"
                             id="elderlyPhone"
                             name="elderlyPhone"
-                            placeholder="Enter Elderly Phone "
+                            placeholder="e.g., +86 13012345678"
                             required
+                            pattern="\+86 (130|131|132|133|134|135|136|137|138|139|145|147|149|150|151|152|153|155|156|157|158|159|166|170|171|172|173|175|176|177|178|180|181|182|183|184|185|186|187|188|189|198|199)[0-9]{8}"
+                            title="Format: +86 followed by a space, a valid prefix (e.g., 130), and eight additional digits (e.g., +86 13012345678)"
                           />
+                          <small class="form-text text-muted">
+                            Format: +86 followed by a space, one of the valid prefixes (e.g., 130), and eight more digits, e.g., +86 13012345678.
+                          </small>
                         </div>
+                        
 
                         <div class="form-group">
                           <label for="dateOfBirth">Birthday <span style="color: red">*</span></label>
@@ -116,14 +143,18 @@
                             class="form-control"
                             id="address"
                             name="address"
-                            placeholder="Enter Address "
+                            placeholder="e.g., 12 Building - 5 Unit - 3 Floor - 205 Room"
                             required
+                            pattern="[0-9]+ Building - [0-5]+ Unit - [0-9]+ Floor - [0-9]+ Room"
+                            title="Format: XX Building - XX Unit - XX Floor - XXX Room (e.g., 12 Building - 5 Unit - 3 Floor - 205 Room)"
                           />
+                          <small class="form-text text-muted">
+                            Format: XX Building - XX Unit - XX Floor - XXX Room (e.g., 12 Building - 5 Unit - 3 Floor - 205 Room)
+                          </small>
                         </div>
-
-                       
-
-
+                        
+                        
+                        
                         <div class="form-group">
                           <label for="emergencyContactName">Emergency Contact Name <span style="color: red">*</span></label>
                           <input
@@ -136,6 +167,8 @@
                           />
                         </div>
 
+                      
+
                         <div class="form-group">
                           <label for="emergencyContactPhone">Emergency Contact Phone <span style="color: red">*</span></label>
                           <input
@@ -143,10 +176,16 @@
                             class="form-control"
                             id="emergencyContactPhone"
                             name="emergencyContactPhone"
-                            placeholder="Enter Emergency Contact Phone "
+                            placeholder="e.g., +86 13012345678"
                             required
+                            pattern="\+86 (130|131|132|133|134|135|136|137|138|139|145|147|149|150|151|152|153|155|156|157|158|159|166|170|171|172|173|175|176|177|178|180|181|182|183|184|185|186|187|188|189|198|199)[0-9]{8}"
+                            title="Format: +86 followed by a space, a valid prefix (e.g., 130), and eight additional digits (e.g., +86 13012345678)"
                           />
+                          <small class="form-text text-muted">
+                            Format: +86 followed by a space, one of the valid prefixes (e.g., 130), and eight more digits, e.g., +86 13012345678.
+                          </small>
                         </div>
+                        
                         
                         <div class="form-group">
                           <label for="userId">
