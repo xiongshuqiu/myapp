@@ -1,1 +1,1 @@
-.vscode is a local code folder for one-click startup
+.vscode is a folder for all service codes that can be started locally with one click
