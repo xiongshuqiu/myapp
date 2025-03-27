@@ -30,3 +30,6 @@ jobs:
       - name: Deploy to remote server
         run: |
           ssh root@46.17.40.33 "cd /xiongshuqiu/myapp && docker-compose up -d --build"
+
+
+          
